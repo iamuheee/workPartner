@@ -8,7 +8,7 @@
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url" value="jdbc:oracle:thin:@gd1class.iptime.org:8877" />
 		<property name="username" value="GDJ49WORKPARTNER" />
-		<property name="password" value="GDJ49WORKPARTNER" />
+		<property name="password" value="WORKPARTNER" />
 	</bean>
 	
 	
