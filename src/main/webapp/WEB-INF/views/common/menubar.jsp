@@ -307,7 +307,7 @@
 	                       <div class="nav">
 	
 	                           <!-- HOME -->     							                          
-	                           <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapseHome" aria-expanded="false" aria-controls="collapseHome">
+	                           <a class="nav-link collapsed nav-choice" href="${ pageContext.servletContext.contextPath }" data-bs-toggle="collapse" data-bs-target="#collapseHome" aria-expanded="false" aria-controls="collapseHome">
 	                               <span class="material-symbols-outlined">
 	                                   home
 	                               </span>
