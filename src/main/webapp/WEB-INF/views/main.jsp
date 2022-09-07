@@ -8,6 +8,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	앟흐흐흑
+	<jsp:include page="common/menubar.jsp"/>
 </body>
 </html>
