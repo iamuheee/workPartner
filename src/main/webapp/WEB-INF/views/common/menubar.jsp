@@ -364,7 +364,7 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseAuth1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages1">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-												<a class="btn btn-sm btn-primary btn-size" href="enroll.do" style="margin:10px;">업무등록 바로가기</a>
+												<a class="btn btn-sm btn-primary btn-size" href="enroll.du" style="margin:10px;">업무등록 바로가기</a>
 												<a class="nav-link nav-choice" href="list.du">전체 업무</a>
 												<a class="nav-link nav-choice" href="todo.du">To Do 리스트</a>
 												<a class="nav-link nav-choice" href="">월간 캘린더</a>
