@@ -82,15 +82,13 @@
                 <div class="card-title">
                     <div class="right" class="writer-info" style="height:50px;">
                         <form action="" method="post" class="edit-form">
-                            <input type="hidden" name="dutyNo" value="${DB의 board_no}">
-                            <input type="hidden" name="progress" value="DB의progress값">
-                            <input type="hidden" name="importrance" value="${DB의importance값}">
+                            <input type="hidden" name="dutyNo" value="${d.dutyNo}">
                             <table width="100%">
                                 <tr>
                                     <td width="90%" style="padding-left:35px;padding-top:5px;">
                                         <span style="font-size:small; color:gray;">담당자</span>
                                         <span style="font-size:small; color:gray;">박혜진</span>
-                                        <h4 style="font-weight:bold;">민진손 vs 희영노 팔씨름 대회 개최</h4>
+                                        <h4 style="font-weight:bold;">${ d.title }</h4>
                                     </td>
 
                                     <td width="5%"><a onclick="$('.edit-form').click();">수정</a></td>
@@ -133,13 +131,13 @@
                     <table width="30%;" style="float:left; margin-right:50px; margin-left: 30px;">
                         <tr>
                             <th>업무번호</th>
-                            <td>253</td>
+                            <td>${ d.dutyNo }</td>
                         </tr>
                         <tr>
                             <th>시작일시</th>
-                            <td>2022-08-17</td>
+                            <td>${ d.startDate }</td>
                             <th>종료일시</th>
-                            <td>2022-08-31</td>
+                            <td>${ d.endDate }</td>
                         </tr>
                     </table>
                     <table width="30%" class="btn-area" style="float:left;">
@@ -149,7 +147,6 @@
                             <td><button class="btn btn-sm">진행</button></td>
                             <td><button class="btn btn-sm">지연</button></td>
                             <td><button class="btn btn-sm">완료</button></td>
-                            <td class="hidden-info progress">ddd</td>
                         </tr>
                         <tr class="tr-importance">
                             <th>우선순위</th>
@@ -157,7 +154,6 @@
                             <td><button class="btn btn-sm">중요</button></td>
                             <td><button class="btn btn-sm">보통</button></td>
                             <td><button class="btn btn-sm">낮음</button></td>
-                            <td class="hidden-info importance"><span></span></td>
                         </tr>
                     </table>
                 </div>
@@ -166,19 +162,19 @@
                     // 게시글의 상태, 우선 순위에 따라 색깔 보여지도록
                     $(function(){
                         $(".tr-progress").each(function(){
-                            switch( $(this).children(".progress").text() ){
-                                case 1 : $(this).children().eq(0).css("background-color", "skyblue");
-                                case 2 : $(this).children().eq(1).css("background-color", "lightgreen");
-                                case 3 : $(this).children().eq(2).css("background-color", "yellow");
-                                case 4 : $(this).children().eq(3).css("background-color", "violet");
+                            switch( ${d.progress} ){
+                                case 1 : $(this).children().eq(0).css("background-color", "skyblue"); break;
+                                case 2 : $(this).children().eq(1).css("background-color", "lightgreen"); break;
+                                case 3 : $(this).children().eq(2).css("background-color", "yellow"); break;
+                                case 4 : $(this).children().eq(3).css("background-color", "violet"); break;
                             }
                         })
                         $(".tr-importance").each(function(){
-                            switch( $(this).children(".importance").text() ){
-                                case 1 : $(this).children().eq(0).css("background-color", "red");
-                                case 2 : $(this).children().eq(1).css("background-color", "orange");
-                                case 3 : $(this).children().eq(2).css("background-color", "lightgreen");
-                                case 4 : $(this).children().eq(3).css("background-color", "gray").color("color", "white");
+                            switch( ${d.importance} ){
+                                case 1 : $(this).children().eq(0).css("background-color", "red"); break;
+                                case 2 : $(this).children().eq(1).css("background-color", "orange"); break;
+                                case 3 : $(this).children().eq(2).css("background-color", "lightgreen"); break;
+                                case 4 : $(this).children().eq(3).css("background-color", "gray").color("color", "white"); break;
                             }
                         })
                     })
@@ -216,8 +212,8 @@
                         </table>
                     </div>
                     <form class="write-comment" action="" method="post"  enctype="multipart/form-data">
-                        <input type="hidden" name="empNo" value="${작성자사번}">
-                        <input type="hidden" name="comRefBno" value="${글번호}">
+                        <input type="hidden" name="empNo" value="로그인유저의사번">
+                        <input type="hidden" name="comRefBno" value="${d.dutyNo}">
                         <input type="file" name="commentAtt" class="hidden-info">
                         <textarea name="comContent" class="form-control" style="width:90%; height:80px; margin:10px; float:left; resize:none"></textarea>
                         <button class="btn btn-sm btn-success" onclick="insertFile();" style="float:left; height:80px; width:3%; margin-top:10px; margin-right:5px;">

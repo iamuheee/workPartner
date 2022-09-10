@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wp.workpartner.common.model.vo.Comment;
+import com.wp.workpartner.common.model.vo.File;
+import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.duty.model.dao.DutyDao;
 import com.wp.workpartner.duty.model.vo.Duty;
+import com.wp.workpartner.duty.model.vo.DutyCharge;
 
 @Service
 public class DutyServiceImpl implements DutyService {
@@ -20,30 +23,39 @@ public class DutyServiceImpl implements DutyService {
 	private SqlSessionTemplate sqlSession;
 	// bean 등록 root-context.xml에서 했음
 
+	
+	// ====================================
 	// 아래부터 Override된 메소드
 
+	
 	@Override
 	public int insertDuty(Duty d) {
-		// TODO Auto-generated method stub
-		return 0;
+		return dDao.insertDuty(sqlSession, d);
 	}
-
+	
 	@Override
-	public ArrayList<Duty> selectDutyList() {
-		// TODO Auto-generated method stub
-		return null;
+	public int insertFile(File f) {
+		return dDao.insertFile(sqlSession, f);
 	}
-
+	
 	@Override
 	public int selectDutyListCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return dDao.selectDutyListCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Duty> selectDutyList(PageInfo pi, String empNo) {
+		return dDao.selectDutyList(sqlSession, pi, empNo);
+	}
+	
+	@Override
+	public ArrayList<DutyCharge> selectDutyChargeList(PageInfo pi, String empNo) {
+		return dDao.selectDutyChargeList(sqlSession, pi, empNo);
 	}
 
 	@Override
 	public Duty selectDuty(int dutyNo) {
-		// TODO Auto-generated method stub
-		return null;
+		return dDao.selectDuty(sqlSession, dutyNo);
 	}
 
 	@Override
@@ -75,5 +87,6 @@ public class DutyServiceImpl implements DutyService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 
 }

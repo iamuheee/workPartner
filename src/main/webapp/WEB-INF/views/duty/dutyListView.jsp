@@ -38,7 +38,7 @@
     <div id="content">
         <main>
             <div class="container-fluid px-4">
-                <h2 class="mt-4">개인 업무 <span style="font-size:18px;color:gray;">(42)</span></h2><br>
+                <h2 class="mt-4">개인 업무 <span style="font-size:18px;color:gray;">(${ listCount })</span></h2><br>
                 
                 <form action="" align="right" class="filter">
                     <input type="checkbox" name="exceptDone" id="exceptDone" class=".form-check-inline">
@@ -48,16 +48,17 @@
                     <span>우선순위별 조회</span>
                     <select name="filter" class="filter">
                         <option>전체보기</option>
-                        <option value="">긴급</option>
-                        <option value="">중요</option>
-                        <option value="">지연</option>
-                        <option value="">진행</option>
+                        <option value="1">긴급</option>
+                        <option value="2">중요</option>
+                        <option value="3">지연</option>
+                        <option value="4">진행</option>
                     </select>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     
                     <input type="text" name="keyword" id="search" class="mb-3" style="border:1px solid lightgray;"placeholder="업무명으로 검색">
                     <button class="btn btn-sm btn-secondary" style="margin-bottom:3px;">검색</button>
                 </form>
+                
                 
                 <div class="filter">
                     <button class="btn btn-sm filter">전체 업무</button> |
@@ -78,18 +79,31 @@
                             <th width="10%">등록일</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>53</td>
-                            <td>아이즈원 아이브 장기하와 얼굴들 국민의 힘 프로듀스101 선발 프로젝트</td>
-                            <td>장원영, 장기하, 장제원</td>
-                            <th><a class="btn btn-sm btn-warning">중요</a></th>
-                            <th><a class="btn btn-sm btn-success">진행</a></th>
-                            <td>2022-08-02</td>
-                            <td>2022-09-02</td>
-                            <td>1999-01-01</td>
-                        </tr>
-                    </tbody>
+                	<c:choose>
+                		<c:if  test="${ not empty dlist }">
+                		<c:forEach var="d" items="${ dlist }">
+		                    <tbody>
+		                        <tr>
+		                            <td>${ d.dutyNo }</td>
+		                            <td>${ d.title }</td>
+		                            <td>${ d.empIC }</td>
+		                            <th><a class="btn btn-sm btn-warning">${ d.importance }</a></th>
+		                            <th><a class="btn btn-sm btn-success">${ d.progress }</a></th>
+		                            <td>${ d.startDate }</td>
+		                            <td>${ d.endDate }</td>
+		                            <td>${ d.enrollDate }</td>
+		                        </tr>
+		                    </tbody>
+                		</c:forEach>
+                		</c:if>
+                		<c:otherwise>
+                			<tbody>
+                				<tr>
+                					<td colspan="8">등록된 업무가 없습니다.</td>
+                				</tr>
+                			</tbody>
+                		</c:otherwise>
+                	</c:choose>
                 </table>
 
                 <div class="paging" align="center">

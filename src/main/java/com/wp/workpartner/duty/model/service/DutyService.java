@@ -3,7 +3,10 @@ package com.wp.workpartner.duty.model.service;
 import java.util.ArrayList;
 
 import com.wp.workpartner.common.model.vo.Comment;
+import com.wp.workpartner.common.model.vo.File;
+import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.duty.model.vo.Duty;
+import com.wp.workpartner.duty.model.vo.DutyCharge;
 
 public interface DutyService {
 	// ** 고민 **
@@ -11,10 +14,12 @@ public interface DutyService {
 	
 	// 업무 게시글 작성
 	int insertDuty(Duty d);
+	int insertFile(File f);
 	
 	// 업무 게시글 리스트 조회 (+페이징)
-	ArrayList<Duty> selectDutyList();
 	int selectDutyListCount();
+	ArrayList<Duty> selectDutyList(PageInfo pi, String empNo);
+	ArrayList<DutyCharge> selectDutyChargeList(PageInfo pi, String empNo);
 	
 	// 업무 게시글 상세 조회
 	Duty selectDuty(int dutyNo);

@@ -19,7 +19,7 @@ public class Duty {
 	private int dutyNo;
 	private String empNo;
 	private String calendarYN;
-	private String importnace;
+	private String importance;
 	private String progress;
 	private String title;
 	private String content;
@@ -28,7 +28,6 @@ public class Duty {
 	private String endDate;
 	private String status;
 	
-	// TB_DUTY_CHARGE 테이블의 EMP_NO 컬럼에 들어갈 값을 넣는 배열
-	private String[] icEmpNo;
+	private String empIC; // 담당자의 이름을 ,로 연결한 것
 	
 }
