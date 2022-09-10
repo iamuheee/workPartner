@@ -95,7 +95,7 @@
                     새로운 To Do 카테고리 <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
             </div>
-            <div class="todo-cate todo-cate-1st shadow-sm inner-area">
+            <div class="todo-cate shadow-sm inner-area">
                 <!-- 첫번째 todo-category에만 todo-category-1st 클래스 부여 -->
                 <div class="todo-title">
                     <span class="title todo-cate-title">텔레토비</span>
@@ -108,14 +108,6 @@
                     <span class="hidden-info"></span>
                     <label><input type="checkbox" name="" class="todo" style="margin-left:10px;"> 보라돌이 뚜까패기</label><br>
                     <span class="filter" style="margin-left:30px;">~2022-10-10</span>
-                    <div style="float:right; margin-right:5px;">
-                        <a onclick="deleteTodo( $(this).parent().siblings().eq(0).text() );">삭제</a>
-                    </div>
-                </div>
-                <div class="todo-list">
-                    <span class="hidden-info"></span>
-                    <label><input type="checkbox" name="" class="todo" style="margin-left:10px;"> 보라돌이 뚜까패기</label><br>
-                    <span class="filter" style="margin-left:30px;">2022-10-10까지</span>
                     <div style="float:right; margin-right:5px;">
                         <a onclick="deleteTodo( $(this).parent().siblings().eq(0).text() );">삭제</a>
                     </div>
@@ -139,7 +131,7 @@
         // })
 
         // To Do의 체크리스트 선택/해제시 취소선 나타남/사라짐 효과 적용하는 함수
-        $(".todo").click(function(){
+        $("input[type=checkbox]").click(function(){
             $(this).attr("checked", true) ? $(this).parent("label").css("text-decoration", "line-through") : $(this).parent("label").css("text-decoration", "none") ;
         })
 
