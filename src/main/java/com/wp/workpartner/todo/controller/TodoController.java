@@ -44,13 +44,13 @@ public class TodoController {
 	@RequestMapping("update.to")
 	public String ajaxDoneTodo(Todo t) {
 		if( tService.ajaxDoneTodo(t) > 0 ) {
-			
 		}
+		return "";
 	}
 	
 	@RequestMapping("delete.to")
 	public String ajaxDeleteTodo(Model m, HttpSession session, int todoNo) {
-		if( tService.deleteTodo(todoNo) > 0 ) {
+		if( tService.ajaxDeleteTodo(todoNo) > 0 ) {
 			session.setAttribute("alertMsg", "할 일을 성공적으로 삭제하였습니다!");
 			return "redirect:list:to";
 		}else {
