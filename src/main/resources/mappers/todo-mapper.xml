@@ -3,13 +3,19 @@
 <mapper namespace="todoMapper">
 	
 	<resultMap id="todoResult" type="Todo">
-		
+		<result column="TODO_NO" property="todoNo" />
+		<result column="EMP_NO" property="empNo" />
+		<result column="CATEGORY_NO" property="categoryNo" />
+		<result column="DONE_YN" property="doneYN" />
+		<result column="TODO_DATE" property="todoDate" />
+		<result column="CATE_TITLE" property="categoryTitle" />
+		<result column="COLOR" property="color" />
 	</resultMap>
 
 	<select id="selectTodoList">
 		SELECT
-			   T.TODO_NO
-			 , T.EMP_NO
+			   T.TODO_NO AS "TODO_NO"
+			 , T.EMP_NO AS "EMP_NO"
 			 , CATEGORY_NO
 			 , CATE_TITLE
 			 , COLOR
@@ -20,7 +26,38 @@
 		    ON (CATEGORY_NO = CATE_NO)
 		 WHERE T.EMP_NO = #{ empNo }
 		 ORDER 
-		 	BY CATEGORY_NO ASC; 
+		 	BY CATEGORY_NO ASC
 	</select>
+	
+	<update id="doneTodo">
+			UPDATE TB_TODO
+		<choose>    
+			<when test="#{doneYN} == 'N'">
+			   SET DONE_YN = 'N'
+			</when>  
+			<otherwise>
+			   SET DONE_YN = 'Y'
+			</otherwise>
+		</choose>
+			 WHERE TODD_NO = #{ todoNo }
+	</update>
+	
+	<delete id="deleteTodo">
+		DELETE TB_TODO
+		 WHERE TODO_NO = #{ todoNo }
+	</delete>
+	
+	<insert id="insertTodo">
+		INSERT
+		  INTO TB_TODO
+		VALUES
+			 (
+			   SEQ_TDNO.NEXTVAL
+			 , #{empNo}
+			 , #{categoryNo}
+			 , DEFAULT
+			 , DEFAULT
+			 )
+	</insert>
 	
 </mapper>

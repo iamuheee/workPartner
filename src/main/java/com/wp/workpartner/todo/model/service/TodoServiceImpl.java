@@ -24,21 +24,19 @@ public class TodoServiceImpl implements TodoService {
 	}
 
 	@Override
-	public int doneTodo(Todo t) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int ajaxDoneTodo(Todo t) {
+		return tDao.ajaxDoneTodo(sqlSession, t);
 	}
 
 	@Override
-	public int deleteTodo(int todoNo) {
+	public int ajaxDeleteTodo(int todoNo) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 	
 	@Override
 	public int insertTodo(Todo t) {
-		// TODO Auto-generated method stub
-		return 0;
+		return tDao.insertTodo(sqlSession, t);
 	}
 
 	@Override

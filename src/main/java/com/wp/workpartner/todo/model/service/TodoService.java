@@ -13,10 +13,10 @@ public interface TodoService {
 	// ArrayList<TodoCate> selectTodoCateList(int empNo);
 	
 	// DONE_YN 컬럼에 변화
-	int doneTodo(Todo t);
+	int ajaxDoneTodo(Todo t);
 	
 	// TO DO 삭제
-	int deleteTodo(int todoNo);
+	int ajaxDeleteTodo(int todoNo);
 	
 	int insertTodo(Todo t);
 	
