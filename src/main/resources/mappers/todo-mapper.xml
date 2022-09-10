@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="todoMapper">
+	
+	<resultMap id="todoResult" type="Todo">
+		
+	</resultMap>
+
+	<select id="selectTodoList">
+		SELECT
+			   T.TODO_NO
+			 , T.EMP_NO
+			 , CATEGORY_NO
+			 , CATE_TITLE
+			 , COLOR
+			 , DONE_YN
+			 , TODO_DATE
+		  FROM TB_TODO T
+		  JOIN TB_TODO_CATE TC
+		    ON (CATEGORY_NO = CATE_NO)
+		 WHERE T.EMP_NO = #{ empNo }
+		 ORDER 
+		 	BY CATEGORY_NO ASC; 
+	</select>
+	
+</mapper>
