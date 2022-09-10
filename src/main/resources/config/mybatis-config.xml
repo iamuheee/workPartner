@@ -13,6 +13,8 @@
 	-->
 	<typeAliases>
 		<typeAlias type="com.wp.workpartner.duty.model.vo.Duty" alias="Duty" />
+		<typeAlias type="com.wp.workpartner.duty.model.vo.DutyCharge" alias="DutyCharge" />
+		
 	</typeAliases>
 	
 	<!-- <유의사항> -->
