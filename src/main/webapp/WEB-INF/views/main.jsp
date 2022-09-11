@@ -188,7 +188,7 @@
 								<table id="profile-tb">
 									<tr align="center">
 										<td rowspan="2" width="50%;">
-											<img src="../../../resources/profile_images/defaultProfile.png" id="profileImg">
+											<img src="${pageContext.request.contextPath}/resources/profile_images/defaultProfile.png" id="profileImg">
 										</td>
 										<td style="padding-top: 15px;"><h4>이름름</h4></td>
 									</tr>
@@ -202,7 +202,7 @@
 								</table>
 							</div>
 							<div class="card-footer d-flex align-items-center" id="pf-card-footer">
-								<a href="마이페이지url" style="text-decoration: none; color: black;text-align:center;">내 정보 수정</a>
+								<a href="mypage.em" style="text-decoration: none; color: black;text-align:center;">내 정보 수정</a>
 							</div>
 						</div>
 					</div>
