@@ -255,6 +255,7 @@
 	</c:if>
 
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-blue" style="font-size: 14px;">
+<<<<<<< Updated upstream
 		<!-- 클릭시 메인페이지 이동-->
 		<a class="navbar-brand ps-3" href="/workpartner">Work Partner!</a>
 
@@ -537,6 +538,252 @@
 
 						<!-- 주소록 -->
 						<!-- <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapseContact" aria-expanded="false" aria-controls="collapseContact">
+=======
+	          <!-- 클릭시 메인페이지 이동-->
+	          <a class="navbar-brand ps-3" href="">Work Partner!</a>
+	
+	          <!-- Sidebar Toggle-->
+	          <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+	
+	          <!-- 공간 띄우기-->
+	          <div class="ms-auto me-0 me-md-3 my-2 my-md-0"></div>   
+	          
+	          <!-- alert -->
+	          <ul class="navbar-nav ms-auto ms-md-3 me-6 me-lg-6 alertFontSize">
+	               <li class="nav-item dropdown no-arrow mx-1">
+	                   <a class="nav-link dropdown-toggle btn-group dropstart" id="alertDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	                       <i class="fas fa-bell fa-fw"></i>
+	                       <span class="badge badge-danger badge-counter">3+</span>               
+	                   </a>
+	                   
+	                   <div class="dropdown-list dropdown-menu dropdown-menu-end shadow animated--grow-in"
+	                           aria-labelledby="alertsDropdown">
+	                           <h6 class="dropdown-header">
+	                               Alerts Center
+	                           </h6>
+	
+	                           <!-- 쪽지알람 예시-->
+	                           <a class="dropdown-item d-flex align-items-center" href="#">
+	                               <div class="mr-3">
+	                                   <div class="icon-circle bg-primary">
+	                                       <span class="material-symbols-outlined outFill">
+	                                           sms
+	                                       </span>
+	                                   </div>
+	                               </div>
+	                               &nbsp;&nbsp;&nbsp;
+	                               <div>
+	                                   <div class="small text-gray-500">2021.09.26</div>
+	                                   <span class="font-weight-bold alertFontMiddle">오늘 종강!!!!</span>
+	                               </div>
+	                           </a>
+	
+	                           <!-- 근태알람 예시 -->
+	                           <a class="dropdown-item d-flex align-items-center" href="#">
+	                               <div class="mr-3">
+	                                   <div class="icon-circle bg-success">
+	                                       <span class="material-symbols-outlined outFill">
+	                                           work_history
+	                                       </span>
+	                                   </div>
+	                               </div>
+	                               &nbsp;&nbsp;&nbsp;
+	                               <div>
+	                                   <div class="small text-gray-500">2021.09.26</div>
+	                                   <span class="font-weight-bold alertFontMiddle">주 52시간 초과!</span>                                        
+	                               </div>
+	                           </a>
+	
+	                           <!-- 기안서 알람 예시 -->
+	                           <a class="dropdown-item d-flex align-items-center" href="#">
+	                               <div class="mr-3">
+	                                   <div class="icon-circle bg-warning">
+	                                       <span class="material-symbols-outlined outFill">
+	                                           description
+	                                       </span>
+	                                   </div>
+	                               </div>
+	                               &nbsp;&nbsp;&nbsp;
+	                               <div>
+	                                   <div class="small text-gray-500">2021.09.26</div>
+	                                   <span class="font-weight-bold alertFontMiddle">업무협조요청이 승인되었습니다.</span>                                    
+	                               </div>
+	                           </a>
+	                           <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+	                       </div>                        
+	                
+	               </li>
+	           </ul>
+	          
+	          <!-- 프로필 & 로그아웃 -->
+	          <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+	              <li class="nav-item dropdown">
+	                  <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+	                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">                        
+	                      <li><a class="dropdown-item" href="#!">Logout</a></li>
+	                  </ul>
+	              </li>
+	          </ul>
+	       </nav>
+	
+	       <div id="layoutSidenav">
+	           <div id="layoutSidenav_nav" style="font-size: 14px;">
+	               <nav class="sb-sidenav accordion sb-sidenav bg-gray" id="sidenavAccordion">
+	                   <div class="sb-sidenav-menu">
+	                       <div class="nav">
+	
+	                           <!-- HOME -->     							                          
+	                           <a class="nav-link collapsed nav-choice" href="${ pageContext.servletContext.contextPath }" data-bs-toggle="collapse" data-bs-target="#collapseHome" aria-expanded="false" aria-controls="collapseHome">
+	                               <span class="material-symbols-outlined">
+	                                   home
+	                               </span>
+	                               <span class="menubarHeadBold"> &nbsp; HOME</span>
+	                               <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                           </a>
+	                           <div class="collapse" id="collapseHome" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+	                               <nav class="sb-sidenav-menu-nested nav">
+	                                   <a class="nav-link nav-choice" href="">마이페이지</a>
+	                                   <a class="nav-link nav-choice" href="">공지사항</a>
+	                                   <a class="nav-link nav-choice" href="">쪽지함</a>
+	                               </nav>
+	                           </div>
+	
+	                           <!-- 근태관리 -->
+	                           <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTA" aria-expanded="false" aria-controls="collapseTA">
+	                               <span class="material-symbols-outlined">
+	                                   work_history
+	                               </span>
+	                               <span class="menubarHeadBold">&nbsp; 근태관리</span>
+	                               <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                           </a>
+	                           <div class="collapse" id="collapseTA" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+	                               
+	                               <nav class="sb-sidenav-menu-nested nav">                                                                    
+	                                   <a class="nav-link nav-choice" href="">근태등록</a>
+	                                   <a class="nav-link nav-choice" href="">내 근태현황</a>
+	                                   <a class="nav-link nav-choice" href="">근태 이력</a>
+	                                   <a class="nav-link nav-choice" href="">휴가관리</a>
+	                               </nav>
+	                               
+	                               <div class="menu-side-head">관리자 메뉴</div>
+	                               <nav class="sb-sidenav-menu-nested nav">                                   
+	                                   <a class="nav-link nav-choice" href="">전사원근태현황</a>
+	                                   <a class="nav-link nav-choice" href="">전사원휴가현황</a>
+	                                   <a class="nav-link nav-choice" href="">근태조정내역</a>                                   
+	                               </nav>                                
+	                           </div>
+	
+	
+	                           <!-- 업무 -->
+	                           <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages1" aria-expanded="false" aria-controls="collapsePages1">
+	                               <span class="material-symbols-outlined">
+	                                   event_note
+	                               </span>
+	                               <span class="menubarHeadBold">&nbsp; 업무</span>
+	                               <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                           </a>                            
+	                           <div class="collapse" id="collapsePages1" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+	                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages1">
+	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth1" aria-expanded="false" aria-controls="pagesCollapseAuth1">
+	                                       개인업무
+	                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                                   </a>
+	                                   <div class="collapse" id="pagesCollapseAuth1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages1">
+	                                       <nav class="sb-sidenav-menu-nested nav">
+												<a class="btn btn-sm btn-primary btn-size" href="enroll.du" style="margin:10px;">업무등록 바로가기</a>
+												<a class="nav-link nav-choice" href="list.du">전체 업무</a>
+												<a class="nav-link nav-choice" href="todo.du">To Do 리스트</a>
+												<a class="nav-link nav-choice" href="">월간 캘린더</a>
+												<a class="nav-link nav-choice" href="">주간 캘린더</a>
+	                                       </nav>
+	                                   </div>
+	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseProject" aria-expanded="false" aria-controls="pagesCollapseProject">
+	                                       프로젝트
+	                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                                   </a>
+	                                   <div class="collapse" id="pagesCollapseProject" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages1">
+	                                       <nav class="sb-sidenav-menu-nested nav">
+	                                           <a class="nav-link nav-choice" href="">홈</a>
+	                                           <a class="nav-link nav-choice" href="">참여프로젝트</a>
+	                                           <a class="nav-link nav-choice" href="">프로젝트 생성</a>
+	                                           <a class="nav-link nav-choice" href="">프로젝트 관리</a>
+	                                       </nav>
+	                                   </div>
+	                               </nav>
+	                           </div>
+	
+	
+	                           <!-- mail -->
+	                           <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapseMail" aria-expanded="false" aria-controls="collapseMail">
+	                               <span class="material-symbols-outlined">
+	                                   mail
+	                               </span>
+	                               <span  class="menubarHeadBold"> &nbsp; 메일</span>
+	                               <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                           </a>
+	                           <div class="collapse" id="collapseMail" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+	                               <nav class="sb-sidenav-menu-nested nav">
+	                                   <a class="btn btn-sm btn-primary btn-size" href="">메일쓰기</a>
+	                                   <a class="nav-link nav-choice" href=""> <label class="starColor">★</label> &nbsp; 중요메일함</a>
+	                                   <a class="nav-link nav-choice" href="">전체메일함</a>
+	                                   <a class="nav-link nav-choice" href="">받은메일함</a>
+	                                   <a class="nav-link nav-choice" href="">보낸메일함</a>
+	                                   <a class="nav-link nav-choice" href="">휴지통</a>
+	                                   <a class="nav-link nav-choice" href="">설정</a>
+	                               </nav>
+	                           </div>
+	
+	                           
+	                           <!-- 전자결재 -->
+	                           <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages2">
+	                               <span class="material-symbols-outlined">
+	                                   description
+	                               </span>
+	                               <span  class="menubarHeadBold">&nbsp; 기안서</span>
+	                               <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                           </a>                            
+	                           <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+	                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages2">     
+	                                   <a class="btn btn-sm btn-primary btn-size">기안서 작성</a>                               
+	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth2" aria-expanded="false" aria-controls="pagesCollapseAuth2">
+	                                       기안서관리
+	                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                                   </a>
+	                                   <div class="collapse" id="pagesCollapseAuth2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
+	                                       <nav class="sb-sidenav-menu-nested nav">
+	                                           <a class="nav-link nav-choice" href="">임시저장</a>
+	                                           <a class="nav-link nav-choice" href="">진행중</a>
+	                                           <a class="nav-link nav-choice" href="">반려됨</a>
+	                                           <a class="nav-link nav-choice" href="">완료됨</a>                                            
+	                                       </nav>
+	                                   </div>
+	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseApproval1" aria-expanded="false" aria-controls="pagesCollapseApproval1">
+	                                       통합결재보관함
+	                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                                   </a>
+	                                   <div class="collapse" id="pagesCollapseApproval1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
+	                                       <nav class="sb-sidenav-menu-nested nav">
+	                                           <a class="nav-link nav-choice" href="">결재할기안서 </a>
+	                                           <a class="nav-link nav-choice" href="">결제완료</a>                                         
+	                                       </nav>
+	                                   </div>
+	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseApproval2" aria-expanded="false" aria-controls="pagesCollapseApproval2">
+	                                       부서결재보관함
+	                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                                   </a>
+	                                   <div class="collapse" id="pagesCollapseApproval2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
+	                                       <nav class="sb-sidenav-menu-nested nav">
+	                                           <a class="nav-link nav-choice" href="">결재할기안서 </a>
+	                                           <a class="nav-link nav-choice" href="">결제완료</a>                                         
+	                                       </nav>
+	                                   </div>
+	                               </nav>
+	                           </div>
+	
+	
+	                           <!-- 주소록 -->						 
+								<!-- <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapseContact" aria-expanded="false" aria-controls="collapseContact">
+>>>>>>> Stashed changes
 									<span class="material-symbols-outlined">
 										perm_contact_calendar
 									</span>
@@ -551,6 +798,7 @@
 										<a class="nav-link nav-choice" href="">내 연락처</a>                                    
 									</nav>
 								</div>  -->
+<<<<<<< Updated upstream
 
 
 						<a class="nav-link  nav-choice" href="list.ad"> 
@@ -640,5 +888,70 @@
 
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 		<script src="resources/js/scripts.js"></script>
+=======
+															   
+	                           
+	                           <a class="nav-link  nav-choice" href="">
+	                                <span class="material-symbols-outlined">
+	                                    perm_contact_calendar
+	                                </span>
+	                                <span class="menubarHeadBold">&nbsp; 주소록</span>
+                               </a> 
+	
+	                            <!-- 회의실예약 -->
+	                            <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapseReservation" aria-expanded="false" aria-controls="collapseReservation">
+	                               <span class="material-symbols-outlined">
+	                                   event_available
+	                               </span>
+	                               <span  class="menubarHeadBold"> &nbsp; 회의실 예약</span>
+	                               <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                           </a>
+	                           <div class="collapse" id="collapseReservation" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+	                               <nav class="sb-sidenav-menu-nested nav">                                   
+	                                   <a class="nav-link nav-choice" href="">예약하기</a>
+	                                   <a class="nav-link nav-choice" href="">내예약현황</a>                                                                    
+	                               </nav>
+	                           </div>
+	
+	                          <!-- 인사관리 -->
+	                          <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
+	                           <span class="material-symbols-outlined">
+	                               manage_accounts
+	                           </span>
+	                           <span  class="menubarHeadBold">&nbsp; 인사관리</span>
+	                           <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                           </a>                            
+	                           <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+	                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages3">
+	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth3" aria-expanded="false" aria-controls="pagesCollapseAuth3">
+	                                       임직원 계정관리
+	                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                                   </a>
+	                                   <div class="collapse" id="pagesCollapseAuth3" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages3">
+	                                       <nav class="sb-sidenav-menu-nested nav">
+	                                           <a class="nav-link nav-choice" href="">사용자 등록</a>
+	                                           <a class="nav-link nav-choice" href="">사용자 조회/수정</a>                                        
+	                                       </nav>
+	                                   </div>
+	                                   <a class="nav-link collapsed nav-choice" href="">인사발령</a>
+	                                   <a class="nav-link collapsed nav-choice" href="">직위/직무등록</a>
+	                               </nav>
+	                           </div>
+	
+	                       </div>
+	                   </div>
+	                   
+	               </nav>
+	           </div>
+	           
+	           <!-- content 영역-->
+	           <div id="layoutSidenav_content">
+	               <main class="mainOuter">
+	                   
+	               	           
+	      
+	       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+	       <script src="resources/js/scripts.js"></script>
+>>>>>>> Stashed changes
 </body>
 </html>
