@@ -95,26 +95,33 @@
                     새로운 To Do 카테고리 <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
             </div>
-            <div class="todo-cate shadow-sm inner-area">
-                <!-- 첫번째 todo-category에만 todo-category-1st 클래스 부여 -->
-                <div class="todo-title">
-                    <span class="title todo-cate-title">텔레토비</span>
-                    <a>(4)</a>
-                    <span class="filter" style="float:right"  data-bs-toggle="modal" data-bs-target="#insertTodoModal">
-                        새로운 To Do %nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-                    </span>
-                </div>
-                <div class="todo-list">
-                	<input type=hidden value="${ todoNo }">
-                    <label><input type="checkbox" name="" class="todo" style="margin-left:10px;"> 보라돌이 뚜까패기</label><br>
-                    <span class="filter" style="margin-left:30px;">~2022-10-10</span>
-                    <div style="float:right; margin-right:5px;">
-                        <a onclick="deleteTodo( $(this).parent().siblings('input')val() );">삭제</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br><br>
+            
+           	<c:if test="not empty ${ tlists }">
+           		<c:forEach var="cateList" items="${ tlists }">
+		            <div class="todo-cate shadow-sm inner-area">
+		                <div class="todo-title">
+		                    <span class="title todo-cate-title">${ cateList.get(0).categoryTitle }</span>
+		                    <span class="filter" style="float:right"  data-bs-toggle="modal" data-bs-target="#insertTodoModal">
+		                        새로운 To Do %nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+		                    </span>
+		                </div>
+		                <%-- 각 카테고리에 속하는 To do 항목들을 반복문으로 출력 --%>
+		                <%-- 아직 어떻게 해야할지 모르겠삼 --%>
+						<c:forEach var="tlist" items="cateList">
+			                <div class="todo-list">
+			                	<input type=hidden value="todoNo">
+			                    <label><input type="checkbox" name="" class="todo" style="margin-left:10px;">todoTitle</label><br>
+			                    <span class="filter" style="margin-left:30px;">~ todoDate</span>
+			                    <div style="float:right; margin-right:5px;">
+			                        <a onclick="deleteTodo( $(this).parent().siblings('input')val() );">삭제</a>
+			                    </div>
+			                </div>
+		                </c:forEach>
+		            </div>
+           		</c:forEach>
+           	</c:if>
+           	
+        </div><br><br>
     </div>
 
 
@@ -137,6 +144,9 @@
 	            $(this).attr("checked", true) ? $(this).parent("label").css("text-decoration", "line-through") : $(this).parent("label").css("text-decoration", "none") ;
 	        })
         })
+        
+        // 추가필요 
+        // To DO의 체크리스트 선택/해제 클릭이벤트 발생시 ajax로 DONE_YN 컬럼 변경해주어야 함
 
         // 선택버튼 클릭시 해당 요소 삭제하는 함수
         function deleteTodo(no){
@@ -207,7 +217,7 @@
                     <span>현재 카테고리명</span>
                     <br><br>
                     <span class="title">등록할 To do</span><br>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" name="todoContent">
                     <br><br>
                 </form>
                 <div class="modal-footer">
