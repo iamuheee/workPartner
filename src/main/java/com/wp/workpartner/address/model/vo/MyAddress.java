@@ -13,6 +13,7 @@ public class MyAddress {
 	 private int addressNo;
 	 private String employeeNo;
 	 private int groupNo;
+	 private String groupName;
 	 private String addressName;
 	 private String addressNickName;
 	 private String addressTel;

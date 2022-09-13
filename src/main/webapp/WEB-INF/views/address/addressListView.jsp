@@ -6,6 +6,16 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/addressCss/address2.css">
+<style>
+#empMenu, #empSubMenu{ list-style-type: none; margin: 0; padding:0;}
+
+#empSubMenu>li{padding-left: 20px; margin: 0px;}
+
+#empSubMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);}
+#empMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);} 
+
+</style>
+
 </head>
 <body>
 	
@@ -23,45 +33,28 @@
                 <hr width="80%">             
             </div>
 
-            
-            <%-- JStree --%>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
-
             <!--  별표연락처 & 조직도 -->
             <div class="addMenu2_1">
             
                 <!-- 별표연락처 -->
-                <div class="starAdd">
-                    <span class='starYellow'>★</span><span style="font-size: 16px;"><b>별표연락처</b></span>
+                <!-- 로그한 유저의 사번 넘기자 -->              
+                <div class="starAdd" onclick="selectStarAdd();">
+                    <span class='starYellow'>★</span><span style="font-size: 16px;" onclick=""><b>별표연락처</b></span>
                 </div>
 
                 <hr width="80%">
                 <!-- 조직도 -->
-                <h6 id="empAddress"><b>조직도</b></h6>           
-                <div id="tree" class="fontsize16">
-                        
-                </div>
-            
-                <script>
-                    $('#tree').jstree({ 
-                            'plugins': ["wholerow"] ,
-                        'core' : {	                    
-                            'data' : [
-                            { "id" : "ajson1", "parent" : "#", "text" : "인사부" , "icon" : false},
-                            { "id" : "ajson2", "parent" : "#", "text" : "영업부", "icon" : false},
-                            { "id" : "ajson3", "parent" : "ajson2", "text" : "해외영업", "icon" : false },
-                            { "id" : "ajson4", "parent" : "ajson2", "text" : "국내영업", "icon" :  false},
-                            { "id" : "ajson5", "parent" : "#", "text" : "마케팅부" , "icon" :  false},
-                            { "id" : "ajson6", "parent" : "#", "text" : "IT개발부" , "icon" :  false},
-                            { "id" : "ajson7", "parent" : "ajson6", "text" : "개발 1팀", "icon" :  false },
-                            { "id" : "ajson8", "parent" : "ajson6", "text" : "개발 2팀", "icon" :  false }
-                            ]
-                        }
-                    });
-                </script>  
-                
+               	 <ul id="empMenu">
+                    <li>
+                        <div class="rowInline">
+                            <span class="fontsize16" ><b>조직도</b></span> &nbsp;&nbsp;&nbsp;                            
+                        </div>
+                    </li>
+                    <ul id="empSubMenu">                
+
+                    </ul>
+                </ul>
+                            
             </div>
             
             
@@ -78,64 +71,28 @@
                         </div>
                     </li>
                     <ul id="subAddMenu">                   
-                        <li>
-                            <div class="btn-group dropright btnPadding">
-                                <button type="button" class="btn btn-text">
-                                    <span style="font-size: 15px;">구디물산</span>
-                                </button> &nbsp; &nbsp;
-                                <button type="button" class="btn btn-text dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false" style="padding: 0;">
-                                    ፧
-                                </button>
-                                <div class="dropdown-menu">
-                                <!-- Dropdown menu links -->
-                                    <button type="button" class="dropdown-item fontsize13" data-toggle="modal" data-target="#editGp">그룹수정</button>
-                                    <button type="button" class="dropdown-item fontsize13" onclick="deleteAddGp()">그룹삭제</button> 
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="btn-group dropright">
-                                <button type="button" class="btn btn-text">
-                                    <span style="font-size: 15px;">제일디자인</span>
-                                </button>  &nbsp; &nbsp;
-                                <button type="button" class="btn btn-text dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false" style="padding: 0;">
-                                    ፧
-                                </button>
-                                <div class="dropdown-menu">
-                                <!-- Dropdown menu links -->
-                                    <button type="button" class="dropdown-item fontsize13" data-toggle="modal" data-target="#editGp">그룹수정</button>
-                                    <button type="button" class="dropdown-item fontsize13" onclick="deleteAddGp()">그룹삭제</button> 
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="btn-group dropright">
-                                <button type="button" class="btn btn-text">
-                                    <span style="font-size: 15px;">그룹미지정</span>
-                                </button>                            
-                            </div>
-                        </li>
-
+                         
                     </ul>
                 </ul>
-
                     
-            </div>
+            </div>            
+           
             
             <div class="addMenu3"></div>
 
-            <!--  검색영역 -->
+            <!-- 검색영역(시간남으면) -->
             <div class="addSearch">
                 <table class="centerBtn">
                     <tr>
-                        <td width="80px"><h4>인사부</h4></td>
-                        <td><input type="text" class="form-control" placeholder="부서 또는 이름 입력하세요" name="searchText" id="searchText"  maxlength="30" style="height: 31px; width:300px"></td>
-                        <td><button type="button" id="searchBtn" class="btn btn-sm btn-primary" onclick="">검색</button></td>
-                        <td width="90px" align="right">전체 3명</td>
+                        <td id="addTitle" width="120px"><h4><b>주소록</b></h4></td>
+                       <!--  <td><input type="text" class="form-control" placeholder="부서 또는 이름 입력하세요" name="searchText" id="searchText"  maxlength="30" style="height: 31px; width:300px"></td>
+                        <td><button type="button" id="searchBtn" class="btn btn-sm btn-primary" onclick="">검색</button></td> -->                       
                     </tr>
                 </table>
                 <hr width="96%">
             </div>
+            
+            
 
             <!-- 주소록 테이블 영역-->
             <div class="addMain">
@@ -148,184 +105,22 @@
 
                     <!-- 내연락처일때만 삭제기능 -->
                     <!-- 삭제 > 모달 > 기능 정보넘기는거 어렵다면 그냥 모달창 띄우지말고 바로 삭제처리 -->
-                    <button type="button" class="btn btn-sm btn-secondary" onclick="deleteAdds();">삭제</button>                
+                    <span id="deleteAddArea">
+	                  
+                    </span>
 
                     <a class="btn btn-sm btn-primary">메일보내기</a>
                 </div>
                 
                 <br>
-
-                <!-- 조직도 테이블 -->
-                <!-- <table class="table" id="dataCompanyTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 15px;"></th>
-                            <th>사번</th>
-                            <th>이름</th>
-                            <th>부서</th>
-                            <th>직위</th>
-                            <th>이메일</th>
-                            <th>내선번호</th>       
-                        </tr>
-                    </thead>
-            
-                    <tbody>                    
-                        <tr>
-                            <td><input type="checkbox" name="chk"></td>
-                            <td class="no">D895c123</td>
-                            <td>김인사</td>
-                            <td>인사부</td>
-                            <td>차장</td>
-                            <td>jojik123@jojik.com</td>
-                            <td>070-4465-4822</td>
-                        </tr>		            
-                        <tr>
-                            <td><input type="checkbox" name="chk"></td>
-                            <td class="no">F895c123</td>
-                            <td>김인사</td>
-                            <td>인사부</td>
-                            <td>차장</td>
-                            <td>jojik123@jojik.com</td>
-                            <td>070-4465-4822</td>
-                        </tr>  
-                        <tr>
-                            <td><input type="checkbox" name="chk"></td>
-                            <td class="no">A895c123</td>
-                            <td>김인사</td>
-                            <td>인사부</td>
-                            <td>차장</td>
-                            <td>jojik123@jojik.com</td>
-                            <td>070-4465-4822</td>
-                        </tr> 
-                        <tr>
-                            <td><input type="checkbox" name="chk"></td>
-                            <td class="no">R895c123</td>
-                            <td>김인사</td>
-                            <td>인사부</td>
-                            <td>차장</td>
-                            <td>jojik123@jojik.com</td>
-                            <td>070-4465-4822</td>
-                        </tr> 
-                        <tr>
-                            <td><input type="checkbox" name="chk"></td>
-                            <td class="no">G895c123</td>
-                            <td>김인사</td>
-                            <td>인사부</td>
-                            <td>차장</td>
-                            <td>jojik123@jojik.com</td>
-                            <td>070-4465-4822</td>
-                        </tr> 
-                        <tr>
-                            <td><input type="checkbox" name="chk"></td>
-                            <td class="no">WE95c123</td>
-                            <td>김인사</td>
-                            <td>인사부</td>
-                            <td>차장</td>
-                            <td>jojik123@jojik.com</td>
-                            <td>070-4465-4822</td>
-                        </tr> 
-                        <tr>
-                            <td><input type="checkbox" name="chk"></td>
-                            <td class="no">T5695c123</td>
-                            <td>김인사</td>
-                            <td>인사부</td>
-                            <td>차장</td>
-                            <td>jojik123@jojik.com</td>
-                            <td>070-4465-4822</td>
-                        </tr> 
-                            
-                    </tbody> 
-                </table> -->
-                                
-                
-                <!-- 내 연락처 테이블 -->
-                <!-- <table class="table" id="dataAddTable">    
-                     <thead>
-                        <tr>
-                            <th style="width:10px"></th>
-                            <th style="width: 10px;"></th>
-                            <th>번호</th>
-                            <th>이름</th>
-                            <th>회사</th>
-                            <th>부서</th>
-                            <th>직위</th>                
-                            <th>휴대전화</th>       
-                        </tr>
-                    </thead>
-            
-                    <tbody>
-                        <tr>
-                            <td><input type="checkbox" name="chk"></td>
-                            <td>
-                                <span class='starYellow'>★</span>                           
-                            </td>
-                            <td class="no">10</td>
-                            <td>김인사</td>
-                            <td>구디물산</td>
-                            <td>인사부</td>
-                            <td>차장</td>                
-                            <td>070-4465-4822</td>
-                        </tr>    
-                        <tr>
-                            <td><input type="checkbox" name="chk"></td>
-                            <td>                            
-                                <span class='starWhite'>★</span>
-                            </td>
-                            <td class="no">9</td>
-                            <td>김인사</td>
-                            <td>구디물산</td>
-                            <td>인사부</td>
-                            <td>차장</td>                
-                            <td>070-4465-4822</td>
-                        </tr>         
-                    </tbody>
-                </table>      -->
-                
-                
-                <!-- 별표연락처 -->
-                 <table class="table" id="dataStarAddTable"> 
-                    <thead>
-                        <tr>
-                            <th style="width:10px"></th>
-                            <th style="width: 10px;"></th>
-                            <th>번호</th>
-                            <th>이름</th>
-                            <th>회사</th>
-                            <th>부서</th>
-                            <th>직위</th>                
-                            <th>휴대전화</th>       
-                        </tr>
-                    </thead>
-            
-                    
-                    <tbody>
-                        <tr>
-                            <td><input type="checkbox" name="chk"></td>
-                            <td>
-                                <span class='starYellow'>★</span>                           
-                            </td>
-                            <td class="no">10</td>
-                            <td>김인사</td>
-                            <td>구디물산</td>
-                            <td>인사부</td>
-                            <td>차장</td>                
-                            <td>070-4465-4822</td>
-                        </tr>    
-                        <tr>
-                            <td><input type="checkbox" name="chk"></td>
-                            <td>                            
-                                <span class='starYellow'>★</span>
-                            </td>
-                            <td class="no">9</td>
-                            <td>김인사</td>
-                            <td>구디물산</td>
-                            <td>인사부</td>
-                            <td>차장</td>                
-                            <td>070-4465-4822</td>
-                        </tr>         
-                    </tbody>       
-                </table>
-
+				
+				<div id="tableArea">	
+						
+				</div>
+				
+                <!-- 1. 조직도 테이블 --> 
+                <!-- 2. 내 연락처 테이블 -->
+                <!-- 3. 별표연락처 -->              
 
             
             </div>
@@ -506,24 +301,8 @@
             </div>
                 
             <!-- 페이징 영역-->
-            <div class="pasingAdd">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>            
+            <div class="pasingAdd" align="center" style="display:inline">
+                 
             </div>
 
             <!--==================================== 삭제용 script ======================================= -->
@@ -920,6 +699,316 @@
         </div>
         
     </div>
+    
+     <script>
+            	$(function(){
+            		selectDepList();
+            		selectGpList();   
+            		selectdepTbCategory();
+            		selectGpCategory(); 
+            		selectStarAdd();
+            	})
+            	
+            	// 부서별 목록 ajax
+            	function selectDepList(){
+            		
+            		$.ajax({
+            			
+            			url: "depList.ad",
+            			success:function(list){
+            				//console.log(list);
+            				let value = "";
+            				
+            				for(let i=0; i<list.length; i++){
+            					value += '<li>'
+                            		   +	 '<div class="btn-group dropright btnPadding">'
+                                	   + 	 	'<button type="button" class="btn btn-text">'
+                                       +	    	'<span style="font-size: 15px;">' + list[i].departmentName + '</span>'
+                                       +			'<input type="hidden" class="depCd" value="' + list[i].departmentCode + '">'
+                                	   +	     '</button>'
+                                	   +      '</div>'
+                                	   +  '</li>';
+                                	   
+                                $("#empSubMenu").html(value);	   
+                                	   
+            				}
+            			},
+            			error:function(){
+            				console.log("부서리스트 ajax통신 실패");
+            			}
+            			
+            		})            		
+            	}
+            	
+            	// 내 연락처 그룹별 목록
+            	function selectGpList(){
+            		$.ajax({
+            			url: "gpList.ad",
+            			data: {
+            				employeeNo: 5  // loginUser.empNo            				
+            			},
+            			success:function(list){            				
+            				let value = "";
+            				
+            				for(let i=0; i<list.length; i++){
+            					  value += '<li>'
+                           				 +	  '<div class="btn-group dropright btnPadding">'
+                                		 + 		  '<button type="button" class="btn btn-text">'
+                                         + 				'<span style="font-size: 15px;">'+ list[i].groupName +'</span>'
+                                         +				'<input type="hidden" class="groupNo" value="' + list[i].groupNo + '">'
+                                		 +    	  '</button> &nbsp; &nbsp;';
+                                		 
+                              		 if(list[i].groupNo != 1 ){
+                              			 value += '<button type="button" class="btn btn-text dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false" style="padding: 0;">'
+                                          	 +	    	 '፧'
+                                      		 +   	   '</button>'
+                                     		 +         '<div class="dropdown-menu">'                                
+                                          	 +        	 	'<button type="button" class="dropdown-item fontsize13" data-toggle="modal" data-target="#editGp">그룹수정</button>'
+                                          	 +         		'<button type="button" class="dropdown-item fontsize13" onclick="deleteAddGp()">그룹삭제</button>' 
+                                     		 +       	'</div>';
+                                		 }
+                              		 
+                                	value +=  	'</div>'
+                        				  + '</li>';
+                        				 
+                        		$("#subAddMenu").html(value);		 
+            				}
+            				 
+            			},
+            			error:function(){
+            				console.log("내연락처 목록용 ajax실패");
+            			}
+            			
+            		})
+            	}
+            	
+            	// 조직도목록 클릭시 상세 테이블 조회용 ajax
+            	//let depCategory= 0; 전역변수 보단            	
+            	function selectdepTbCategory(){
+            		$("#empSubMenu").on("click", "li", function(){            			
+            			selectdepTbList($(this).find(".depCd").val());
+            			// 이렇게 바로 전달 *children().children() 이런식으로 내려가는것보단 find!
+            		})            		
+            	}
+            	
+            	function selectdepTbList(selectDepCd, cpage){            		
+            		$.ajax({
+            			type: "post",
+            			url : "depTb.ad",
+            			data : { 
+            				depCd: selectDepCd,
+            				cpage: cpage
+            			},            			
+            			success : function(result){
+            				
+            				let value;
+            					 value += '<table class="table" id="dataCompanyTable">'
+    	                               +	'<thead>'
+    	                               +         '<tr>'
+    	                               + 				'<th style="width: 15px;"></th>'
+                                       + 				'<th>사번</th>'
+                                	   + 				'<th>이름</th>'
+                                	   +				'<th>부서</th>'
+                                	   +                '<th>직위</th>'
+                                	   +  				'<th>이메일</th>'
+                                	   + 				'<th>내선번호</th>'
+                                	   +          '</tr>'                        
+                                	   +    '</thead>'
+                                	   +  '<tbody>'   ;                 						   
+            					
+            				let pageValue = "";
+            				
+            				let list = result.list;
+            				let pi = result.pi; 
+            				
+            				if(list.length == 0){
+            					value += "<tr>"
+            							+	"<td colspan='7'>등록된 직원이 없습니다.</td>"            						
+            							+"</tr>";
+            				}else{
+            					for(let i=0; i<list.length; i++){
+            						value += 		'<tr>'
+                                        	+ 			'<td><input type="checkbox" name="chk"></td>'
+                                        	+ 			'<td class="no">'+ list[i].empNo +'</td>'
+                                            +   		'<td>'+ list[i].empName +'</td>'
+                                        	+   		'<td>'+ list[i].depCd +'</td>'
+                                        	+  			'<td>'+ list[i].posCd +'</td>'
+                                        	+   		'<td>'+ list[i].empEmail + '</td>';
+                                        	
+                                        	if(list[i].empExtension != null){
+                                        		 value   +=   '<td>'+ list[i].empExtension +'</td>';
+                                        	}else{
+                                        		 value   +=  '<td>'+ '' +'</td>'; 
+                                        	}                                        	
+                                    value   +=  '</tr>'	;                                        	
+            					}
+            					
+            					 if(pi.currentPage != 1){
+                        			pageValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectdepTbList("+ selectDepCd + ", "  + (pi.currentPage - 1) + ")'>&lt;</button>"	
+                        		}
+                        		
+                        		for(let p=pi.startPage; p<=pi.endPage; p++) { 
+                				   
+                		   			if(p == pi.currentPage) { 
+                				   			pageValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
+                				   	}else {
+                				   			pageValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectdepTbList("+ selectDepCd + ", "  + p +")'>" + p + "</button>"
+                		           	} 
+                		         }     
+                         
+                		         if(pi.currentPage != pi.maxPage) {
+                		        	  pageValue +=	"<button class='btn btn-sm btn-outline-primary' onclick='selectdepTbList(" + selectDepCd + ", " + (pi.currentPage + 1) + ")'>&gt;</button>"
+                		         }  
+            				}
+            				
+            				value   +=	'</tbody>'
+                        			+ '</table>';
+            				
+            				$("#tableArea").html(value);
+            				 $(".pasingAdd").html(pageValue); 
+            				            				            				
+            				$("#addTitle").html("<h4><b>"+ list[0].depCd +"</b></h4>");
+            				$("#deleteAddArea").html("");        	
+            				
+            				
+            				
+            			},
+            			error:function(){
+            				console.log("조직도 주소록 테이블 조회용 ajax실패");
+            			}
+            			
+            		
+            		})
+            	}
+            	
+            	// 내 연락처 목록클릭 시 조회테이블
+            	function selectGpCategory(){
+            		$("#subAddMenu").on("click", "li", function(){            			
+            			selectAddTbList($(this).find(".groupNo").val());               			
+            		})            		
+            	}
+            	
+            	function selectAddTbList(groupNo, cpage){
+            		
+            		$.ajax({
+            			type: "post",
+            			url : "myAdTb.ad",
+            			data : { 
+            				groupNo: groupNo,
+            				cpage: cpage
+            			},            			
+            			success : function(result){
+            				
+            				let value;
+            					 value += '<table class="table" id="dataAddTable">'
+    	                               +	'<thead>'
+    	                               +         '<tr>'
+    	                               +				'<th style="width:10px"></th>'
+    	                               +				'<th style="width: 10px;"></th>'
+    	                               +				'<th>번호</th>'
+    	                               +				'<th>이름</th>'
+    	                               +				'<th>회사</th>'
+    	                               +				'<th>부서</th>'
+    	                               +				'<th>직위</th>'                
+    	                               +				'<th>휴대전화</th>'      
+                                	   +          '</tr>'                        
+                                	   +    '</thead>'
+                                	   +  '<tbody>'   ;                 						   
+            					
+            				let pageValue = "";
+            				
+            				let list = result.list;
+            				let pi = result.pi;   
+            				
+            				if(list.length == 0){
+            					value += "<tr>"
+            							+	"<td colspan='8'>등록된 연락처가 없습니다.</td>"            						
+            							+"</tr>";
+            				}else{
+            					for(let i=0; i<list.length; i++){
+            						value += 		'<tr>'
+                                        	+ 			'<td><input type="checkbox" name="chk"></td>'
+                                        	+			'<td>'
+                                            +				'<span class="';
+                                    if(list[i].addressStar == 'Y'){
+                                    		value +=  'starYellow';
+                                    }else{
+                                    	value += 'starWhite';
+                                    }     
+                                            
+                                     value  +=                '">★</span>'                           
+                                        	+			'</td>'
+                                        	+			'<td class="no">'+ list[i].addressNo +'</td>'
+                                        	+			'<td>'+ list[i].addressCompany +'</td>'
+                                        	+			'<td>'+ list[i].addressDepartment +'</td>'
+                                        	+			'<td>'+ list[i].addressPosition +'</td>'
+                                        	+			'<td>'+ list[i].addressTel +'</td>';        
+                                        	
+                                        	if(list[i].addressTel != null){
+                                        		 value   +=   '<td>'+ list[i].addressTel +'</td>';
+                                        	}else{
+                                        		 value   +=  '<td>'+ '' +'</td>'; 
+                                        	}                                        	
+                                    value   +=  '</tr>'	;                                        	
+            					}
+            					
+            					 if(pi.currentPage != 1){
+                        			pageValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectAddTbList("+ groupNo + ", "  + (pi.currentPage - 1) + ")'>&lt;</button>"	
+                        		}
+                        		
+                        		for(let p=pi.startPage; p<=pi.endPage; p++) { 
+                				   
+                		   			if(p == pi.currentPage) { 
+                				   			pageValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
+                				   	}else {
+                				   			pageValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectAddTbList("+ groupNo + ", "  + p +")'>" + p + "</button>"
+                		           	} 
+                		         }     
+                         
+                		         if(pi.currentPage != pi.maxPage) {
+                		        	  pageValue +=	"<button class='btn btn-sm btn-outline-primary' onclick='selectAddTbList(" + groupNo + ", " + (pi.currentPage + 1) + ")'>&gt;</button>"
+                		         }  
+            				}
+            				
+            				value   +=	'</tbody>'
+                        			+ '</table>';
+            				
+                        			console.log(value);
+            				$("#tableArea").html(value);
+            				 $(".pasingAdd").html(pageValue); 
+            				            				            				
+            				$("#addTitle").html("<h4><b>내 연락처</b></h4>"); 
+            				$("#deleteAddArea").html(' <button type="button" class="btn btn-sm btn-secondary" onclick="deleteAdds();">삭제</button>');        	
+            				
+            			},
+            			error:function(){
+            				console.log("내연락처 주소록 테이블 조회용 ajax실패");
+            			}       		
+            		})
+            	} 
+            	
+            	function selectStarAdd(cpage){
+            		$.ajax({
+            			url: "starList.ad",
+            			type: "post",
+            			data: {
+            				empNo:'5',
+            				cpage:cpage
+            			},
+            			success:function(result){
+            				console.log(result);
+            			}, 
+            			error:function(){
+            				console.log("별표연락터 조회용 ajax실패")
+            			}
+            		
+            				
+            		})
+            	}
+            	
+            	
+            	
+            </script>
 		
 </body>
 </html>

@@ -9,6 +9,10 @@ addressAdminNotice
     background-color: #0442AF !important; 
     border-color:#0442AF !important;                 
 }
+btn-outline-primary{
+	 background-color: #0442AF !important; 
+    border-color:#0442AF !important; 
+}
 
 .adOuter{
     margin: auto;

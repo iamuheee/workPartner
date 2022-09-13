@@ -6,6 +6,7 @@
 		<result column="add_no" property="addressNo"/>
 		<result column="emp_no" property="employeeNo"/>
 		<result column="group_no" property="groupNo"/>
+		<result column="group_name" property="groupName"/>
 		<result column="add_name" property="addressName"/>
 		<result column="add_nick" property="addressNickName"/>
 		<result column="add_tel" property="addressTel"/>
@@ -26,15 +27,150 @@
 		<result column="emp_no" property="employeeNo"/>
 	</resultMap>
 	
-	<resultMap id="positionResult" type="Position">
+	<!-- <resultMap id="positionResult" type="Position">
 		<result column="pos_cd" property="positionCode"/>
 		<result column="pos_name" property="positionName"/>
-	</resultMap>
+	</resultMap> -->
 	
 	<resultMap id="departmentResult" type="Department">
 		<result column="dep_cd" property="departmentCode"/>
 		<result column="dep_name" property="departmentName"/>
+	</resultMap> 
+	
+	<resultMap id="empResult" type="Employee">
+		<result column="emp_no" property="empNo" />
+		<result column="emp_id" property="empId" />
+		<result column="emp_pwd" property="empPwd" />
+		<result column="emp_name" property="empName" />
+		<result column="emp_phone" property="empPhone" />
+		<result column="emp_extension" property="empExtension" />
+		<result column="emp_email" property="empEmail" />
+		<result column="emp_exemail" property="empExEmail" />
+		<result column="emp_enrollldate" property="empEnrollDate" />
+		<result column="emp_retiredate" property="empRetireDate" />
+		<result column="emp_modifydate" property="empModifyDate" />
+		<result column="emp_status" property="empStatus" />
+		<result column="emp_profile" property="empProfile" />		
+		<result column="emp_nt_admin" property="empNtAdmin" />
+		<result column="dep_cd" property="depCd" />
+		<result column="pos_cd" property="posCd" />	
+		<result column="emp_sig_use" property="empSigUse" />		
 	</resultMap>
+	
+	<select id="selectDepList" resultMap="departmentResult">	
+		select dep_cd,
+		       dep_name
+		  from tb_department
+		  order
+		     by dep_cd asc	
+	</select>
+	
+	<select id="selectGpList" resultMap="myGroupResult">
+		 select group_no,
+		 		group_name 
+		   from tb_mygroup
+		  where emp_no = #{empNo}
+		  order 
+		     by group_no asc
+	</select>
+	
+	
+	<select id="selectEmpAdList" resultMap="empResult">
+		 select 
+		         emp_no
+		        , emp_Id
+		        , emp_pwd
+		        , emp_name
+		        , emp_phone
+		        , emp_extension
+		        , emp_email
+		        , emp_exEmail
+		        , emp_enrollDate
+		        , emp_retireDate
+		        , emp_modifyDate
+		        , emp_status
+		        , emp_profile      
+		        , emp_nt_admin
+		        , dep_name as dep_cd
+		        , pos_name as pos_cd   
+		        , emp_sig_use
+		    from tb_employee
+		    join tb_department using(dep_cd)
+		    join tb_position using(pos_cd)
+		   where dep_cd = #{depCd}
+		    and emp_status = 'Y'
+		   order 
+		   	  by emp_name asc
+	</select>
+	
+	<select id="selectEmpAdListCount" resultType="_int">
+		  select count(*)       
+		    from tb_employee   
+		    where dep_cd = #{depCd}
+		     and emp_status = 'Y'
+	</select>
+	
+	<select id="selectMyAddCount" resultType="_int">
+		select count(*)
+               from tb_my_address
+              where group_no = #{groupNo}
+                and add_status = 'Y'
+	</select>
+	
+	<select id="selectMyAddList" resultMap="myAddressResult">
+		select
+               add_no
+             , emp_no
+             , group_no
+             , add_name
+             , add_nick
+             , add_tel
+             , add_extension_no
+             , add_fax
+             , add_company
+             , add_department
+             , add_position
+             , add_memo
+             , add_email
+             , add_star
+             , add_status
+       from tb_my_address
+      where group_no = #{groupNo}
+        and add_status = 'Y'
+	</select>
+	
+	<select id="selectStarAdCount" resultType="_int">
+		 select count(*)
+	       from tb_my_address
+	      where emp_no = #{empNo}
+	        and add_star = 'Y'
+	        and add_status = 'Y'
+	</select>
+	
+	<select id="selectStarList" resultMap="myAddressResult">
+		 select
+               add_no
+             , a.emp_no as "emp_no"
+             , a.group_no as "group_no"
+             , group_name
+             , add_name
+             , add_nick
+             , add_tel
+             , add_extension_no
+             , add_fax
+             , add_company
+             , add_department
+             , add_position
+             , add_memo
+             , add_email
+             , add_star
+             , add_status
+       from tb_my_address a
+       join tb_mygroup g on(a.group_no = g.group_no)
+     where a.emp_no = #{empNo}
+       and add_star = 'Y'
+       and add_status = 'Y'
+	</select>
 	
 	
 	
