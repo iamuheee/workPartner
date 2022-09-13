@@ -89,7 +89,7 @@
 		 	BY DUTY_NO DESC
 	</select>
 	
-	<select id="selectDutyChargeList" resultMap="DutyChargeResult">
+	<select id="selectDutyChargeList" resultMap="dutyChargeResult">
 		SELECT 
 			   DC.DUTY_NO AS "DUTY_NO"
 			   DC.EMP_ID AS "EMP_NO"
