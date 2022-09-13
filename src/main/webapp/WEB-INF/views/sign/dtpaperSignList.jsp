@@ -169,7 +169,7 @@
        
        function showPopup(){
         
-        vacation = window.open("vacation.html", "btn", "width=820, height=800");
+        vacation = window.open("vacationEnrollForm.bo", "btn", "width=825, height=800");
         vacation.moveTo(560,120);
         vacation.focus();
         };
@@ -178,7 +178,7 @@
        
        function showPopup2(){
         
-        vacation = window.open("outWorkPaper.html", "btn", "width=820, height=800");
+        vacation = window.open("outWorkEnrollForm.bo", "btn", "width=825, height=800");
         vacation.moveTo(560,120);
         vacation.focus();
         };
@@ -187,26 +187,18 @@
        
         function showPopup3() {
 
-                var _width = '800';
-                var _height = '800';
-
-                // 팝업을 가운데 위치시키기 위해 아래와 같이 값 구하기
-                var _left = Math.ceil((window.screen.width - _width) / 2);
-                var _top = Math.ceil((window.screen.height - _height) / 2);
-
-                window.open('reSignEmp.html', 'popup-test', 'width=' + _width + ',height=' + _height + ',left=' + _left + ',top=' + _top);
+        	 vacation = window.open("reSignEnrollForm.bo", "btn", "width=825, height=800");
+             vacation.moveTo(560,120);
+             vacation.focus();
 
             }
     </script>
     <script>
        
         function showPopup4() {
-                var _width = '800';
-                var _height = '800';
-                // 팝업을 가운데 위치시키기 위해 아래와 같이 값 구하기
-                var _left = Math.ceil((window.screen.width - _width) / 2);
-                var _top = Math.ceil((window.screen.height - _height) / 2);
-                window.open('coopEnrollForm.bo', 'popup-test', 'width=' + _width + ',height=' + _height + ',left=' + _left + ',top=' + _top);
+        	 vacation = window.open("cooperationEnrollForm.bo", "btn", "width=825, height=800");
+             vacation.moveTo(560,120);
+             vacation.focus();
             }
     </script>
    

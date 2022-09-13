@@ -155,7 +155,7 @@ input, select, textarea {
 </script>
 </head>
 <body style="width: 800px;">
-	<jsp:include page="../sign/insertTitle.jsp">
+	<jsp:include page="../sign/insertTitle.jsp"/>
 	
 	 <br>
     <section>
