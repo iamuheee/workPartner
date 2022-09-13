@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -183,27 +183,9 @@ span {
 	href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css" />
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<!-- <script>
-        $(document).ready(function () {
-            $("#today").change(function () {
-                console.log("gd");
-                if ($("#today").is(":checked")) {
-                    $("#startTime").attr("disabled", false);
-                    $("#endTime").attr("disabled", false);
-                    $("#currentDate2").attr("disabled", true);
-                } else {
-                    $("#startTime").attr("disabled", true);
-                    $("#endTime").attr("disabled", true);
-                    $("#currentDate2").attr("disabled", false);
-                }
-            });
-        });
-    </script> -->
-
 </head>
-
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-
+	<jsp:include page="../sign/signPaper.jsp"/>
 	<br>
 	<section>
 		<div style="margin: auto; margin-top: 10px; width: 800px;">
@@ -254,6 +236,5 @@ span {
 		document.getElementById('currentDate2').value = new Date()
 				.toISOString().substring(0, 10);
 	</script>
-
 </body>
 </html>

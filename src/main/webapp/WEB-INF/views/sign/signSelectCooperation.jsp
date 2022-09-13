@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -167,7 +167,7 @@ input, select, textarea {
 </style>
 </head>
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;" >
-  <jsp:include page="../sign/selectTitle.jsp"/>
+  <jsp:include page="../sign/signPaper.jsp"/>
     <br>
     <section>
         <div style="margin: auto; margin-top: 10px; width: 800px;">

@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet"
@@ -153,72 +153,54 @@
 </head>
 <!-- onload="window.resizeTo(620,800)" -->
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-    <section class="mainTitle">
-        <form action="updatePaper.bo" name="updateForm" style="float: left">
-            <a class="insertBtn" onclick="updateCheck();">기안서 재작성</a>
-        </form>
-        <form action="updateSign.me" style="float: left">
-            <a class="insertBtn" id="btn-modal">결재선 변경</a>
-        </form>
-        <form action="deletePaper.bo" name="deleteForm">
-            <a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
-        </form>
-        <hr>
-    </section>
-    <script>
-        function updateCheck() {
-            if (confirm("다시 기안하시겠습니까?") == true){    //확인
-                document.updateForm.submit();
-            }else{   //취소
-                return false;
-            }
-            }
-    </script>
-    <script>
-        function deleteCheck() {
-            if (confirm("정말 삭제하시겠습니까??") == true){    //확인
-                document.deleteForm.submit();
-            }else{   //취소
-                return false;
-            }
-            }
-    </script>
+	
+	<jsp:include page="../sign/signPaper.jsp"/>
+    <br>
     <section>
-        <div>
-            <h1 class="dtpaperName">XX 신청서 - <span style="font-weight:lighter;">김종군(영업부)</span></h1>
-            <hr>
-        </div>
-    </section>
-    <section class="signSelect">
-        <div>
-            <h3>결재선</h3>
-            <table align="center">
-                <tr>
-                    <th width="100">결재</th>
-                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><span>김종군(마케팅부)</span></td>
-                    <th>결재</th>
-                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"></td>
-                    <th>결재</th>
-                    <td></td>
+        <div style="border:0.5px solid rgba(143, 143, 143, 0.547); margin:auto; margin-top: 10px; width: 764px;" id="dpaperOuter">
+            <table style="margin-left:10px; border:0; border-spacing: 10px;">
+                <tr align="left">
+                    <th width="70" style="border:0">
+                        근태명
+                    </th>
+                    <td width="540" style="border:0">
+                        연차
+                    </td>
+                </tr>
+                <tr align="left">
+                    <th style="border:0">
+                        시작일시
+                    </th>
+                    <td style="border:0">
+                        <span>2022-01-02</span>
+                    </td>
+                </tr>
+                <tr align="left">
+                    <th style="border:0">
+                        종료일시
+                    </th>
+                    <td style="border:0">
+                        <span>2022-01-02</span>
+                    </td>
+                </tr>
+                <tr align="left">
+                    <th style="border:0; vertical-align: top;">
+                        사유
+                    </th>
+                    <td style="border:0">
+                        <textarea name="" id="" cols="30" rows="10"
+                            style=" border-radius: 4px; width: 95%; resize: none;" readonly>ㄴ</textarea>
+                    </td>
                 </tr>
             </table>
         </div>
-    </section>
-    <hr style="margin-top: 10px;">
-    <section class="publicPaper">
-        <div>
-            <table align="center">
-                <tr class="titleSection">
-                    <th style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);">제목</th>
-                    <td align="left" style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);"><span
-                            style="margin-left:10px;">외근신청서 결재 부탁드립니다.</span></td>
-                </tr>
-                <tr style="border-top:0.5px solid rgba(143, 143, 143, 0.547);">
-                    <th>첨부파일</th>
-                    <td align="left"><input type="file" style="margin-left:10px; border:0;"></td>
-                </tr>
-            </table>
+        <div id="copyDpaper">
+
         </div>
     </section>
+    <script>
+        document.getElementById('currentDate').value = new Date().toISOString().substring(0, 10);
+        document.getElementById('currentDate2').value = new Date().toISOString().substring(0, 10);;
+    </script>
 </body>
 </html>

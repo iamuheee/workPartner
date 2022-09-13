@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -62,8 +62,8 @@ th {
 }
 
 th, td {
-	border-right: 0.5px solid rgba(143, 143, 143, 0.547);
 	vertical-align: middle;
+	border-right: 0.5px solid rgba(143, 143, 143, 0.547);
 }
 
 .signSelect tr {
@@ -118,8 +118,16 @@ th, td {
 	font-size: 16px;
 }
 
+input[type=file] {
+	margin-bottom: 4px;
+}
+
 input, select, textarea {
-	border: 0.5px solid rgba(143, 143, 143, 0.547)
+	border: 1px solid rgba(143, 143, 143, 0.547)
+}
+
+span {
+	margin-left: 5px
 }
 
 .otworkPaper input[type=text] {
@@ -129,8 +137,8 @@ input, select, textarea {
 	height: 100%;
 	border: 0;
 	font-size: 16px;
-	vertical-align: middle;
 	background-color: #ffffff48;
+	padding: auto;
 }
 
 /* .otworkPaper input[type=date] {
@@ -161,12 +169,8 @@ input, select, textarea {
 	vertical-align: middle;
 }
 
-input[type=file] {
-	margin-bottom: 4px;
-}
-
-span {
-	margin-left: 5px
+#startTime {
+	width: 28%;
 }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -183,77 +187,51 @@ span {
 	href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css" />
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<!-- <script>
-        $(document).ready(function () {
-            $("#today").change(function () {
-                console.log("gd");
-                if ($("#today").is(":checked")) {
-                    $("#startTime").attr("disabled", false);
-                    $("#endTime").attr("disabled", false);
-                    $("#currentDate2").attr("disabled", true);
-                } else {
-                    $("#startTime").attr("disabled", true);
-                    $("#endTime").attr("disabled", true);
-                    $("#currentDate2").attr("disabled", false);
-                }
-            });
-        });
-    </script> -->
-
 </head>
-
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-
+	<jsp:include page="../sign/signPaper.jsp"/>
 	<br>
 	<section>
 		<div style="margin: auto; margin-top: 10px; width: 800px;">
 			<table class="otworkPaper"
 				style="border: 1px solid rgba(143, 143, 143, 0.547)" align="center">
 				<tr>
-					<td class="tableTitle" width="100">퇴직자</td>
+					<td class="tableTitle" width="100">신청자</td>
 					<td width="280" align="left"><span>김범진</span></td>
-					<td class="tableTitle" width="100">부서</td>
-					<td width="280" align="left" style="border-right: 0;"><span>영업부</span>
+					<td class="tableTitle" width="100">담당자</td>
+					<td width="280" align="left" style="border-right: 0;"><span>김범진</span>
 					</td>
 				</tr>
 				<tr>
-					<td class="tableTitle">퇴직예정일자</td>
-					<td align="left"><span>2022-01-01</span></td>
-					<td class="tableTitle">업무인수자</td>
-					<td align="left" style="border-right: 0;"><span>인수자</span></td>
+					<td class="tableTitle">외근목적</td>
+					<td align="left"><span>출장</span></td>
+					<td class="tableTitle">거래처</td>
+					<td align="left" style="border-right: 0;"><span>동양생명</span></td>
 				</tr>
 				<tr>
-					<td class="tableTitle">외부메일주소</td>
-					<td align="left"><span>메일</span></td>
-					<td class="tableTitle">면담자</td>
-					<td style="border-right: 0;" align="left"><span>면담자</span></td>
+					<td class="tableTitle">교통수단</td>
+					<td align="left"><span>자차</span></td>
+					<td class="tableTitle">위치</td>
+					<td style="border-right: 0;" align="left"><span>영등포로
+							49길 23</span></td>
 				</tr>
 				<tr>
-					<td class="tableTitle">은행명</td>
-					<td align="left"><span>국민은행</span></td>
-					<td class="tableTitle">계좌번호</td>
-					<td style="border-right: 0;" align="left"><span>계좌번호</span></td>
+					<td class="tableTitle">시간</td>
+					<td colspan="3" align="left" style="border-right: 0;"><span>2022-01-02</span>
+						~ <span>2022-02-02</span></td>
+
 				</tr>
 				<tr>
-					<td class="tableTitle" style="border-bottom: 0;">퇴직사유</td>
+					<td class="tableTitle" style="border-bottom: 0;">비고</td>
 					<td colspan="3" style="border-bottom: 0; border-right: 0;"
 						align="left">
-						<div style="margin-left: 5px;">
-							<p>여기는 어쩌고 저쩌고</p>
+						<div style="margin-left: 10px;">
+							<p>하이용</p>
 						</div>
 					</td>
 				</tr>
 			</table>
 		</div>
 	</section>
-
-
-	<script>
-		document.getElementById('currentDate').value = new Date().toISOString()
-				.substring(0, 10);
-		document.getElementById('currentDate2').value = new Date()
-				.toISOString().substring(0, 10);
-	</script>
-
 </body>
 </html>

@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 
 </head>
-<body>
+<body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;" >
 	<jsp:include page="../sign/insertTitle.jsp"/>
 	
 	<br>
