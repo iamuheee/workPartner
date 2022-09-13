@@ -1,0 +1,134 @@
+@charset "UTF-8";
+/* ==============================================================
+
+noticeListView
+
+===============================================================*/ 
+.ntOuter{
+    margin: auto;
+    padding: 20px;         
+    align-items: center;
+    box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);;
+    border-radius: 10px;
+    width: 80%; 
+    height: 85%;
+}
+
+/* 그리드영역 */
+.ntContainer{
+     margin: 30px;
+     display: grid;
+     grid-gap: 10px;
+     height: 90vh;         
+     grid-template-columns: 1fr 1fr;
+     grid-template-rows: 40px 40px 0.85fr 40px;
+     grid-template-areas: 'menu1_1 menu1_2'
+                          'menu2_1 menu2_2'
+                          'main main'
+                          'footer footer';    
+    color: rgb(43, 42, 42);  
+    font-size: 13px;
+ }
+ .ntContainer div{
+     /* border: 1px solid  black;         */
+ } 
+
+.ntMenu1_1{ grid-area: menu1_1; }
+
+.ntMenu1_2{ grid-area: menu1_2; }
+ 
+ .ntMenu2_1{ grid-area: menu2_1;}
+
+ .ntMenu2_2{ grid-area: menu2_2;}
+      
+ .ntMain{grid-area: main;}
+
+ .ntPasing{
+    grid-area: footer;
+    place-items: center;
+    display: grid;
+}
+
+ #adminSetting:hover{
+    cursor: pointer;        
+ }
+
+ .ntContainer select{        
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;      
+    /* margin: 5px;          */
+    height: 30px;
+           
+ }
+ 
+ .ntContainer input{        
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;     
+    height: 30px;
+    
+ }
+   
+
+.inline{display: inline;}
+
+#noticeTable>tbody:hover{cursor: pointer;}
+
+/* ==============================================================
+
+noticeDetailView
+
+===============================================================*/ 
+
+
+.ntOuter1{
+    margin: auto;
+    padding: 0px;         
+    align-items: center;
+    box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);
+    border-radius: 5px;
+    width: 80%; 
+    /* height: 80%; */
+    color: rgb(43, 42, 42);               
+}
+   
+.ntOuter2{
+    margin: auto;
+    padding: 10px;         
+    align-items: center;     
+    height: 5px;
+    background-color:  rgb(236, 236, 236);               
+}
+
+.ntOuter1 input{        
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;     
+    height: 30px;        
+ }
+
+.fontsize13{font-size: 13px;}
+
+.textareaStyle1{
+    height: 350px;
+    width: 100%;
+    /* border-color:rgb(182, 181, 181) ; */
+    border-style: none;        
+}
+
+.aStyle{text-decoration: none; color:  rgb(43, 42, 42);}
+
+.borderColor{border: 1px solid rgb(212, 211, 211) ;}
+.paddingStyle{padding: 15px;}
+
+#profileImg{
+     width:23px;
+     height:23px;
+     border:1px solid lightgray;
+     border-radius: 50%;               
+ }
+
+#ntDetailTB *{margin:5px;}
+#ntDetailTB{width:100%;}
+ 
+.sympathyRed{color: red;}
+.sympathywhite{color: rgb(197, 197, 194);}
+.marginReply{margin-left: 7%;}

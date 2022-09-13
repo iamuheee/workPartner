@@ -1,0 +1,171 @@
+@charset "UTF-8";
+/* ==============================================================
+
+email List 관련 css
+
+===============================================================*/ 
+.ntOuter{
+    margin: auto;
+    padding: 20px;         
+    align-items: center;
+    box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);;
+    border-radius: 10px;
+    width: 80%; 
+    height: 85%;
+}
+
+/* 그리드영역 */
+.ntContainer{
+     margin: 30px;
+     display: grid;
+     grid-gap: 10px;
+     height: 90vh;               
+     grid-template-rows: 40px 40px 40px 0.85fr 40px;
+     grid-template-areas: 'menu1'
+                          'menu2'
+                          'menu3'
+                          'main'
+                          'footer';    
+    color: rgb(43, 42, 42);  
+    font-size: 13px;
+ }
+ .ntContainer div{
+     /* border: 1px solid  black;         */
+ } 
+
+.ntMenu1{ grid-area: menu1; }
+
+.ntMenu2{ grid-area: menu2; }
+ 
+.ntMenu3{ grid-area: menu3;}
+        
+.ntMain{grid-area: main;}
+
+.ntPasing{
+    grid-area: footer;
+    place-items: center;
+    display: grid;
+}
+
+.ntContainer select{        
+    border: 1px solid #ced4da;
+    border-radius: 0.10rem;      
+    /* margin: 5px;          */
+    height: 30px;
+           
+ }
+ 
+ .ntContainer input{        
+    border: 1px solid #ced4da;
+    border-radius: 0.10rem;     
+    height: 30px;
+    
+ }  
+ .starYellow{                
+    font-size: 1.0em;
+    color:rgba(250, 208, 0, 0.99);        
+}
+.starWhite{       
+    font-size: 1.0em;     
+    color: rgb(197, 197, 194);
+}   
+.emailNotRead{
+    color: rgb(14, 168, 14);
+}  
+#emailTable>tbody>tr:hover{
+    cursor: pointer;
+    background-color: #f1f4f89a;;
+}
+
+.borderStyle{
+    border: 1px solid red;
+    border-radius: 3px;
+    background-color: white;
+    color: red;
+    font-size: 12px;
+    padding: 2px;
+}
+
+/* ==============================================================
+
+email Detail 관련 css
+
+===============================================================*/ 
+
+.emOuter1{
+    margin: auto;
+    padding: 20px;         
+    align-items: center;
+    box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);;
+    border-radius: 10px;
+    width: 80%; 
+    height: 95%;
+    background-color:  rgb(248, 248, 248);   
+}
+
+/* 그리드영역 */
+.EmContainer1{
+     margin: 30px;
+     display: grid;
+     grid-gap: 15px;
+     height: 90vh;               
+     grid-template-rows:  40px 0.3fr 0.65fr;
+     grid-template-areas: 'menu1'
+                          'menu2'                              
+                          'main';    
+    color: rgb(43, 42, 42);  
+    font-size: 13px;
+ }
+ .EmContainer1 div{
+     /* border: 1px solid  black;         */
+ } 
+
+.emMenu1{ grid-area: menu1; }
+
+.emMenu2{ grid-area: menu2; }   
+           
+.emMain{
+    grid-area: main;
+    background-color: white;
+    padding: 10px;
+}
+
+
+.EmContainer1 select{        
+    border: 1px solid #ced4da;
+    border-radius: 0.10rem;      
+    /* margin: 5px;          */
+    height: 30px;
+           
+ }
+ 
+ .EmContainer1 input{        
+    border: 1px solid #ced4da;
+    border-radius: 0.10rem;     
+    height: 30px;
+    
+ }  
+   
+/* .borderStyle{
+    border: 1px solid red;
+    border-radius: 3px;
+    background-color: white;
+    color: red;
+    font-size: 12px;
+    padding: 2px;
+} */
+
+.borderFileStyle{
+    background-color:  white;   
+    /* border: 1px solid #ced4da; */
+    height: 80px;
+    width: 100%;
+    margin-top: 5px;
+    /* margin-left: 40px; */
+    padding: 5px;
+}
+
+.emailDetailTable *{margin: 5px;}
+.emailDetailTable{width:100%;}
+
+.aStyle1{text-decoration: none; color:  rgb(43, 42, 42);}

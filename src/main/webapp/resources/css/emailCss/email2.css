@@ -1,0 +1,59 @@
+@charset "UTF-8";
+/* ==============================================================
+
+email 보내기/답장/전달 관련 css
+
+===============================================================*/ 
+
+.ntOuter{
+    margin: auto;
+    padding: 15px;         
+    align-items: center;
+    box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);
+    border-radius: 10px;
+    width: 70%; 
+    height: 95%;
+    color: rgb(43, 42, 42); 
+}
+.ntOuter input{        
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;     
+    height: 30px;    
+ }
+
+ .ntOuter select{        
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;     
+    height: 30px;    
+ }
+
+
+.fontsize13{font-size: 13px;}
+
+/* #emailTable *{margin: 5px;}    */
+
+.inline{display: inline;}
+
+.inlineBlock{display: inline-block;}
+
+.blueColor{background-color: rgb(229, 243, 255);}
+.redColor{background-color: rgb(250, 226, 226);}
+
+.removeMail{cursor: pointer;}
+
+.removeFile{cursor: pointer;}
+
+input[type=file]::file-selector-button {
+    /* width: 50px; */
+    height: 30px;
+    background: rgb(245, 241, 241);
+    border: 1px solid rgb(245, 241, 241);
+    /* border-radius: 10px; */
+    cursor: pointer;      
+}
+
+input[type=file]::file-selector-button:hover{
+    background-color: rgb(212, 211, 211);
+    cursor: pointer;
+}
+

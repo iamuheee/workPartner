@@ -14,9 +14,7 @@
 	<typeAliases>
 		<typeAlias type="com.wp.workpartner.duty.model.vo.Duty" alias="Duty" />
 		<typeAlias type="com.wp.workpartner.duty.model.vo.DutyCharge" alias="DutyCharge" />
-		<typeAlias type="com.wp.workpartner.todo.model.vo.Todo" alias="Todo" />
-		
-		
+		<typeAlias type="com.wp.workpartner.todo.model.vo.Todo" alias="Todo" />		
 	</typeAliases>
 	
 	<!-- <유의사항> -->

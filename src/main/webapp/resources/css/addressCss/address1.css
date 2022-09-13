@@ -1,0 +1,253 @@
+@charset "UTF-8";
+/* ==============================================================
+
+addressAdminNotice
+
+===============================================================*/  
+
+.btn-primary{
+    background-color: #0442AF !important; 
+    border-color:#0442AF !important;                 
+}
+
+.adOuter{
+    margin: auto;
+    padding: 20px;         
+    align-items: center;
+    box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);;
+    border-radius: 10px;
+    width: 90%; 
+    height: 80%;
+}
+    
+/* 그리드영역 */
+.adContainer{
+    display: grid;
+    grid-gap: 20px;
+    height: 90vh;
+    grid-template-columns: 0.4fr  1fr 25px  0.5fr;
+    grid-template-rows: 60px 1fr  30px;
+    grid-template-areas: 'header header  header header'
+                        ' menu   main1  submit  main2'                            
+                        'footer footer  footer footer';    
+color: rgb(43, 42, 42);  
+font-size: 13px;
+}
+.adContainer div{
+    /* border: 1px solid  black; */
+} 
+
+.header{grid-area: header;}
+    
+.menu{ 
+    grid-area: menu;
+    border: 1px solid #e0e3e6;
+    /* margin: 5px; */
+}
+    
+.main1{
+    grid-area: main1;
+    border: 1px solid #e0e3e6;
+}
+    
+.submit{
+    grid-area: submit;
+    display: grid;
+    place-items: center;
+
+}
+
+.main2{
+    grid-area: main2;
+    border: 1px solid #e0e3e6;
+}
+
+.footer{grid-area: footer;}
+
+/*  그 외 css */
+
+.table>tbody>tr:hover{
+    cursor:pointer;
+    background-color:#f1f1f1;
+}
+
+.addBoxShadow {        
+    margin: 10px;
+    /* padding: 10px 10px 10px 50px;          */
+    align-items: center;
+    box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);;
+    border-radius: 1px;
+    width: 80%; 
+}    
+
+.aHover:hover{
+    cursor: pointer;
+    }
+
+#empAddress:hover{cursor:pointer; background: rgb(233, 244, 248);}
+
+.formInput{
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;     
+    margin: 5px;   
+}
+
+.fontsize16{font-size: 16px;} 
+
+.removeAdmin{cursor: pointer;}
+
+/* ==============================================================
+
+addressEmail / addressEmailCC
+
+===============================================================*/  
+
+
+
+.adOuter1{
+    margin: auto;
+    padding: 20px;         
+    align-items: center;
+    box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);;
+    border-radius: 10px;
+    width: 90%; 
+    height: 80%;        
+}
+    
+/* 그리드영역 */
+ .adContainer2{
+     display: grid;
+     grid-gap: 15px;
+     height: 90vh;
+     grid-template-columns: 0.4fr  1fr 25px  0.5fr;
+     grid-template-rows: 60px 0.5fr  0.5fr 60px;
+     grid-template-areas: 'header2 header2  header2 header2'
+                          ' adEmMenu1   adEmMain1  adEmSubmit  adEmMain2'   
+                          ' adEmMenu2   adEmMain1  adEmSubmit  adEmMain2'                         
+                          'adEmFooter adEmFooter  adEmFooter adEmFooter';    
+    color: rgb(43, 42, 42);  
+    font-size: 13px;
+ }
+ .adContainer2 div{
+     /* border: 1px solid  black; */
+ } 
+
+.header2{grid-area: header2;}
+ 
+.adEmMenu1{ 
+    grid-area: adEmMenu1;
+    /* border: 1px solid #e0e3e6; */
+    /* margin: 5px; */
+}
+
+.adEmMenu2{ 
+    grid-area: adEmMenu2;
+    /* border: 1px solid #e0e3e6; */
+    /* margin: 5px; */
+}
+ 
+.adEmMain1{
+    grid-area: adEmMain1;
+    border: 1px solid #e0e3e6;
+}
+ 
+.adEmSubmit{
+    grid-area: adEmSubmit;
+    display: grid;
+    place-items: center;
+
+}
+
+.adEmMain2{
+    grid-area: adEmMain2;
+    border: 1px solid #e0e3e6;
+}
+
+ .adEmFooter{grid-area: adEmFooter;}
+
+ /*  그 외 css */
+
+ /* .table>tbody>tr:hover{
+     cursor:pointer;
+     background-color:#f1f1f1;
+  }
+
+ .addBoxShadow {        
+     margin: 10px;        
+     align-items: center;
+     box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);;
+     border-radius: 1px;
+     width: 80%; 
+ }    
+
+.aHover:hover{
+    cursor: pointer;
+ }
+
+#empAddress:hover{cursor:pointer; background: rgb(233, 244, 248);}
+
+.formInput{
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;     
+    margin: 5px;   
+} */
+
+/* .fontsize16{font-size: 16px;}  */
+
+.removeMail{cursor: pointer;}
+
+#mainAddMenu, #subAddMenu{ list-style-type: none; margin: 0; padding:0;}
+
+#subAddMenu>li{padding-left: 20px; margin: 0px;}
+
+#subAddMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);}
+#mainAddMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);}
+
+/* ==============================================================
+
+addressNote
+
+===============================================================*/  
+
+.adOuter3{
+    margin: auto;
+    padding: 20px;         
+    align-items: center;
+    box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);;
+    border-radius: 10px;
+    width: 90%; 
+    height: 80%;
+}
+    
+/* 그리드영역 */
+ .adContainer3{
+     display: grid;
+     grid-gap: 20px;
+     height: 90vh;
+     grid-template-columns: 1fr 2fr;
+     grid-template-rows: 60px 1fr  30px;
+     grid-template-areas: 'header3 header3'
+                          ' menu3   adNoteMain'                            
+                          'footer3  footer3';    
+    color: rgb(43, 42, 42);  
+    font-size: 13px;
+ }
+ .adContainer3 div{
+     /* border: 1px solid  black; */
+ } 
+
+.header3{grid-area: header3;}
+ 
+.menu3{ 
+    grid-area: menu3;
+    border: 1px solid #e0e3e6;
+    /* margin: 5px; */
+}
+ 
+.adNoteMain{
+    grid-area: adNoteMain;
+    border: 1px solid #e0e3e6;
+}
+ 
+.footer3{grid-area: footer3;}
+    

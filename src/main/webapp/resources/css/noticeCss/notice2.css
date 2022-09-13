@@ -1,0 +1,22 @@
+@charset "UTF-8";
+/* ==============================================================
+
+noticeUpdateView
+
+===============================================================*/
+.ntOuter{
+    margin: auto;
+    padding: 10px;         
+    align-items: center;
+    box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);;
+    border-radius: 10px;
+    width: 70%; 
+    height: 95%;
+    color: rgb(43, 42, 42); 
+}
+.ntOuter input{        
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;     
+    height: 30px;        
+ }
+.fontsize13{font-size: 13px;}
