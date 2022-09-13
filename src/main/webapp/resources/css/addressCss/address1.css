@@ -203,6 +203,14 @@ addressEmail / addressEmailCC
 #subAddMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);}
 #mainAddMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);}
 
+#empMenu, #empSubMenu{ list-style-type: none; margin: 0; padding:0;}
+
+#empSubMenu>li{padding-left: 20px; margin: 0px;}
+
+#empSubMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);}
+#empMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);}
+
+
 /* ==============================================================
 
 addressNote
