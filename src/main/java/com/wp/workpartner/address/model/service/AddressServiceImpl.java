@@ -68,6 +68,14 @@ public class AddressServiceImpl implements AddressService {
 	public ArrayList<MyAddress> selectStarList(String empNo, PageInfo pi) {
 		return adDao.selectStarList(sqlSession, empNo, pi);
 	}
+
+	
+	/** 테이블 선택시 회사 내 직원 상세정보	 
+	 */
+	@Override
+	public ArrayList<Employee> selectDetailEmp(String empNo) {
+		return adDao.selectDetailEmp(sqlSession, empNo);
+	}
 	
 
 }

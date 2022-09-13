@@ -46,7 +46,7 @@
 		<result column="emp_extension" property="empExtension" />
 		<result column="emp_email" property="empEmail" />
 		<result column="emp_exemail" property="empExEmail" />
-		<result column="emp_enrollldate" property="empEnrollDate" />
+		<result column="emp_enrolldate" property="empEnrollDate" />
 		<result column="emp_retiredate" property="empRetireDate" />
 		<result column="emp_modifydate" property="empModifyDate" />
 		<result column="emp_status" property="empStatus" />
@@ -172,6 +172,28 @@
        and add_status = 'Y'
 	</select>
 	
+	<select id="selectDetailEmp" resultMap="empResult">
+		select 
+		          emp_no
+		        , emp_Id
+		        , emp_pwd
+		        , emp_name
+		        , emp_phone
+		        , emp_extension
+		        , emp_email
+		        , emp_exEmail
+		        , emp_enrollDate		  
+		        , emp_status
+		        , emp_profile      
+		        , emp_nt_admin
+		        , dep_name as dep_cd
+		        , pos_name as pos_cd   
+		        , emp_sig_use
+		    from tb_employee
+		    join tb_department using(dep_cd)
+		    join tb_position using(pos_cd)
+		   where emp_no = #{empNo}
+	</select>
 	
 	
 </mapper>

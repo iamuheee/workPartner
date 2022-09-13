@@ -30,6 +30,7 @@ public interface AddressService {
 	ArrayList<MyAddress> selectStarList(String empNo, PageInfo pi);
 	
 	// 6. 테이블 선택 시 회사 내 직원정보
+	ArrayList<Employee> selectDetailEmp(String empNo);
 	
 	// 7. 테이블 선택시 내 연락처 사람 정보
 	

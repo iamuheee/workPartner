@@ -39,7 +39,7 @@
                 <!-- 별표연락처 -->
                 <!-- 로그한 유저의 사번 넘기자 -->              
                 <div class="starAdd" onclick="selectStarAdd();">
-                    <span class='starYellow'>★</span><span style="font-size: 16px;" onclick=""><b>별표연락처</b></span>
+                    <span class='starYellow'>★</span><span style="font-size: 16px;"><b>별표연락처</b></span>
                 </div>
 
                 <hr width="80%">
@@ -157,78 +157,23 @@
             <div class="detailAdd">           
                 <br>
                 <!-- 내연락처에만 있는 삭제/ 편집기능-->
-                <div style="margin-left: 30px;" align="left">
+                <div id="myAddChoiceArea" style="margin-left: 30px;" align="left">
                     <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#addressEdit">편집</button>
                     <button type="button" class="btn btn-sm btn-secondary" onclick="deleteAdd();">삭제</button>      
                 </div> 
 
                 <div class="addBoxShadow">
                     <br>
-                    <table>	
+                    <table id="adDetailTb">	
                         
-                        <!--목록클릭 전-->
-                        <!-- <br>
-                        <p>
-                            연락처 상세정보를 보려면 목록을 <br>
+                        <!--목록클릭 전-->                       
+                        <p id="beforeClick">
+                        	<br>
+                            연락처 상세정보를 보려면 이름을 <br>
                             클릭하세요
-                        </p> -->
+                        </p> 
 
-                        <!-- 주소록 상세보기 -->
-                        <thead>
-                            <tr>
-                                <th>
-                                    <img id="profileImg" src="">
-                                </th>
-                                <th align="left"><h5><b>감나라</b></h5></th>
-                                <th class="fontSmallSize" style="width: 50px;">Maria</th>
-                                <th  align="right">
-                                    <a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.em">
-                                        mail
-                                    </a>
-                                </th>
-                                <th>
-                                    <button type="button" class="material-symbols-outlined aHover btn-text" data-toggle="modal" data-target="#addressChat">
-                                        chat
-                                    </button>
-                                </th>
-                            </tr>                       
-                        </thead>
-                        <tbody>               
-                            <tr>
-                                <td class="fontSmallSize">부서</td>
-                                <td colspan="4" class="fontMiddleAdd">&nbsp; 영업부1팀</td>
-                            </tr>
-                            <tr>
-                                <td class="fontSmallSize">직급</td>
-                                <td colspan="4" class="fontMiddleAdd">&nbsp; 주임</td>
-                            </tr>
-            
-                            <tr>
-                                <td colspan="5"> <hr style="width: 100%;"> </td>
-                            </tr>
-            
-                            <tr>
-                                <td class="fontSmallSize">이메일</td>
-                                <td colspan="4" class="fontMiddleAdd">&nbsp; wkdfgjkdl@naver.com</td>
-                            </tr>
-                            <tr>
-                                <td class="fontSmallSize">내선번호</td>
-                                <td colspan="4" class="fontMiddleAdd">&nbsp;  073-1234-5689</td>
-                            </tr>
-                            <tr>
-                                <td class="fontSmallSize">휴대전화</td>
-                                <td colspan="4" class="fontMiddleAdd">&nbsp; 010-1234-5689</td>
-                            </tr>                        
-            
-                            <tr>
-                                <td colspan="5"> <hr style="width: 97%;"> </td>
-                            </tr>
-            
-                            <tr>
-                                <td class="fontSmallSize">입사일</td>
-                                <td colspan="4" class="fontMiddleAdd">&nbsp;  2018.07.02</td>
-                            </tr>                             
-                        </tbody> 
+                        <!-- 주소록 상세보기 -->                       
 
                         <!-- 별표연락처 & 내 연락처 상세보기 -->
                         <!-- <thead>
@@ -291,8 +236,6 @@
                                 <td colspan="3" class="fontMiddleAdd">&nbsp; 시간약속에 철저한 편</td>
                             </tr>                             
                         </tbody>   -->
-
-
             
                     </table> 
                     <br>
@@ -707,6 +650,7 @@
             		selectdepTbCategory();
             		selectGpCategory(); 
             		selectStarAdd();
+            		selectDetailEmpClick();
             	})
             	
             	// 부서별 목록 ajax
@@ -830,7 +774,7 @@
             						value += 		'<tr>'
                                         	+ 			'<td><input type="checkbox" name="chk"></td>'
                                         	+ 			'<td class="no">'+ list[i].empNo +'</td>'
-                                            +   		'<td>'+ list[i].empName +'</td>'
+                                            +   		'<td class="name">'+ list[i].empName +'</td>'
                                         	+   		'<td>'+ list[i].depCd +'</td>'
                                         	+  			'<td>'+ list[i].posCd +'</td>'
                                         	+   		'<td>'+ list[i].empEmail + '</td>';
@@ -880,7 +824,84 @@
             		
             		})
             	}
+            	// 조직도테이블 > 상세보기
+            	function selectDetailEmpClick(){
+            		$("#dataCompanyTable").on("click", ".name", function(){
+            			selectDetailEmp($(this).prev().text());
+            		})
+            	}
             	
+            	function selectDetailEmp(empNo){
+            		$.ajax({
+            			url:"detailEmp.ad",
+            			type:"post",
+            			data:{
+            				empNo:empNo
+            			},
+            			success:function(result){
+            				console.log(result);
+            				let value = "";
+            				    value += '<thead>'
+                            		 	+		'<tr>'
+                            		 	+	        '<th><img id="profileImg" src="${pageContext.request.contextPath}/resources/profile_images/defaultProfile.png"></th>'
+                                		+			'<th align="left"><h5><b>'+ result[0].empName +'</b></h5></th>'                               
+                                		+           '<th  align="right">'
+                                    	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.em?no='+ result[0].empNo +'">mail</a>'
+                                		+			'</th>'
+                                		+			'<th><button type="button" class="material-symbols-outlined aHover btn-text" data-toggle="modal" data-target="#addressChat">chat</button></th>'
+                           				+		 '</tr>'                       
+                        				+'</thead>'
+                       					+'<tbody>'               
+                            			+		'<tr>'
+                                		+			'<td class="fontSmallSize">부서</td>'
+                                		+			'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result[0].depCd +'</td>'
+                            			+		'</tr>'
+                            			+		'<tr>'
+                                		+			'<td class="fontSmallSize">직급</td>'
+                                		+ 			'<td colspan="4" class="fontMiddleAdd">&nbsp;'+ result[0].posCd +'</td>'
+                            			+ 		'</tr>'
+           								+		 '<tr>'
+                                		+			'<td colspan="5"> <hr style="width: 100%;"> </td>'
+                           				+ 		'</tr>'
+                          				+		'<tr>'
+			                       		+			'<td class="fontSmallSize">이메일</td>'
+			                    		+			'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result[0].empEmail+'</td>'
+			                			+       '</tr>'
+			                			+		'<tr>'
+		                      			+ 			'<td class="fontSmallSize">내선번호</td>';		                			
+			                			
+                           
+                           if(result[0].empExtension != null){
+                        	   		value += 		'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result[0].empExtension+'</td>'
+                           }
+		                    		value +=	'</tr>'
+		                    			  + 	 '<tr>'
+				                       	  +			'<td class="fontSmallSize">휴대전화</td>';
+                           
+                           if(result[0].empPhone != null){
+                        	   value += 			'<td colspan="4" class="fontMiddleAdd">&nbsp;' + result[0].empPhone + ' </td>';			               			  
+                           }
+                            			                    
+                           		value	+=		'</tr>'
+                           				+       '<tr>'
+                                		+			'<td colspan="5"> <hr style="width: 97%;"> </td>'
+                            			+		'</tr>'
+			                            +		'<tr>'
+                                		+			'<td class="fontSmallSize">입사일</td>'
+                                		+			'<td colspan="4" class="fontMiddleAdd">&nbsp;'+ result[0].empEnrollDate+ '</td>'
+                            			+		'</tr>'                             
+                        				+'</tbody>'; 
+                        				
+                        	$("#beforeClick").remove();		
+                        	$("#adDetailTb").html(value);			
+                        				
+            			},
+            			error:function(){
+            				console.log("조직도 직원 상세보기용 ajax 실패");
+            			}
+            		})
+            	}
+            	            	
             	// 내 연락처 목록클릭 시 조회테이블
             	function selectGpCategory(){
             		$("#subAddMenu").on("click", "li", function(){            			
@@ -939,10 +960,10 @@
                                      value  +=                '">★</span>'                           
                                         	+			'</td>'
                                         	+			'<td class="no">'+ list[i].addressNo +'</td>'
+                                        	+			'<td class="name">'+ list[i].addressName +'</td>'
                                         	+			'<td>'+ list[i].addressCompany +'</td>'
                                         	+			'<td>'+ list[i].addressDepartment +'</td>'
-                                        	+			'<td>'+ list[i].addressPosition +'</td>'
-                                        	+			'<td>'+ list[i].addressTel +'</td>';        
+                                        	+			'<td>'+ list[i].addressPosition +'</td>'                                        	       
                                         	
                                         	if(list[i].addressTel != null){
                                         		 value   +=   '<td>'+ list[i].addressTel +'</td>';
@@ -973,7 +994,7 @@
             				value   +=	'</tbody>'
                         			+ '</table>';
             				
-                        			console.log(value);
+                        			//console.log(value);
             				$("#tableArea").html(value);
             				 $(".pasingAdd").html(pageValue); 
             				            				            				
@@ -986,7 +1007,7 @@
             			}       		
             		})
             	} 
-            	
+            	            	
             	function selectStarAdd(cpage){
             		$.ajax({
             			url: "starList.ad",
@@ -996,13 +1017,93 @@
             				cpage:cpage
             			},
             			success:function(result){
-            				console.log(result);
+            				let list = result.list;
+            				let pi = result.pi;
+            				let value;       					
+       						let pageValue = "";
+       						
+       						value += '<table class="table" id="dataStarAddTable">' 
+       	                   		 	+ 	'<thead>'
+                            		+   	'<tr>'
+                                	+			'<th style="width:10px"></th>'
+                               		+			'<th style="width: 10px;"></th>'		   
+                                	+			'<th>번호</th>'
+                                	+			'<th>이름</th>'
+    		   						+			'<th>그룹명</th>'	
+                                	+			'<th>회사</th>'
+                                	+			'<th>부서</th>'
+                                	+  			'<th>직위</th>'                
+                                	+			'<th>휴대전화</th>'       
+                            		+		'</tr>'
+                        			+	'</thead>'	
+                					+ 	'<tbody>';
+                					
+       						if(list.length == 0){
+            					value += "<tr>"
+            							+	"<td colspan='8'>등록된 연락처가 없습니다.</td>"            						
+            							+"</tr>";
+            				}else{
+            					for(let i=0; i<list.length; i++){
+            						value += 		'<tr>'
+                                        	+ 			'<td><input type="checkbox" name="chk"></td>'
+                                        	+			'<td>'
+                                            +				'<span class="';
+                                    if(list[i].addressStar == 'Y'){
+                                    		value +=  'starYellow';
+                                    }else{
+                                    	value += 'starWhite';
+                                    }     
+                                            
+                                     value  +=                '">★</span>'                           
+                                        	+			'</td>'
+                                        	+			'<td class="no">'+ list[i].addressNo +'</td>'
+                                        	+			'<td class="name">' + list[i].addressName + '</td>'
+                                        	+			'<td>'+ list[i].groupName +'</td>'
+                                        	+			'<td>'+ list[i].addressCompany +'</td>'
+                                        	+			'<td>'+ list[i].addressDepartment +'</td>'
+                                        	+			'<td>'+ list[i].addressPosition +'</td>';                                             
+                                        	
+                                        	if(list[i].addressTel != null){
+                                        		 value   +=   '<td>'+ list[i].addressTel +'</td>';
+                                        	}else{
+                                        		 value   +=  '<td>'+ '' +'</td>'; 
+                                        	}                                        	
+                                    value   +=  '</tr>'	;                                        	
+            					}
+            					
+            					 if(pi.currentPage != 1){
+                        			pageValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectStarAdd("+ (pi.currentPage - 1) + ")'>&lt;</button>"	
+                        		}
+                        		
+                        		for(let p=pi.startPage; p<=pi.endPage; p++) { 
+                				   
+                		   			if(p == pi.currentPage) { 
+                				   			pageValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
+                				   	}else {
+                				   			pageValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectStarAdd("+ p +")'>" + p + "</button>"
+                		           	} 
+                		         }     
+                         
+                		         if(pi.currentPage != pi.maxPage) {
+                		        	  pageValue +=	"<button class='btn btn-sm btn-outline-primary' onclick='selectAddTbList("  + (pi.currentPage + 1) + ")'>&gt;</button>"
+                		         }  
+            				}
+            				
+            				value   +=	'</tbody>'
+                        			+ '</table>';
+                        
+                        
+                        
+                    $("#tableArea").html(value);
+       			    $(".pasingAdd").html(pageValue); 
+       				            				            				
+       				$("#addTitle").html("<h4><b>별표연락처</b></h4>"); 
+       				$("#deleteAddArea").html(' <button type="button" class="btn btn-sm btn-secondary" onclick="deleteAdds();">삭제</button>');        	
+       						
             			}, 
             			error:function(){
             				console.log("별표연락터 조회용 ajax실패")
-            			}
-            		
-            				
+            			}    
             		})
             	}
             	

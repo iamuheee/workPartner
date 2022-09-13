@@ -59,4 +59,8 @@ public class AddressDao {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		return (ArrayList)sqlSession.selectList("addressMapper.selectStarList", empNo, rowBounds);
 	}
+	
+	public ArrayList<Employee> selectDetailEmp(SqlSessionTemplate sqlSession, String empNo){
+		return (ArrayList)sqlSession.selectList("addressMapper.selectDetailEmp", empNo);
+	}
 }
