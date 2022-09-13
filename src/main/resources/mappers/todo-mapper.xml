@@ -6,6 +6,7 @@
 		<result column="TODO_NO" property="todoNo" />
 		<result column="EMP_NO" property="empNo" />
 		<result column="CATEGORY_NO" property="categoryNo" />
+		<result column="TODO_CONTENT" property="todoContent" />
 		<result column="DONE_YN" property="doneYN" />
 		<result column="TODO_DATE" property="todoDate" />
 		<result column="CATE_TITLE" property="categoryTitle" />
@@ -18,6 +19,7 @@
 			 , T.EMP_NO AS "EMP_NO"
 			 , CATEGORY_NO
 			 , CATE_TITLE
+			 , TODO_CONTENT
 			 , COLOR
 			 , DONE_YN
 			 , TODO_DATE
@@ -32,7 +34,7 @@
 	<update id="doneTodo">
 			UPDATE TB_TODO
 		<choose>    
-			<when test="#{doneYN} == 'N'">
+			<when test="#{doneYN} == 'Y'">
 			   SET DONE_YN = 'N'
 			</when>  
 			<otherwise>
@@ -55,6 +57,7 @@
 			   SEQ_TDNO.NEXTVAL
 			 , #{empNo}
 			 , #{categoryNo}
+			 , #{todoContent}
 			 , DEFAULT
 			 , DEFAULT
 			 )

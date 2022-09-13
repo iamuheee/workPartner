@@ -17,23 +17,44 @@ public class TodoController {
 	
 	private TodoServiceImpl tService;
 	
+	/**
+	 * To do 리스트 조회
+	 * @param mv
+	 * @param empNo
+	 * @return ModelAndView (tlists:카테고리별로 분류된 리스트, tlist: 각 카테고리의 To do 리스트)
+	 */
 	@RequestMapping("list.to")
 	public ModelAndView selectTodoList(ModelAndView mv, int empNo){
 		ArrayList<Todo> list = tService.selectTodoList(empNo);
 		
+		// tlist  : 각 카테고리 안의 To do 항목들이 들어간 ArrayList
+		// tlists : 카테고리별로 분류된 ArrayList (각각의 tlist들이 리스트의 각 요소로 들어감)
 		ArrayList<Todo> tlist = new ArrayList<Todo>();
 		ArrayList< ArrayList<Todo> > tlists = new ArrayList< ArrayList<Todo> >();
 		
-		// 마지막 인덱스는 i+1번 인덱스가 없어서 NullPointerException이 뜰텐데 어쩌지??
-		// => 고민해보기 ㅡㅡ
-		for(int i=0; i<list.size(); i++) {
-			if( list.get(i).getCategoryNo().equals( list.get(i+1).getCategoryNo() ) ) {
-				tlist.add(list.get(i));
-			}else {
-				tlist.add(list.get(i));
-				tlists.add(tlist);
-				tlist.clear();
+		// 문제1) 마지막 인덱스는 i+1번 인덱스가 없어서 NullPointerException이 뜰텐데 어쩌지??
+		// 			=> 마지막 인덱스 제외하고 반복문 수행
+		// 문제2)list.size() == 1이면 오류 뜰텐데 어쩌지??
+		//			=> list.size() == 1인 경우, 1이 아닌 경우로 조건 나누기
+		
+		if( list.size() != 1 ) {
+			tlists.add(tlist);
+		}else {
+			for(int i=0; i<list.size() - 1; i++) {
+				if( list.get(i).getCategoryNo().equals( list.get(i+1).getCategoryNo() ) ) {
+					tlist.add(list.get(i));
+				}else {
+					tlist.add(list.get(i));
+					tlists.add(tlist);
+					tlist.clear();
+				}
 			}
+			// 마지막 인덱스에 대한 조건은 필요 없지 않음?
+			// 이유 : 이미 마지막-1인덱스와 마지막인덱스의 일치/불일치를 따졌잖슴
+			//		  경우 == : tlist.add(마지막-1인덱스), tlists에 아직 넣지 않음, tlist 초기화 안됨 => 기존 인덱스에 마지막인덱스 추가됨 
+			//		  경우 != : tlist.add(마지막-1인덱스), tlists에 새 요소 추가됨, tlist 초기화됨    => 새로운 인덱스에 마지막인덱스 들어감
+			tlist.add( list.get(list.size()-1) );
+			tlists.add(tlist);
 		}
 		
 		mv.addObject( "tlists", tlists ).setViewName("duty/todoListView");
