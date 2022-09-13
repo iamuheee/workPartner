@@ -484,30 +484,31 @@
 	                           </div>
 	
 	                          <!-- 인사관리 -->
-	                          <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
-	                           <span class="material-symbols-outlined">
-	                               manage_accounts
-	                           </span>
-	                           <span  class="menubarHeadBold">&nbsp; 인사관리</span>
-	                           <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-	                           </a>                            
-	                           <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-	                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages3">
-	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth3" aria-expanded="false" aria-controls="pagesCollapseAuth3">
-	                                       임직원 계정관리
-	                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-	                                   </a>
-	                                   <div class="collapse" id="pagesCollapseAuth3" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages3">
-	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="">사용자 등록</a>
-	                                           <a class="nav-link nav-choice" href="">사용자 조회/수정</a>                                        
-	                                       </nav>
-	                                   </div>
-	                                   <a class="nav-link collapsed nav-choice" href="">인사발령</a>
-	                                   <a class="nav-link collapsed nav-choice" href="">직위/직무등록</a>
-	                               </nav>
-	                           </div>
-	
+	                          <!-- 인사부 직원에게만 보이는 메뉴 -->
+	                          <c:if test="${ loginUser.depCd eq '인사부' }">
+		                          <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
+		                           <span class="material-symbols-outlined">
+		                               manage_accounts
+		                           </span>
+		                           <span  class="menubarHeadBold">&nbsp; 인사관리</span>
+		                           <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+		                           </a>                            
+		                           <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+		                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages3">
+		                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth3" aria-expanded="false" aria-controls="pagesCollapseAuth3">
+		                                       임직원 계정관리
+		                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+		                                   </a>
+		                                   <div class="collapse" id="pagesCollapseAuth3" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages3">
+		                                       <nav class="sb-sidenav-menu-nested nav">
+		                                           <a class="nav-link nav-choice" href="enrollForm.em">사용자 등록</a>
+		                                           <a class="nav-link nav-choice" href="list.em">사용자 조회/수정</a>                                        
+		                                       </nav>
+		                                   </div>
+		                                   <a class="nav-link collapsed nav-choice" href="">직위/직무등록</a>
+		                               </nav>
+		                           </div>
+	                           </c:if>
 	                       </div>
 	                   </div>
 	                   
