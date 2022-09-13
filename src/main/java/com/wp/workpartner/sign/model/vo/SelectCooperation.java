@@ -1,5 +1,6 @@
 package com.wp.workpartner.sign.model.vo;
 
+import java.sql.Clob;
 import java.util.ArrayList;
 
 import lombok.AllArgsConstructor;
@@ -7,13 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Dtpaper {
+public class SelectCooperation {
 	private int dpNo;
 	private String empNo;
 	private String dpTitle;
@@ -24,11 +24,10 @@ public class Dtpaper {
 	private String dpCategory;
 	private String dpTemp;
 	private String dpUrl;
+	private String depRec;
+	private String cpRequestor;
+	private String cpRequestDay;
+	private Clob cpContent;
 	
 	private ArrayList<Sign> signList;
-	//private ArrayList<Vacation> vacationList;
-	//private ArrayList<Otwork> otworkList;
-	//private ArrayList<ReSign> reSignList;
-	//private ArrayList<Cooperation> cooperationList;
-	
 }

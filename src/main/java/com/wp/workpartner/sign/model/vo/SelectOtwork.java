@@ -7,13 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Dtpaper {
+public class SelectOtwork {
 	private int dpNo;
 	private String empNo;
 	private String dpTitle;
@@ -24,11 +23,13 @@ public class Dtpaper {
 	private String dpCategory;
 	private String dpTemp;
 	private String dpUrl;
-	
+	private String otCall;
+	private String otSupervisor;
+	private String otStartdate;
+	private String otEnddate;
+	private String otCustomer;
+	private String otContent;
+	private String otTrans;
+	private String otNote;
 	private ArrayList<Sign> signList;
-	//private ArrayList<Vacation> vacationList;
-	//private ArrayList<Otwork> otworkList;
-	//private ArrayList<ReSign> reSignList;
-	//private ArrayList<Cooperation> cooperationList;
-	
 }
