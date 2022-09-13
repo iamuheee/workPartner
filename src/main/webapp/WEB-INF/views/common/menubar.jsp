@@ -405,7 +405,7 @@
 	                           </a>                            
 	                           <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
 	                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages2">     
-	                                   <a class="btn btn-sm btn-primary btn-size">기안서 작성</a>                               
+	                                   <a class="btn btn-sm btn-primary btn-size" href="../sign/signMain.jsp">기안서 작성</a>                               
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth2" aria-expanded="false" aria-controls="pagesCollapseAuth2">
 	                                       기안서관리
 	                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
