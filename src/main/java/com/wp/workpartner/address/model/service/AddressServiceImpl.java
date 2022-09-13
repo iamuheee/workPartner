@@ -1,5 +1,8 @@
 package com.wp.workpartner.address.model.service;
 
-public class AddressServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service 
+public class AddressServiceImpl implements AddressService {
 
 }

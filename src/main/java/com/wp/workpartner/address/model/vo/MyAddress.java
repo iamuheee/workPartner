@@ -1,5 +1,28 @@
 package com.wp.workpartner.address.model.vo;
 
-public class Address {
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+public class MyAddress {
+	 private int addressNo;
+	 private String employeeNo;
+	 private int groupNo;
+	 private String addressName;
+	 private String addressNickName;
+	 private String addressTel;
+	 private String addExtensionNo;
+	 private String AddressFax;
+	 private String addressCompany;
+	 private String AddressDepartment;
+	 private String addressPosition;
+	 private String addressMemo;
+	 private String addressEmail;
+	 private String addressStar;
+	 private String addressStatus;
 }

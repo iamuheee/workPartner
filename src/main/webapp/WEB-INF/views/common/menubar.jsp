@@ -460,7 +460,7 @@
 								</div>  -->
 															   
 	                           
-	                           <a class="nav-link  nav-choice" href="">
+	                           <a class="nav-link  nav-choice" href="list.ad">
 	                                <span class="material-symbols-outlined">
 	                                    perm_contact_calendar
 	                                </span>

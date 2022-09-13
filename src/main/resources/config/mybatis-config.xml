@@ -14,7 +14,9 @@
 	<typeAliases>
 		<typeAlias type="com.wp.workpartner.duty.model.vo.Duty" alias="Duty" />
 		<typeAlias type="com.wp.workpartner.duty.model.vo.DutyCharge" alias="DutyCharge" />
-		<typeAlias type="com.wp.workpartner.todo.model.vo.Todo" alias="Todo" />		
+		<typeAlias type="com.wp.workpartner.todo.model.vo.Todo" alias="Todo" />	
+		<typeAlias type="com.wp.workpartner.address.model.vo.MyAddress" alias="MyAddress" />	
+		<typeAlias type="com.wp.workpartner.address.model.vo.MyGroup" alias="MyGroup" />	
 	</typeAliases>
 	
 	<!-- <유의사항> -->
@@ -22,6 +24,7 @@
 	<mappers>
 		<mapper resource="/mappers/duty-mapper.xml" />
 		<mapper resource="/mappers/todo-mapper.xml" />
+		<mapper resource="/mappers/address-mapper.xml" />
 	</mappers>
 	
 </configuration>
