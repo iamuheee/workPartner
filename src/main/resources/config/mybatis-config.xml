@@ -17,6 +17,8 @@
 		<typeAlias type="com.wp.workpartner.todo.model.vo.Todo" alias="Todo" />	
 		<typeAlias type="com.wp.workpartner.address.model.vo.MyAddress" alias="MyAddress" />	
 		<typeAlias type="com.wp.workpartner.address.model.vo.MyGroup" alias="MyGroup" />	
+		<typeAlias type="com.wp.workpartner.address.model.vo.Department" alias="Department" />
+		<typeAlias type="com.wp.workpartner.address.model.vo.Position" alias="Position" />
 	</typeAliases>
 	
 	<!-- <유의사항> -->

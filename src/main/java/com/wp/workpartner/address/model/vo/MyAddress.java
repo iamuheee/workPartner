@@ -17,9 +17,9 @@ public class MyAddress {
 	 private String addressNickName;
 	 private String addressTel;
 	 private String addExtensionNo;
-	 private String AddressFax;
+	 private String addressFax;
 	 private String addressCompany;
-	 private String AddressDepartment;
+	 private String addressDepartment;
 	 private String addressPosition;
 	 private String addressMemo;
 	 private String addressEmail;

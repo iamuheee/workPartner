@@ -1,5 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="addressMapper">
-
+	
+	<resultMap id="myAddressResult" type="MyAddress">
+		<result column="add_no" property="addressNo"/>
+		<result column="emp_no" property="employeeNo"/>
+		<result column="group_no" property="groupNo"/>
+		<result column="add_name" property="addressName"/>
+		<result column="add_nick" property="addressNickName"/>
+		<result column="add_tel" property="addressTel"/>
+		<result column="add_extension_no" property="addExtensionNo"/>
+		<result column="add_fax" property="addressFax"/>
+		<result column="add_company" property="addressCompany"/>
+		<result column="add_department" property="addressDepartment"/>
+		<result column="add_position" property="addressPosition"/>
+		<result column="add_memo" property="addressMemo"/>
+		<result column="add_email" property="addressEmail"/>
+		<result column="add_star" property="addressStar"/>
+		<result column="add_status" property="addressStatus"/>
+	</resultMap>
+	
+	<resultMap id="myGroupResult" type="MyGroup">
+		<result column="group_no" property="groupNo"/>
+		<result column="group_name" property="groupName"/>
+		<result column="emp_no" property="employeeNo"/>
+	</resultMap>
+	
+	<resultMap id="positionResult" type="Position">
+		<result column="pos_cd" property="positionCode"/>
+		<result column="pos_name" property="positionName"/>
+	</resultMap>
+	
+	<resultMap id="departmentResult" type="Department">
+		<result column="dep_cd" property="departmentCode"/>
+		<result column="dep_name" property="departmentName"/>
+	</resultMap>
+	
+	
+	
 </mapper>
