@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SignController {
 	@RequestMapping("coopEnrollForm.bo")
 	public String coopEnrollForm() {
-		return "sign/cooperation.jsp";
+		return "sign/cooperation";
 	}
 }

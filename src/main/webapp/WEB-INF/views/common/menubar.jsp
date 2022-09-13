@@ -200,6 +200,29 @@
 		<c:remove var="alertMsg" scope="session" />
 	</c:if>
 
+	<!-- 기안서 작성 모달 및 팝업차 -->	
+	 <div id="modal" class="modal-overlay">
+        <div class="modal-window">
+            <div class="modaltitle">
+                <h4>서식 목록</h4>
+                <span class="material-symbols-outlined close-area">
+                    close
+                </span>
+            </div>
+            <div class="dPaperBtn" align="center">
+                <button class="vacation" onclick="showPopup();">연차 신청서</button>
+                <button class="outWork" onclick="showPopup2();">외근 신청서</button>
+                <button class="reSignEmp" onclick="showPopup3();">퇴직원 신청서</button>
+                <button class="cooperation" onclick="showPopup4();">업무협조 신청서</button>
+            </div>
+        </div>
+    </div>
+    
+    
+	<!-- 기안서 작성 모달 및 팝업 -->
+ 	<jsp:include page="../sign/dtpaperSignList.jsp"/>
+
+
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-blue" style="font-size: 14px;">
 	          <!-- 클릭시 메인페이지 이동-->
 	          <a class="navbar-brand ps-3" href="${ pageContext.servletContext.contextPath }">Work Partner!</a>
@@ -406,7 +429,7 @@
 	                           </a>                            
 	                           <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
 	                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages2">     
-	                                   <a class="btn btn-sm btn-primary btn-size" href="../sign/signMain.jsp">기안서 작성</a>                               
+	                                   <a id="btn-modal" class="btn btn-sm btn-primary btn-size">기안서 작성</a>                               
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth2" aria-expanded="false" aria-controls="pagesCollapseAuth2">
 	                                       기안서관리
 	                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
