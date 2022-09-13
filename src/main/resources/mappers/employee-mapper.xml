@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="employeeMapper">
+	<resultMap id="empResult" type="Employee">
+		<result column="emp_no" property="empNo" />
+		<result column="emp_id" property="empId" />
+		<result column="emp_pwd" property="empPwd" />
+		<result column="emp_name" property="empName" />
+		<result column="emp_phone" property="empPhone" />
+		<result column="emp_extension" property="empExtension" />
+		<result column="emp_email" property="empEmail" />
+		<result column="emp_exemail" property="empExemail" />
+		<result column="emp_enrollldate" property="empEnrollDate" />
+		<result column="emp_retiredate" property="empRetireDate" />
+		<result column="emp_modifydate" property="empModifyDate" />
+		<result column="emp_status" property="empStatus" />
+		<result column="emp_profile" property="empProfile" />
+		<result column="emp_acc_status" property="empAccStatus" />
+		<result column="emp_nt_admin" property="empNtAdmin" />
+		<result column="dep_cd" property="depCd" />
+		<result column="pos_cd" property="posCd" />
+		<result column="emp_tenure" property="empTenure" />
+		<result column="emp_sig_use" property="empSigUse" />
+		<result column="emp_movedate" property="empMoveDate" />
+		<result column="emp_holtake" property="empHolTake" />
+		<result column="emp_holuse" property="empHolUse" />
+	</resultMap>
+
+</mapper>

@@ -19,6 +19,7 @@
 		<typeAlias type="com.wp.workpartner.address.model.vo.MyGroup" alias="MyGroup" />	
 		<typeAlias type="com.wp.workpartner.address.model.vo.Department" alias="Department" />
 		<typeAlias type="com.wp.workpartner.address.model.vo.Position" alias="Position" />
+		<typeAlias type="com.wp.workpartner.employee.model.vo.Employee" alias="Employee" />		
 	</typeAliases>
 	
 	<!-- <유의사항> -->
@@ -27,6 +28,8 @@
 		<mapper resource="/mappers/duty-mapper.xml" />
 		<mapper resource="/mappers/todo-mapper.xml" />
 		<mapper resource="/mappers/address-mapper.xml" />
+		<mapper resource="/mappers/employee-mapper.xml" />
+		
 	</mappers>
 	
 </configuration>
