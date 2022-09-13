@@ -86,13 +86,13 @@
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
                                 <div class="card-header"><h1 class="text-center font-weight-light my-4">Work Partner!</h1></div>
                                 <div class="card-body">
-                                    <form>
+                                    <form action="login.em" method="post" id="loginForm">
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" id="inputId" type="text" placeholder="ID" />
+                                            <input class="form-control" id="inputId" type="text" placeholder="ID" name="empId" required />
                                             <label for="inputId">ID</label>
                                         </div>
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
+                                            <input class="form-control" id="inputPassword" type="password" placeholder="Password" name="empPwd" required />
                                             <label for="inputPassword">Password</label>
                                         </div>
                                         <div class="form-check mb-3">
@@ -100,7 +100,7 @@
                                             <label class="form-check-label" for="inputRememberLogin">로그인 상태 유지</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="btn btn-primary" id="loginBtn" href="index.html">Login</a>
+                                        	<button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
                                         </div>
                                         <hr style="margin-top:20px;">
                                         <div class="d-flex align-items-center justify-content-center mt-4 mb-0" id="findIdPwd">
@@ -116,8 +116,6 @@
             </main>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="js/scripts.js"></script>
 </body>
 
 </html>

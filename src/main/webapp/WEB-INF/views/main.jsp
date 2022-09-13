@@ -190,12 +190,12 @@
 										<td rowspan="2" width="50%;">
 											<img src="${pageContext.request.contextPath}/resources/profile_images/defaultProfile.png" id="profileImg">
 										</td>
-										<td style="padding-top: 15px;"><h4>이름름</h4></td>
+										<td style="padding-top: 15px;"><h4>${ loginUser.empName }</h4></td>
 									</tr>
 									<tr align="center">
 										<td>
 											<h6>
-												부서 / 직위 자리 <br> Work Partner!
+												${ loginUser.depCd } / ${ loginUser.posCd } <br> Work Partner!
 											</h6>
 										</td>
 									</tr>
