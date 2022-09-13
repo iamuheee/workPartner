@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="employeeMapper">
-	<resultMap id="empResult" type="Employee">
+
+	<resultMap id="employeeResult" type="Employee">
 		<result column="emp_no" property="empNo" />
 		<result column="emp_id" property="empId" />
 		<result column="emp_pwd" property="empPwd" />
@@ -9,21 +10,66 @@
 		<result column="emp_phone" property="empPhone" />
 		<result column="emp_extension" property="empExtension" />
 		<result column="emp_email" property="empEmail" />
-		<result column="emp_exemail" property="empExemail" />
-		<result column="emp_enrollldate" property="empEnrollDate" />
+		<result column="emp_exemail" property="empExEmail" />
+		<result column="emp_enrolldate" property="empEnrollDate" />
 		<result column="emp_retiredate" property="empRetireDate" />
 		<result column="emp_modifydate" property="empModifyDate" />
 		<result column="emp_status" property="empStatus" />
 		<result column="emp_profile" property="empProfile" />
 		<result column="emp_acc_status" property="empAccStatus" />
 		<result column="emp_nt_admin" property="empNtAdmin" />
-		<result column="dep_cd" property="depCd" />
-		<result column="pos_cd" property="posCd" />
+		<result column="dep_name" property="depCd" /> <!-- join해서 가져올 부서명 -->
+		<result column="pos_name" property="posCd" /> <!-- join해서 가져올 직위명 -->
 		<result column="emp_tenure" property="empTenure" />
 		<result column="emp_sig_use" property="empSigUse" />
 		<result column="emp_movedate" property="empMoveDate" />
 		<result column="emp_holtake" property="empHolTake" />
 		<result column="emp_holuse" property="empHolUse" />
 	</resultMap>
+	
+	<resultMap id="departmentResult" type="Department">
+		<result column="dep_cd" property="departmentCode" />
+		<result column="dep_name" property="departmentName" />
+	</resultMap>
+	
+	<resultMap id="positionResult" type="Position">
+		<result column="pos_cd" property="position" />
+		<result column="pos_name" property="positionName" />
+	</resultMap>
+	
+	
+	<!-- 작성자 : 박태은 -->
+	<select id="loginEmployee" resultMap="employeeResult">
+		select 
+		       emp_no
+		     , emp_id
+		     , emp_pwd
+		     , emp_name
+		     , emp_phone
+		     , emp_extension
+		     , emp_email
+		     , emp_exemail
+		     , to_char(to_date(emp_enrolldate, 'MM-DD-YYYY'), 'YYYY-MM-DD') as emp_enrolldate
+		     , to_char(to_date(emp_retiredate, 'MM-DD-YYYY'), 'YYYY-MM-DD') as emp_retiredate
+		     , to_char(to_date(emp_modifydate, 'MM-DD-YYYY'), 'YYYY-MM-DD') as emp_modifydate
+		     , emp_status
+		     , emp_profile
+		     , emp_acc_status
+		     , emp_nt_admin
+		     , dep_name
+		     , pos_name
+		     , emp_tenure
+		     , emp_sig_use
+		     , to_char(to_date(emp_movedate, 'MM-DD-YYYY'), 'YYYY-MM-DD') as emp_movedate
+		     , emp_holtake
+		     , emp_holuse
+		  from tb_employee
+		  join tb_department using(dep_cd)
+		  join tb_position using(pos_cd)
+	  	 where emp_status = 'Y'
+	  	   and emp_acc_status = 'Y'
+	       and emp_id = #{empId}
+	       and emp_pwd = #{empPwd}
+	</select>
 
 </mapper>
