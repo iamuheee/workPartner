@@ -68,6 +68,9 @@
 
 	<jsp:include page="../common/menubar.jsp" />
 	
+	<!-- input date 타입에 적용할 날짜 포맷 (입사일) -->
+	<% request.setAttribute("dateType", "yyyy-MM-dd"); %>
+	
 	<div id="mypage-outer">
 	    <!-- 상단 메뉴 제목 영역 -->
 	    <div id="mypage-header">
@@ -76,7 +79,7 @@
 	    <hr>
 	    <!-- 내 정보 관리 영역 -->
 	    <div id="mypage-body">
-	        <form action="사용자등록요청받을서버" method="post" id="insertForm">
+	        <form action="insert.em" method="post" id="insertForm">
 	           <table id="empInfo">
 	                <tr>
 	                    <th width="150px">이름<span style="color:red;">&nbsp;*</span></th>
@@ -102,13 +105,13 @@
 	                    <th>비밀번호<span style="color:red;">&nbsp;*</span></th>
 	                    <td>
 	                        <!-- 아이디와 동일하게 설정 (placeholder로 지시하거나 아이디와 동일하게 입력되도록 하기) -->
-	                        <input type="password" id="empPwd" name="empPwd" required>
+	                        <input type="password" id="empPwd" name="empPwd" placeholder="초기 비밀번호는 아이디와 동일하게 작성" required>
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <th>이메일<span style="color:red;">&nbsp;*</span></th>
 	                    <td>
-	                        <input type="email" id="empEmail" name="empEmail" value="아이디@workpartner.com" readonly required>
+	                        <input type="email" id="empEmail" name="empEmail" readonly required>
 	                    </td>
 	                </tr>
 	                <tr>
@@ -135,16 +138,13 @@
 	                    </td>
 	                </tr>
 	                <tr>
-	                    <th>입사일</th>
+	                    <th>입사일<span style="color:red;">&nbsp;*</span></th>
 	                    <td>
-	                        <input type="date" name="empEnrolldate" required>
+	                        <input type="date" name="empEnrollDate" required>
 	                    </td>
 	                    <th>재직 상태</th>
 	                    <td>
-	                        <select name="empStatus" id="empStatus" required>
-	                            <option value="Y">재직</option>
-	                            <option value="N">퇴사</option>
-	                        </select>
+	                        재직
 	                    </td>
 	                </tr>
 	                <tr>
@@ -166,6 +166,20 @@
 	            </table>
 	        </form>
 	    </div>
+	    
+	    <!-- 아이디 입력 시 이메일 주소 자동완성 -->
+	    <script>
+	    	$(function(){
+	    		$("#empId").keyup(function(){
+	    			var id = $("#empId").val();
+	    			var email = id + '@workpartner.com';
+	    			
+	    			$("#empEmail").val(email);
+	    		});	
+	    	});
+	    </script>
+	    
+	   
 	</div>
 
 </body>

@@ -37,7 +37,7 @@
 		<result column="pos_name" property="positionName" />
 	</resultMap>
 	
-	
+	<!-- 로그인 -->
 	<!-- 작성자 : 박태은 -->
 	<select id="loginEmployee" resultMap="employeeResult">
 		select 
@@ -49,9 +49,9 @@
 		     , emp_extension
 		     , emp_email
 		     , emp_exemail
-		     , to_char(to_date(emp_enrolldate, 'MM-DD-YYYY'), 'YYYY-MM-DD') as emp_enrolldate
-		     , to_char(to_date(emp_retiredate, 'MM-DD-YYYY'), 'YYYY-MM-DD') as emp_retiredate
-		     , to_char(to_date(emp_modifydate, 'MM-DD-YYYY'), 'YYYY-MM-DD') as emp_modifydate
+		     , emp_enrolldate
+		     , emp_retiredate
+		     , emp_modifydate
 		     , emp_status
 		     , emp_profile
 		     , emp_acc_status
@@ -60,7 +60,7 @@
 		     , pos_name
 		     , emp_tenure
 		     , emp_sig_use
-		     , to_char(to_date(emp_movedate, 'MM-DD-YYYY'), 'YYYY-MM-DD') as emp_movedate
+		     , emp_movedate
 		     , emp_holtake
 		     , emp_holuse
 		  from tb_employee
@@ -69,7 +69,51 @@
 	  	 where emp_status = 'Y'
 	  	   and emp_acc_status = 'Y'
 	       and emp_id = #{empId}
-	       and emp_pwd = #{empPwd}
+	       <!-- and emp_pwd = #{empPwd} // db에 담긴 pwd 값은 암호문이므로 평문인 비밀번호 값 쓸모 없음 -->
 	</select>
+	
+	<!-- 사용자 등록 -->
+	<!-- 작성자 : 박태은 -->
+	<insert id="insertEmployee">
+		insert 
+		  into tb_employee
+		  ( 
+		    emp_no
+		  , emp_id
+		  , emp_pwd
+		  , emp_name
+		  , emp_email
+		  , emp_nt_admin
+		  , dep_cd
+		  , pos_cd
+		  , emp_enrolldate
+		  , emp_extension
+		  , emp_phone
+		  )
+		  values
+		  (
+		  <!-- 사번 == 입사연도 끝 두 자리 + 부서코드 + seq_empno.nextval 로 생성 -->
+		  <!-- 입사연도 + #{depCd} + seq_empno.nextval -->
+		  <!-- 2 + 2 + 3 ==> 총 7자리로 생성 -->
+		    #{empEnrollYear} || LPAD(#{depCd}, 2, '0') || LPAD(seq_empno.nextval, 3, '0')
+		  , #{empId}
+		  , #{empPwd}
+		  , #{empName}
+		  , #{empEmail}
+		  <choose>
+		  	<when test="depCd == 1"> <!-- 인사부일 경우 공지사항 작성 권한 'A' -->
+		  	, 'A'
+		  	</when>
+		  	<otherwise>	<!-- 인사부가 아닐 경우 default -->
+		  	, default
+		  	</otherwise>
+		  </choose>
+		  , #{depCd}
+		  , #{posCd}
+		  , #{empEnrollDate}
+		  , #{empExtension}
+		  , #{empPhone}  
+		  )
+	</insert>
 
 </mapper>

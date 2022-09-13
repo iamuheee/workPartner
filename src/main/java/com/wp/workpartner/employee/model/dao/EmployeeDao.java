@@ -1,5 +1,7 @@
 package com.wp.workpartner.employee.model.dao;
 
+import java.util.HashMap;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +14,8 @@ public class EmployeeDao {
 		return sqlSession.selectOne("employeeMapper.loginEmployee", e);
 	}
 	
+	public int insertEmployee(SqlSessionTemplate sqlSession, Employee e) {
+		
+		return sqlSession.insert("employeeMapper.insertEmployee", e);
+	}
 }
