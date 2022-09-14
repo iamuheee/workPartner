@@ -69,7 +69,6 @@ public class AddressServiceImpl implements AddressService {
 	public ArrayList<MyAddress> selectStarList(String empNo, PageInfo pi) {
 		return adDao.selectStarList(sqlSession, empNo, pi);
 	}
-
 	
 	//  테이블 선택시 회사 내 직원 상세정보	
 	@Override
@@ -105,6 +104,24 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public int insertGp(MyGroup myGp) {
 		return adDao.insertGp(sqlSession, myGp);
+	}
+
+	//그룹 수정
+	@Override
+	public int updateGp(MyGroup myGp) {
+		return adDao.updateGp(sqlSession, myGp);
+	}
+
+	// 그룹 삭제
+	@Override
+	public int deleteGp(int groupNo) {
+		return adDao.deleteGp(sqlSession, groupNo);
+	}
+	
+	// 내 연락처 개별 삭제
+	@Override
+	public int deleteAddOne(int addressNo) {
+		return adDao.deleteAddOne(sqlSession, addressNo);
 	}
 	
 

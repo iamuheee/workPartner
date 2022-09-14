@@ -44,14 +44,20 @@ public interface AddressService {
 	// 10. 새연락처 등록
 	int insertAdd(MyAddress myAd);
 	
-	// 8. 내연락처 그룹 추가
+	// 11. 내연락처 그룹 추가
 	int insertGp(MyGroup myGp);
 	
-	// 9. 내연락처 그룹 삭제
+	// 12. 내연락처 그룹명 수정
+	int updateGp(MyGroup myGp);
 	
-	// 10. 내연락처 그룹명 수정
+	// 13. 내연락처 그룹 삭제
+	int deleteGp(int groupNo);
 	
+	// 14. 연락처 개별 삭제
+	int deleteAddOne(int addressNo);
 	
+	// 15. 연락처 다중 삭제
+	//int deleteAddOne
+		
 	
-	// 13. 검색기능
 }

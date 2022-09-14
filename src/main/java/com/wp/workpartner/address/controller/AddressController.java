@@ -197,4 +197,40 @@ public class AddressController {
 		}
 		
 	}
+	
+	@RequestMapping("updateGp.ad")
+	public String updateGp(MyGroup myGp, HttpSession session, Model model) {
+		int result = adService.updateGp(myGp);
+		if(result > 0) {
+			session.setAttribute("alertMsg", "성공적으로 그룹명이 수정되었습니다.");
+			return "redirect:list.ad";
+		}else {
+			model.addAttribute("errorMsg", "수정실패");
+			return "common/error";
+		}
+	}
+	
+	@RequestMapping("deleteGp.ad")
+	public String deleteGp(int groupNo, HttpSession session, Model model) {
+		int result = adService.deleteGp(groupNo);
+		if(result > 0) {
+			session.setAttribute("alertMsg", "성공적으로 그룹명이 삭제되었습니다.");
+			return "redirect:list.ad";
+		}else {
+			model.addAttribute("errorMsg", "삭제실패");
+			return "common/error";
+		}
+	}
+	
+	@RequestMapping("deleteAdd.ad")
+	public String deleteAddOne(int addressNo, HttpSession session, Model model) {
+		int result = adService.deleteAddOne(addressNo);
+		if(result > 0) {
+			session.setAttribute("alertMsg", "성공적으로 연락처가 삭제되었습니다.");
+			return "redirect:list.ad";
+		}else {
+			model.addAttribute("errorMsg", "삭제실패");
+			return "common/error";
+		}
+	}
 }

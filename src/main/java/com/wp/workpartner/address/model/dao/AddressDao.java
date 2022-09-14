@@ -83,4 +83,16 @@ public class AddressDao {
 	public int insertGp(SqlSessionTemplate sqlSession, MyGroup myGp) {
 		return sqlSession.insert("addressMapper.insertGp", myGp);
 	}
+	
+	public int updateGp(SqlSessionTemplate sqlSession, MyGroup myGp) {
+		return sqlSession.update("addressMapper.updateGp", myGp);
+	}
+	
+	public int deleteGp(SqlSessionTemplate sqlSession, int groupNo) {
+		return sqlSession.delete("addressMapper.deleteGp", groupNo);
+	}
+	
+	public int deleteAddOne(SqlSessionTemplate sqlSession, int addressNo) {
+		return sqlSession.update("addressMapper.deleteAddOne", addressNo);
+	}
 }

@@ -13,7 +13,12 @@
 
 #empSubMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);}
 #empMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);} 
- 
+ #profileImg{
+     width:42px;
+     height:42px;
+     border:1px solid lightgray;
+     border-radius: 50%;               
+ }
 </style>
 
 </head>
@@ -106,7 +111,7 @@
                     <!-- <a class="btn btn-sm btn-primary">메일보내기</a> -->
                     <!-- 내연락처일때만 삭제기능 -->
                     <!-- 삭제 > 모달 > 기능 정보넘기는거 어렵다면 그냥 모달창 띄우지말고 바로 삭제처리 -->
-                    <button id="deleteFeat" type="button" class="btn btn-sm btn-secondary" onclick="deleteAdds();">삭제</button>                      
+                    <button id="deleteFeat" class="btn btn-sm btn-secondary" onclick="">삭제</button>                      
 
                 </div>
                 
@@ -126,7 +131,7 @@
                 <!-- 내연락처에만 있는 삭제/ 편집기능-->
                 <div id="myAddChoiceArea" style="visibility:hidden;">                
                     <button type="button" class="btn btn-sm btn-warning openAddEdit" data-toggle="modal" data-target="#addressEdit">편집</button>
-                    <button type="button" class="btn btn-sm btn-secondary" onclick="deleteAdd();">삭제</button>      
+                    <a type="button" class="btn btn-sm btn-secondary deleteAddOne" onclick="deleteAdd();">삭제</a>      
                 </div> 
                 
                
@@ -135,11 +140,11 @@
                     <table id="adDetailTb" width="85%">	
                         
 			           <!--목록클릭 전-->                       
-			           <div id="beforeClick">
+			           <p id="beforeClick" style="margin-left:30px">
 			               <br>
 			               연락처 상세정보를 보려면 이름을 <br>
 			               클릭하세요
-			            </div> 
+			            </p> 
                         <!-- 주소록 상세보기 -->    
                         <!-- 별표연락처 & 내 연락처 상세보기 -->
                         
@@ -154,32 +159,7 @@
                  
             </div>
 
-            <!--==================================== 삭제용 script ======================================= -->
-
-
-            <script>
-
-                // 그룹삭제                 
-                function deleteAddGp(){
-                    if(confirm("그룹과 연락처 모두 삭제됩니다. 삭제하시겠습니까?")){
-
-                    }else{
-                        //$("").focus();
-                    }
-                }
-
-                //내연락처 상세보기 삭제 
-                function deleteAdd(){
-                    if(confirm("삭제하시겠습니까?")){
-
-                    }else{
-                        //$("").focus();
-                    }
-                }             
-               
-
-            </script>
-
+            
             <!--==================================== Modal ======================================= -->
 
             <!-- 새연락처 Modal -->
@@ -413,13 +393,13 @@
                             </button>                     
                         </div>
                         <div class="modal-body">
-                            <form  class="inputStyle">
-                                <input type="hidden" name="empNo" value="">
-                                <input type="hidden" name="groupNo" value="">
+                            <form action="updateGp.ad" method="post" class="inputStyle">
+                                <input type="hidden" name="employeeNo"  value="${loginUser.empNo }">
+                                <input type="hidden" name="groupNo" id="groupNo" value="">
                                 <table align="center">
                                     <tr>
                                         <td>
-                                            <input type="text" name="groupName"  value="구디물산" required>
+                                            <input type="text" name="groupName" id="groupName"  value="" required>
                                         </td>
                                         <td><button type="submit" class="btn btn-sm btn-primary">수정</button></td>
                                         <td><button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button></td>
@@ -551,7 +531,7 @@
             			selectDetailMyAdd($(this).prev().text());            			
             		}) 
             		
-            		// [별 클릭시 별표연락처설정 실시간변경] => 연락처 번호, input:addStar 값
+            		// [별 클릭시 별표연락처설정 실시간변경] => 연락처 번호, input:addStar, *groupno 속성에 박아서 전달했음
             		$(document).on("click", "#adDetailTb :checkbox", function(){
             			 let addStar = ''; 
             			 if($(this).is(":checked")) {
@@ -562,14 +542,21 @@
             			updateStarAdd($(this).next().next().val(), addStar, $(this).attr("groupno"));            		
             		})
             		
-            		// 클릭 > 삭제
-	           		 function deleteAdds(){
-	                       if(confirm("4개 모두 삭제하시겠습니까?")){
-	
-	                       }else{
-	                           //$("").focus();
-	                       }
-	                   }
+            		// 그룹 수정시 필요한 groupNo, groupName 전달
+            		$(document).on("click", "#subAddMenu .editGpOpen", function(){
+            			//console.log($(this).parent().siblings("#groupValues").children().eq(0).text());
+            			//console.log($(this).parent().siblings("#groupValues").children().eq(1).val())
+            			$("#editGp #groupName").val($(this).parent().siblings("#groupValues").children().eq(0).text());
+            			$("#editGp #groupNo").val($(this).parent().siblings("#groupValues").children().eq(1).val());
+            		})
+            		
+            		// 그룹삭제 시 필요한 그룹번호 넘기기 + a태그 htrf
+            		$(document).on("click", "#subAddMenu .deleteAddGp", function(){  
+            			if(confirm("그룹과 연락처 모두 삭제됩니다. 삭제하시겠습니까?")){
+            				let url = 'deleteGp.ad?groupNo=' +  $(this).parent().siblings("#groupValues").children().eq(1).val();
+                			$(this).attr("href", url);   
+            			}         			
+            		})
             		
             		
             	})
@@ -617,7 +604,7 @@
             				for(let i=0; i<list.length; i++){
             					  value += '<li>'
                            				 +	  '<div class="btn-group dropright btnPadding">'
-                                		 + 		  '<button type="button" class="btn btn-text">'
+                                		 + 		  '<button id="groupValues" type="button" class="btn btn-text">'
                                          + 				'<span style="font-size: 15px;">'+ list[i].groupName +'</span>'
                                          +				'<input type="hidden" class="groupNo" value="' + list[i].groupNo + '">'
                                 		 +    	  '</button> &nbsp; &nbsp;';
@@ -625,14 +612,14 @@
                               		 if(list[i].groupName != '그룹미지정' ){
                               			 value += '<button type="button" class="btn btn-text dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false" style="padding: 0;">'
                                           	 +	    	 '፧'
-                                      		 +   	   '</button>'
-                                     		 +         '<div class="dropdown-menu">'                                
-                                          	 +        	 	'<button type="button" class="dropdown-item fontsize13" data-toggle="modal" data-target="#editGp">그룹수정</button>'
-                                          	 +         		'<button type="button" class="dropdown-item fontsize13" onclick="deleteAddGp()">그룹삭제</button>' 
-                                     		 +       	'</div>';
+                                      		 +   '</button>'
+                                     		 +   '<div class="dropdown-menu">'                                
+                                          	 +   	 	'<button type="button" class="dropdown-item fontsize13 editGpOpen" data-toggle="modal" data-target="#editGp">그룹수정</button>'
+                                          	 +     		'<a class="dropdown-item fontsize13 deleteAddGp">그룹삭제</a>' 
+                                     		 +   '</div>';
                                 		 }
                               		 
-                                	value +=  	'</div>'
+                                	value +=  '</div>'
                         				  + '</li>';
                         				 
             				}            				 
@@ -666,6 +653,7 @@
                                 	   +				'<th>부서</th>'
                                 	   +                '<th>직위</th>'
                                 	   +  				'<th>이메일</th>'
+                                	   +				'<th>핸드폰</th>'
                                 	   + 				'<th>내선번호</th>'
                                 	   +          '</tr>'                        
                                 	   +    '</thead>'
@@ -678,7 +666,7 @@
             				
             				if(list.length == 0){
             					value += "<tr>"
-            							+	"<td colspan='6'>등록된 직원이 없습니다.</td>"            						
+            							+	"<td colspan='7'>등록된 직원이 없습니다.</td>"            						
             							+"</tr>";
             				}else{
             					for(let i=0; i<list.length; i++){
@@ -694,7 +682,13 @@
                                         		 value   +=   '<td>'+ list[i].empExtension +'</td>';
                                         	}else{
                                         		 value   +=  '<td>'+ '' +'</td>'; 
-                                        	}                                        	
+                                        	}  
+                                        	
+                                        	if(list[i].empPhone != null){
+                                        		 value   += '<td>' + list[i].empPhone + '</td>';
+                                        	}else{
+                                        		 value 	 += '<td>'+ '' +'</td>'; 
+                                        	}
                                     value   +=  '</tr>'	;                                        	
             					}
             					
@@ -746,7 +740,7 @@
             				let value = "";
             				    value += '<thead>'
                             		 	+		'<tr>'
-                            		 	+	        '<th><img id="profileImg" src="';
+                            		 	+	        '<th rowspan="2"><img id="profileImg" src="';
                             	
                             if(result.empProfile != null){
                             	value +=  result.empProfile;
@@ -764,7 +758,7 @@
                        					+'<tbody>'               
                             			+		'<tr>'
                                 		+			'<td class="fontSmallSize">부서</td>'
-                                		+			'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result.depCd +'</td>'
+                                		+			'<td colspan="4" class="fontMiddleAdd">&nbsp;'+ result.depCd +'</td>'
                             			+		'</tr>'
                             			+		'<tr>'
                                 		+			'<td class="fontSmallSize">직급</td>'
@@ -789,7 +783,7 @@
 				                       	  +			'<td class="fontSmallSize">휴대전화</td>';
                            
                            if(result.empPhone != null){
-                        	   value += 			'<td colspan="4" class="fontMiddleAdd">&nbsp;' + result.empPhone + ' </td>';			               			  
+                        	   value += 			'<td colspan="4" class="fontMiddleAdd">&nbsp;&nbsp;' + result.empPhone + ' </td>';			               			  
                            }
                             			                    
                            		value	+=		'</tr>'
@@ -813,7 +807,7 @@
             		})
             	}
             	            	
-            	// 내 연락처 목록클릭 시 조회테이블
+            	// 내 연락처 목록클릭 시 조회 테이블
             	function selectAddTbList(groupNo, cpage){
             		
             		$.ajax({
@@ -1018,9 +1012,9 @@
 	             				el.find("#addressFax").val(result.addressFax);
 	             				el.find("#addressMemo").val(result.addressMemo);	             				
 	             			});
-	             		});                    	
-                    	
-                 		
+	             				             			
+	             		});                      	
+                                        	
             			},
             			error:function(){
             				console.log("내연락처 내 상세보기 ajax 실패");
@@ -1158,9 +1152,18 @@
             		})
             		
             	}
-            	         
             	
-            	
+            	<!--==================================== 삭제용 script ======================================= -->
+                             
+                //내연락처 상세보기 삭제 
+                function deleteAdd(){
+                    if(confirm("해당 연락처를 삭제하시겠습니까?")){
+						let url = "deleteAdd.ad?addressNo=" + $("#adDetailTb .no").val();
+						//console.log($("#adDetailTb .no").val());
+						$(".deleteAddOne").attr("href", url);						
+                    }
+                }   
+                
             </script>
 		
 </body>

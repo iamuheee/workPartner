@@ -298,8 +298,27 @@
              SEQ_GPNO.NEXTVAL
              , #{groupName}                           
              , #{employeeNo}
-        )
-	
+        )	
 	</insert>
+	
+	<update id="updateGp">
+		update 
+            	tb_mygroup
+	       set 	group_name = #{groupName}
+	      where group_no = #{groupNo}
+	</update>
+	
+	<delete id="deleteGp">
+		 DELETE 
+		   FROM TB_MYGROUP
+		  WHERE GROUP_NO = #{groupNo} 
+	</delete>
+	
+	<update id="deleteAddOne">
+		update
+				tb_my_address
+		   set  add_status = 'N'
+		 where  add_no = #{addressNo}		   		
+	</update>
 	
 </mapper>

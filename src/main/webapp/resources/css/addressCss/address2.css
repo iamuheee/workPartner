@@ -120,8 +120,8 @@ addressListView
      font-size: 14px;
  }
  #profileImg{
-     width:23px;
-     height:23px;
+     width:45px;
+     height:45px;
      border:1px solid lightgray;
      border-radius: 50%;               
  }
