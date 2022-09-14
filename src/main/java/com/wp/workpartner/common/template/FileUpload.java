@@ -24,7 +24,7 @@ public class FileUpload {
 			
 			// 파일을 저장할 폴더의 물리적인 경로 알아내기
 			String savePath = session.getServletContext().getRealPath(folderPath);
-			System.out.println("저장폴더의 물리적 경로 : " + savePath);
+			//System.out.println("저장폴더의 물리적 경로 : " + savePath);
 			
 			try {
 				// transferTo() : 업로드된 첨부파일을 매개변수의 파일 형식으로 변환하여 저장하는 메소드
