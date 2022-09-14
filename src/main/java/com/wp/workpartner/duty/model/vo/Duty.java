@@ -1,5 +1,6 @@
 package com.wp.workpartner.duty.model.vo;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -28,6 +29,6 @@ public class Duty {
 	private String endDate;
 	private String status;
 	
-	private String empIC; // 담당자의 이름을 ,로 연결한 것
+	private ArrayList<DutyCharge> empIC;
 	
 }

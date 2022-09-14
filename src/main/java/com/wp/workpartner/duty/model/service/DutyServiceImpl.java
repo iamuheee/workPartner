@@ -27,15 +27,39 @@ public class DutyServiceImpl implements DutyService {
 	// ====================================
 	// 아래부터 Override된 메소드
 
-	
 	@Override
-	public int insertDuty(Duty d) {
-		return dDao.insertDuty(sqlSession, d);
+	public int insertDutyWithFile(Duty d, String empIC, File f) {
+		// TB_DUTY, TB_DUTY_CHARGE, TB_FILE에 각각 INSERT문 실행
+		// 단, TB_DUTY_CHARGE, TB_FILE에는 DUTY_NO가 필요하므로 TB_DUTY를 먼저 변화시켜야 외래키로 쓸 수 있음
+		
+		// TB_DUTY 		  : Duty d 필요 (1)
+		// TB_DUTY_CHARGE : DutyCharge dc 필요 <- 그런데, EMP_NAME을 알기 위해서는 DB에서 조회해야함
+		// TB_FILE 		  : File f 필요
+		
+		int result1 = dDao.insertDuty(sqlSession, d);
+		
+		ArrayList<DutyCharge> list = dDao.selectDutyCharge(sqlSession, empIC);
+		int result2 = 0;
+		for(DutyCharge dc : list) {
+			result2 *= dDao.insertDutyCharge(sqlSession, dc);
+		}
+		
+		int result3 = dDao.insertFile(sqlSession, f);
+		
+		return result1 * result2 * result3;
 	}
 	
+	
 	@Override
-	public int insertFile(File f) {
-		return dDao.insertFile(sqlSession, f);
+	public int insertDutyWithoutFile(Duty d, String empIC) {
+		int result1 = dDao.insertDuty(sqlSession, d);
+		
+		ArrayList<DutyCharge> list = dDao.selectDutyCharge(sqlSession, empIC);
+		int result2 = 0;
+		for(DutyCharge dc : list) {
+			result2 *= dDao.insertDutyCharge(sqlSession, dc);
+		}
+		return result1 * result2;
 	}
 	
 	@Override
@@ -45,12 +69,10 @@ public class DutyServiceImpl implements DutyService {
 
 	@Override
 	public ArrayList<Duty> selectDutyList(PageInfo pi, String empNo) {
+		// 업무 리스트도 조회하고
+		// 업무별 담당자 리스트도 조회해야 함 (조회 후 같은 업무별 담당자 이름끼리 묶기)
+		// To do 리스트 조회에서처럼 Duty 객체 안에 String[] 또는 ArrayList<TodoCharge>에 담당자 객체를 담아보기
 		return dDao.selectDutyList(sqlSession, pi, empNo);
-	}
-	
-	@Override
-	public ArrayList<DutyCharge> selectDutyChargeList(PageInfo pi, String empNo) {
-		return dDao.selectDutyChargeList(sqlSession, pi, empNo);
 	}
 
 	@Override

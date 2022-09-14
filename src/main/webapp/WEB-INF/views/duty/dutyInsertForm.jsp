@@ -76,12 +76,12 @@
             <hr>
         </div>
         <form action="insert.du" method="post" enctype="multipart/form-data" class="inner-area">
-        	<!-- <input type="hidden" name="empNo" value="${ loginUser.empNo }"> -->
-        	<input type="hidden" name="empNo" value="999">
+        	<input type="hidden" name="empNo" value="${ loginUser.empNo }">
+            
             <span class="title">업무 제목</span> <br><br>
-            <!-- 아래의 input:text의 value에 기존 제목 넣기 -->
             <input type="text" name="title" class="form-control" required>
             <br><br>
+            
             <div class="setting-left">
                 <span class="title">상태</span><br>
 				<select name="progress" class="form-select">
@@ -91,6 +91,7 @@
 					<option value="4">완료</option>
 				</select>
             </div>
+            
             <div class="setting-right">
                 <span class="title">우선 순위</span><br>
 				<select name="importance" class="form-select">
@@ -100,13 +101,15 @@
 					<option value="4">낮음</option>
 				</select>
             </div>
+            
             <br style="clear:both;"><br>
+            
             <div class="setting-left">
                 <span class="title">담당자</span><br>
-                <!-- 주소록 띄우는 버튼 -->
-                <button type="button" class="btn btn-sm btn-primary" id="search-emp">담당자 검색</button>
+                <button type="button" class="btn btn-sm btn-primary" id="search-emp">담당자 검색</button> <!-- 주소록 띄우는 버튼 -->
+                <input type="hidden" name="empIC" value="2,3,4,">
                 <!-- 주소록 만들어봐야 알지만 -->
-                <!-- 업무번호, 담당자의 사번, 이름을 ArrayList<DutyCharge>.list[i]에 담아 넘기기  -->
+                <!-- 담당자의 사번을 ,로 이어서 Controller에 넘기기 => IN(?,?,?)으로 담당자 조회할 수 있도록 -->
                 <!-- 아래의 li요소들은 동적 요소로 for문 돌려 만들어야 할듯../??  -->
                 <ul class="list-mem">
                     <li>
@@ -119,6 +122,7 @@
                     </li>
                 </ul>
             </div>
+            
             <div class="setting-right">
                 <span class="title" style="margin-bottom:20px;">캘린더 등록</span><div style="height:5px;"></div>
                 <input type="radio" name="calendarYN" value="Y" id="Y">
@@ -126,12 +130,16 @@
                 <input type="radio" name="calendarYN" value="N" id="N" checked>
                 <label for="N">업무 일정을 캘린더에 등록 안함</label> 
             </div>
+            
             <br style="clear:both;"><br>
+            
             <div class="content">
                 <span class="title">업무 내용</span><br><br>
                 <textarea name="content" class="form-control" rows="10" required style="height:400px; width:100%; overflow:auto; resize:none;"></textarea>
             </div>
+            
             <br><br>
+            
             <div class="setting-left">
                 <span class="title">시작일</span>
                 <input type="date" name="startDate" class="form-control" required><br>
@@ -144,10 +152,12 @@
                 <input type="date" name="endDate" class="form-control" required><br>
                 
             </div>
+            
             <br style="clear:both;"><br><hr>
+            
             <div class="submit-area" align="right">
                 <input type="reset" class="btn btn-secondary" value="초기화" />
-                <button type="submit" class="btn btn-primary">등록</button>
+                <button class="btn btn-primary" id="submit-btn">등록</button>
             </div>
         </form>
     </div>
@@ -156,6 +166,7 @@
     <script>
     	$(function(){
 	    	// 담당자 이름 옆 x 버튼 클릭시 발생하는 이벤트
+	    	// => 왜 안돼? 선언적 함수로 다시 써보기 혹시모르니까...
 	    	$(".delete-emp").click(function(){
 	    		$(this).parent("li").remove();
 	    	})    
@@ -168,10 +179,17 @@
 	    	
 	    	// 마감일 날짜로 시작일 이전 날짜 불가능하도록 만드는 이벤트
 	    	$("input[name=startDate]").change(function(){
-	    		console.log("함수실행");
-	    		console.log($(this).val());
 	    		$("input[name=endDate]").attr("min", $(this).val());
 	    	})
+	    	
+	    	// #submit-btn 클릭시 발생하는 이벤트
+	    	$("#submit-btn").click(function(){
+	    		let $empIC = $("input[name=empIC]").val();
+	    		$empIC = $empIC.substr(0, $empIC.length - 1); // substr(시작인덱스, 개수)
+	    		console.log($empIC);
+	    		$("form").submit();
+	    	})
+	    	
     	})
     </script>
 
