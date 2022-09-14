@@ -12,8 +12,26 @@
 		<result column="CATE_TITLE" property="categoryTitle" />
 		<result column="COLOR" property="color" />
 	</resultMap>
+	
+	<resultMap id="todoCateResult" type="TodoCategory">
+		<result column="CATE_NO" property="categoryNo" />
+		<result column="EMP_NO" property="empNo" />
+		<result column="CATE_TITLE" property="categoryTitle" />
+		<result column="COLOR" property="color" />
+	</resultMap>
 
-	<select id="selectTodoList">
+
+	<select id="selectTodoCateList" resultMap="todoCateResult">
+		SELECT CATE_NO
+			 , CATE_TITLE
+			 , COLOR
+		  FROM TB_TODO_CATE
+		 WHERE EMP_NO = #{ empNo }
+		 ORDER
+		    BY CATE_NO ASC
+	</select>
+
+	<select id="selectTodoList" resultMap="todoResult">
 		SELECT
 			   T.TODO_NO AS "TODO_NO"
 			 , T.EMP_NO AS "EMP_NO"

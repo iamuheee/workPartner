@@ -15,6 +15,7 @@
 		<typeAlias type="com.wp.workpartner.duty.model.vo.Duty" alias="Duty" />
 		<typeAlias type="com.wp.workpartner.duty.model.vo.DutyCharge" alias="DutyCharge" />
 		<typeAlias type="com.wp.workpartner.todo.model.vo.Todo" alias="Todo" />	
+		<typeAlias type="com.wp.workpartner.todo.model.vo.TodoCategory" alias="TodoCategory" />	
 		<typeAlias type="com.wp.workpartner.address.model.vo.MyAddress" alias="MyAddress" />	
 		<typeAlias type="com.wp.workpartner.address.model.vo.MyGroup" alias="MyGroup" />	
 		<typeAlias type="com.wp.workpartner.address.model.vo.Department" alias="Department" />
