@@ -64,6 +64,7 @@ public class TodoController {
 	@ResponseBody
 	@RequestMapping(value="delete.to", produces="application/text; charset=utf-8")
 	public String ajaxDeleteTodo(int todoNo) {
+		System.out.println(todoNo);
 		if( tService.ajaxDeleteTodo(todoNo) > 0 ) {
 			return "해당 투두를 성공적으로 삭제하였습니다!";
 		}else {
@@ -88,6 +89,16 @@ public class TodoController {
 			return "새로운 카테고리를 성공적으로 등록하였습니다!";
 		}else {
 			return "새로운 카테고리 등록에 실패하였습니다.";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="delCate.to", produces="application/text; charset=utf-8")
+	public String deleteCate(String categoryNo) {
+		if( tService.deleteCate(categoryNo) > 0) {
+			return "카테고리를 성공적으로 삭제하였습니다!";
+		}else {
+			return "카테고리 삭제에 실패하였습니다.";
 		}
 	}
 

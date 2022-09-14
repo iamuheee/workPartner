@@ -88,4 +88,16 @@
 			 )
 	</insert>
 	
+	<delete id="deleteCate">
+		DELETE
+		  FROM TB_TODO_CATE
+		 WHERE CATE_NO = #{categoryNo}
+	</delete>
+	
+	<delete id="deleteTodos">
+		DELETE
+		  FROM TB_TODO
+		 WHERE CATEGORY_NO = #{categoryNo}
+	</delete>
+	
 </mapper>

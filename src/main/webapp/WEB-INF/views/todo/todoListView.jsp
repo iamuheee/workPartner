@@ -75,6 +75,57 @@
 
 <body>
 	<jsp:include page="../common/menubar.jsp" />
+	
+	<script>
+		// Todo 리스트를 조회하는 선언적 함수
+		function selectTodoList(){
+			$.ajax({
+				url: "todo.to",
+				type:"POST",
+				data:{
+					empNo:${loginUser.empNo}
+				},
+				success: function(tclist){
+					console.log(tclist);
+					
+					let html = ""; // 투두리스트를 조회하여 동적으로 띄워줄 용도의 문자열
+					let modalHtml = "";	// 새로운 투두 등록 모달의 카테고리 선택 option들을 동적으로 만드는 용도의 문자열					
+					if(tclist != null){
+						for(let i=0; i<tclist.length; i++){
+							html += '<div class="todo-cate shadow-sm inner-area">'
+								  +  	'<span class="filter" onclick="deleteCate(' + tclist[i].categoryNo + ')">해당 카테고리 삭제</span>'
+								  + 	'<div class="todo-title">'
+								  +			'<span class="title todo-cate-title">'+ tclist[i].categoryTitle + '</span>'
+								  + 	'</div>'
+							for(let j=0; j<tclist[i].todosPerCate.length; j++){
+								html += '<div class="todo-list">'
+									  + 	'<input type=hidden value="todoNo">'
+									  + 	'<label style="margin-bottom:0px; font-size:14px;">'
+									  +			'<input type="checkbox" class="doneYN" style="margin-left:10px; margin-right:10px;">' 
+									  + 	 	tclist[i].todosPerCate[j].todoContent 
+									  + 	'</label><br>'
+									  + 	'<span class="filter" style="margin-left:30px;"> ~ ' + tclist[i].todosPerCate[j].todoDate + '</span>'
+									  +		'<div style="float:right; margin-right:5px;">'
+									  +			'<span class="delete-todo filter" onclick="deleteTodo(' + tclist[i].todosPerCate[j].todoNo + ');">삭제</span>'
+									  +		'</div>'
+									  +	'</div>';
+							}
+							html += '</div>';
+							
+							modalHtml += '<option value="' + tclist[i].categoryNo + '" label="' + tclist[i].categoryTitle + '"></option>';
+						}
+						
+						$("#todo-list-wrap").html(html);				
+						$("#selectCategory").html(modalHtml);
+					}
+					
+				},
+				error: function(){
+					console.log("리스트 조회 AJAX 통신 실패");
+				}
+			})
+		}
+	</script>
 
 	<div class="container">
 	
@@ -90,57 +141,6 @@
             </span>
         </div>
         <hr>
-        
-		
-		<script>
-			// Todo 리스트를 조회하는 선언적 함수
-			function selectTodoList(){
-				$.ajax({
-					url: "todo.to",
-					type:"POST",
-					data:{
-						empNo:${loginUser.empNo}
-					},
-					success: function(tclist){
-						console.log(tclist);
-						
-						let html = ""; // 투두리스트를 조회하여 동적으로 띄워줄 용도의 문자열
-						let modalHtml = "";	// 새로운 투두 등록 모달의 카테고리 선택 option들을 동적으로 만드는 용도의 문자열					
-						if(tclist != null){
-							for(let i=0; i<tclist.length; i++){
-								html += '<div class="todo-cate shadow-sm inner-area">'
-									  + 	'<div class="todo-title">'
-									  +			'<span class="title todo-cate-title">'+ tclist[i].categoryTitle + '</span>'
-									  + 	'</div>';
-								for(let j=0; j<tclist[i].todosPerCate.length; j++){
-									html += '<div class="todo-list">'
-										  + 	'<input type=hidden value="todoNo">'
-										  + 	'<label style="margin-bottom:0px;"><input type="checkbox" class="doneYN" style="margin-left:10px; margin-right:10px;">' 
-										  + 	 tclist[i].todosPerCate[j].todoContent 
-										  + 	'</label><br>'
-										  + 	'<span class="filter" style="margin-left:30px;"> ~ ' + tclist[i].todosPerCate[j].todoDate + '</span>'
-										  +		'<div style="float:right; margin-right:5px;">'
-										  +			'<span class="delete-todo filter" onclick="deleteTodo(' + tclist[i].todosPerCate[j].todoNo + ');">삭제</span>'
-										  +		'</div>'
-										  +	'</div>';
-								}
-								html += '</div>';
-								
-								modalHtml += '<option value="' + tclist[i].categoryNo + '" label="' + tclist[i].categoryTitle + '"></option>';
-							}
-							
-							$("#todo-list-wrap").html(html);				
-							$("#selectCategory").html(modalHtml);
-						}
-						
-					},
-					error: function(){
-						console.log("리스트 조회 AJAX 통신 실패");
-					}
-				})
-			}
-		</script>
-		
 		
 		<%-- 아래부터는 로그인 여부, TO DO 존재 여부에 따라 보이는 내용이 달라짐 --%>
 		<div id="todoList">
@@ -169,6 +169,8 @@
 		</div>
 		
 	</div>
+	
+	
     <script>
         // DB의 TB_TODO_CATE의 COLOR 컬럼값에 따라 카테고리의 색 변경되도록 하는 함수
 
@@ -181,10 +183,43 @@
         
         // To DO 체크박스에 클릭이벤트 발생시 DONE_YN 컬럼 변경하는 AJAX
 
-        // 선택버튼 클릭시 해당 요소 삭제하는 AJAX
+        // 카테고리 삭제 클릭시 해당 카테고리와 카테고리에 속한 모든 투두 삭제하는 AJAX
+        function deleteCate(categoryNo){
+        	if(window.confirm("해당 카테고리에 속한 모든 투두도 함께 지워집니다. <br> 정말 삭제하시겠습니까?")){
+            	// AJAX
+            	$.ajax({
+            		url:"delCate.to",
+            		data:{
+            			categoryNo : categoryNo
+            		},
+            		success:function(result){
+            			alert(result);
+            			location.reload();
+            		},
+            		error:function(){
+            			console.log("AJAX 통신 실패");
+            		}
+            	})
+        	}
+        }
+        
+        // 투두 삭제 클릭시 해당 요소 삭제하는 AJAX
         function deleteTodo(todoNo){
             if(window.confirm("정말 삭제하시겠습니까?")){
             	// AJAX
+            	$.ajax({
+            		url:"delete.to",
+            		data:{
+            			todoNo : todoNo
+            		},
+            		success:function(result){
+            			alert(result);
+            			location.reload();
+            		},
+            		error:function(){
+            			console.log("AJAX 통신 실패");
+            		}
+            	})
             }
             
         }
@@ -228,6 +263,7 @@
             		color : $("input[name=color]").val()
             	},
             	success:function(result){
+            		alert(result);
             		location.reload();
             	}
             })
@@ -275,6 +311,7 @@
             		todoDate : $("input[name=dueDate]").val()
             	},
             	success:function(result){
+            		alert(result);
             		location.reload();
             	}
             })

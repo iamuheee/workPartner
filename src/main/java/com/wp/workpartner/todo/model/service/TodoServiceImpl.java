@@ -40,8 +40,7 @@ public class TodoServiceImpl implements TodoService {
 
 	@Override
 	public int ajaxDeleteTodo(int todoNo) {
-		// TODO Auto-generated method stub
-		return 0;
+		return tDao.ajaxDeleteTodo(sqlSession, todoNo);
 	}
 	
 	@Override
@@ -52,6 +51,18 @@ public class TodoServiceImpl implements TodoService {
 	@Override
 	public int insertCate(TodoCategory tc) {
 		return tDao.insertCate(sqlSession, tc);
+	}
+
+	@Override
+	public int deleteCate(String categoryNo) {
+		if(tDao.selectTodoList(sqlSession, categoryNo).isEmpty()) {
+			// 삭제하려는 카테고리에 속한 TO DO가 하나도 없는 경우
+			return tDao.deleteCate(sqlSession, categoryNo);
+		}else {
+			// 삭제하려는 카테고리에 속한 TO DO가 한 개 이상 있는 경우
+			// 단, TB_TODO_CATE의 CATE_NO은 TB_TODO의 CATEGORY_NO의 부모이므로, 자식 먼저 삭제
+			return tDao.deleteTodos(sqlSession, categoryNo) * tDao.deleteCate(sqlSession, categoryNo);
+		}
 	}
 	
 }

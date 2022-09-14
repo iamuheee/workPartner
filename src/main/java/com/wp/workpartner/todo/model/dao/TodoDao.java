@@ -35,4 +35,12 @@ public class TodoDao {
 		return sqlSession.insert("todoMapper.insertCate", tc);
 	}
 	
+	public int deleteCate(SqlSessionTemplate sqlSession, String categoryNo) {
+		return sqlSession.delete("todoMapper.deleteCate", categoryNo);
+	}
+	
+	public int deleteTodos(SqlSessionTemplate sqlSession, String categoryNo) {
+		return sqlSession.delete("todoMapper.deleteTodos", categoryNo);
+	}
+	
 }
