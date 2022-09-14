@@ -10,7 +10,7 @@
 	#mypage-outer {
         /* border:1px solid blue; */
         width:100%;
-        height:100%;
+        height:100vh;
         padding:10px;
         margin:auto;
         position:relative;
@@ -61,6 +61,11 @@
         display: flex;
         flex-direction: column;
     }
+    
+    #empPwd::placeholder {
+    	font-size:14px;
+    	font-weight:900;
+    }
 
 </style>
 </head>
@@ -79,7 +84,7 @@
 	    <hr>
 	    <!-- 내 정보 관리 영역 -->
 	    <div id="mypage-body">
-	        <form action="insert.em" method="post" id="insertForm">
+	        <form action="insert.em" method="post" id="enrollForm" enctype="multipart/form-data">
 	           <table id="empInfo">
 	                <tr>
 	                    <th width="150px">이름<span style="color:red;">&nbsp;*</span></th>
@@ -89,23 +94,44 @@
 	                    <th width="150px">프로필 사진</th>
 	                    <td rowspan="4">
 	                        <div id="profile-box">
-	                            <img id="profileImg" src="${pageContext.request.contextPath}/resources/profile_images/defaultProfile.png" onclick="$('#profileImgFile').click();"><br>
-	                            <button type="button" class="btn btn-primary" onclick="$('#profileImgFile').click();">프로필 사진 등록</button>
-	                            <input type="file" id="profileImgFile" name="empProfile" style="display:none;">
+	                            <img id="profileImg" src="resources/profile_images/defaultProfile.png" onclick="choosefile();"><br>
+	                            <button type="button" class="btn btn-primary" onclick="choosefile();">프로필 사진 등록</button>
+	                            <input type="file" name="upfile" id="upfile" onchange="loadImg(this);" style="display:none;">
 	                        </div>
+	                        
+	                        <!-- 첨부한 프로필 이미지 화면에 띄우기 -->
+	                        <script>
+	                        	function choosefile() {
+	                        		$("input[name=upfile]").click();
+	                        	}
+	                        	
+	                        	function loadImg(inputFile) {
+	                        		console.log(inputFile);
+	                        		if(inputFile.files.length == 1) {	// 파일이 선택된 경우
+	                        			const reader = new FileReader();
+	                        			reader.readAsDataURL(inputFile.files[0]);
+	                        			reader.onload = function(e) {
+	                        				$("#profileImg").attr("src", e.target.result);
+	                        			}
+	                        		}else {	// 파일 선택을 취소한 경우 ==> 기본 이미지가 뜨게 
+	                        			$("#profileImg").attr("src", "resources/profile_images/defaultProfile.png");
+	                        		}
+	                        	}
+	                        </script>
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <th>아이디<span style="color:red;">&nbsp;*</span></th>
 	                    <td>
-	                        <input type="text" id="empId" name="empId" required>
+	                        <input type="text" id="empId" name="empId" required><br>
+	                        <label id="checkResult" style="font-size:0.8em; display:none;"></label>
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <th>비밀번호<span style="color:red;">&nbsp;*</span></th>
 	                    <td>
 	                        <!-- 아이디와 동일하게 설정 (placeholder로 지시하거나 아이디와 동일하게 입력되도록 하기) -->
-	                        <input type="password" id="empPwd" name="empPwd" placeholder="초기 비밀번호는 아이디와 동일하게 작성" required>
+	                        <input type="password" id="empPwd" name="empPwd" placeholder="초기 비밀번호는 아이디와 동일하게 설정하세요." required>
 	                    </td>
 	                </tr>
 	                <tr>
@@ -159,7 +185,7 @@
 	                </tr>
 	                <tr>
 	                    <th colspan="4" style="height:100px">
-	                        <button type="submit" class="btn btn-primary" style="margin-right:5px;">저장</button>
+	                        <button type="submit" class="btn btn-primary" style="margin-right:5px;" disabled>저장</button>
 	                        <button type="button" class="btn btn-secondary" onclick="location.href='javascript:history.back();'">취소</button>
 	                    </th>
 	                </tr>
@@ -177,6 +203,48 @@
 	    			$("#empEmail").val(email);
 	    		});	
 	    	});
+	    </script>
+	    
+	    <!-- 아이디 중복확인 -->
+	    <script>
+	    	$(function(){
+	    		const $idInput = $("#enrollForm input[name=empId]");
+	    		
+	    		$idInput.keyup(function(){
+	    			// console.log($idInput.val());
+	    			
+	    			// 아이디가 영문자+숫자만으로 입력되었는지 확인
+	    			let regExp = /[A-Za-z0-9]+$/;
+	    			
+	    			if(regExp.test( $idInput.val() )) {	// 제대로 입력한 경우 ==> 중복확인
+	    				$.ajax({
+	    					url:"idCheck.em",
+	    					data:{checkId:$idInput.val()},
+	    					success:function(result){
+	    						console.log(result);
+	    						
+	    						if(result == "NNNNN"){
+	    							$("#checkResult").show();
+	    							$("#checkResult").css("color", "red").text("사용 중인 아이디입니다.");
+	    							$("#enrollForm :submit").attr("disabled", true);
+	    							
+	    						}else {
+	    							$("#checkResult").show();
+	    							$("#checkResult").css("color", "green", "bold").text("사용 가능한 아이디입니다.");
+	    							$("#enrollForm :submit").removeAttr("disabled");
+	    						}
+	    					},error:function(){
+	    						console.log("id 중복 체크용 ajax 통신 실패")
+	    					}
+	    				})
+	    				
+	    			}else {	// 영문자+숫자 외 다른 문자를 입력한 경우
+	    				$("#checkResult").show();
+	    				$("#checkResult").css("color", "blue").text("영문 소문자, 숫자만 사용 가능합니다.");
+	    				$("#enrollForm :submit").attr("disabled", true);
+	    			}
+	    		})
+	    	})
 	    </script>
 	    
 	   

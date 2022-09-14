@@ -15,7 +15,10 @@ public class EmployeeDao {
 	}
 	
 	public int insertEmployee(SqlSessionTemplate sqlSession, Employee e) {
-		
 		return sqlSession.insert("employeeMapper.insertEmployee", e);
+	}
+	
+	public int idCheck(SqlSessionTemplate sqlSession, String empId) {
+		return sqlSession.selectOne("employeeMapper.idCheck", empId);
 	}
 }

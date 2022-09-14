@@ -89,6 +89,7 @@
 		  , emp_enrolldate
 		  , emp_extension
 		  , emp_phone
+		  , emp_profile
 		  )
 		  values
 		  (
@@ -113,7 +114,17 @@
 		  , #{empEnrollDate}
 		  , #{empExtension}
 		  , #{empPhone}  
+		  , #{empProfile}
 		  )
 	</insert>
+	
+	<!-- 아이디 중복 체크 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="idCheck" resultType="_int">
+		select
+		       count(*)
+		  from tb_employee
+		 where emp_id = lower(#{empId})	<!-- 대소문자 구분없이 중복체크 -->
+	</select>
 
 </mapper>

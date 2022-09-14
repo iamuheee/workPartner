@@ -7,8 +7,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wp.workpartner.common.template.FileUpload;
 import com.wp.workpartner.employee.model.service.EmployeeServiceImpl;
 import com.wp.workpartner.employee.model.vo.Employee;
 
@@ -21,6 +24,7 @@ public class EmployeeController {
 	@Autowired	
 	private BCryptPasswordEncoder bcryptPasswordEncoder;	// 비밀번호 암호화
 	
+	
 	/**
 	 * @author	: Taeeun Park
 	 * @date	: 2022. 9. 11.
@@ -31,6 +35,7 @@ public class EmployeeController {
 	public String loginForm() {
 		return "employee/loginForm";
 	}
+	
 	
 	/**
 	 * @author	: Taeeun Park
@@ -44,10 +49,10 @@ public class EmployeeController {
 		
 //		System.out.println("ID : " + e.getEmpId());
 //		System.out.println("pwd : " + e.getEmpPwd());
-		
+				
 		Employee loginUser = eService.loginEmployee(e);
 		
-		System.out.println(loginUser);
+//		System.out.println(loginUser);
 		
 		if(loginUser != null && bcryptPasswordEncoder.matches(e.getEmpPwd(), loginUser.getEmpPwd())) {	// 로그인 성공
 			session.setAttribute("loginUser", loginUser);
@@ -58,6 +63,7 @@ public class EmployeeController {
 		}
 		return mv;
 	}
+	
 	
 	/**
 	 * @author	: Taeeun Park
@@ -71,6 +77,7 @@ public class EmployeeController {
 		return "employee/loginForm";
 	}
 	
+	
 	/**
 	 * @author	: Taeeun Park
 	 * @date	: 2022. 9. 11.
@@ -82,28 +89,36 @@ public class EmployeeController {
 		return "employee/employeeEnrollForm";
 	}
 	
+	
 	/**
 	 * @author	: Taeeun Park
-	 * @date	: 2022. 9. 13.
+	 * @date	: 2022. 9. 14.
 	 * @method	: 사용자 등록 요청 처리
-	 * @param	: Employee e
+	 * @param	: Employee e, upfile(프로필 사진 파일)
 	 * @return	: String "redirect:list.em" 
 	 */
 	@RequestMapping("insert.em")
-	public String insertEmployee(Employee e, HttpSession session, Model model) {
+	public String insertEmployee(Employee e, MultipartFile upfile, HttpSession session, Model model) {
+
+		// 비밀번호 암호화
 		String encPwd = bcryptPasswordEncoder.encode(e.getEmpPwd());
 //		System.out.println("암호화된 비밀번호 : " + encPwd);
-		
 		e.setEmpPwd(encPwd);
-		
+					
 		// 사번 생성을 위한 입사연도 끝 두 자리 추출
 		String enrollYear = e.getEmpEnrollDate().substring(2, 4);
-		
 //		System.out.println(e);
 //		System.out.println(enrollYear);
-		
 		e.setEmpEnrollYear(enrollYear);
-				
+
+		// 프로필 사진을 등록한 경우
+		if(!upfile.getOriginalFilename().equals("")) {
+			String saveFilePath = FileUpload.saveFile(upfile, session, "resources/profile_images/");
+			e.setEmpProfile(saveFilePath);
+		}
+		
+		System.out.println(e.getEmpProfile());
+		
 		int result = eService.insertEmployee(e);
 		
 		if(result > 0) {	// 사용자 등록 성공
@@ -115,6 +130,22 @@ public class EmployeeController {
 			return "common/error";
 		}
 	}
+	
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 14.
+	 * @method	: 아이디 중복 체크 요청 처리 (ajax)
+	 * @param	: String checkId
+	 * @return	: 중복 시 "NNNNN", 아닐 시 "NNNNY"
+	 */
+	@ResponseBody	// 리턴하는 문자열이 응답view가 아닌 데이터임을 선언하는 어노테이션
+	@RequestMapping("idCheck.em")
+	public String ajaxIdCheck(String checkId) {
+		int count = eService.idCheck(checkId);
+		return (count > 0) ? "NNNNN" : "NNNNY";
+	}
+	
 	
 	/**
 	 * @author	: Taeeun Park
@@ -148,9 +179,7 @@ public class EmployeeController {
 	public String myPage() {
 		return "employee/myPage";
 	}
-	
-	
-	
+		
 	/**
 	 * @author	: Taeeun Park
 	 * @date	: 2022. 9. 11.
@@ -161,5 +190,7 @@ public class EmployeeController {
 	public String selectEmpList() {
 		return "employee/employeeListView";
 	}
+	
+	
 	
 }

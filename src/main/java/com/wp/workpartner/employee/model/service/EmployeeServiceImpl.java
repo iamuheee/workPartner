@@ -42,8 +42,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public int idCheck(String userId) {
-		return 0;
+	public int idCheck(String empId) {
+		return eDao.idCheck(sqlSession, empId);
 	}
 
 	@Override
