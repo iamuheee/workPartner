@@ -51,47 +51,43 @@ public class TodoController {
 	}
 	
 	
-	
-	@RequestMapping("update.to")
+	@ResponseBody
+	@RequestMapping(value="update.to", produces="application/text; charset=utf-8")
 	public String ajaxDoneTodo(Todo t, Model model) {
 		if( tService.ajaxDoneTodo(t) > 0 ) {
-			return "redirect:list.to";
+			return "DONE_YN UPDATE 성공";
 		}else {
-			model.addAttribute("errorMsg", "수정에 실패하였습니다.");
-			return "common/errorPage";
+			return "DONE_YN UPDATE 실패";
 		}
 	}
 	
-	@RequestMapping("delete.to")
-	public String ajaxDeleteTodo(Model m, HttpSession session, int todoNo) {
+	@ResponseBody
+	@RequestMapping(value="delete.to", produces="application/text; charset=utf-8")
+	public String ajaxDeleteTodo(int todoNo) {
 		if( tService.ajaxDeleteTodo(todoNo) > 0 ) {
-			session.setAttribute("alertMsg", "할 일을 성공적으로 삭제하였습니다!");
-			return "redirect:list:to";
+			return "해당 투두를 성공적으로 삭제하였습니다!";
 		}else {
-			m.addAttribute("errorMsg", "할 일을 삭제하지 못했습니다.");
-			return "common/errorPage";
+			return "해당 투두 삭제에 실패하였습니다.";
 		}
 	}
 	
-	@RequestMapping("insert.to")
-	public String insertTodo(Model m, HttpSession session, Todo t) {
+	@ResponseBody
+	@RequestMapping(value="insert.to", produces="application/text; charset=utf-8")
+	public String insertTodo(Todo t) {
 		if(tService.insertTodo(t) > 0) {
-			session.setAttribute("alertMsg", "성공적으로 추가하였습니다!");
-			return "redirect:list.to";
+			return "새로운 투두를 성공적으로 등록하였습니다!";
 		}else {
-			m.addAttribute("errorMsg", "할 일을 To do 리스트에 추가하지 못했습니다.");
-			return "common/errorPage";
+			return "새로운 투두 등록에 실패하였습니다.";
 		}
 	}
 	
-	@RequestMapping("newcate.to")
-	public String insertCate(Model m, HttpSession session, TodoCategory tc) {
+	@ResponseBody
+	@RequestMapping(value="newcate.to", produces="application/text; charset=utf-8")
+	public String insertCate(TodoCategory tc) {
 		if( tService.insertCate(tc) > 0 ) {
-			session.setAttribute("alertMsg", "카테고리를 성공적으로 추가하였습니다!");
-			return "redirect:list.to";
+			return "새로운 카테고리를 성공적으로 등록하였습니다!";
 		}else {
-			m.addAttribute("errorMsg", "카테고리를 추가하지 못했습니다.");
-			return "common/errorPage";
+			return "새로운 카테고리 등록에 실패하였습니다.";
 		}
 	}
 
