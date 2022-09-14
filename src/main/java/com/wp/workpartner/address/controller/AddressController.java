@@ -3,8 +3,11 @@ package com.wp.workpartner.address.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -118,7 +121,80 @@ public class AddressController {
 	@ResponseBody
 	@RequestMapping(value="detailEmp.ad", produces="application/json; charset=utf-8")
 	public String ajaxSelectDetailEmp(String empNo) {
-		ArrayList<Employee> list = adService.selectDetailEmp(empNo);		
-		return new Gson().toJson(list);
+		Employee emp = adService.selectDetailEmp(empNo);		
+		return new Gson().toJson(emp);
+	}
+	
+	/** 별표연락처 & 내 연락처 > 상세내용 
+	 * @param addressNo 연락처번호
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="detailMyAdd.ad", produces="application/json; charset=utf-8")
+	public String ajaxSelectDetailMyAdd(int addressNo) {
+		MyAddress myAdd = adService.selectDetailmyAdd(addressNo);
+		return new Gson().toJson(myAdd);
+	}
+	
+	/** 별 클릭시 실시간 addstar 반영
+	 * @param myAd : adderessNo, addressStar
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="updateStar.ad")
+	public String ajaxUpdateStar(MyAddress myAd) {	
+		// produces로 json타입하면 안됨 전달안된다
+		// 값 두개 전달왔을때 data 키값==객체의 필드명과 같게 써서 객체에 담았음 
+		int result = adService.updateAddStar(myAd);
+		return result > 0 ? "success" : "fail";
+	}
+	
+	
+	/** 연락처 편집
+	 * @param myAdd 수정된 정보
+	 * @param session 성공메시지
+	 * @param model 실패메세지
+	 * @return
+	 */
+	@RequestMapping("updateAdd.ad")
+	public String updateAdd(MyAddress myAdd, HttpSession session, Model model) {
+		//System.out.println(myAdd);
+		
+		int result = adService.updateAdd(myAdd);
+		if(result > 0) {
+			session.setAttribute("alertMsg", "성공적으로 수정되었습니다.");
+			return "redirect:list.ad";
+		}else {
+			model.addAttribute("errorMsg", "수정실패");
+			return "common/error";
+		}
+		
+	}
+	
+	@RequestMapping("insertAd.ad")
+	public String insertAdd(MyAddress myAdd, HttpSession session, Model model) {
+		
+		int result = adService.insertAdd(myAdd);
+		if(result > 0) {
+			session.setAttribute("alertMsg", "성공적으로 등록되었습니다.");
+			return "redirect:list.ad";
+		}else {
+			model.addAttribute("errorMsg", "등록실패");
+			return "common/error";
+		}
+		
+	}
+	
+	@RequestMapping("insertGp.ad")
+	public String insertGp(MyGroup myGp, HttpSession session, Model model) {
+		int result = adService.insertGp(myGp);
+		if(result > 0) {
+			session.setAttribute("alertMsg", "성공적으로 등록되었습니다.");
+			return "redirect:list.ad";
+		}else {
+			model.addAttribute("errorMsg", "등록실패");
+			return "common/error";
+		}
+		
 	}
 }

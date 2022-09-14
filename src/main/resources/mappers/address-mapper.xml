@@ -137,6 +137,8 @@
        from tb_my_address
       where group_no = #{groupNo}
         and add_status = 'Y'
+      order
+      	 by add_name asc
 	</select>
 	
 	<select id="selectStarAdCount" resultType="_int">
@@ -165,11 +167,13 @@
              , add_email
              , add_star
              , add_status
-       from tb_my_address a
-       join tb_mygroup g on(a.group_no = g.group_no)
-     where a.emp_no = #{empNo}
-       and add_star = 'Y'
-       and add_status = 'Y'
+	      from tb_my_address a
+	      join tb_mygroup g on(a.group_no = g.group_no)
+	     where a.emp_no = #{empNo}
+	       and add_star = 'Y'
+	       and add_status = 'Y'
+         order
+      	    by add_name asc
 	</select>
 	
 	<select id="selectDetailEmp" resultMap="empResult">
@@ -195,5 +199,107 @@
 		   where emp_no = #{empNo}
 	</select>
 	
+	<select id="selectDetailmyAdd" resultMap="myAddressResult">
+		 select
+               add_no
+             , a.emp_no as "emp_no"
+             , a.group_no as "group_no"
+             , group_name
+             , add_name
+             , add_nick
+             , add_tel
+             , add_extension_no
+             , add_fax
+             , add_company
+             , add_department
+             , add_position
+             , add_memo
+             , add_email
+             , add_star
+             , add_status
+	      from tb_my_address a
+	      join tb_mygroup g on(a.group_no = g.group_no)
+	     where add_no = #{addressNo}
+	</select>
+	
+	<update id="updateAddStar">
+		 update 
+		        tb_my_address
+		    set add_star = #{addressStar}
+		  where add_no = #{addressNo}
+	</update>
+	
+	<update id="updateAdd">
+		 update 
+			 	 tb_my_address
+	     	set         
+	               group_no  = #{groupNo}         
+	             , add_name = #{addressName}
+	             , add_nick = #{addressNickName}
+	             , add_tel = #{addressTel}
+	             , add_extension_no= #{addExtensionNo}
+	             , add_fax = #{addressFax}
+	             , add_company = #{addressCompany}
+	             , add_department = #{addressDepartment}
+	             , add_position = #{addressPosition}
+	             , add_memo = #{addressMemo}
+	             , add_email = #{addressEmail}     
+	        where add_no = #{addressNo}
+	</update>
+	
+	<insert id="insertAdd">
+		insert
+		  into tb_my_address
+        (
+               add_no
+             , group_no    
+             , add_name 
+             , add_nick 
+             , add_tel 
+             , add_extension_no
+             , add_fax 
+             , add_company 
+             , add_department 
+             , add_position 
+             , add_memo 
+             , add_email 
+             , add_star              
+             , emp_no
+        )
+        values
+        (
+             SEQ_ADDNO.NEXTVAL
+             , #{groupNo}
+             , #{addressName}
+             , #{addressNickName}
+             , #{addressTel}
+             , #{addExtensionNo}
+             , #{addressFax}
+             , #{addressCompany}
+             , #{addressDepartment}
+             , #{addressPosition}
+             , #{addressMemo}
+             , #{addressEmail}
+             , #{addressStar}               
+             , #{employeeNo}
+        )
+	</insert>
+	
+	<insert id="insertGp">
+	insert
+		  into tb_mygroup
+        (
+               group_no    
+             , group_name           
+             , emp_no
+        )
+        values
+        (
+             SEQ_GPNO.NEXTVAL
+             , #{groupName}                           
+             , #{employeeNo}
+        )
+	
+	</insert>
 	
 </mapper>

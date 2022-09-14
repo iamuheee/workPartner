@@ -60,7 +60,27 @@ public class AddressDao {
 		return (ArrayList)sqlSession.selectList("addressMapper.selectStarList", empNo, rowBounds);
 	}
 	
-	public ArrayList<Employee> selectDetailEmp(SqlSessionTemplate sqlSession, String empNo){
-		return (ArrayList)sqlSession.selectList("addressMapper.selectDetailEmp", empNo);
+	public Employee selectDetailEmp(SqlSessionTemplate sqlSession, String empNo){
+		return sqlSession.selectOne("addressMapper.selectDetailEmp", empNo);
+	}
+	
+	public MyAddress selectDetailmyAdd(SqlSessionTemplate sqlSession, int addressNo) {
+		return sqlSession.selectOne("addressMapper.selectDetailmyAdd", addressNo);
+	}
+	
+	public int updateAddStar(SqlSessionTemplate sqlSession, MyAddress myAd) {
+		return sqlSession.update("addressMapper.updateAddStar", myAd);
+	}
+	
+	public int updateAdd(SqlSessionTemplate sqlSession, MyAddress myAd) {
+		return sqlSession.update("addressMapper.updateAdd", myAd);
+	}
+	
+	public int insertAdd(SqlSessionTemplate sqlSession, MyAddress myAd) {
+		return sqlSession.insert("addressMapper.insertAdd", myAd);
+	}
+	
+	public int insertGp(SqlSessionTemplate sqlSession, MyGroup myGp) {
+		return sqlSession.insert("addressMapper.insertGp", myGp);
 	}
 }

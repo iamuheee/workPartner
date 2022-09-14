@@ -2,6 +2,7 @@ package com.wp.workpartner.address.model.service;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.session.SqlSessionManager;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,11 +71,40 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	
-	/** 테이블 선택시 회사 내 직원 상세정보	 
-	 */
+	//  테이블 선택시 회사 내 직원 상세정보	
 	@Override
-	public ArrayList<Employee> selectDetailEmp(String empNo) {
+	public Employee selectDetailEmp(String empNo) {
 		return adDao.selectDetailEmp(sqlSession, empNo);
+	}
+
+	// 내 연락처 내 상세보기
+	@Override
+	public MyAddress selectDetailmyAdd(int addressNo) {
+		return adDao.selectDetailmyAdd(sqlSession, addressNo);
+	}
+
+	// 별클릭시 addStar update
+	@Override
+	public int updateAddStar(MyAddress myAd) {
+		return adDao.updateAddStar(sqlSession, myAd);
+	}
+	
+	// 연락처 편집
+	@Override
+	public int updateAdd(MyAddress myAd) {
+		return adDao.updateAdd(sqlSession, myAd);
+	}
+	
+	// 연락처 등록
+	@Override
+	public int insertAdd(MyAddress myAd) {
+		return adDao.insertAdd(sqlSession, myAd);
+	}
+
+	// 그룹 등록
+	@Override
+	public int insertGp(MyGroup myGp) {
+		return adDao.insertGp(sqlSession, myGp);
 	}
 	
 

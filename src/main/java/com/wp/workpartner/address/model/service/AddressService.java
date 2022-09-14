@@ -30,19 +30,28 @@ public interface AddressService {
 	ArrayList<MyAddress> selectStarList(String empNo, PageInfo pi);
 	
 	// 6. 테이블 선택 시 회사 내 직원정보
-	ArrayList<Employee> selectDetailEmp(String empNo);
+	Employee selectDetailEmp(String empNo);
 	
 	// 7. 테이블 선택시 내 연락처 사람 정보
+	MyAddress selectDetailmyAdd(int addressNo);
+	
+	// 8. 별클릭시 addStar 업데이트
+	int updateAddStar(MyAddress myAd);
+	
+	// 9. 연락처 편집
+	int updateAdd(MyAddress myAd);
+	
+	// 10. 새연락처 등록
+	int insertAdd(MyAddress myAd);
 	
 	// 8. 내연락처 그룹 추가
+	int insertGp(MyGroup myGp);
 	
 	// 9. 내연락처 그룹 삭제
 	
 	// 10. 내연락처 그룹명 수정
 	
-	// 11. 새연락처 등록
 	
-	// 12. 새연락처 편집
 	
 	// 13. 검색기능
 }

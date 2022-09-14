@@ -13,7 +13,7 @@
 
 #empSubMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);}
 #empMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);} 
-
+ 
 </style>
 
 </head>
@@ -103,140 +103,46 @@
                     &nbsp;
                     <input type="checkbox" name="" id="cbx_chkAll" onclick=""> &nbsp;
 
+                    <!-- <a class="btn btn-sm btn-primary">메일보내기</a> -->
                     <!-- 내연락처일때만 삭제기능 -->
                     <!-- 삭제 > 모달 > 기능 정보넘기는거 어렵다면 그냥 모달창 띄우지말고 바로 삭제처리 -->
-                    <span id="deleteAddArea">
-	                  
-                    </span>
+                    <button id="deleteFeat" type="button" class="btn btn-sm btn-secondary" onclick="deleteAdds();">삭제</button>                      
 
-                    <a class="btn btn-sm btn-primary">메일보내기</a>
                 </div>
                 
                 <br>
 				
-				<div id="tableArea">	
-						
+				<div id="tableArea">					
+	                <!-- 1. 조직도 테이블 --> 
+    	            <!-- 2. 내 연락처 테이블 -->
+        	        <!-- 3. 별표연락처 -->              
 				</div>
-				
-                <!-- 1. 조직도 테이블 --> 
-                <!-- 2. 내 연락처 테이블 -->
-                <!-- 3. 별표연락처 -->              
-
-            
-            </div>
-
-            <!-- <script> ajax라서... 어떻게 넘길지 모르겠음
-                                
-                $(function(){
-                   
-                    $(".emailTitle").click(function(){
-                        location.href = 'detail.ne?no=' + $(this).siblings(".no").text();
-                                                        // 해당 emailTitle의 동위요소  중 클래스가 no인
-                    })        		
-        
-
-                    $("#dataCompanyTable>tbody>tr").click(function(){
-                        location.href = 'detailCompany.ad?no=' + $(this).children(".no").text();
-                                                        // 해당 tr요소의 자식요소 중 클래스가 no인
-                    })   
-                    
-                    $("#dataAddTable>tbody>tr").click(function(){
-                        location.href = 'detailMyAdd.ad?no=' + $(this).children(".no").text();
-                                                        // 해당 tr요소의 자식요소 중 클래스가 no인
-                    })   
-
-                    $("#dataStarAddTable>tbody>tr").click(function(){
-                        location.href = 'detailStarAdd.ad?no=' + $(this).children(".no").text();
-                                                        // 해당 tr요소의 자식요소 중 클래스가 no인
-                    }) 
-                })            	
-                
-            </script> -->
+	
+            </div>          
 
             <!-- 특정 멤버의 주소록 상세창영역-->
             <div class="detailAdd">           
                 <br>
                 <!-- 내연락처에만 있는 삭제/ 편집기능-->
-                <div id="myAddChoiceArea" style="margin-left: 30px;" align="left">
-                    <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#addressEdit">편집</button>
+                <div id="myAddChoiceArea" style="visibility:hidden;">                
+                    <button type="button" class="btn btn-sm btn-warning openAddEdit" data-toggle="modal" data-target="#addressEdit">편집</button>
                     <button type="button" class="btn btn-sm btn-secondary" onclick="deleteAdd();">삭제</button>      
                 </div> 
-
-                <div class="addBoxShadow">
+                
+               
+                <div class="addBoxShadow" >
                     <br>
-                    <table id="adDetailTb">	
+                    <table id="adDetailTb" width="85%">	
                         
-                        <!--목록클릭 전-->                       
-                        <p id="beforeClick">
-                        	<br>
-                            연락처 상세정보를 보려면 이름을 <br>
-                            클릭하세요
-                        </p> 
-
-                        <!-- 주소록 상세보기 -->                       
-
+			           <!--목록클릭 전-->                       
+			           <div id="beforeClick">
+			               <br>
+			               연락처 상세정보를 보려면 이름을 <br>
+			               클릭하세요
+			            </div> 
+                        <!-- 주소록 상세보기 -->    
                         <!-- 별표연락처 & 내 연락처 상세보기 -->
-                        <!-- <thead>
-                            <tr>
-                                <th class="Addstar">
-                                    <input type="checkbox" name="addStar" value="" id="rate2">
-                                    <label for="rate2">★</label>                                  
-                                </th>
-                                <th align="left"><h2>감나라</h2></th>
-                                <th class="fontSmallSize" style="width: 70px;">Maria</th>
-                                <th align="right">
-                                    <a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.em">
-                                        mail
-                                    </a>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="fontSmallSize">회사</td>
-                                <td colspan="3" class="fontMiddleAdd">&nbsp; 제일디자인</td>
-                            </tr>
-                            <tr>
-                                <td class="fontSmallSize">부서</td>
-                                <td colspan="3" class="fontMiddleAdd">&nbsp; 영업부1팀</td>
-                            </tr>
-                            <tr>
-                                <td class="fontSmallSize">직급</td>
-                                <td colspan="3" class="fontMiddleAdd">&nbsp; 주임</td>
-                            </tr>
-            
-                            <tr>
-                                <td colspan="4"> <hr style="width: 97%;"> </td>
-                            </tr>
-            
-                            <tr>
-                                <td class="fontSmallSize">이메일</td>
-                                <td colspan="3" class="fontMiddleAdd">&nbsp; wkdfgjkdl@naver.com</td>
-                            </tr>
-                            <tr>
-                                <td class="fontSmallSize">내선번호</td>
-                                <td colspan="3" class="fontMiddleAdd">&nbsp;  073-1234-5689</td>
-                            </tr>
-                            <tr>
-                                <td class="fontSmallSize">휴대전화</td>
-                                <td colspan="3" class="fontMiddleAdd">&nbsp; 010-1234-5689</td>
-                            </tr>
-            
-                            <tr>
-                                <td class="fontSmallSize">FAX</td>
-                                <td colspan="3" class="fontMiddleAdd">&nbsp; 02-561-4635</td>
-                            </tr>              
-            
-                            <tr>
-                                <td colspan="4"> <hr style="width: 97%;"> </td>
-                            </tr>
-            
-                            <tr>
-                                <td class="fontSmallSize">메모</td>
-                                <td colspan="3" class="fontMiddleAdd">&nbsp; 시간약속에 철저한 편</td>
-                            </tr>                             
-                        </tbody>   -->
-            
+                        
                     </table> 
                     <br>
                 </div>
@@ -269,16 +175,8 @@
                     }else{
                         //$("").focus();
                     }
-                }
-
-                // 내연락처 다중선택 삭제
-                function deleteAdds(){
-                    if(confirm("4개 모두 삭제하시겠습니까?")){
-
-                    }else{
-                        //$("").focus();
-                    }
-                }
+                }             
+               
 
             </script>
 
@@ -287,49 +185,44 @@
             <!-- 새연락처 Modal -->
             <div class="modal fade" id="addressAdd" tabindex="-1" aria-labelledby="addressAddModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- <div class="modal-header">
-                            <h5 class="modal-title" id="addressAddModalLabel">새 연락처</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div> -->
+                    <div class="modal-content">                       
                         <div class="modal-body">                          
-                            <form action="">
+                            <form action="insertAd.ad" method="post">
                                 <table align="center">   
                                         <tr>
-                                            <th class="Addstar3" colspan="2">
-                                                <input type="checkbox" name="addStar" value="Y" id="rate3">
-                                                <label for="rate3">★</label>                                  
+                                            <th class="Addstar" colspan="2">
+                                                <input type="checkbox" name="addressStar"  value="Y" id="rate3">
+                                                <label for="rate3">★</label>      
+                                                <input type="hidden" name="employeeNo" value="${loginUser.empNo }">                            
                                             </th>                                    
                                         </tr>                             
                                     <tr>
                                             <th>이름</th>  &nbsp;                                                                       
-                                            <td><input class="formInput"  type="text" id="addName" name="addName" required></td>                                       
+                                            <td><input class="formInput"  type="text" id="addressName" name="addressName" required></td>                                       
                                     </tr>
                                     <tr>
                                             <th>닉네임</th>  &nbsp;
-                                            <td><input class="formInput" type="text" name="addNick"></td>
+                                            <td><input class="formInput" type="text" name="addressNickName"></td>
                                     </tr>
                                     <tr>
                                             <th>회사</th> &nbsp;
-                                            <td><input class="formInput" type="text" name="addCompany" required></td>                                       
+                                            <td><input class="formInput" type="text" name="addressCompany" required></td>                                       
                                     </tr>        
                                     <tr>
                                             <th>부서</th>  &nbsp;                                    
-                                            <td><input class="formInput" type="text" name="addDepartment" required></td>                                        
+                                            <td><input class="formInput" type="text" name="addressDepartment" required></td>                                        
                                         </tr>    
                                         <tr>
                                             <th>직급</th>   &nbsp;                                   
-                                            <td><input class="formInput" type="text" name="addPosition" required></td>
+                                            <td><input class="formInput" type="text" name="addressPosition" required></td>
                                         </tr>                            
                                         <tr>
                                             <th>이메일</th> &nbsp;
-                                            <td><input class="formInput" type="email" name="addEmail" required></td>
+                                            <td><input class="formInput" type="email" name="addressEmail" required></td>
                                         </tr>
                                         <tr>
                                             <th>휴대전화</th> &nbsp;
-                                            <td ><input class="formInput" type="text" name="addTel" placeholder=" -도 함께 입력해주세요." maxlength="13"></td>
+                                            <td ><input class="formInput" type="text" name="addressTel" placeholder=" -도 함께 입력해주세요." maxlength="13"></td>
                                         </tr>
                                         <tr>
                                             <th>사내번호</th> &nbsp;
@@ -337,11 +230,11 @@
                                         </tr>
                                         <tr>
                                             <th>FAX</th> &nbsp; 
-                                            <td><input class="formInput" type="text" name="addFax"></td>
+                                            <td><input class="formInput" type="text" name="addressFax"></td>
                                         </tr>
                                         <tr>
                                             <th>메모</th> &nbsp;
-                                            <td><textarea style="resize: none;" maxlength="19" name="addMemo" id="addMemo1" cols="30" class="formInput"></textarea></td>                                        
+                                            <td><textarea style="resize: none;" maxlength="19" name="addressMemo" id="addMemo1" cols="30" class="formInput"></textarea></td>                                        
                                         </tr>
                                         <tr>
                                             <td colspan="2" align="end">
@@ -360,9 +253,9 @@
                                             <th>그룹</th>
                                             <td>
                                                 <select name="groupNo" class="formInput">
-                                                    <option value="">구디쓰주식회사</option>
-                                                    <option value="">제일디자인</option>
-                                                    <option value="">그룹미지정</option>
+                                                    <option value="7">구디쓰주식회사</option>
+                                                    <option value="6">구디물산</option>
+                                                    <option value="5">그룹미지정</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -370,7 +263,7 @@
                                 </table>
                                 <br><br>
                                 <div align="center">
-                                    <button type="submit" class="btn btn-sm btn-primary">수정</button>
+                                    <button type="submit" class="btn btn-sm btn-primary">등록</button>
                                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
                                 </div>
                                 
@@ -382,7 +275,7 @@
             </div>
 
             <!-- 내연락처 다중선택 삭제 Modal -->
-            <!-- <div class="modal fade" id="addressDelete" tabindex="-1" aria-labelledby="addressDeleteModalLabel" aria-hidden="true">
+            <div class="modal fade" id="addressDelete" tabindex="-1" aria-labelledby="addressDeleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -400,90 +293,70 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div> 
                      
             <!-- 내연락처 편집 Modal -->
             <div class="modal fade" id="addressEdit" tabindex="-1" aria-labelledby="addressEditModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- <div class="modal-header">
-                            <h5 class="modal-title" id="addressEditModalLabel">연락처 편집</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div> -->
+                    <div class="modal-content">                        
                         <div class="modal-body">                          
-                            <form action="">
-                                <table align="center">  
-                                    <tr>
-                                        <th class="Addstar3" colspan="2">
-                                            <input type="checkbox" name="addStar" value="Y" id="rate4">
-                                            <label for="rate4">★</label>                                  
+                            <form action="updateAdd.ad" method="post">
+                                <table id="addEdit" align="center">  
+                                   <tr>
+                                        <th colspan="2">                                           
+                                            <input type="hidden" name="addressNo" id="addressNo" value="">                             
                                         </th>                                    
                                     </tr>                               
                                     <tr>
                                             <th >이름</th>  &nbsp;                                                                       
-                                            <td ><input class="formInput"  type="text" id="addName" name="addName" value="감나라" required></td>                                                                             
+                                            <td ><input class="formInput"  type="text" id="addressName" name="addressName"  required></td>                                                                             
                                     </tr>
                                     <tr>
                                             <th>닉네임</th>  &nbsp;
-                                            <td><input class="formInput" type="text" name="addNick" value="Maria"></td>
+                                            <td><input class="formInput" type="text" name="addressNickName" id="addressNickName" ></td>
                                     </tr>
                                     <tr>
                                             <th>회사</th> &nbsp;
-                                            <td><input class="formInput" type="text" name="addCompany" required value="구디쓰주식회사"></td>                                       
+                                            <td><input class="formInput" type="text" name="addressCompany" id="addressCompany" required></td>                                       
                                     </tr>        
                                     <tr>
                                             <th>부서</th>  &nbsp;                                    
-                                            <td><input class="formInput" type="text" name="addDepartment" required></td>                                        
+                                            <td><input class="formInput" type="text" name="addressDepartment" id="addressDepartment" required></td>                                        
                                         </tr>    
                                         <tr>
                                             <th>직급</th>   &nbsp;                                   
-                                            <td><input class="formInput" type="text" name="addPosition" required></td>
+                                            <td><input class="formInput" type="text" name="addressPosition" id="addressPosition" required></td>
                                         </tr>                            
                                         <tr>
                                             <th>이메일</th> &nbsp;
-                                            <td><input class="formInput" type="email" name="addEmail" required></td>
+                                            <td><input class="formInput" type="email" name="addressEmail" id="addressEmail" required></td>
                                         </tr>
                                         <tr>
                                             <th>휴대전화</th> &nbsp;
-                                            <td ><input class="formInput" type="text" name="addTel" placeholder=" -도 함께 입력해주세요." maxlength="13"></td>
+                                            <td ><input class="formInput" type="text" name="addressTel" id="addressTel" placeholder=" -도 함께 입력해주세요." maxlength="13"></td>
                                         </tr>
                                         <tr>
                                             <th>사내번호</th> &nbsp;
-                                            <td><input class="formInput" type="text" name="addExtensionNo"></td>
+                                            <td><input class="formInput" type="text" id="addExtensionNo" name="addExtensionNo"></td>
                                         </tr>
                                         <tr>
                                             <th>FAX</th> &nbsp; 
-                                            <td><input class="formInput" type="text" name="addFax"></td>
+                                            <td><input class="formInput" type="text" name="addressFax" id="addressFax"></td>
                                         </tr>
                                         <tr>
                                             <th>메모</th> &nbsp;
-                                            <td><textarea style="resize: none;" maxlength="19" name="addMemo" id="addMemo" cols="30" class="formInput"></textarea></td>                                        
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2" align="end">
-                                                <span id="addMemoContentcount">0</span>
-                                                <span class="blueColor">/20</span> 
-                                            </td>
-                                            <script>
-                                                $(function(){
-                                                    $("#addMemo").keyup(function(){
-                                                        $("#addMemoContentcount").text($(this).val().length); 
-                                                    })
-                                                })
-                                            </script>
-                                        </tr>
+                                            <td><textarea style="resize: none;" maxlength="19" name="addressMemo" id="addressMemo" cols="30" class="formInput"></textarea></td>                                        
+                                        </tr>                                       
                                         <tr>
                                             <th>그룹</th>
                                             <td>
                                                 <select name="groupNo" class="formInput">
-                                                    <option value="">구디쓰주식회사</option>
-                                                    <option value="">제일디자인</option>
-                                                    <option value="">그룹미지정</option>
+                                                    <option value="7">구디쓰주식회사</option>
+                                                    <option value="6">구디물산</option>
+                                                    <option value="5">그룹미지정</option>
                                                 </select>
                                             </td>
-                                        </tr>
+                                        </tr> 
                                     
                                 </table>
                                 <br>
@@ -511,8 +384,8 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form align="center" class="inputStyle">
-                                <input type="hidden" name="empNo" value="">
+                            <form align="center" class="inputStyle" action="insertGp.ad" method="post">
+                                <input type="hidden" name="employeeNo" value="${loginUser.empNo }">
                                 <table align="center">
                                     <tr>
                                         <td><input type="text" name="groupName" placeholder="그룹명을 입력해주세요" required></td>
@@ -645,12 +518,60 @@
     
      <script>
             	$(function(){
+            		
+            		// [부서, 내연락처 목록]
             		selectDepList();
-            		selectGpList();   
-            		selectdepTbCategory();
-            		selectGpCategory(); 
+            		selectGpList(); 
+            		
+            		// [테이블조회 (부서/그룹코드 넘기고 테이블 조회)]
+            		// 1) 사내조직도 직원 테이블
+            		$("#empSubMenu").on("click", "li", function(){            			
+            			selectdepTbList($(this).find(".depCd").val());
+            			// 이렇게 바로 전달 *children().children() 이런식으로 내려가는것보단 find!
+            		})    
+            		// 2) 내 연락처 내 테이블
+            		$("#subAddMenu").on("click", "li", function(){            			
+            			selectAddTbList($(this).find(".groupNo").val());               			
+            		})         
+            		// 3) 별표연락처 테이블
             		selectStarAdd();
-            		selectDetailEmpClick();
+            		
+            		//[상세보기]            		           	
+            		// => 선언적함수로 거쳐서 값 전달하는것보다 바로 $function안에서 조회용 함수로 넘기는게 좋다
+            		// 1) 사내직원 자세히 보기
+            		$(document).on("click", "#dataCompanyTable .name", function(){
+            			selectDetailEmp($(this).prev().text());
+            		})
+            		// 2) 내 연락처 내 상세보기
+            		$(document).on("click", "#dataAddTable .name", function(){
+            			selectDetailMyAdd($(this).prev().text(), $(this).parents("#dataAddTable").attr("groupno"));
+            		})
+            		// 3) 별표연락처 상세보기
+            		$(document).on("click", "#dataStarAddTable .name", function(){
+            			selectDetailMyAdd($(this).prev().text());            			
+            		}) 
+            		
+            		// [별 클릭시 별표연락처설정 실시간변경] => 연락처 번호, input:addStar 값
+            		$(document).on("click", "#adDetailTb :checkbox", function(){
+            			 let addStar = ''; 
+            			 if($(this).is(":checked")) {
+            				addStar = 'Y'
+            			 } else{
+            				addStar = 'N'
+            			 }            			
+            			updateStarAdd($(this).next().next().val(), addStar, $(this).attr("groupno"));            		
+            		})
+            		
+            		// 클릭 > 삭제
+	           		 function deleteAdds(){
+	                       if(confirm("4개 모두 삭제하시겠습니까?")){
+	
+	                       }else{
+	                           //$("").focus();
+	                       }
+	                   }
+            		
+            		
             	})
             	
             	// 부서별 목록 ajax
@@ -671,11 +592,10 @@
                                        +			'<input type="hidden" class="depCd" value="' + list[i].departmentCode + '">'
                                 	   +	     '</button>'
                                 	   +      '</div>'
-                                	   +  '</li>';
-                                	   
-                                $("#empSubMenu").html(value);	   
+                                	   +  '</li>';                              	   
                                 	   
             				}
+                                $("#empSubMenu").html(value);	                                
             			},
             			error:function(){
             				console.log("부서리스트 ajax통신 실패");
@@ -689,7 +609,7 @@
             		$.ajax({
             			url: "gpList.ad",
             			data: {
-            				employeeNo: 5  // loginUser.empNo            				
+            				employeeNo: ${loginUser.empNo}            				
             			},
             			success:function(list){            				
             				let value = "";
@@ -702,7 +622,7 @@
                                          +				'<input type="hidden" class="groupNo" value="' + list[i].groupNo + '">'
                                 		 +    	  '</button> &nbsp; &nbsp;';
                                 		 
-                              		 if(list[i].groupNo != 1 ){
+                              		 if(list[i].groupName != '그룹미지정' ){
                               			 value += '<button type="button" class="btn btn-text dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false" style="padding: 0;">'
                                           	 +	    	 '፧'
                                       		 +   	   '</button>'
@@ -715,9 +635,8 @@
                                 	value +=  	'</div>'
                         				  + '</li>';
                         				 
-                        		$("#subAddMenu").html(value);		 
-            				}
-            				 
+            				}            				 
+                        		$("#subAddMenu").html(value);	                        		
             			},
             			error:function(){
             				console.log("내연락처 목록용 ajax실패");
@@ -726,15 +645,7 @@
             		})
             	}
             	
-            	// 조직도목록 클릭시 상세 테이블 조회용 ajax
-            	//let depCategory= 0; 전역변수 보단            	
-            	function selectdepTbCategory(){
-            		$("#empSubMenu").on("click", "li", function(){            			
-            			selectdepTbList($(this).find(".depCd").val());
-            			// 이렇게 바로 전달 *children().children() 이런식으로 내려가는것보단 find!
-            		})            		
-            	}
-            	
+            	// 조직도목록 클릭시 상세 테이블 조회용 ajax          	
             	function selectdepTbList(selectDepCd, cpage){            		
             		$.ajax({
             			type: "post",
@@ -745,11 +656,11 @@
             			},            			
             			success : function(result){
             				
-            				let value;
+            				let value="";
             					 value += '<table class="table" id="dataCompanyTable">'
     	                               +	'<thead>'
     	                               +         '<tr>'
-    	                               + 				'<th style="width: 15px;"></th>'
+    	                              /*  + 				'<th style="width: 15px;"></th>' */
                                        + 				'<th>사번</th>'
                                 	   + 				'<th>이름</th>'
                                 	   +				'<th>부서</th>'
@@ -767,12 +678,12 @@
             				
             				if(list.length == 0){
             					value += "<tr>"
-            							+	"<td colspan='7'>등록된 직원이 없습니다.</td>"            						
+            							+	"<td colspan='6'>등록된 직원이 없습니다.</td>"            						
             							+"</tr>";
             				}else{
             					for(let i=0; i<list.length; i++){
             						value += 		'<tr>'
-                                        	+ 			'<td><input type="checkbox" name="chk"></td>'
+                                        	/* + 			'<td><input type="checkbox" name="chk"></td>' */
                                         	+ 			'<td class="no">'+ list[i].empNo +'</td>'
                                             +   		'<td class="name">'+ list[i].empName +'</td>'
                                         	+   		'<td>'+ list[i].depCd +'</td>'
@@ -808,14 +719,12 @@
             				value   +=	'</tbody>'
                         			+ '</table>';
             				
-            				$("#tableArea").html(value);
+            				 $("#tableArea").html(value); 
             				 $(".pasingAdd").html(pageValue); 
-            				            				            				
-            				$("#addTitle").html("<h4><b>"+ list[0].depCd +"</b></h4>");
-            				$("#deleteAddArea").html("");        	
-            				
-            				
-            				
+            				 $("#deleteFeat").attr("style", "visibility:hidden");   
+            				 $("#cbx_chkAll").attr("style", "visibility:hidden");
+            				 $("#addTitle").html("<h4><b>"+ list[0].depCd +"</b></h4>");            				             				 
+            				            				
             			},
             			error:function(){
             				console.log("조직도 주소록 테이블 조회용 ajax실패");
@@ -824,13 +733,8 @@
             		
             		})
             	}
-            	// 조직도테이블 > 상세보기
-            	function selectDetailEmpClick(){
-            		$("#dataCompanyTable").on("click", ".name", function(){
-            			selectDetailEmp($(this).prev().text());
-            		})
-            	}
             	
+            	// 조직도테이블 > 상세보기          	
             	function selectDetailEmp(empNo){
             		$.ajax({
             			url:"detailEmp.ad",
@@ -838,15 +742,21 @@
             			data:{
             				empNo:empNo
             			},
-            			success:function(result){
-            				console.log(result);
+            			success:function(result){            				
             				let value = "";
             				    value += '<thead>'
                             		 	+		'<tr>'
-                            		 	+	        '<th><img id="profileImg" src="${pageContext.request.contextPath}/resources/profile_images/defaultProfile.png"></th>'
-                                		+			'<th align="left"><h5><b>'+ result[0].empName +'</b></h5></th>'                               
+                            		 	+	        '<th><img id="profileImg" src="';
+                            	
+                            if(result.empProfile != null){
+                            	value +=  result.empProfile;
+                            }else{
+                            	value += 'resources/profile_images/defaultProfile.png';
+                            }		 	
+                            	value  +=			'"></th>'
+                                		+			'<th align="left"><h5><b>'+ result.empName +'</b></h5></th>'                               
                                 		+           '<th  align="right">'
-                                    	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.em?no='+ result[0].empNo +'">mail</a>'
+                                    	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.em?email='+ result.empEmail +'">mail</a>'
                                 		+			'</th>'
                                 		+			'<th><button type="button" class="material-symbols-outlined aHover btn-text" data-toggle="modal" data-target="#addressChat">chat</button></th>'
                            				+		 '</tr>'                       
@@ -854,32 +764,32 @@
                        					+'<tbody>'               
                             			+		'<tr>'
                                 		+			'<td class="fontSmallSize">부서</td>'
-                                		+			'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result[0].depCd +'</td>'
+                                		+			'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result.depCd +'</td>'
                             			+		'</tr>'
                             			+		'<tr>'
                                 		+			'<td class="fontSmallSize">직급</td>'
-                                		+ 			'<td colspan="4" class="fontMiddleAdd">&nbsp;'+ result[0].posCd +'</td>'
+                                		+ 			'<td colspan="4" class="fontMiddleAdd">&nbsp;'+ result.posCd +'</td>'
                             			+ 		'</tr>'
            								+		 '<tr>'
                                 		+			'<td colspan="5"> <hr style="width: 100%;"> </td>'
                            				+ 		'</tr>'
                           				+		'<tr>'
 			                       		+			'<td class="fontSmallSize">이메일</td>'
-			                    		+			'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result[0].empEmail+'</td>'
+			                    		+			'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result.empEmail+'</td>'
 			                			+       '</tr>'
 			                			+		'<tr>'
 		                      			+ 			'<td class="fontSmallSize">내선번호</td>';		                			
 			                			
                            
-                           if(result[0].empExtension != null){
-                        	   		value += 		'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result[0].empExtension+'</td>'
+                           if(result.empExtension != null){
+                        	   		value += 		'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result.empExtension+'</td>'
                            }
 		                    		value +=	'</tr>'
 		                    			  + 	 '<tr>'
 				                       	  +			'<td class="fontSmallSize">휴대전화</td>';
                            
-                           if(result[0].empPhone != null){
-                        	   value += 			'<td colspan="4" class="fontMiddleAdd">&nbsp;' + result[0].empPhone + ' </td>';			               			  
+                           if(result.empPhone != null){
+                        	   value += 			'<td colspan="4" class="fontMiddleAdd">&nbsp;' + result.empPhone + ' </td>';			               			  
                            }
                             			                    
                            		value	+=		'</tr>'
@@ -888,13 +798,14 @@
                             			+		'</tr>'
 			                            +		'<tr>'
                                 		+			'<td class="fontSmallSize">입사일</td>'
-                                		+			'<td colspan="4" class="fontMiddleAdd">&nbsp;'+ result[0].empEnrollDate+ '</td>'
+                                		+			'<td colspan="4" class="fontMiddleAdd">&nbsp;'+ result.empEnrollDate+ '</td>'
                             			+		'</tr>'                             
                         				+'</tbody>'; 
                         				
                         	$("#beforeClick").remove();		
-                        	$("#adDetailTb").html(value);			
-                        				
+                        	$("#adDetailTb").html(value);	
+                        	$("#myAddChoiceArea").attr("style", "visibility:hidden; margin-left:30px;");
+                        	                        	                        				
             			},
             			error:function(){
             				console.log("조직도 직원 상세보기용 ajax 실패");
@@ -903,12 +814,6 @@
             	}
             	            	
             	// 내 연락처 목록클릭 시 조회테이블
-            	function selectGpCategory(){
-            		$("#subAddMenu").on("click", "li", function(){            			
-            			selectAddTbList($(this).find(".groupNo").val());               			
-            		})            		
-            	}
-            	
             	function selectAddTbList(groupNo, cpage){
             		
             		$.ajax({
@@ -920,8 +825,8 @@
             			},            			
             			success : function(result){
             				
-            				let value;
-            					 value += '<table class="table" id="dataAddTable">'
+            				let value="";
+            					 value += '<table class="table" id="dataAddTable" groupno="'+ groupNo + '">'
     	                               +	'<thead>'
     	                               +         '<tr>'
     	                               +				'<th style="width:10px"></th>'
@@ -998,8 +903,9 @@
             				$("#tableArea").html(value);
             				 $(".pasingAdd").html(pageValue); 
             				            				            				
-            				$("#addTitle").html("<h4><b>내 연락처</b></h4>"); 
-            				$("#deleteAddArea").html(' <button type="button" class="btn btn-sm btn-secondary" onclick="deleteAdds();">삭제</button>');        	
+            				$("#addTitle").html("<h4><b>내 연락처</b></h4>");      
+            				$("#deleteFeat").attr("style", "visibility:visible");
+            				$("#cbx_chkAll").attr("style", "visibility:visible");
             				
             			},
             			error:function(){
@@ -1007,19 +913,136 @@
             			}       		
             		})
             	} 
+            	
+            	// 내연락처 & 별표연락처 상세보기
+            	function selectDetailMyAdd(addressNo, groupNo){
+            		$.ajax({
+            			url : "detailMyAdd.ad",
+            			type:  "post",
+            			data:{
+            				addressNo:addressNo
+            			},
+            			success:function(result){
+            				let value = "";
+        				    value += '<thead>'
+                        		 	+		'<tr>'
+                        		 	+	        '<th class="Addstar">'
+                        		 	+				'<input type="checkbox" name="addStar" value="Y" id="rate2" groupno="' + groupNo + '"';
+                        	if(result.addressStar == 'Y'){
+                        	 value +=				'checked';
+                        	}	 	
+                        		 	
+                        	value 	+=  			'><label for="rate2">★</label>'   
+                        			+				'<input type="hidden" class="no" value="'+ result.addressNo +'">'
+                        		 	+			'</th>'
+                            		+			'<th align="left"><h5><b>'+ result.addressName +'</b></h5></th>';
+                          	if(result.addressNickName != null){
+                          		value += '<th class="fontSmallSize" style="width: 70px;">'+ result.addressNickName+'</th>';
+                          	} 		
+                             value +=           '<th  align="right">'
+                                	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.em?no='+ result.addressEmail +'">mail</a>'
+                            		+			'</th>'
+                       				+		 '</tr>'                       
+                    				+'</thead>'
+                   					+'<tbody>' 
+                   					+		'<tr>'
+			                        +           '<td class="fontSmallSize">회사</td>'
+			                        +           '<td colspan="3" class="fontMiddleAdd">&nbsp;'+ result.addressCompany +'</td>'
+			                        +       '</tr>'		
+                        			+		'<tr>'
+                            		+			'<td class="fontSmallSize">부서</td>'
+                            		+			'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result.addressDepartment +'</td>'
+                        			+		'</tr>'
+                        			+		'<tr>'
+                            		+			'<td class="fontSmallSize">직급</td>'
+                            		+ 			'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result.addressPosition +'</td>'
+                        			+ 		'</tr>'
+       								+		 '<tr>'
+                            		+			'<td colspan="5"> <hr style="width: 100%;"></td>'
+                       				+ 		'</tr>'
+                      				+		'<tr>'
+		                       		+			'<td class="fontSmallSize">이메일</td>'
+		                    		+			'<td colspan="4" class="fontMiddleAdd">&nbsp;'+ result.addressEmail+'</td>'
+		                			+       '</tr>'
+		                			+		'<tr>'
+	                      			+ 			'<td class="fontSmallSize">내선번호</td>';		                			
+		                			
+                       
+                      	 if(result.addressExtensionNo != null){
+                    	   		value += 		'<td colspan="4" class="fontMiddleAdd">&nbsp; '+ result.addExtensionNo+'</td>'
+                      	 }
+	                    		value +=	'</tr>'
+	                    			  + 	 '<tr>'
+			                       	  +			'<td class="fontSmallSize">휴대전화</td>';
+                       
+                      	 if(result.addressTel != null){
+                    	 	   value += 		'<td colspan="4" class="fontMiddleAdd">&nbsp;' + result.addressTel + ' </td>';			               			  
+                      	 }
+		                       value +=		'</tr>'
+		             			 	 + 	 	'<tr>'
+			                       	 +			'<td class="fontSmallSize">FAX</td>';
+                       	if(result.addressFax != null){
+                   	 	       value += 		'<td colspan="4" class="fontMiddleAdd">&nbsp;' + result.addressFax + ' </td>';			               			  
+                     	}            	 
+                        			                    
+                       		   value +=		'</tr>'
+                       				 +       '<tr>'
+                            		 +			'<td colspan="5"> <hr style="width: 97%;"> </td>'
+                        			 +		'</tr>'
+		                             +		'<tr>'
+                            		 +			'<td class="fontSmallSize">메모</td>';
+                            		
+                          if(result.addressMemo != null ){
+                        	  value += 			'<td colspan="4" class="fontMiddleAdd">&nbsp;'+ result.addressMemo+ '</td>';
+                          } 		
+                              value	+=		'</tr>'                             
+                    				+'</tbody>'; 
+                    			
+                    	$("#beforeClick").remove();		
+                    	$("#adDetailTb").html(value);	
+                    	$("#myAddChoiceArea").attr("style", "visibility:visible; margin-left:30px;");
+                    	
+                    	// 편집버튼 클릭 시 편집모달창에 값 뿌리기                    	
+	                    $(document).ready(function(){
+	             			$(".openAddEdit").click(function(){	   
+	             				const el = $("#addressEdit table");
+	             				el.find("#addressNo").val(addressNo);
+	             				el.find("#addressName").val(result.addressName);
+	             				el.find("#addressNickName").val(result.addressNickName);
+	             				el.find("#addressCompany").val(result.addressCompany);
+	             				el.find("#addressDepartment").val(result.addressDepartment);
+	             				el.find("#addressPosition").val(result.addressPosition);
+	             				el.find("#addressEmail").val(result.addressEmail);
+	             				el.find("#addressTel").val(result.addressTel);
+	             				el.find("#addExtensionNo").val(result.addExtensionNo);
+	             				el.find("#addressFax").val(result.addressFax);
+	             				el.find("#addressMemo").val(result.addressMemo);	             				
+	             			});
+	             		});                    	
+                    	
+                 		
+            			},
+            			error:function(){
+            				console.log("내연락처 내 상세보기 ajax 실패");
+            			}
+            			
+            			
+            		})
+            	}            	     	
             	            	
+            	// 별표연락처 테이블 조회            	            	
             	function selectStarAdd(cpage){
             		$.ajax({
             			url: "starList.ad",
             			type: "post",
             			data: {
-            				empNo:'5',
+            				empNo: ${loginUser.empNo},
             				cpage:cpage
             			},
             			success:function(result){
             				let list = result.list;
             				let pi = result.pi;
-            				let value;       					
+            				let value="";       					
        						let pageValue = "";
        						
        						value += '<table class="table" id="dataStarAddTable">' 
@@ -1096,9 +1119,9 @@
                         
                     $("#tableArea").html(value);
        			    $(".pasingAdd").html(pageValue); 
-       				            				            				
-       				$("#addTitle").html("<h4><b>별표연락처</b></h4>"); 
-       				$("#deleteAddArea").html(' <button type="button" class="btn btn-sm btn-secondary" onclick="deleteAdds();">삭제</button>');        	
+       			 	$("#deleteFeat").attr("style", "visibility:visible"); 
+       			    $("#cbx_chkAll").attr("style", "visibility:visible");
+       				$("#addTitle").html("<h4><b>별표연락처</b></h4>");        				     	
        						
             			}, 
             			error:function(){
@@ -1107,6 +1130,35 @@
             		})
             	}
             	
+            	// 별 클릭시 실시간 별표연락처 변경
+            	function updateStarAdd(addNo, addStar, groupNo){
+            		$.ajax({
+            			url:"updateStar.ad",
+            			type: "post",
+            			data: {
+            				addressNo:addNo,
+            				addressStar:addStar
+            			},
+            			success:function(result){
+            				if(result == "success"){ 
+            					
+        						if($("#tableArea>table").is("#dataStarAddTable")){
+        							// =>별표목록리스트 조회하는 ajax 호출
+        							selectStarAdd();
+        						}else{
+        							selectAddTbList(groupNo);
+        						}
+        						
+        						
+        					}
+            			},
+            			error:function(){
+            				console.log("실시간 별표연락처 변경 ajax 실패");
+            			}
+            		})
+            		
+            	}
+            	         
             	
             	
             </script>
