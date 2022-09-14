@@ -104,14 +104,32 @@
 					success: function(tclist){
 						console.log(tclist);
 						
-						let html = "";
-						let modalHtml = "";						
+						let html = ""; // 투두리스트를 조회하여 동적으로 띄워줄 용도의 문자열
+						let modalHtml = "";	// 새로운 투두 등록 모달의 카테고리 선택 option들을 동적으로 만드는 용도의 문자열					
 						if(tclist != null){
 							for(let i=0; i<tclist.length; i++){
-								html += "";
+								html += '<div class="todo-cate shadow-sm inner-area">'
+									  + 	'<div class="todo-title">'
+									  +			'<span class="title todo-cate-title">'+ tclist[i].categoryTitle + '</span>'
+									  + 	'</div>';
+								for(let j=0; j<tclist[i].todosPerCate.length; j++){
+									html += '<div class="todo-list">'
+										  + 	'<input type=hidden value="todoNo">'
+										  + 	'<label style="margin-bottom:0px;"><input type="checkbox" class="doneYN" style="margin-left:10px; margin-right:10px;">' 
+										  + 	 tclist[i].todosPerCate[j].todoContent 
+										  + 	'</label><br>'
+										  + 	'<span class="filter" style="margin-left:30px;"> ~ ' + tclist[i].todosPerCate[j].todoDate + '</span>'
+										  +		'<div style="float:right; margin-right:5px;">'
+										  +			'<span class="delete-todo filter" onclick="deleteTodo(' + tclist[i].todosPerCate[j].todoNo + ');">삭제</span>'
+										  +		'</div>'
+										  +	'</div>';
+								}
+								html += '</div>';
+								
 								modalHtml += '<option value="' + tclist[i].categoryNo + '" label="' + tclist[i].categoryTitle + '"></option>';
 							}
 							
+							$("#todo-list-wrap").html(html);				
 							$("#selectCategory").html(modalHtml);
 						}
 						
@@ -144,6 +162,8 @@
 					    </a>
 					</div>
 		    		<script>selectTodoList();</script>
+		    		
+		    		<div id="todo-list-wrap"></div>
 		    	</c:otherwise>
 		    </c:choose>
 		</div>
@@ -162,9 +182,9 @@
         // To DO 체크박스에 클릭이벤트 발생시 DONE_YN 컬럼 변경하는 AJAX
 
         // 선택버튼 클릭시 해당 요소 삭제하는 AJAX
-        function deleteTodo(no){
-            if( window.confirm("정말?") ){
-            	// ajax 실행
+        function deleteTodo(todoNo){
+            if(window.confirm("정말 삭제하시겠습니까?")){
+            	// AJAX
             }
             
         }
