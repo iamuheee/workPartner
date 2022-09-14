@@ -104,7 +104,6 @@
 									  +			'<input type="checkbox" class="doneYN" style="margin-left:10px; margin-right:10px;">' 
 									  + 	 	tclist[i].todosPerCate[j].todoContent 
 									  + 	'</label><br>'
-									  + 	'<span class="filter" style="margin-left:30px;"> ~ ' + tclist[i].todosPerCate[j].todoDate + '</span>'
 									  +		'<div style="float:right; margin-right:5px;">'
 									  +			'<span class="delete-todo filter" onclick="deleteTodo(' + tclist[i].todosPerCate[j].todoNo + ');">삭제</span>'
 									  +		'</div>'
@@ -280,15 +279,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span class="title">카테고리</span><br>
-                    <select name="selectCategory" id="selectCategory">
+                    <span class="title">카테고리 선택</span><br>
+                    <select name="selectCategory" id="selectCategory" required>
                     </select>
                     <br><br>
                     <span class="title">등록할 To do</span><br>
-                    <input type="text" class="form-control" name="todoContent">
+                    <input type="text" class="form-control" name="todoContent" required>
                     <br><br>
-                    <span class="title">마감일</span>
-                    <input type="date" name="dueDate" >
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -308,7 +305,6 @@
             		empNo : ${loginUser.empNo},
             		categoryNo : $("#selectCategory option:selected").val(),
             		todoContent : $("input[name=todoContent]").val(),
-            		todoDate : $("input[name=dueDate]").val()
             	},
             	success:function(result){
             		alert(result);

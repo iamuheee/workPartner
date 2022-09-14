@@ -17,7 +17,6 @@ public class TodoCategory {
 	private String empNo;
 	private String categoryNo;
 	private String categoryTitle;
-	private String color;
 	
 	// 카테고리별 모든 To do를 담는 ArrayList<Todo>
 	private ArrayList<Todo> todosPerCate;

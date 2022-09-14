@@ -17,6 +17,5 @@ public class Todo {
 	private String categoryNo;
 	private String todoContent;
 	private String doneYN;
-	private String todoDate;
 
 }

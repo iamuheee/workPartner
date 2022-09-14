@@ -8,23 +8,19 @@
 		<result column="CATEGORY_NO" property="categoryNo" />
 		<result column="TODO_CONTENT" property="todoContent" />
 		<result column="DONE_YN" property="doneYN" />
-		<result column="TODO_DATE" property="todoDate" />
 		<result column="CATE_TITLE" property="categoryTitle" />
-		<result column="COLOR" property="color" />
 	</resultMap>
 	
 	<resultMap id="todoCateResult" type="TodoCategory">
 		<result column="CATE_NO" property="categoryNo" />
 		<result column="EMP_NO" property="empNo" />
 		<result column="CATE_TITLE" property="categoryTitle" />
-		<result column="COLOR" property="color" />
 	</resultMap>
 
 
 	<select id="selectTodoCateList" resultMap="todoCateResult">
 		SELECT CATE_NO
 			 , CATE_TITLE
-			 , COLOR
 		  FROM TB_TODO_CATE
 		 WHERE EMP_NO = #{ empNo }
 		 ORDER
@@ -37,7 +33,6 @@
 			 , CATEGORY_NO
 			 , TODO_CONTENT
 			 , DONE_YN
-			 , TODO_DATE
 		  FROM TB_TODO
 		 WHERE CATEGORY_NO = #{ categoryNo }
 		 ORDER 
@@ -71,7 +66,6 @@
 			 , #{empNo}
 			 , #{categoryNo}
 			 , DEFAULT
-			 , #{todoDate}
 			 , #{todoContent}
 			 )
 	</insert>
@@ -84,7 +78,6 @@
 			   SEQ_TDCNO.NEXTVAL
 			 , #{empNo}
 			 , #{categoryTitle}
-			 , #{color}
 			 )
 	</insert>
 	
