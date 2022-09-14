@@ -21,5 +21,8 @@ public class SignController {
 	public String coopEnrollForm() {
 		return "sign/cooperation";
 	}
-	
+	@RequestMapping("signMain.bo")
+	public String signMain() {
+		return "sign/signMain";
+	}
 }

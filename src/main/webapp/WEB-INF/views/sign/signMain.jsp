@@ -6,162 +6,39 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+ <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <link href="resources/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet">
+
+    <!-- 구글 아이콘 -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- 구글폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&family=Poppins:wght@300&display=swap"
+        rel="stylesheet">
+
+    <!-- 부트스트랩 5.1.3-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- jQuery 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 <style>
-.material-symbols-outlined {
-	font-variation-settings: 'FILL' 0, 'wght' 250, 'GRAD' 0, 'opsz' 30
-}
-
-.material-symbols-outlined .outFill {
-	font-variation-settings: 'FILL' 1, 'wght' 250, 'GRAD' 0, 'opsz' 30
-}
-
-.outFill {
-	color: white;
-}
-
-.bg-blue {
-	background-color: #0442AF;
-}
-
-.bg-gray {
-	background-color: #f1f1f1;
-}
-
-.nav-choice:hover {
-	cursor: pointer;
-	/*btn에 커서가면 커서모양이 손모양으로*/
-	background-color: rgb(226, 224, 224);
-	color: #0442AF;
-}
-
-.nav-choice {
-	color: rgb(39, 38, 38);
-}
-
-.btn-primary {
-	background-color: #0442AF;
-	border-color: #0442AF;
-}
-
-.btn-size {
-	margin-left: 8px;
-	width: 80%;
-}
-
-.starColor {
-	/* padding: 0; */
-	/* font-size: 1.5em;      */
-	color: rgba(250, 208, 0, 0.99);
-}
-
-.menu-side-head {
-	margin-left: 10px;
-	padding: 1.75rem 1rem 0.75rem;
-	font-size: 0.75rem;
-	font-weight: bold;
-}
-
-.badge-danger {
-	color: #fff;
-	background-color: #e74a3b;
-}
-
-.badge {
-	display: inline-block;
-	padding: 0.25em 0.4em;
-	font-size: 75%;
-	font-weight: 700;
-	line-height: 1;
-	text-align: center;
-	white-space: nowrap;
-	vertical-align: baseline;
-	border-radius: 0.35rem;
-	transition: color .15s ease-in-out, background-color .15s ease-in-out,
-		border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-}
-
-.alertFont {
-	font-size: 13px;
-	color: rgb(94, 94, 94);
-}
-
-.dropdown-list {
-	padding: 0;
-	border: none;
-	overflow: hidden;
-}
-
-.dropdown-header {
-	background-color: #0b60e0;
-	border: 1px solid #0b60e0;
-	padding-top: 0.75rem;
-	padding-bottom: 0.75rem;
-	color: white;
-}
-
-.dropdown-list-image {
-	position: relative;
-	height: 2.5rem;
-	width: 2.5rem;
-}
-
-.icon-circle {
-	height: 2.5rem;
-	width: 2.5rem;
-	border-radius: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.small, small {
-	font-size: 80%;
-	font-weight: 400;
-}
-
-.text-gray-500 {
-	color: #b7b9cc !important;
-}
-
-.alertFontSize {
-	font-size: 13px;
-}
-
-.align-items-center {
-	align-items: center !important;
-}
-
-.d-flex {
-	display: flex !important;
-}
-
-.dropdown-item {
-	display: block;
-	width: 100%;
-	padding: 0.25rem 1.5rem;
-	clear: both;
-	font-weight: 400;
-	color: #3a3b45;
-	text-align: inherit;
-	white-space: nowrap;
-	background-color: transparent;
-	border: 0;
-}
-
-.topbar .dropdown-list {
-	width: 20rem !important;
-}
-
-.alertFontMiddle {
-	font-size: 14px;
-}
-
-.menubarHeadBold {
-	font-weight: 620;
-}
 
 /* ------------------------------------------------------------- */
-.col-xl-6 {
+
+.searchBar{
+	
+	margin-left:5px;
+	margin-bottom:30px;
+}
+.board1 {
 	margin-top: 20px;
 }
 
@@ -201,30 +78,30 @@
 	height: 50%;
 	box-shadow: 0px 0px 4px #8787877d;
 }
-
 .card-header {
-	background-color: white;
+	background-color: white !important;;
 }
 
 .col-md-6 {
-	width: 20%;
-	text-align: center;
+	width: 20% !important;
+	text-align: center !important;
 }
 
 .bg-primary, .bg-warning, .bg-success, .bg-danger {
 	color: black !important;
-	width: 70%;
+	width: 70% !important;
 	display: inline-block !important;
-	height: 200px;
-	border-radius: 25px;
-	font-size: 25px;
-	vertical-align: middle;
-	box-shadow: 0px 0px 4px #878787;
+	height: 200px !important;
+	border-radius: 25px !important;
+	font-size: 25px !important;
+	vertical-align: middle !important;
+	box-shadow: 0px 0px 4px #878787 !important;
 }
+
 
 .bg-primary {
 	background-color: rgba(52, 152, 219, 0.2) !important;
-	color: white;
+	color: white !important;;
 }
 
 .bg-warning {
@@ -251,7 +128,9 @@
 	margin: auto;
 	text-decoration: none;
 }
+.col-xi-3{
 
+}
 #signColorBox {
 	margin-top: 20px;
 	margin-left: 15px;
@@ -269,16 +148,16 @@
 }
 
 .card-footer {
-	background: none;
-	padding-top: 15px;
+	background: none !important;
+	padding-top: 15px !important;
 }
 
 tr {
-	font-size: 20px;
+	font-size: 20px !important;;
 }
 
 td {
-	font-size: 18px;
+	font-size: 18px !important;;
 }
 </style>
 </head>
@@ -297,7 +176,7 @@ td {
 				<button
 					style="width: 60px; height: 30px; padding: 0; border: none; background: #87878740; box-shadow: 0px 0px 4px #878787;">검색</button>
 			</div>
-			<div class="col-xl-6">
+			<div class="col-xl-6 board1">
 				<div class="card mb-4"
 					style="height: 90%; box-shadow: 0px 0px 4px #8787877d;">
 					<div class="card-header">
@@ -402,7 +281,7 @@ td {
 			</div>
 			<div class="row" id="signColorBox">
 				<div class="col-xl-3 col-md-6">
-					<div class="card bg-primary text-white mb-4">
+					<div class="card bg-primary text-white mb-4" id="saveBoard">
 						<div class="card-body">작성중</div>
 						<div id="listblue"
 							class="card-footer d-flex align-items-center justify-content-between">
@@ -465,7 +344,7 @@ td {
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
 		crossorigin="anonymous"></script>
-	<script src="js/scripts.js"></script>
+	<script src="resources/js/scripts.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"
 		crossorigin="anonymous"></script>
 	<script src="js/datatables-simple-demo.js"></script>
