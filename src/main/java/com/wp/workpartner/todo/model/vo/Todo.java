@@ -15,10 +15,8 @@ public class Todo {
 	private String todoNo;
 	private String empNo;
 	private String categoryNo;
-	private String categoryTitle;
 	private String todoContent;
 	private String doneYN;
 	private String todoDate;
-	private String color;
 
 }

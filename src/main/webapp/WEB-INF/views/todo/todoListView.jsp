@@ -74,12 +74,15 @@
 </head>
 
 <body>
-    <br><br><br>
-    <div class="container">
-        <div class="title-area">
+	<jsp:include page="../common/menubar.jsp" />
+
+	<div class="container">
+	
+		<%-- TO DO 상단의 무조건 보이는 영역 --%>
+		<div class="title-area">
             <h1 style="font-weight:bolder;">To Do List</h1>
-        </div>
-        <hr>
+		</div>
+		
         <div align="center">
             <span class="filter">
                 할 일을 체크리스트로 작성할 수 있는 공간입니다. <br>
@@ -88,89 +91,86 @@
         </div>
         <hr>
         
-        <!-- =================== 여기부터 To Do ======================== -->
-        <div class="todo-wrap">
-            <div class="add-todo" align="right" style="margin:10px;">
-                <a class="filter" data-bs-toggle="modal" data-bs-target="#insertCategoryModal">
-                    새로운 To Do 카테고리 <i class="fa fa-plus" aria-hidden="true"></i>
-                </a>
-            </div>
-            
-           	<c:if test="not empty ${ tlists }">
-           		<c:forEach var="cateList" items="${ tlists }">
-		            <div class="todo-cate shadow-sm inner-area">
-		                <div class="todo-title">
-		                    <span class="title todo-cate-title">${ cateList.get(0).categoryTitle }</span>
-		                    <span class="filter" style="float:right"  data-bs-toggle="modal" data-bs-target="#insertTodoModal">
-		                        새로운 To Do %nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-		                    </span>
-		                </div>
-		                <%-- 각 카테고리에 속하는 To do 항목들을 반복문으로 출력 --%>
-		                <%-- 아직 어떻게 해야할지 모르겠삼 --%>
-						<c:forEach var="tlist" items="cateList">
-			                <div class="todo-list">
-			                	<input type=hidden value="todoNo">
-			                    <label><input type="checkbox" name="" class="todo" style="margin-left:10px;">todoTitle</label><br>
-			                    <span class="filter" style="margin-left:30px;">~ todoDate</span>
-			                    <div style="float:right; margin-right:5px;">
-			                        <a onclick="deleteTodo( $(this).parent().siblings('input')val() );">삭제</a>
-			                    </div>
-			                </div>
-		                </c:forEach>
-		            </div>
-           		</c:forEach>
-           	</c:if>
-           	
-        </div><br><br>
-    </div>
-
-
+		
+		<script>
+			// Todo 리스트를 조회하는 선언적 함수
+			function selectTodoList(){
+				$.ajax({
+					url: "todo.to",
+					type:"POST",
+					data:{
+						empNo:${loginUser.empNo}
+					},
+					success: function(tclist){
+						console.log(tclist);
+						
+						let html = "";
+						let modalHtml = "";						
+						if(tclist != null){
+							for(let i=0; i<tclist.length; i++){
+								html += "";
+								modalHtml += '<option value="' + tclist[i].categoryNo + '" label="' + tclist[i].categoryTitle + '"></option>';
+							}
+							
+							$("#selectCategory").html(modalHtml);
+						}
+						
+					},
+					error: function(){
+						console.log("리스트 조회 AJAX 통신 실패");
+					}
+				})
+			}
+		</script>
+		
+		
+		<%-- 아래부터는 로그인 여부, TO DO 존재 여부에 따라 보이는 내용이 달라짐 --%>
+		<div id="todoList">
+		    <c:choose>
+		    	<c:when test="${ empty loginUser }">
+		    		<div align="center">
+		    			<span>To do 일정이 없습니다.</span>
+		    		</div>
+		    	</c:when>
+		    	<c:otherwise>
+			        <%-- TO DO 상단의 카테고리 추가 영역 --%>
+					<div class="add-todo" align="right" style="margin:10px;">
+					    <a class="filter" data-bs-toggle="modal" data-bs-target="#insertCategoryModal">
+					        새로운 To Do 카테고리 <i class="fa fa-plus" aria-hidden="true"></i>
+					    </a>
+					    &nbsp; &nbsp; &nbsp;  
+			   		    <a class="filter" data-bs-toggle="modal" data-bs-target="#insertTodoModal">
+					        새로운 To Do 일정 <i class="fa fa-plus" aria-hidden="true"></i>
+					    </a>
+					</div>
+		    		<script>selectTodoList();</script>
+		    	</c:otherwise>
+		    </c:choose>
+		</div>
+		
+	</div>
     <script>
         // DB의 TB_TODO_CATE의 COLOR 컬럼값에 따라 카테고리의 색 변경되도록 하는 함수
-        // $(function(){
-        //     $(".todo-cate-title").each(function(){
-        //         var color = "";
-        //         for(var i; i<TB_TODO_CATE의 컬럼수; i++){
-        //             color = "i번째 행의 COLOR 컬럼값 (#XXXXXX)";
-        //             $(this).css("color", color);
-        //         }
-        //     })
-        // })
 
         // To Do의 체크리스트 선택/해제시 취소선 나타남/사라짐 효과 적용하는 함수
-        
         $(function(){
 	        $("input[type=checkbox]").click(function(){
 	            $(this).attr("checked", true) ? $(this).parent("label").css("text-decoration", "line-through") : $(this).parent("label").css("text-decoration", "none") ;
 	        })
         })
         
-        // 추가필요 
-        // To DO의 체크리스트 선택/해제 클릭이벤트 발생시 ajax로 DONE_YN 컬럼 변경해주어야 함
+        // To DO 체크박스에 클릭이벤트 발생시 DONE_YN 컬럼 변경하는 AJAX
 
-        // 선택버튼 클릭시 해당 요소 삭제하는 함수
+        // 선택버튼 클릭시 해당 요소 삭제하는 AJAX
         function deleteTodo(no){
-            window.confirm("정말?");
-            // if( confirm("정말로 삭제하시겠습니까?") ){
-            //     $.ajax({
-            //         url:"",
-            //         date:{
-            //             // 전달할 값 : 해당 ToDo의 번호
-            //             todoNo:no
-            //         },
-            //         success:function(){
-            //             alert("성공적으로 삭제했습니다.");
-            //             location.reload();
-            //         },error:function(){
-
-            //         }
-            //     })
-            // }
+            if( window.confirm("정말?") ){
+            	// ajax 실행
+            }
+            
         }
     </script>
-
-
-    <!-- Modal : Insert a New Category -->
+    
+    <%-- 새로운 카테고리 추가하는 모달 시작 --%>
     <div class="modal fade" id="insertCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -178,15 +178,14 @@
                     <h5 class="modal-title" id="exampleModalLabel">To Do 카테고리 추가</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="" method="post" class="modal-body" id="submitCate">
-                    <input type="hidden" name="empNo" value="로그인유저의사번" required>
+                <div class="modal-body" id="submitCate">
                     <span class="filter">카테고리 이름</span><br>
-                    <input type="text" name="" id="" class="form-control col-md-4" required>
+                    <input type="text" name="categoryTitle" class="form-control col-md-4" required>
                     <br><br>
                     <span class="filter">카테고리 컬러</span><br>
-                    <input type="color" name="">
+                    <input type="color" name="color">
                     <br><br>
-                </form>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >닫기</button>
                     <button type="button" class="btn btn-success" onclick="submitCate();" >확인</button>
@@ -194,32 +193,47 @@
             </div>
         </div>
     </div>
-
-    <script>
+    <%-- 새로운 카테고리 추가하는 모달 끝 --%>
+    
+    <%-- 새로운 카테고리 추가하는 모달의 내용을 DB에 반영하는 AJAX --%>
+	<script>
         function submitCate(){
-            $("#submitCate").submit();
-            location.reload();
-            // $("#insertCategoryModal").attr("data-bs-dismiss", "modal");
+            // AJAX 작성
+            // - DB에 새로운 카테고리 추가
+            $.ajax({
+            	url:"newcate.to",
+            	data:{
+            		empNo : ${loginUser.empNo},
+            		categoryTitle : $("input[name=categoryTitle]").val(),
+            		color : $("input[name=color]").val()
+            	},
+            	success:function(result){
+            		location.reload();
+            	}
+            })
         }
     </script>
 
 
-    <!-- Modal : Insert a New To Do -->
+    <%-- 새로운 To Do를 추가하는 Modal --%>
     <div class="modal fade" id="insertTodoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">To Do 추가</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">To do 추가</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="" method="post" class="modal-body">
+                <div class="modal-body">
                     <span class="title">카테고리</span><br>
-                    <span>현재 카테고리명</span>
+                    <select name="selectCategory" id="selectCategory">
+                    </select>
                     <br><br>
                     <span class="title">등록할 To do</span><br>
                     <input type="text" class="form-control" name="todoContent">
                     <br><br>
-                </form>
+                    <span class="title">마감일</span>
+                    <input type="date" name="dueDate" >
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     <button type="button" class="btn btn-success" onclick="submitTodo();">확인</button>
@@ -230,9 +244,20 @@
 
     <script>
         function submitTodo(){
-            $("#submitTodo").submit();
-            location.reload();
-            // $("#insertTodoModal").attr("data-bs-dismiss", "modal");
+            // AJAX 작성
+            // - DB에 새로운 카테고리 추가
+            $.ajax({
+            	url:"insert.to",
+            	data:{
+            		empNo : ${loginUser.empNo},
+            		categoryNo : $("#selectCategory option:selected").val(),
+            		todoContent : $("input[name=todoContent]").val(),
+            		todoDate : $("input[name=dueDate]").val()
+            	},
+            	success:function(result){
+            		location.reload();
+            	}
+            })
         }
     </script>
 

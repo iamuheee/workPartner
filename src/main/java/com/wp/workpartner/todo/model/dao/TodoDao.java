@@ -3,13 +3,20 @@ package com.wp.workpartner.todo.model.dao;
 import java.util.ArrayList;
 
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.wp.workpartner.todo.model.vo.Todo;
+import com.wp.workpartner.todo.model.vo.TodoCategory;
 
+@Repository
 public class TodoDao {
 	
-	public ArrayList<Todo> selectTodoList(SqlSessionTemplate sqlSession, int empNo){
-		return (ArrayList)sqlSession.selectList("todoMapper.selectTodoList", empNo);
+	public ArrayList<TodoCategory> selectTodoCategoryList(SqlSessionTemplate sqlSession, int empNo){
+		return (ArrayList)sqlSession.selectList("todoMapper.selectTodoCateList", empNo);
+	}
+	
+	public ArrayList<Todo> selectTodoList(SqlSessionTemplate sqlSession, String categoryNo){
+		return (ArrayList)sqlSession.selectList("todoMapper.selectTodoList", categoryNo);
 	}
 	
 	public int ajaxDoneTodo(SqlSessionTemplate sqlSession, Todo t) {
@@ -22,6 +29,10 @@ public class TodoDao {
 	
 	public int insertTodo(SqlSessionTemplate sqlSession, Todo t) {
 		return sqlSession.insert("todoMapper.insertTodo", t);
+	}
+	
+	public int insertCate(SqlSessionTemplate sqlSession, TodoCategory tc) {
+		return sqlSession.insert("todoMapper.insertCate", tc);
 	}
 	
 }

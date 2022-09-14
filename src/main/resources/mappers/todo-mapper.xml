@@ -33,20 +33,15 @@
 
 	<select id="selectTodoList" resultMap="todoResult">
 		SELECT
-			   T.TODO_NO AS "TODO_NO"
-			 , T.EMP_NO AS "EMP_NO"
+			   TODO_NO
 			 , CATEGORY_NO
-			 , CATE_TITLE
 			 , TODO_CONTENT
-			 , COLOR
 			 , DONE_YN
 			 , TODO_DATE
-		  FROM TB_TODO T
-		  JOIN TB_TODO_CATE TC
-		    ON (CATEGORY_NO = CATE_NO)
-		 WHERE T.EMP_NO = #{ empNo }
+		  FROM TB_TODO
+		 WHERE CATEGORY_NO = #{ categoryNo }
 		 ORDER 
-		 	BY CATEGORY_NO ASC
+		 	BY TODO_DATE DESC
 	</select>
 	
 	<update id="doneTodo">
@@ -75,9 +70,21 @@
 			   SEQ_TDNO.NEXTVAL
 			 , #{empNo}
 			 , #{categoryNo}
+			 , DEFAULT
+			 , #{todoDate}
 			 , #{todoContent}
-			 , DEFAULT
-			 , DEFAULT
+			 )
+	</insert>
+	
+	<insert id="insertCate">
+		INSERT
+		  INTO TB_TODO_CATE
+		VALUES
+			 (
+			   SEQ_TDCNO.NEXTVAL
+			 , #{empNo}
+			 , #{categoryTitle}
+			 , #{color}
 			 )
 	</insert>
 	
