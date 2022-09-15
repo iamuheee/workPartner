@@ -102,7 +102,7 @@
             <!-- 주소록 테이블 영역-->
             <div class="addMain">
 
-                <!-- 메일보내기 및 삭제 다중선택-->
+                <!-- 삭제 다중선택-->
                 <br>
                 <div id="deleteGroupArea">                
                     &nbsp;
@@ -534,6 +534,26 @@
                 			 
             			}         			
             		})
+            		
+            		 $("#cbx_chkAll").click(function() {
+                         if($("#cbx_chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
+                         else $("input[name=chk]").prop("checked", false);
+                     });
+            		
+            		// ajax로 만든거 => 고치기
+            		/*  $("input[name=chk]").click(function() {
+		                    var total = $("input[name=chk]").length;
+		                    var checked = $("input[name=chk]:checked").length;
+		
+		                    if(total != checked) $("#cbx_chkAll").prop("checked", false);
+		                    else $("#cbx_chkAll").prop("checked", true); 
+                		}); */                    
+                     $(document).on("click", "#tableArea :checkbox", function(){
+                     	var total = $("input[name=chk]").length;
+                     	var checked = $("input[name=chk]:checked").length;
+                     	if(total != checked) $("#cbx_chkAll").prop("checked", false);
+	                    else $("#cbx_chkAll").prop("checked", true); 
+                     })                   
                         		
             	})
             	
@@ -1274,18 +1294,7 @@
                 
                 <!--==================================== 다중선택 전체선택 script ======================================= -->
                 $(document).ready(function() {
-                    $("#cbx_chkAll").click(function() {
-                        if($("#cbx_chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
-                        else $("input[name=chk]").prop("checked", false);
-                    });
-
-                    $("input[name=chk]").click(function() {
-                        var total = $("input[name=chk]").length;
-                        var checked = $("input[name=chk]:checked").length;
-
-                        if(total != checked) $("#cbx_chkAll").prop("checked", false);
-                        else $("#cbx_chkAll").prop("checked", true); 
-                    });
+                   
                 }); 
             </script>
 		
