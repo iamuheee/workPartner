@@ -616,7 +616,7 @@
             		})
             	}
             	
-            	// 조직도목록 클릭시 상세 테이블 조회용 ajax          	
+            	// 조직도목록 클릭시 테이블 조회용 ajax          	
             	function selectdepTbList(selectDepCd, cpage){            		
             		$.ajax({
             			type: "post",

@@ -25,13 +25,29 @@
 <!-- css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/addressCss/address1.css">
 <style>
-    .btn-primary{
-        background-color: #0442AF;
-        border-color:#0442AF;                
-    }
-    * {
-	font-family: 'Noto Sans KR', sans-serif;
+ .adContainer{
+   display: grid;
+   grid-gap: 20px;
+   height: 90vh;
+   grid-template-columns: 0.4fr  1fr 25px  0.5fr;
+   grid-template-rows: 60px 1fr 35px 30px;
+   grid-template-areas: 'header header  header header'
+                       ' menu   main1  submit  main2'  
+                       ' menu   page  submit  main2'                           
+                       'footer footer  footer footer';    
+color: rgb(43, 42, 42);  
+font-size: 13px;
 }
+
+.page{
+    grid-area: page;   
+}
+/*  여기까지 위의 내용은 외부 css가 실시간으로 반영되지않아서 내부방식으로 한번 더 입력한것. 나중에 삭제 예정 */
+
+ * {
+font-family: 'Noto Sans KR', sans-serif;
+}
+
 </style>
 <script>
     function send() { 
@@ -54,74 +70,44 @@
             <div class="header">
                 <table>
                     <tr>
-                        <td width="80px"><h4>인사부</h4></td>
-                        <td><input type="text" class="form-control" placeholder="부서 또는 이름 입력하세요" name="searchText" id="searchText"  maxlength="30" style="height: 31px; width:300px"></td>
-                        <td><button type="button" id="searchBtn" class="btn btn-sm btn-primary" onclick="">검색</button></td>
-                    
+                        <td width="80px"><h4>주소록</h4></td>                       
                     </tr>
                 </table>
                 <hr>       
             </div>
 
-
-            <!-- JStree -->            
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
-
+            <!-- 조직도 부서별 목록 -->
             <div class="menu">
-                <!-- 조직도 메뉴바 -->
-                <h6 id="empAddress"><b>조직도</b></h6>           
-                <div id="tree" class="fontsize16">
-                    
-                </div>
-            
-                <script>
-                    $('#tree').jstree({ 
-                            'plugins': ["wholerow"] ,
-                        'core' : {	                    
-                            'data' : [
-                            { "id" : "ajson1", "parent" : "#", "text" : "인사부" , "icon" : false},
-                            { "id" : "ajson2", "parent" : "#", "text" : "영업부", "icon" : false},
-                            { "id" : "ajson3", "parent" : "ajson2", "text" : "해외영업", "icon" : false },
-                            { "id" : "ajson4", "parent" : "ajson2", "text" : "국내영업", "icon" :  false},
-                            { "id" : "ajson5", "parent" : "#", "text" : "마케팅부" , "icon" :  false},
-                            { "id" : "ajson6", "parent" : "#", "text" : "IT개발부" , "icon" :  false},
-                            { "id" : "ajson7", "parent" : "ajson6", "text" : "개발 1팀", "icon" :  false },
-                            { "id" : "ajson8", "parent" : "ajson6", "text" : "개발 2팀", "icon" :  false }
-                            ]
-                        }
-                    });
-                </script>  
+               <div style="height: 10px;"></div>
+                
+                <ul id="empMenu">
+                    <li>
+                        <div class="rowInline">
+                            <span class="fontsize16" ><b>조직도</b></span> &nbsp;&nbsp;&nbsp;                            
+                        </div>
+                    </li>
+                    <ul id="empSubMenu">                
+
+                    </ul>
+                </ul>
 
             </div>
 
            <div class="main1">
                 <!-- 조직도 테이블 -->
-                <table class="table" id="dataCompanyTable">
-                                                                     
-                    <tr>
-                        <td><input type="checkbox" name="chk"></td>
-                        <td class="no">D8123</td>
-                        <td>김인사</td>
-                        <td>인사부</td>                        
-                        <td>jojik123@jojik.com</td>                            
-                    </tr>		            
-                    <tr>
-                        <td><input type="checkbox" name="chk"></td>
-                        <td class="no">Fc123</td>
-                        <td>김인사</td>
-                        <td>인사부</td>                        
-                        <td>jojik123@jojik.com</td>                           
-                    </tr>                        
-                   
-                </table>
+                <div id="tableArea">					
+	                       	                   
+				</div>  
 
+           </div>
+           
+           <div class="page" align="center">
+           
            </div>
                                
            <!-- 왼쪽영역으로 가는 버튼 -->
            <div class="submit">
-                <button type="button" class="btn btn-sm btn-primary material-symbols-outlined">
+                <button type="button" class="btn btn-sm btn-primary material-symbols-outlined" onclick="empNoSend();">
                      arrow_forward_ios
                 </button>
            </div>
@@ -131,28 +117,7 @@
 
                 <form name="myform" id="myform">                                          
                     <table name="adminEmpList">
-                        <tr>     
-                            <td width="40px" class="no">5215 </td>
-                            <td> | IT부</td>
-                            <td width="60px"> | 유아인  </td>
-                            <td><input type="hidden" name="empEmail" value=""></td>                           
-                            <td><span class="removeAddAdmin" style="cursor: pointer;"> x</span></td>                            
-                        </tr>                        
-                        <tr>     
-                            <td width="40px" class="no">5215 </td>
-                            <td> | 해외영업2팀</td>
-                            <td width="60px"> | 남주혁 </td>
-                            <td><input type="hidden" name="empEmail" value=""></td>                           
-                            <td><span class="removeAddAdmin" style="cursor: pointer;"> x</span></td>                            
-                        </tr> 
-                        <tr>     
-                            <td width="40px" class="no">5215 </td>
-                            <td> | IT부</td>
-                            <td width="60px"> | 박보검 </td>
-                            <td><input type="hidden" name="empEmail" value=""></td>                           
-                            <td><span class="removeAddAdmin" style="cursor: pointer;"> x</span></td>                            
-                        </tr> 
-
+                        
                     </table>                               
                      
                 </form>
@@ -166,6 +131,27 @@
                     })
                 })
                 
+                function empNoSend(){
+					
+					let value = "";
+					
+					// 선택한 연락처의 이메일정보 넘기기
+					var arr = new Array();					
+					$("input[name='chk']:checked").each(function(){						
+						arr.push($(this).parent().siblings(".email").text());
+					});
+					
+					for(let i=0; i<arr.length; i++){
+						 value  += '<tr>'                                   
+	                            +       '<td><span>'+  arr[i] + '</span></td>'
+	                            +       '<td><input type="hidden" name="emailRecipient" value="'+  arr[i]  +'"></td>'
+	                            +       '<td><span class="removeMail">x</span></td>'
+	                            + '</tr>';
+					}
+					
+					$("#adminEmpList").append(value);
+					$("input[name='chk']").prop("checked", false);
+				}
 
             </script>
 
@@ -178,7 +164,131 @@
             </div>
 
         </div>
-        
+        <script>
+      	$(function(){
+      		
+      		// [부서목록]
+      		selectDepList();      		
+      		
+      		// [테이블조회 (부서/그룹코드 넘기고 테이블 조회)]
+      		// 1) 사내조직도 직원 테이블
+      		$("#empSubMenu").on("click", "li", function(){            			
+      			selectdepTbList($(this).find(".depCd").val());
+      			// 이렇게 바로 전달 *children().children() 이런식으로 내려가는것보단 find!
+      		})          		
+      	})         
+      		      	
+      	// 부서별 목록 ajax
+      	function selectDepList(){
+      		
+      		$.ajax({      			
+      			url: "depList.ad",
+      			success:function(list){
+      				//console.log(list);
+      				let value = "";
+      				
+      				for(let i=0; i<list.length; i++){
+      					value  += '<li>'
+                      		   +	 '<div class="btn-group dropright btnPadding">'
+                          	   + 	 	'<button type="button" class="btn btn-text">'
+                               +	    	'<span style="font-size: 15px;">' + list[i].departmentName + '</span>'
+                               +			'<input type="hidden" class="depCd" value="' + list[i].departmentCode + '">'
+                          	   +	     '</button>'
+                          	   +      '</div>'
+                          	   +  '</li>';
+                          	   
+                          $("#empSubMenu").html(value);	   
+                          	   
+      				}
+      			},
+      			error:function(){
+      				console.log("부서리스트 ajax통신 실패");
+      			}
+      			
+      		})            		
+      	}
+      	      	
+      	// 조직도 목록 클릭 시 테이블 조회용 ajax          	
+      	function selectdepTbList(selectDepCd, cpage){            		
+      		$.ajax({
+      			type: "post",
+      			url : "depTb.ad",
+      			data : { 
+      				depCd: selectDepCd,
+      				cpage: cpage
+      			},            			
+      			success : function(result){
+      				
+      				let value="";
+      					 value += '<table class="table" id="dataCompanyTable">'
+                               +	'<thead>'
+                               +         '<tr>'
+                               + 				'<th style="width: 15px;"></th>'
+                               + 				'<th>사번</th>'
+                          	   + 				'<th>이름</th>'
+                          	   +				'<th>부서</th>'
+                          	   +                '<th>직위</th>'
+                          	   +  				'<th>이메일</th>'
+                          	   +          '</tr>'                        
+                          	   +    '</thead>'
+                          	   +  '<tbody>'   ;                 						   
+      					
+      				let pageValue = "";
+      				
+      				let list = result.list;
+      				let pi = result.pi; 
+      				
+      				if(list.length == 0){
+      						value   +=     "<tr>"
+      								+			"<td colspan='6'>등록된 직원이 없습니다.</td>"            						
+      								+      "</tr>";
+      				}else{
+      					for(let i=0; i<list.length; i++){
+      						value   += 		'<tr>'
+                                  	+ 			'<td><input type="checkbox" name="chk"></td>'
+                                  	+ 			'<td class="no">'+ list[i].empNo +'</td>'
+                                    +   		'<td class="name">'+ list[i].empName +'</td>'
+                                  	+   		'<td>'+ list[i].depCd +'</td>'
+                                  	+  			'<td>'+ list[i].posCd +'</td>'
+                                  	+   		'<td class="email">'+ list[i].empEmail + '</td>';
+                                  	+   	'</tr>'	;      
+      					}
+      					
+      					 if(pi.currentPage != 1){
+                  			pageValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectdepTbList("+ selectDepCd + ", "  + (pi.currentPage - 1) + ")'>&lt;</button>"	
+                  		 }
+                  		
+                  		for(let p=pi.startPage; p<=pi.endPage; p++) { 
+          				   
+          		   			if(p == pi.currentPage) { 
+          				   			pageValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
+          				   	}else {
+          				   			pageValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectdepTbList("+ selectDepCd + ", "  + p +")'>" + p + "</button>"
+          		           	} 
+          		         }     
+                   
+          		         if(pi.currentPage != pi.maxPage) {
+          		        	  pageValue +=	"<button class='btn btn-sm btn-outline-primary' onclick='selectdepTbList(" + selectDepCd + ", " + (pi.currentPage + 1) + ")'>&gt;</button>"
+          		         }  
+      				}
+      				
+      				value   +=	'</tbody>'
+                  			+ '</table>';
+      				
+      				 $("#tableArea").html(value); 
+      				 $(".page").html(pageValue); 
+      				 //$("#addTitle").html("<h4><b>"+ list[0].depCd +"</b></h4>");
+      				        				     	
+      				            				
+      			},
+      			error:function(){
+      				console.log("조직도 주소록 테이블 조회용 ajax실패");
+      			}
+      			
+      		
+      		})
+      	}      
+      </script>
     </div>
    
 		
