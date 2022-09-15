@@ -28,7 +28,7 @@
 		<typeAlias type="com.wp.workpartner.notice.model.vo.NoticeComment" alias="NoticeComment" />	
 		
 		
-			<typeAlias type="com.wp.workpartner.sign.model.vo.Cooperation" alias="Cooperation"/>
+		<typeAlias type="com.wp.workpartner.sign.model.vo.Cooperation" alias="Cooperation"/>
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Dtpaper" alias="Dtpaper"/>
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Otwork" alias="Otwork"/>
 		<typeAlias type="com.wp.workpartner.sign.model.vo.ReSign" alias="ReSign"/>
@@ -49,7 +49,6 @@
 		<mapper resource="/mappers/employee-mapper.xml" />
 		<mapper resource="/mappers/mail-mapper.xml" />
 		<mapper resource="/mappers/notice-mapper.xml" />
-		<mapper resource="/mappers/sign-mapper.xml"/>
 	</mappers>
 	
 </configuration>

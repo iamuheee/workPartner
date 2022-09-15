@@ -66,4 +66,5 @@ public class SignController {
 			return "common/errorPage";
 		}
 	}
+}
 	
