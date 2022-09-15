@@ -271,7 +271,7 @@ public class AddressController {
 	}
 	
 	// 공지사항관리자 주소록
-	@RequestMapping("adressAdmin.ad")
+	@RequestMapping("addressAdmin.ad")
 	public String addressAdminNotice() {
 		return "address/addressAdminNotice";
 	}

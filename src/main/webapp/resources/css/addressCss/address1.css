@@ -30,15 +30,16 @@ btn-outline-primary{
     grid-gap: 20px;
     height: 90vh;
     grid-template-columns: 0.4fr  1fr 25px  0.5fr;
-    grid-template-rows: 60px 1fr  30px;
+    grid-template-rows: 60px 1fr 35px 30px;
     grid-template-areas: 'header header  header header'
-                        ' menu   main1  submit  main2'                            
+                        ' menu   main1  submit  main2'  
+                        ' menu   page  submit  main2'                           
                         'footer footer  footer footer';    
 color: rgb(43, 42, 42);  
 font-size: 13px;
 }
 .adContainer div{
-    /* border: 1px solid  black; */
+   /* border: 1px solid  black; */
 } 
 
 .header{grid-area: header;}
@@ -52,6 +53,10 @@ font-size: 13px;
 .main1{
     grid-area: main1;
     border: 1px solid #e0e3e6;
+}
+
+.page{
+    grid-area: page;   
 }
     
 .submit{
@@ -106,8 +111,6 @@ addressEmail / addressEmailCC
 
 ===============================================================*/  
 
-
-
 .adOuter1{
     margin: auto;
     padding: 20px;         
@@ -124,10 +127,11 @@ addressEmail / addressEmailCC
      grid-gap: 15px;
      height: 90vh;
      grid-template-columns: 0.4fr  1fr 25px  0.5fr;
-     grid-template-rows: 60px 0.5fr  0.5fr 60px;
+     grid-template-rows: 60px 0.5fr  0.5fr 35px 60px;
      grid-template-areas: 'header2 header2  header2 header2'
                           ' adEmMenu1   adEmMain1  adEmSubmit  adEmMain2'   
-                          ' adEmMenu2   adEmMain1  adEmSubmit  adEmMain2'                         
+                          ' adEmMenu2   adEmMain1  adEmSubmit  adEmMain2'  
+                          ' adEmMenu2     page     adEmSubmit  adEmMain2'                        
                           'adEmFooter adEmFooter  adEmFooter adEmFooter';    
     color: rgb(43, 42, 42);  
     font-size: 13px;
@@ -150,6 +154,10 @@ addressEmail / addressEmailCC
     /* margin: 5px; */
 }
  
+.page{
+    grid-area: page;   
+}
+
 .adEmMain1{
     grid-area: adEmMain1;
     border: 1px solid #e0e3e6;
@@ -196,7 +204,7 @@ addressEmail / addressEmailCC
     margin: 5px;   
 } */
 
-/* .fontsize16{font-size: 16px;}  */
+.fontsize16{font-size: 16px;} 
 
 .removeMail{cursor: pointer;}
 
@@ -213,6 +221,10 @@ addressEmail / addressEmailCC
 
 #empSubMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);}
 #empMenu>li:hover{cursor:pointer; background: rgb(233, 244, 248);}
+
+#empMenu, #empSubMenu{ list-style-type: none; margin: 0; padding:0;}
+
+
 
 
 /* ==============================================================

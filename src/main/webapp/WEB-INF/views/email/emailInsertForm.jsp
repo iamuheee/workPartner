@@ -145,15 +145,12 @@
                     <td colspan="4">
                         <div style="border: 1px solid  #e0e3e6; min-height: 60px;" id="mailCC">
                            
-                            <table id="mailCC">
-                                
-                                <tr>                                   
-                                    <td><span>wwlaalcjstk@naver.com</span></td>
-                                    <td><input type="hidden" name="emailCC" value="wwlaalcjstk@naver.com"></td>
-                                    <td><span class="removeMail" style="cursor: pointer;">x</span></td>
-                                </tr>
-                                
-
+                            <table id="mailCC">                                
+                               <!-- 
+                               	
+                               		참조이메일 올 자리
+                               		
+                                -->   
                             </table>  
                         </div>
                     </td>
@@ -346,7 +343,7 @@
         <script>
             var newWindow;
             function openAddressTo(){
-                newWindow = window.open("${pageContext.request.contextPath}/addressEmail.ad","addressWindow", "height=700, width=1000");                
+                newWindow = window.open("${pageContext.request.contextPath}/addressEmail.ad","addressWindow", "height=700, width=1100");                
             }
 
             function sendData(data){
@@ -365,7 +362,7 @@
             
             function openAddressCC(){
                 var newWindow2;
-                newWindow2 = window.open("${pageContext.request.contextPath}/addressEmailCC.ad","addressWindow", "height=700, width=1000");
+                newWindow2 = window.open("${pageContext.request.contextPath}/addressEmailCC.ad","addressWindow", "height=700, width=1100");
             }
 
             function sendDataCC(data){
