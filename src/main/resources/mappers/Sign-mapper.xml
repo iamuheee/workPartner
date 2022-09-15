@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="signMapper">
+
+	<resultMap id="SelectVacationResult" type="SelectVacation">
+		<result column="dp_no" property="dpNo"/>
+		<result column="emp_no" property="emp_no"/>
+		<result column="dp_title" property="dpTitle"/>
+		<result column="dp_create" property="dpCreate"/>
+		<result column="dp_modify" property="dpModify"/>
+		<result column="dp_status" property="dpStatus"/>
+		<result column="dp_final" property="dpFinal"/>
+		<result column="dp_category" property="dpCategory"/>
+		<result column="dp_temp" property="dpTemp"/>
+		<result column="dp_origin" property="dpOrigin"/>
+		<result column="dp_change" property="dpChange"/>
+		<result column="va_start" property="vaStart"/>
+		<result column="va_end" property="vaEnd"/>
+		<result column="va_category" property="vaCategory"/>
+		<result column="va_content" property="vaContent"/>
+		<result column="va_useday" property="vaUseday"/>
+	</resultMap>
+	 
+	<insert id="insertDtpaper">
+		
+		insert
+		 
+		  into tb_dtpaper
+		  	  {
+		  	  	dp_no
+		  	  ,	emp_no
+		  	  , dp_title
+		  	  , dp_category
+		  	  , dp_origin
+		  	  , dp_change
+		  	  }
+		values
+			  {
+			  	10||seq_vac.nextval
+			  , #{ empNo }
+			  , #{ dpTitle }
+			  , #{ dpCategory }
+			  , #{ dpOrigin }
+			  , #{ dpChange }
+			  } 
+			  
+		
+	</insert>
+	<insert id="insertVacation">
+		insert
+			
+			into tb_vacation
+			  	  {
+			  	  	dp_no
+			  	  ,	emp_no
+			  	  , dp_title
+			  	  , dp_category
+			  	  , dp_origin
+			  	  , dp_change
+			  	  }
+			values
+				  {
+				    10||seq_vac.currval 
+				  , #{ vaStart }
+				  , #{ vaEnd }
+				  , #{ vaCategory }
+				  , #{ vaContent }
+				  , #{ vaUseday }
+				  } 
+	</insert>
+</mapper>

@@ -25,7 +25,19 @@
 		<typeAlias type="com.wp.workpartner.mail.model.vo.Signature" alias="Signature" />
 		<typeAlias type="com.wp.workpartner.mail.model.vo.MailStatus" alias="MailStatus" />
 		<typeAlias type="com.wp.workpartner.notice.model.vo.Notice" alias="Notice" />
-		<typeAlias type="com.wp.workpartner.notice.model.vo.NoticeComment" alias="NoticeComment" />		
+		<typeAlias type="com.wp.workpartner.notice.model.vo.NoticeComment" alias="NoticeComment" />	
+		
+		
+			<typeAlias type="com.wp.workpartner.sign.model.vo.Cooperation" alias="Cooperation"/>
+		<typeAlias type="com.wp.workpartner.sign.model.vo.Dtpaper" alias="Dtpaper"/>
+		<typeAlias type="com.wp.workpartner.sign.model.vo.Otwork" alias="Otwork"/>
+		<typeAlias type="com.wp.workpartner.sign.model.vo.ReSign" alias="ReSign"/>
+		<typeAlias type="com.wp.workpartner.sign.model.vo.SelectCooperation" alias="SelectCooperation"/>
+		<typeAlias type="com.wp.workpartner.sign.model.vo.SelectOtwork" alias="SelectOtwork"/>
+		<typeAlias type="com.wp.workpartner.sign.model.vo.SelectReSign" alias="SelectReSign"/>
+		<typeAlias type="com.wp.workpartner.sign.model.vo.SelectVacation" alias="SelectVacation"/>
+		<typeAlias type="com.wp.workpartner.sign.model.vo.Sign" alias="Sign"/>
+		<typeAlias type="com.wp.workpartner.sign.model.vo.Vacation" alias="Vacation"/>	
 	</typeAliases>
 	
 	<!-- <유의사항> -->
@@ -37,7 +49,7 @@
 		<mapper resource="/mappers/employee-mapper.xml" />
 		<mapper resource="/mappers/mail-mapper.xml" />
 		<mapper resource="/mappers/notice-mapper.xml" />
-		
+		<mapper resource="/mappers/sign-mapper.xml"/>
 	</mappers>
 	
 </configuration>

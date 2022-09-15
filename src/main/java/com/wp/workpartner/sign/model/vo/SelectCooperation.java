@@ -23,7 +23,8 @@ public class SelectCooperation {
 	private String dpFinal;
 	private String dpCategory;
 	private String dpTemp;
-	private String dpUrl;
+	private String dpOrigin;
+	private String dpChange;
 	private String depRec;
 	private String cpRequestor;
 	private String cpRequestDay;

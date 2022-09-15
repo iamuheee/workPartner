@@ -22,7 +22,8 @@ public class SelectOtwork {
 	private String dpFinal;
 	private String dpCategory;
 	private String dpTemp;
-	private String dpUrl;
+	private String dpOrigin;
+	private String dpChange;
 	private String otCall;
 	private String otSupervisor;
 	private String otStartdate;

@@ -2,9 +2,12 @@ package com.wp.workpartner.sign.model.service;
 
 import java.util.ArrayList;
 
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wp.workpartner.common.model.vo.PageInfo;
+import com.wp.workpartner.sign.model.dao.SignDao;
 import com.wp.workpartner.sign.model.vo.Cooperation;
 import com.wp.workpartner.sign.model.vo.Dtpaper;
 import com.wp.workpartner.sign.model.vo.Otwork;
@@ -18,23 +21,34 @@ import com.wp.workpartner.sign.model.vo.Vacation;
 @Service
 public class SignServiceImpl implements SignService {
 
+	@Autowired
+	private SignDao sDao;
+	
+	@Autowired
+	private SqlSessionTemplate sqlSession;
+
 	@Override
-	public int insertCooperation(Dtpaper d, Cooperation c) {
+	public int insertDtpaper(Dtpaper d) {
+		return sDao.insertDtpaper(sqlSession, d);
+	}
+
+	@Override
+	public int insertCooperation(Cooperation c) {
 		return 0;
 	}
 
 	@Override
-	public int insertVacation(Dtpaper d, Vacation v) {
+	public int insertVacation(Vacation v) {
+		return sDao.insertVacation(sqlSession, v);
+	}
+
+	@Override
+	public int insertOtwork(Otwork o) {
 		return 0;
 	}
 
 	@Override
-	public int insertOtwork(Dtpaper d, Otwork o) {
-		return 0;
-	}
-
-	@Override
-	public int insertReSignEmp(Dtpaper d, ReSign r) {
+	public int insertReSignEmp(ReSign r) {
 		return 0;
 	}
 
@@ -167,5 +181,7 @@ public class SignServiceImpl implements SignService {
 	public SelectOtwork selectOtwork(int dpNo) {
 		return null;
 	}
+	
+	
 
 }

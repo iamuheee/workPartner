@@ -15,10 +15,11 @@ import com.wp.workpartner.sign.model.vo.Vacation;
 
 public interface SignService {
 //	기안서 작성
-	int insertCooperation(Dtpaper d, Cooperation c);
-	int insertVacation(Dtpaper d, Vacation v);
-	int insertOtwork(Dtpaper d, Otwork o);
-	int insertReSignEmp(Dtpaper d, ReSign r);
+	int insertDtpaper(Dtpaper d);
+	int insertCooperation(Cooperation c);
+	int insertVacation(Vacation v);
+	int insertOtwork(Otwork o);
+	int insertReSignEmp(ReSign r);
 //	진행중 리스트
 	int selectProgressListCount();
 	ArrayList<Dtpaper> selectProgressList(PageInfo pi);

@@ -129,6 +129,7 @@ th, td {
 input, select, textarea {
 	border: 0.5px solid rgba(143, 143, 143, 0.547)
 }
+
 </style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -166,7 +167,7 @@ input, select, textarea {
                         근태명
                     </th>
                     <td width="540" style="border:0">
-                        <select name="vacation" id="selectVacation" style="height:30px; border-radius: 4px;">
+                        <select name="vaCategory" id="selectVacation" style="height:30px; border-radius: 4px;">
                             <option value="연차">연차</option>
                             <option value="반차">반차</option>
                         </select>
@@ -177,9 +178,9 @@ input, select, textarea {
                         시작일시
                     </th>
                     <td style="border:0">
-                        <input type="date" id="currentDate"
+                        <input type="date" id="currentDate" name="vaStart"
                             style="height:30px; border-radius: 4px; text-align: center;">
-                        <input type="datetime-local" style="height:30px; border-radius: 4px; text-align: center;" id="startTime" hidden>
+                        <input type="datetime-local" name="vaStart" style="height:30px; border-radius: 4px; text-align: center;" id="startTime" hidden>
                     </td>
                 </tr>
                 <tr align="left">
@@ -187,9 +188,9 @@ input, select, textarea {
                         종료일시
                     </th>
                     <td style="border:0">
-                        <input type="date" id="currentDate2"
+                        <input type="date" id="currentDate2" name="vaEnd"
                             style="height:30px; border-radius: 4px; text-align: center;" enabled>
-                        <input type="datetime-local" style="height:30px; border-radius: 4px; text-align: center;" id="endTime" hidden>
+                        <input type="datetime-local" name="vaEnd" style="height:30px; border-radius: 4px; text-align: center;" id="endTime" hidden>
 
                     </td>
                 </tr>
@@ -198,7 +199,7 @@ input, select, textarea {
                         사유
                     </th>
                     <td style="border:0">
-                        <textarea name="" id="" cols="30" rows="10"
+                        <textarea name="vaContent" cols="30" rows="10"
                             style=" border-radius: 4px; width: 95%; resize: none;"></textarea>
                     </td>
                 </tr>

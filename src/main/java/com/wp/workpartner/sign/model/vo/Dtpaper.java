@@ -23,7 +23,8 @@ public class Dtpaper {
 	private String dpFinal;
 	private String dpCategory;
 	private String dpTemp;
-	private String dpUrl;
+	private String dpOrigin;
+	private String dpChange;
 	
 	private ArrayList<Sign> signList;
 	//private ArrayList<Vacation> vacationList;

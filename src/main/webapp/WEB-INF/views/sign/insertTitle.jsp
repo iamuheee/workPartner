@@ -232,6 +232,16 @@ input, select, textarea {
 	cursor: pointer;
 	color: black;
 }
+input[type=text] {
+	width: 97%;
+	box-sizing: border-box;
+	margin: auto;
+	height: 100%;
+	border: 0;
+	font-size: 16px;
+	background-color: #ffffff48;
+	padding: auto;
+}
 </style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -255,10 +265,29 @@ input, select, textarea {
 </head>
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
     <section class="mainTitle">
-        <form action="insertDpaper.bo" name="insertForm" style="float: left">
+    	<c:choose>
+    	<c:when test="${ paperName == '연차' }">
+        <form action="insertV.si" name="insertForm" style="float: left" enctype="multipart/form-data">
+            <a class="insertBtn" onclick="insertCheck();">기안하기</a>
+        
+        </c:when>
+    	<c:when test="${ paperName == '외근' }">
+        <form action="insertD.bo" name="insertForm" style="float: left" enctype="multipart/form-data">
             <a class="insertBtn" onclick="insertCheck();">기안하기</a>
         </form>
-        <form action="insertSave.bo" name="saveForm" style="float: left">
+        </c:when>
+    	<c:when test="${ paperName == '퇴직원' }">
+        <form action="insertD.bo" name="insertForm" style="float: left" enctype="multipart/form-data">
+            <a class="insertBtn" onclick="insertCheck();">기안하기</a>
+        </form>
+        </c:when>
+    	<c:when test="${ paperName == '업무협조' }">
+        <form action="insertD.bo" name="insertForm" style="float: left" enctype="multipart/form-data">
+            <a class="insertBtn" onclick="insertCheck();">기안하기</a>
+        </form>
+        </c:when>
+        </c:choose>
+        <form action="insertSave.bo" name="saveForm" style="float: left" enctype="multipart/form-data">
             <a class="insertBtn" onclick="saveCheck()">임시저장</a>
         </form>
             <a class="insertBtn" id="btn-modal">결재선 추가</a>
@@ -284,7 +313,7 @@ input, select, textarea {
     </script>
     <section>
         <div>
-            <h1 class="dtpaperName">${ paperName } 신청서 - <span style="font-weight:lighter;">김종군(영업부)</span></h1>
+            <h1 class="dtpaperName"><span id="dpCategory">${ paperName }</span> 신청서 - <span style="font-weight:lighter;">${ loginUser.empName }(${ loginUser.depCd })</span></h1>
             <hr>
         </div>
     </section>
@@ -294,11 +323,11 @@ input, select, textarea {
             <table align="center">
                 <tr>
                     <th width="100">결재</th>
-                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><span>김종군(마케팅부)</span></td>
+                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><input type="text" name="sign1" value="김종군" readonly></td>
                     <th>결재</th>
-                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"></td>
+                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><input type="text" name="sign2" value="김종군" readonly></td>
                     <th>결재</th>
-                    <td></td>
+                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><input type="text" name="sign3" value="김종군(마케팅)" readonly></td>
                 </tr>
             </table>
         </div>
@@ -310,17 +339,17 @@ input, select, textarea {
                 <tr class="titleSection">
                     <th style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);">제목</th>
                     <td align="left" style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);">
-                    <input type="text" style="margin-left:10px;">
+                    <input type="text" style="margin-left:10px; width:95%;" name="dpTitle">
                     </td>
                 </tr>
                 <tr style="border-top:0.5px solid rgba(143, 143, 143, 0.547);">
                     <th>첨부파일</th>
-                    <td align="left"><input type="file" style="margin-left:10px; border:0;"></td>
+                    <td align="left"><input type="file" id="upfile" name="upfile" style="margin-left:10px; border:0;"></td>
                 </tr>
             </table>
         </div>
     </section>
-
+	</form>
     <section class="modal">
         <div id="modal" class="modal-overlay">
             <div class="modal-window">
