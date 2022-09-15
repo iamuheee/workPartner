@@ -29,7 +29,7 @@ btn-outline-primary{
     display: grid;
     grid-gap: 20px;
     height: 90vh;
-    grid-template-columns: 0.4fr  1fr 25px  0.5fr;
+    grid-template-columns: 0.4fr  1fr 25px  0.4fr;
     grid-template-rows: 60px 1fr 35px 30px;
     grid-template-areas: 'header header  header header'
                         ' menu   main1  submit  main2'  

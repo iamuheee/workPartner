@@ -29,7 +29,7 @@
    display: grid;
    grid-gap: 20px;
    height: 90vh;
-   grid-template-columns: 0.4fr  1fr 25px  0.5fr;
+   grid-template-columns: 0.4fr  1fr 25px  0.4fr;
    grid-template-rows: 60px 1fr 35px 30px;
    grid-template-areas: 'header header  header header'
                        ' menu   main1  submit  main2'  
@@ -116,7 +116,7 @@ font-family: 'Noto Sans KR', sans-serif;
             <div class="main2">
 
                 <form name="myform" id="myform">                                          
-                    <table name="adminEmpList">
+                    <table id="adminEmpList">
                         
                     </table>                               
                      
@@ -133,24 +133,36 @@ font-family: 'Noto Sans KR', sans-serif;
                 
                 function empNoSend(){
 					
-					let value = "";
+					let value = "";					
+					var arr = new Array();		
 					
-					// 선택한 연락처의 이메일정보 넘기기
-					var arr = new Array();					
-					$("input[name='chk']:checked").each(function(){						
-						arr.push($(this).parent().siblings(".email").text());
+					// 체크된 항목 반복문 돌리고 
+					$("input[name='chk']:checked").each(function(){			
+						
+						const obj = {
+							empNo:$(this).parent().siblings(".no").text(),
+							depCd:$(this).parent().siblings(".depCd").text(),
+							empName:$(this).parent().siblings(".name").text()							
+						};				
+						
+						arr.push(obj);
+						
 					});
-					
+									
 					for(let i=0; i<arr.length; i++){
-						 value  += '<tr>'                                   
-	                            +       '<td><span>'+  arr[i] + '</span></td>'
-	                            +       '<td><input type="hidden" name="emailRecipient" value="'+  arr[i]  +'"></td>'
-	                            +       '<td><span class="removeMail">x</span></td>'
-	                            + '</tr>';
+						 value  += '<tr>'     
+			                     +    '<td width="60px"> ' + arr[i].empNo + ' </td>'
+			                     +    '<td width="80px"> '+ arr[i].depCd +' </td>'
+			                     +    '<td>  '+ arr[i].empName +'  </td>'
+			                     +    '<td><input type="hidden" name="empNo" value="'+ arr[i].empNo +'"></td>'                           
+			                     +    '<td><span class="removeAdmin" style="cursor: pointer;"> x</span></td>'                            
+			                     + '</tr>';
+			                     
+			                     console.log(arr[i].empNo);
 					}
-					
+					console.log(value);
 					$("#adminEmpList").append(value);
-					$("input[name='chk']").prop("checked", false);
+					$("input[name='chk']").prop("checked", false); 
 				}
 
             </script>
@@ -248,7 +260,7 @@ font-family: 'Noto Sans KR', sans-serif;
                                   	+ 			'<td><input type="checkbox" name="chk"></td>'
                                   	+ 			'<td class="no">'+ list[i].empNo +'</td>'
                                     +   		'<td class="name">'+ list[i].empName +'</td>'
-                                  	+   		'<td>'+ list[i].depCd +'</td>'
+                                  	+   		'<td class="depCd">'+ list[i].depCd +'</td>'
                                   	+  			'<td>'+ list[i].posCd +'</td>'
                                   	+   		'<td class="email">'+ list[i].empEmail + '</td>';
                                   	+   	'</tr>'	;      
@@ -278,7 +290,6 @@ font-family: 'Noto Sans KR', sans-serif;
       				 $("#tableArea").html(value); 
       				 $(".page").html(pageValue); 
       				 //$("#addTitle").html("<h4><b>"+ list[0].depCd +"</b></h4>");
-      				        				     	
       				            				
       			},
       			error:function(){
