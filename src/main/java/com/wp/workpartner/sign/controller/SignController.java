@@ -1,5 +1,7 @@
 package com.wp.workpartner.sign.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +67,51 @@ public class SignController {
 			model.addAttribute("errorMsg", "결재 신청 실패.");
 			return "common/errorPage";
 		}
+	}
+	
+// 기안서 리스트 조회
+	@RequestMapping("saveSi.si")
+	public String selectSaveSignList(Model model) {
+		model.addAttribute("flag", "save");
+		return "sign/dpaperSaveResign";
+	}
+	@RequestMapping("contSi.si")
+	public String selectContSignList(Model model) {
+		model.addAttribute("flag", "continue");
+		return "sign/dpaperContEnd";
+	}
+	@RequestMapping("reSi.si")
+	public String selectReSignList(Model model) {
+		model.addAttribute("flag", "reSign");
+		return "sign/dpaperSaveResign";
+	}
+	@RequestMapping("endSi.si")
+	public String selectEndSignList(Model model) {
+		model.addAttribute("flag", "end");
+		return "sign/dpaperContEnd";
+	}
+	
+//	타부서 결재함
+	@RequestMapping("othSi.si")
+	public String selectOtherSignList(Model model){
+		model.addAttribute("flag", "otherSign");
+		return "sign/otherDeptSign";
+	}
+	@RequestMapping("othEndSi.si")
+	public String selectOtherSignEndList(Model model) {
+		model.addAttribute("flag", "otherEndSign");
+		return "sign/otherDeptSign";
+	}
+//	내 부서 결재함
+	@RequestMapping("deptSi.si")
+	public String selectDeptSignList(Model model){
+		model.addAttribute("flag", "deptSign");
+		return "sign/deptSign";
+	}
+	@RequestMapping("deptEndSi.si")
+	public String selectDeptSignEndList(Model model) {
+		model.addAttribute("flag", "deptEndSign");
+		return "sign/deptSign";
 	}
 }
 	
