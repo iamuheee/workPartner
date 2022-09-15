@@ -7,22 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-        table th {
-            border-top: 2px solid #87878772;
-            border-bottom: 2px solid #87878772;
-            height: 50x;
-            font-size: 18px;
-        }
-
-        table td {
-            border-bottom: 1px solid #87878792;
-            font-size: 16px;
-        }
-
-        table {
-            margin-top: 10px;
-
-        }
+        
 
         /* 전자결재 기안서 목록 모달 */
         #modal {
