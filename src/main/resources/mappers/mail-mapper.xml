@@ -55,7 +55,7 @@
 		<result column="sig_extension" property="sigExtension"/>
 		<result column="sig_tel" property="sigTel"/>
 		<result column="sig_email" property="sigEmail"/>
-		<result column="sig_stats" property="sigStats"/>
+		<result column="sig_status" property="sigStatus"/>
 		<result column="sig_basic" property="sigBasic"/>
 	</resultMap>
 	

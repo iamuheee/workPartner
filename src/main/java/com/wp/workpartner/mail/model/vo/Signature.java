@@ -21,6 +21,6 @@ public class Signature {
 	 private String sigExtension;
 	 private String sigTel;
 	 private String sigEmail;
-	 private String sigStats;
+	 private String sigStatus;
 	 private String sigBasic;
 }
