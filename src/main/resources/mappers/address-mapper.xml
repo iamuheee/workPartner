@@ -321,4 +321,14 @@
 		 where  add_no = #{addressNo}		   		
 	</update>
 	
+	<delete id="deleteAddGp">
+		delete 
+		  from tb_my_address
+		 <where>
+		 	<foreach item="addNo" collection="addArr" open="add_no in (" separator="," close=")">
+		 		#{addNo}
+		 	</foreach>		  
+		 </where>
+	</delete> 
+	
 </mapper>

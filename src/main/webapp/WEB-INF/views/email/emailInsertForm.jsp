@@ -346,7 +346,7 @@
         <script>
             var newWindow;
             function openAddressTo(){
-                newWindow = window.open("http://localhost:8888/spring/addressEmail.ad","addressWindow", "height=700, width=1000");                
+                newWindow = window.open("${pageContext.request.contextPath}/addressEmail.ad","addressWindow", "height=700, width=1000");                
             }
 
             function sendData(data){
@@ -365,7 +365,7 @@
             
             function openAddressCC(){
                 var newWindow2;
-                newWindow2 = window.open("http://localhost:8888/spring/addressEmailCC.ad","addressWindow", "height=700, width=1000");
+                newWindow2 = window.open("${pageContext.request.contextPath}/addressEmailCC.ad","addressWindow", "height=700, width=1000");
             }
 
             function sendDataCC(data){

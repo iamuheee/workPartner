@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="noticeMapper">
+
+	<resultMap id="noticeCommentResult" type="NoticeComment">
+		<result column="ncom_no" property="nCommetNo"/>
+		<result column="nt_no" property="noticeNo"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="emp_id" property="empId"/>
+		<result column="ncom_content" property="nCommentContent"/>
+		<result column="ncom_create_date" property="createDate"/>
+		<result column="ncom_modify_date" property="modifyDate"/>
+		<result column="ncom_parent_no" property="nCommentParentNo"/>
+		<result column="ncom_status" property="nCommentStatus"/>
+	</resultMap>
+	
+	<resultMap id="noticeResult" type="Notice">
+		<result column="nt_no" property="noticeNo"/>
+		<result column="nt_title" property="noticeTitle"/>
+		<result column="nt_content" property="noticeContent"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="nt_status" property="noticeStatus"/>
+		<result column="nt_count" property="noticeCount"/>
+		<result column="nt_important" property="noticeImportant"/>
+		<result column="nt_top" property="noticeTop"/>
+		<result column="nt_create_date" property="NoticeCreateDate"/>
+		<result column="nt_modify_date" property="NoticeModifyDate"/>
+		<result column="nt_file" property="NoticeFile"/>
+	</resultMap>
+</mapper>

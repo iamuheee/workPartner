@@ -20,7 +20,12 @@
 		<typeAlias type="com.wp.workpartner.address.model.vo.MyGroup" alias="MyGroup" />	
 		<typeAlias type="com.wp.workpartner.address.model.vo.Department" alias="Department" />
 		<typeAlias type="com.wp.workpartner.address.model.vo.Position" alias="Position" />
-		<typeAlias type="com.wp.workpartner.employee.model.vo.Employee" alias="Employee" />		
+		<typeAlias type="com.wp.workpartner.employee.model.vo.Employee" alias="Employee" />
+		<typeAlias type="com.wp.workpartner.mail.model.vo.Mail" alias="Mail" />
+		<typeAlias type="com.wp.workpartner.mail.model.vo.Signature" alias="Signature" />
+		<typeAlias type="com.wp.workpartner.mail.model.vo.MailStatus" alias="MailStatus" />
+		<typeAlias type="com.wp.workpartner.notice.model.vo.Notice" alias="Notice" />
+		<typeAlias type="com.wp.workpartner.notice.model.vo.NoticeComment" alias="NoticeComment" />		
 	</typeAliases>
 	
 	<!-- <유의사항> -->
@@ -30,6 +35,8 @@
 		<mapper resource="/mappers/todo-mapper.xml" />
 		<mapper resource="/mappers/address-mapper.xml" />
 		<mapper resource="/mappers/employee-mapper.xml" />
+		<mapper resource="/mappers/mail-mapper.xml" />
+		<mapper resource="/mappers/notice-mapper.xml" />
 		
 	</mappers>
 	

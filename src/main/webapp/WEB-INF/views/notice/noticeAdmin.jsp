@@ -84,7 +84,7 @@
              
             var newWindow;
             function openAddressWindow(){
-                newWindow = window.open("http://localhost:8888/spring/adressAdmin.nt", "addressWindow", "height=700, width=1000");
+                newWindow = window.open("${pageContext.request.contextPath}/adressAdmin.ad", "addressWindow", "height=700, width=1000");
             }
 
             function sendMeData(data){                   

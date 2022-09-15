@@ -356,7 +356,7 @@
                 <script>
                     var noteNewWindow;
                     function openNoteAdWindow(){
-                        noteNewWindow = window.open("http://localhost:8888/spring/addresssNote.ad", "", "height=700, width=1000");
+                        noteNewWindow = window.open("${pageContext.request.contextPath}/addresssNote.ad", "", "height=700, width=1000");
                     }
                   
                 </script>

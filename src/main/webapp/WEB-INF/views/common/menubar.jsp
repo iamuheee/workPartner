@@ -308,7 +308,7 @@
 	                           <div class="collapse" id="collapseHome" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 	                               <nav class="sb-sidenav-menu-nested nav">
 	                                   <a class="nav-link nav-choice" href="">마이페이지</a>
-	                                   <a class="nav-link nav-choice" href="">공지사항</a>
+	                                   <a class="nav-link nav-choice" href="list.nt">공지사항</a>
 	                                   <a class="nav-link nav-choice" href="">쪽지함</a>
 	                               </nav>
 	                           </div>
@@ -388,13 +388,13 @@
 	                           </a>
 	                           <div class="collapse" id="collapseMail" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 	                               <nav class="sb-sidenav-menu-nested nav">
-	                                   <a class="btn btn-sm btn-primary btn-size" href="">메일쓰기</a>
-	                                   <a class="nav-link nav-choice" href=""> <label class="starColor">★</label> &nbsp; 중요메일함</a>
-	                                   <a class="nav-link nav-choice" href="">전체메일함</a>
-	                                   <a class="nav-link nav-choice" href="">받은메일함</a>
-	                                   <a class="nav-link nav-choice" href="">보낸메일함</a>
-	                                   <a class="nav-link nav-choice" href="">휴지통</a>
-	                                   <a class="nav-link nav-choice" href="">설정</a>
+	                                   <a class="btn btn-sm btn-primary btn-size" href="insert.ma">메일쓰기</a>
+	                                   <a class="nav-link nav-choice" href="starList.ma"> <label class="starColor">★</label> &nbsp; 중요메일함</a>
+	                                   <a class="nav-link nav-choice" href="totalList.ma">전체메일함</a>
+	                                   <a class="nav-link nav-choice" href="receiveList.ma">받은메일함</a>
+	                                   <a class="nav-link nav-choice" href="sendList.ma">보낸메일함</a>
+	                                   <a class="nav-link nav-choice" href="bin.ma">휴지통</a>
+	                                   <a class="nav-link nav-choice" href="sig.ma">설정</a>
 	                               </nav>
 	                           </div>
 	

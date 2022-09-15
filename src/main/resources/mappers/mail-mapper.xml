@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mailMapper">
+
+	<resultMap id="empResult" type="Employee">
+		<result column="emp_no" property="empNo" />
+		<result column="emp_id" property="empId" />
+		<result column="emp_pwd" property="empPwd" />
+		<result column="emp_name" property="empName" />
+		<result column="emp_phone" property="empPhone" />
+		<result column="emp_extension" property="empExtension" />
+		<result column="emp_email" property="empEmail" />
+		<result column="emp_exemail" property="empExEmail" />
+		<result column="emp_enrolldate" property="empEnrollDate" />
+		<result column="emp_retiredate" property="empRetireDate" />
+		<result column="emp_modifydate" property="empModifyDate" />
+		<result column="emp_status" property="empStatus" />
+		<result column="emp_profile" property="empProfile" />		
+		<result column="emp_nt_admin" property="empNtAdmin" />
+		<result column="dep_cd" property="depCd" />
+		<result column="pos_cd" property="posCd" />	
+		<result column="emp_sig_use" property="empSigUse" />		
+	</resultMap>
+	
+	<resultMap id="mailResult" type="Mail">
+		<result column="mail_no" property="mailNo"/>
+		<result column="mail_title" property="mailTitle"/>
+		<result column="mail_content" property="mailContent"/>
+		<result column="mail_create_date" property="mailCreateDate"/>
+		<result column="mail_important" property="mailImportant"/>
+		<result column="mail_security" property="mailSecurity"/>
+		<result column="mail_file" property="mailFile"/>
+		<result column="mail_recipient" property="mailRecipient"/>
+		<result column="mail_cc" property="mailCC"/>
+		<result column="mail_sender" property="mailSender"/>
+		<result column="mail_sender_name" property="mailSenderName"/>
+	</resultMap>
+	
+	<resultMap id="statusResult" type="MailStatus">
+		<result column="mail_no" property="mailNo"/>
+		<result column="mail_email" property="mailEmail"/>
+		<result column="mail_status" property="mailStatus"/>
+		<result column="mail_category" property="mailCategory"/>
+		<result column="mail_read" property="mailRead"/>
+		<result column="mail_star" property="mailStar"/>
+	</resultMap>
+	
+	<resultMap id="sigResult" type="Signature">
+		<result column="sig_no" property="sigNo"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="sig_name" property="sigName"/>
+		<result column="sig_department" property="sigDepartment"/>
+		<result column="sig_position" property="sigPosition"/>
+		<result column="sig_address" property="sigAddress"/>
+		<result column="sig_extension" property="sigExtension"/>
+		<result column="sig_tel" property="sigTel"/>
+		<result column="sig_email" property="sigEmail"/>
+		<result column="sig_stats" property="sigStats"/>
+		<result column="sig_basic" property="sigBasic"/>
+	</resultMap>
+	
+	
+
+</mapper>

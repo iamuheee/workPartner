@@ -8,6 +8,9 @@
 <title>Insert title here</title>
 <!-- css  -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/emailCss/email1.css">
+<style>
+
+</style>
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"></jsp:include>
@@ -76,7 +79,7 @@
                 </button> -->
 
                 <button type="button" class="btn btn-sm btn-light">
-                    <span style="color: rgb(177, 177, 176) ;"> ★</span>
+                    <span> ★</span>
                 </button>
 
             </div>
@@ -172,7 +175,7 @@
             
                     $(function(){
                         $(".emailTitle").click(function(){
-                            location.href = 'detail.em?no=' + $(this).siblings(".no").text();
+                            location.href = 'detail.ma?no=' + $(this).siblings(".no").text();
                                                             // 해당 emailTitle의 동위요소  중 클래스가 no인
                         })        		
                     })            	

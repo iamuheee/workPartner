@@ -21,11 +21,11 @@
         <div class="EmContainer1">
            
             <div class="emMenu1">            
-               <a class="btn btn-sm btn-primary" href="reply.em">답장하기</a>
+               <a class="btn btn-sm btn-primary" href="reply.ma">답장하기</a>
                <button class="btn btn-sm btn-secondary" onclick="history.back()">이전</button>
 
                <!-- 기밀인 경우 전달하기 버튼 비활성화 -->
-               <a class="btn btn-sm btn-warning" href="forward.em">전달하기</a>
+               <a class="btn btn-sm btn-warning" href="forward.ma">전달하기</a>
                <hr>
             </div>
                 
