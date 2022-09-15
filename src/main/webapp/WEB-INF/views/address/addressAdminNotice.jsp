@@ -66,7 +66,7 @@ font-family: 'Noto Sans KR', sans-serif;
     
         <div class="adContainer">
 
-            <!-- 선택한 부서명 & 검색 -->
+            <!-- header영역 -->
             <div class="header">
                 <table>
                     <tr>
@@ -94,25 +94,26 @@ font-family: 'Noto Sans KR', sans-serif;
             </div>
 
            <div class="main1">
-                <!-- 조직도 테이블 -->
+                <!-- 조직도 사원 테이블 -->
                 <div id="tableArea">					
 	                       	                   
 				</div>  
 
            </div>
            
+           <!-- 페이징영역 -->
            <div class="page" align="center">
            
            </div>
                                
-           <!-- 왼쪽영역으로 가는 버튼 -->
+           <!-- 왼쪽영역으로 가는 버튼 : 해당 버튼 클릭시 맨 왼쪽 form으로 넘어감-->
            <div class="submit">
                 <button type="button" class="btn btn-sm btn-primary material-symbols-outlined" onclick="empNoSend();">
                      arrow_forward_ios
                 </button>
            </div>
 
-           <!-- 선택된 직원이 보여지는 영역 -->
+           <!-- 선택된 직원이 보여지는 영역 => 해당 영역에 있는 사원들이 부모창으로 넘어감 -->
             <div class="main2">
 
                 <form name="myform" id="myform">                                          
@@ -131,6 +132,11 @@ font-family: 'Noto Sans KR', sans-serif;
                     })
                 })
                 
+                // 클릭된 사원의 정보를 맨 왼쪽으로 넘기기 
+                /* 
+                	사번, 부서명, 사원이름으로 표시되도록 했으며, input:hidden으로 사번이 넘어갈 수 있도록 했음  
+                	해당 tr > X 클릭 시 tr요소 삭제되게끔 했음
+                */
                 function empNoSend(){
 					
 					let value = "";					
@@ -168,7 +174,7 @@ font-family: 'Noto Sans KR', sans-serif;
             </script>
 
            
-            <!-- 버튼-->
+            <!-- 버튼 : 해당 버튼 클릭 시 부모창으로 정보 전달 -->
             <div class="footer" align="end">             
               
                 <input type="button" class="btn btn-sm btn-primary" value="보내기" onclick="send()"/>

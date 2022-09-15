@@ -79,16 +79,22 @@
             2. x버튼 누리면 해당 행의 직원번호가 전달 =>  ajax로 data넘겨서 일반직원으로 업데이트 처리 후 리스트를 조회하는 ajax를 다시 호출
             3. 버튼 누르면 해당 테이블에 추가가 되고 =>저장 누르면 최종적으로 추가관리자가 저장됨
         -->
-
+        <!-- 
+            window.open(첫번째, 두번째, 세번째);
+            첫번째 : 새 창에서 열고자 하는 url주소
+            두번째 : 창 이름(target), 창 이름이 같은게 이미 열려있을 경우 새 창이 열리지 않고 기존의 창이 새로고침됨
+            세번째 : 새창의 너비, 높이, 주소창의 여부, 툴바여부, 스크롤바 여부 등등 새로운 창의 특성(브라우저마다 적용범위 다름)
+        -->
        <script>
              
             var newWindow;
             function openAddressWindow(){
                 newWindow = window.open("${pageContext.request.contextPath}/addressAdmin.ad", "addressWindow", "height=700, width=1100");
             }
-
+			
+            /* 자식창으로부터 전달된 정보  */
             function sendMeData(data){                   
-                console.log(data);
+                //console.log(data);
                 $("#adminList").append(data);           
                
             }

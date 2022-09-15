@@ -277,7 +277,7 @@ public class AddressController {
 	}
 	
 	// 쪽지보내기용 주소록
-	@RequestMapping("addresssNote.ad")
+	@RequestMapping("addressNote.ad")
 	public String addressNote() {
 		return "address/addressNote";
 	}
