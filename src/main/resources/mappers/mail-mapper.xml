@@ -49,7 +49,7 @@
 		<result column="sig_no" property="sigNo"/>
 		<result column="emp_no" property="empNo"/>
 		<result column="sig_name" property="sigName"/>
-		<result column="sig_department" property="sigDepartment"/>
+		<result column="sig_dep" property="sigDepartment"/>
 		<result column="sig_position" property="sigPosition"/>
 		<result column="sig_address" property="sigAddress"/>
 		<result column="sig_extension" property="sigExtension"/>
