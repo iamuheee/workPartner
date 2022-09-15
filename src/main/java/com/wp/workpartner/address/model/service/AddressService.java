@@ -1,6 +1,7 @@
 package com.wp.workpartner.address.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.wp.workpartner.address.model.vo.Department;
 import com.wp.workpartner.address.model.vo.MyAddress;
@@ -54,10 +55,10 @@ public interface AddressService {
 	int deleteGp(int groupNo);
 	
 	// 14. 연락처 개별 삭제
-	int deleteAddOne(int addressNo);
+	int deleteAddOne(String addressNo);
 	
-	// 15. 연락처 다중 삭제
-	//int deleteAddOne
+	// 15. 연락처 다중선택 삭제
+	int deleteAddGp(HashMap<String, Object> map);
 		
 	
 }

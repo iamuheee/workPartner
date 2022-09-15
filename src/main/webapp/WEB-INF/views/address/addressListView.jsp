@@ -70,7 +70,7 @@
                     <li>
                         <div class="rowInline">
                             <span class="fontsize16"><b>내 연락처</b></span> &nbsp;&nbsp;&nbsp;
-                            <span  data-toggle="modal" data-target="#addGp">
+                            <span  data-toggle="modal" onclick='$("#addGp").modal("show");'>
                              +
                             </span>
                         </div>
@@ -104,14 +104,14 @@
 
                 <!-- 메일보내기 및 삭제 다중선택-->
                 <br>
-                <div>
+                <div id="deleteGroupArea">                
                     &nbsp;
-                    <input type="checkbox" name="" id="cbx_chkAll" onclick=""> &nbsp;
+                    <input type="checkbox" name="" id="cbx_chkAll"> &nbsp;
 
                     <!-- <a class="btn btn-sm btn-primary">메일보내기</a> -->
                     <!-- 내연락처일때만 삭제기능 -->
                     <!-- 삭제 > 모달 > 기능 정보넘기는거 어렵다면 그냥 모달창 띄우지말고 바로 삭제처리 -->
-                    <button id="deleteFeat" class="btn btn-sm btn-secondary" onclick="">삭제</button>                      
+                    <button id="deleteFeat" type="button" class="btn btn-sm btn-secondary deleteAddGroup" onclick="deleteAddGroup();">삭제</button>                      
 
                 </div>
                 
@@ -131,7 +131,7 @@
                 <!-- 내연락처에만 있는 삭제/ 편집기능-->
                 <div id="myAddChoiceArea" style="visibility:hidden;">                
                     <button type="button" class="btn btn-sm btn-warning openAddEdit" data-toggle="modal" data-target="#addressEdit">편집</button>
-                    <a type="button" class="btn btn-sm btn-secondary deleteAddOne" onclick="deleteAdd();">삭제</a>      
+                    <button type="button" class="btn btn-sm btn-secondary deleteAddOne" onclick="deleteAdd();">삭제</button>      
                 </div> 
                 
                
@@ -233,9 +233,6 @@
                                             <th>그룹</th>
                                             <td>
                                                 <select name="groupNo" class="formInput">
-                                                    <option value="7">구디쓰주식회사</option>
-                                                    <option value="6">구디물산</option>
-                                                    <option value="5">그룹미지정</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -253,28 +250,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 내연락처 다중선택 삭제 Modal -->
-            <div class="modal fade" id="addressDelete" tabindex="-1" aria-labelledby="addressDeleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addressDeleteModalLabel">내 연락처삭제</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            4개를 내 연락처에서 삭제하시겠습니까?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-sm btn-danger">연락처삭제</button>
-                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
-                        </div>
-                    </div>
-                </div>
-            </div> 
-                     
+                                
             <!-- 내연락처 편집 Modal -->
             <div class="modal fade" id="addressEdit" tabindex="-1" aria-labelledby="addressEditModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -331,9 +307,6 @@
                                             <th>그룹</th>
                                             <td>
                                                 <select name="groupNo" class="formInput">
-                                                    <option value="7">구디쓰주식회사</option>
-                                                    <option value="6">구디물산</option>
-                                                    <option value="5">그룹미지정</option>
                                                 </select>
                                             </td>
                                         </tr> 
@@ -359,21 +332,22 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="addGpModalLabel">그룹추가</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close" onclick='$("#addGp").modal("hide");' aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            <form align="center" class="inputStyle" action="insertGp.ad" method="post">
-                                <input type="hidden" name="employeeNo" value="${loginUser.empNo }">
-                                <table align="center">
-                                    <tr>
-                                        <td><input type="text" name="groupName" placeholder="그룹명을 입력해주세요" required></td>
-                                        <td><button type="submit" class="btn btn-sm btn-primary">등록</button></td>
-                                        <td><button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button></td>
-                                    </tr>
-                                </table>                               
-                            </form>
+                        <div class="modal-body">                            
+                           
+                           <table align="center" id="addGpTb">
+                               <tr>
+                               	   <input type="hidden" id="employeeNo" name="employeeNo" value="${loginUser.empNo }">
+                                   <td><input type="text" id="groupName" name="groupName" placeholder="그룹명을 입력해주세요" required></td>
+                                   <td><button type="button" class="btn btn-sm btn-primary" onclick="ajaxAddGp();">등록</button></td>
+                                   <td><button type="button" class="btn btn-sm btn-secondary" onclick='$("#addGp").modal("hide");'>취소</button></td>
+                               </tr>
+                           </table>                               
+                          
+                            <!-- form submit 말고 등록버튼 클릭시 ajax로 insert하게끔 success function에서 $("#addGp").modal("hide"); -->
                         </div>
                         <div class="modal-footer">                      
                         
@@ -388,24 +362,24 @@
                     <div class="modal-content">
                         <div class="modal-header" >   
                             <h5 class="modal-title" id="addGpModalLabel">그룹수정</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close" onclick="$('#editGp').modal('hide');" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>                     
                         </div>
-                        <div class="modal-body">
-                            <form action="updateGp.ad" method="post" class="inputStyle">
-                                <input type="hidden" name="employeeNo"  value="${loginUser.empNo }">
-                                <input type="hidden" name="groupNo" id="groupNo" value="">
-                                <table align="center">
-                                    <tr>
-                                        <td>
-                                            <input type="text" name="groupName" id="groupName"  value="" required>
-                                        </td>
-                                        <td><button type="submit" class="btn btn-sm btn-primary">수정</button></td>
-                                        <td><button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button></td>
-                                    </tr>
-                                </table>                              
-                            </form>
+                        <div class="modal-body" id="updateGpModalBd">        
+                                            
+                             <input type="hidden" name="employeeNo"  value="${loginUser.empNo }">
+                             <input type="hidden" name="groupNo" id="groupNo" value="">
+                             <table align="center">
+                                 <tr>
+                                     <td>
+                                         <input type="text" name="groupName" id="groupName"  value="" required>
+                                     </td>
+                                     <td><button type="button" class="btn btn-sm btn-primary" onclick="ajaxEditGp();">수정</button></td>
+                                     <td><button type="button" class="btn btn-sm btn-secondary" onclick="$('#editGp').modal('hide');">취소</button></td>
+                                 </tr>
+                             </table>                             
+                           
                         </div>
                         <div class="modal-footer">                        
                         </div>
@@ -475,22 +449,7 @@
                 </div>
             </div>
             
-            <script>
-                $(document).ready(function() {
-                    $("#cbx_chkAll").click(function() {
-                        if($("#cbx_chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
-                        else $("input[name=chk]").prop("checked", false);
-                    });
-
-                    $("input[name=chk]").click(function() {
-                        var total = $("input[name=chk]").length;
-                        var checked = $("input[name=chk]:checked").length;
-
-                        if(total != checked) $("#cbx_chkAll").prop("checked", false);
-                        else $("#cbx_chkAll").prop("checked", true); 
-                    });
-                }); 
-            </script>
+           
 
         </div>
         
@@ -550,15 +509,32 @@
             			$("#editGp #groupNo").val($(this).parent().siblings("#groupValues").children().eq(1).val());
             		})
             		
-            		// 그룹삭제 시 필요한 그룹번호 넘기기 + a태그 htrf
+            		// 그룹삭제 ajax
             		$(document).on("click", "#subAddMenu .deleteAddGp", function(){  
             			if(confirm("그룹과 연락처 모두 삭제됩니다. 삭제하시겠습니까?")){
-            				let url = 'deleteGp.ad?groupNo=' +  $(this).parent().siblings("#groupValues").children().eq(1).val();
-                			$(this).attr("href", url);   
+            				let groupNo= $(this).parent().siblings("#groupValues").children().eq(1).val();
+            				
+            				$.ajax({
+            					
+            					url:"deleteGp.ad",
+            					data:{
+            						groupNo:groupNo
+            					},
+            					success:function(result){
+            						if(result == 'success'){
+            							selectGpList();
+            							$("#tableArea").html("");
+            						}            						
+            					},
+            					error:function(){
+            						console.log("그룹삭제 ajax실패");
+            					}
+            					
+            				})
+                			 
             			}         			
             		})
-            		
-            		
+                        		
             	})
             	
             	// 부서별 목록 ajax
@@ -600,7 +576,7 @@
             			},
             			success:function(list){            				
             				let value = "";
-            				
+            				let optionVal = "";
             				for(let i=0; i<list.length; i++){
             					  value += '<li>'
                            				 +	  '<div class="btn-group dropright btnPadding">'
@@ -614,16 +590,24 @@
                                           	 +	    	 '፧'
                                       		 +   '</button>'
                                      		 +   '<div class="dropdown-menu">'                                
-                                          	 +   	 	'<button type="button" class="dropdown-item fontsize13 editGpOpen" data-toggle="modal" data-target="#editGp">그룹수정</button>'
-                                          	 +     		'<a class="dropdown-item fontsize13 deleteAddGp">그룹삭제</a>' 
+                                          	 +   	 	'<button type="button" class="dropdown-item fontsize13 editGpOpen" data-toggle="modal" onclick="' + "$('#editGp').modal('show');\"" + '>그룹수정</button>'
+                                          	 +     		'<button type="button" class="dropdown-item fontsize13 deleteAddGp">그룹삭제</a>' 
                                      		 +   '</div>';
                                 		 }
                               		 
                                 	value +=  '</div>'
                         				  + '</li>';
+                        				  
+                        			optionVal += '<option value="' + list[i].groupNo + '">' + list[i].groupName + '</option>';	  
                         				 
-            				}            				 
-                        		$("#subAddMenu").html(value);	                        		
+            				}      
+            				
+            				
+                        		$("#subAddMenu").html(value);	
+                        		
+                        		// 새연락처등록 , 연락처 편집에서 select 그룹선택  option값이 내가 그룹목록조회때마다 실시간 반영될것
+                        		$("select[name=groupNo]").html(optionVal);
+                        		
             			},
             			error:function(){
             				console.log("내연락처 목록용 ajax실패");
@@ -644,7 +628,7 @@
             			success : function(result){
             				
             				let value="";
-            					 value += '<table class="table" id="dataCompanyTable">'
+            					 value += '<table class="table" id="dataCompanyTable" depCd="'+ selectDepCd +'">'
     	                               +	'<thead>'
     	                               +         '<tr>'
     	                              /*  + 				'<th style="width: 15px;"></th>' */
@@ -847,7 +831,7 @@
             				}else{
             					for(let i=0; i<list.length; i++){
             						value += 		'<tr>'
-                                        	+ 			'<td><input type="checkbox" name="chk"></td>'
+                                        	+ 			'<td><input type="checkbox" name="chk" value="'+ list[i].addressNo  +'"></td>'
                                         	+			'<td>'
                                             +				'<span class="';
                                     if(list[i].addressStar == 'Y'){
@@ -1057,12 +1041,12 @@
                 					
        						if(list.length == 0){
             					value += "<tr>"
-            							+	"<td colspan='8'>등록된 연락처가 없습니다.</td>"            						
+            							+	"<td colspan='9'>등록된 연락처가 없습니다.</td>"            						
             							+"</tr>";
             				}else{
             					for(let i=0; i<list.length; i++){
             						value += 		'<tr>'
-                                        	+ 			'<td><input type="checkbox" name="chk"></td>'
+                                        	+ 			'<td><input type="checkbox" name="chk" value="'+ list[i].addressNo +'"></td>'
                                         	+			'<td>'
                                             +				'<span class="';
                                     if(list[i].addressStar == 'Y'){
@@ -1153,17 +1137,156 @@
             		
             	}
             	
+            	// 그룹 수정용 ajax
+            	function ajaxEditGp(){
+            		let groupNo =  $("#editGp #updateGpModalBd").find("#groupNo").val();
+            		let groupName = $("#editGp table").find("#groupName").val();
+            		
+            		$.ajax({
+            			url: "updateGp.ad",
+            			data:{
+            				groupNo:groupNo,
+            				groupName:groupName
+            			},
+            			success:function(result){
+            				if(result == 'success'){
+            					// 처리 후 모달창 닫기
+            					$('#editGp').modal('hide');
+            					// 연락처 목록 조회
+            					selectGpList(); 
+            				}
+            			},
+            			error:function(){
+            				console.log("그룹수정용 ajax실패");
+            			}
+            		})
+            	}
+            	
+            	// 그룹등록용 ajax
+            	function ajaxAddGp(){
+            		let employeeNo = $("#addGpTb").find("#employeeNo").val();
+            		let groupName = $("#addGpTb").find("#groupName").val();
+            		$.ajax({
+            			url:"insertGp.ad",
+            			data:{
+            				employeeNo:employeeNo,
+            				groupName:groupName
+            			},
+            			success:function(result){
+            				if(result == "success"){
+            					// 처리 후 모달창 닫기 + 비워주기
+            					$("#addGpTb").find("#groupName").val("");
+            					$('#addGp').modal('hide');
+            					// 연락처 목록 조회
+            					selectGpList(); 
+            				}
+            			},
+            			error:function(){
+            				console.log("그룹등록용 ajax 실패");
+            			}
+            		})
+            	}
+            	
             	<!--==================================== 삭제용 script ======================================= -->
                              
                 //내연락처 상세보기 삭제 
                 function deleteAdd(){
                     if(confirm("해당 연락처를 삭제하시겠습니까?")){
-						let url = "deleteAdd.ad?addressNo=" + $("#adDetailTb .no").val();
+						//let url = "deleteAdd.ad?addressNo=" + $("#adDetailTb .no").val();
 						//console.log($("#adDetailTb .no").val());
-						$(".deleteAddOne").attr("href", url);						
+						//$(".deleteAddOne").attr("href", url);	
+						let addressNo = $("#adDetailTb .no").val(); 
+						$.ajax({
+							url:"deleteAdd.ad",
+							data:{ addressNo:addressNo								
+							},
+							success:function(result){
+								if(result == "success"){
+                    				
+                    				// 각각의 테이블 조회하는 ajax 호출
+                    				if($("#tableArea>table").is("#dataStarAddTable")){                					
+                    					selectStarAdd();
+                    				}else{
+                    					let groupNo = $("#dataAddTable").attr("groupNo");
+                    					//console.log(groupNo);
+                    					selectAddTbList(groupNo);
+                    				}
+                    				// 상세보기 영역 비워주기
+                    				$("#adDetailTb").html("삭제된 연락처정보 입니다.");
+                    			  }    
+							},
+							error:function(){
+                				console.log("개별연락처 삭제 ajax 실패");
+                			}
+						})
                     }
-                }   
+                }
                 
+               // 다중선택 연락처 삭제 1-1 check된 항목들의 연락처 번호를 담고, 만약 체크 안한 상태로 삭제버튼 클릭시 안넘어가도록 조건 처리
+               function deleteAddGroup(){
+                	var arr = new Array();
+                	$("input[name='chk']:checked").each(function(){
+                		arr.push(($(this).val()));                		
+                	});
+                	
+                	if(arr.length > 0){
+                		ajaxDeleteAddGroup(arr);
+                	}else{
+                		alert("연락처를 선택해주세요");
+                	}
+                	
+                	
+                } 
+                
+                function ajaxDeleteAddGroup(arr){
+                	if(confirm("연락처를 삭제하시겠습니까?")){
+                		$.ajax({
+                    		url : "deleteAdds.ad",
+                    		// ajax에서 배열의 값을 java단으로 넘기고 싶을땐 꼭해줘야함!!
+                    		traditional:true,
+                    		data : {
+                    			addArr:arr
+                    		},
+                    		success:function(result){
+                    			if(result == "success"){
+                    				
+                    				// 각각의 테이블 조회하는 ajax 호출
+                    				if($("#tableArea>table").is("#dataStarAddTable")){                					
+                    					selectStarAdd();
+                    				}else{
+                    					let groupNo = $("#dataAddTable").attr("groupNo");
+                    					//console.log(groupNo);
+                    					selectAddTbList(groupNo);                    					
+                    				}
+                    				
+                    				// 선택된게 있을수있으니 상세정보영역 비워주기
+                    				$("#adDetailTb").html("");
+                    				
+                    			  }               				
+                    			
+                    		},
+                    		error:function(){
+                				console.log("다중선택 연락처 삭제 ajax 실패");
+                			}
+                    	})
+                	}
+                }
+                
+                <!--==================================== 다중선택 전체선택 script ======================================= -->
+                $(document).ready(function() {
+                    $("#cbx_chkAll").click(function() {
+                        if($("#cbx_chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
+                        else $("input[name=chk]").prop("checked", false);
+                    });
+
+                    $("input[name=chk]").click(function() {
+                        var total = $("input[name=chk]").length;
+                        var checked = $("input[name=chk]:checked").length;
+
+                        if(total != checked) $("#cbx_chkAll").prop("checked", false);
+                        else $("#cbx_chkAll").prop("checked", true); 
+                    });
+                }); 
             </script>
 		
 </body>

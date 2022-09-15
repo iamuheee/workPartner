@@ -1,6 +1,7 @@
 package com.wp.workpartner.address.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -92,7 +93,11 @@ public class AddressDao {
 		return sqlSession.delete("addressMapper.deleteGp", groupNo);
 	}
 	
-	public int deleteAddOne(SqlSessionTemplate sqlSession, int addressNo) {
+	public int deleteAddOne(SqlSessionTemplate sqlSession, String addressNo) {
 		return sqlSession.update("addressMapper.deleteAddOne", addressNo);
+	}
+	
+	public int deleteAddGp(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+		return sqlSession.delete("addressMapper.deleteAddGp", map);
 	}
 }

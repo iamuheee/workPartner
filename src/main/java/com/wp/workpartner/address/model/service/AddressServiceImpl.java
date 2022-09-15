@@ -1,8 +1,8 @@
 package com.wp.workpartner.address.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import org.apache.ibatis.session.SqlSessionManager;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -120,8 +120,14 @@ public class AddressServiceImpl implements AddressService {
 	
 	// 내 연락처 개별 삭제
 	@Override
-	public int deleteAddOne(int addressNo) {
+	public int deleteAddOne(String addressNo) {
 		return adDao.deleteAddOne(sqlSession, addressNo);
+	}
+
+	// 내 연락처 다중 선택 삭제
+	@Override
+	public int deleteAddGp(HashMap<String, Object> map) {
+		return adDao.deleteAddGp(sqlSession, map);
 	}
 	
 

@@ -2,6 +2,7 @@ package com.wp.workpartner.address.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -171,6 +172,12 @@ public class AddressController {
 		
 	}
 	
+	/** 새 연락처 등록
+	 * @param myAdd 연락처 정보
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("insertAd.ad")
 	public String insertAdd(MyAddress myAdd, HttpSession session, Model model) {
 		
@@ -185,52 +192,109 @@ public class AddressController {
 		
 	}
 	
+	/** 새 내 연락처 그룹 추가
+	 * @param myGp 그룹명, 등록한 직원번호	
+	 */
+	@ResponseBody
 	@RequestMapping("insertGp.ad")
-	public String insertGp(MyGroup myGp, HttpSession session, Model model) {
+	public String insertGp(MyGroup myGp) {
 		int result = adService.insertGp(myGp);
-		if(result > 0) {
-			session.setAttribute("alertMsg", "성공적으로 등록되었습니다.");
-			return "redirect:list.ad";
-		}else {
-			model.addAttribute("errorMsg", "등록실패");
-			return "common/error";
-		}
+		return result > 0? "success" : "fail";
 		
 	}
 	
+	/** 그룹명 수정
+	 * @param myGp 그룹번호	
+	 * @return
+	 */
+	@ResponseBody
 	@RequestMapping("updateGp.ad")
-	public String updateGp(MyGroup myGp, HttpSession session, Model model) {
+	public String updateGp(MyGroup myGp) {
 		int result = adService.updateGp(myGp);
-		if(result > 0) {
-			session.setAttribute("alertMsg", "성공적으로 그룹명이 수정되었습니다.");
-			return "redirect:list.ad";
-		}else {
-			model.addAttribute("errorMsg", "수정실패");
-			return "common/error";
-		}
+		return result > 0? "success" : "fail";
 	}
 	
+	/** 그룹삭제
+	 * @param groupNo 그룹번호
+	 * @return
+	 */
+	@ResponseBody
 	@RequestMapping("deleteGp.ad")
-	public String deleteGp(int groupNo, HttpSession session, Model model) {
+	public String deleteGp(int groupNo) {
 		int result = adService.deleteGp(groupNo);
-		if(result > 0) {
-			session.setAttribute("alertMsg", "성공적으로 그룹명이 삭제되었습니다.");
-			return "redirect:list.ad";
-		}else {
-			model.addAttribute("errorMsg", "삭제실패");
-			return "common/error";
-		}
+		return result > 0? "success" : "fail";
 	}
 	
+	/** 내 연락처 개별 삭제
+	 * @param addressNo 연락처 번호
+	 * @return
+	 */
+	@ResponseBody
 	@RequestMapping("deleteAdd.ad")
-	public String deleteAddOne(int addressNo, HttpSession session, Model model) {
+	public String ajaxDeleteAddOne(String addressNo) {
 		int result = adService.deleteAddOne(addressNo);
-		if(result > 0) {
-			session.setAttribute("alertMsg", "성공적으로 연락처가 삭제되었습니다.");
-			return "redirect:list.ad";
-		}else {
-			model.addAttribute("errorMsg", "삭제실패");
-			return "common/error";
-		}
+		return result > 0 ? "success" : "fail";
 	}
+	
+	/** 다중선택 연락처 삭제
+	 * @param addArr 연락처번호들
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("deleteAdds.ad")
+	public String ajaxDeleteAddGroup(String[] addArr) {
+				
+		/* 이렇게 sql문을 반복실행하는것보단
+		int result = 0;
+		for(String addressNo: addArr) {
+			result = adService.deleteAddOne(addressNo);
+		}	
+		*/
+		
+		/* 이용할 동적 sql문 => 마이바티스 홈페이지 동적 sql foreach 참조
+		 * delete from tb_my_address
+		 * where address_no in (20, 21)
+		 * 
+		 */
+		// 주의 => 그럼 화면상에서 체크박스 선택 안 할 시 삭제버튼 못누르게 해줘야함 => 안그러면 저 sql구문상 전체data가 삭제처리됨
+		// map을 dao까지 쭉 넘기고 sql문 까지 넘기기
+		// collection="addArr"로 하면된다 (map에 key값한)
+		//hashMap 담지않고 collection="addArr"하면 안 됨!!
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("addArr", addArr);
+		
+		int result = adService.deleteAddGp(map);
+		
+		return result > 0 ? "success" : "fail";	
+		
+	}
+	
+	// 공지사항관리자 주소록
+	@RequestMapping("adressAdmin.ad")
+	public String addressAdminNotice() {
+		return "address/addressAdminNotice";
+	}
+	
+	// 쪽지보내기용 주소록
+	@RequestMapping("addresssNote.ad")
+	public String addressNote() {
+		return "address/addressNote";
+	}
+	
+	// 받는사람 이메일용 주소록
+	@RequestMapping("addressEmail.ad")
+	public String addressEmail() {
+		return "address/addressEmail";
+	}
+	
+	// CC용 이메일용 주소록
+	@RequestMapping("addressEmailCC.ad")
+	public String addressEmailCC() {
+		return "address/addressEmailCC";
+	}
+	
+	
+	
+	
 }
