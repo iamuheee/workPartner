@@ -196,7 +196,7 @@
     <script>
        
         function showPopup4() {
-        	 vacation = window.open("cooperationEnrollForm.bo", "btn", "width=825, height=800");
+        	 vacation = window.open("coopEnrollForm.bo", "btn", "width=825, height=800");
              vacation.moveTo(560,120);
              vacation.focus();
             }
@@ -213,10 +213,10 @@
                 </span>
             </div>
             <div class="dPaperBtn" align="center">
-                <button class="vacation" onclick="showPopup();">연차 신청서</button>
-                <button class="outWork" onclick="showPopup2();">외근 신청서</button>
-                <button class="reSignEmp" onclick="showPopup3();">퇴직원 신청서</button>
-                <button class="cooperation" onclick="showPopup4();">업무협조 신청서</button>
+                <button class="vacation" onclick="showPopup();" name="vacation">연차 신청서</button>
+                <button class="outWork" onclick="showPopup2();" name="outWork">외근 신청서</button>
+                <button class="reSignEmp" onclick="showPopup3();" name="reSign">퇴직원 신청서</button>
+                <button class="cooperation" onclick="showPopup4();" name="coop">업무협조 신청서</button>
             </div>
         </div>
     </div>

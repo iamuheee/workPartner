@@ -429,7 +429,7 @@
 	                                   <div class="collapse" id="pagesCollapseApproval1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
 	                                       <nav class="sb-sidenav-menu-nested nav">
 	                                           <a class="nav-link nav-choice" href="">결재할기안서 </a>
-	                                           <a class="nav-link nav-choice" href="">결제완료</a>                                         
+	                                           <a class="nav-link nav-choice" href="">결재완료</a>                                         
 	                                       </nav>
 	                                   </div>
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseApproval2" aria-expanded="false" aria-controls="pagesCollapseApproval2">
@@ -439,7 +439,7 @@
 	                                   <div class="collapse" id="pagesCollapseApproval2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
 	                                       <nav class="sb-sidenav-menu-nested nav">
 	                                           <a class="nav-link nav-choice" href="">결재할기안서 </a>
-	                                           <a class="nav-link nav-choice" href="">결제완료</a>                                         
+	                                           <a class="nav-link nav-choice" href="">결재완료</a>                                         
 	                                       </nav>
 	                                   </div>
 	                               </nav>
@@ -517,7 +517,7 @@
 	                   
 	               </nav>
 	           </div>
-	           
+	           <jsp:include page="../sign/dtpaperSignList.jsp"/>
 	           <!-- content 영역-->
 	           <div id="layoutSidenav_content">
 	               <main class="mainOuter">

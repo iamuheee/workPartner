@@ -284,7 +284,7 @@ input, select, textarea {
     </script>
     <section>
         <div>
-            <h1 class="dtpaperName">XX 신청서 - <span style="font-weight:lighter;">김종군(영업부)</span></h1>
+            <h1 class="dtpaperName">${ paperName } 신청서 - <span style="font-weight:lighter;">김종군(영업부)</span></h1>
             <hr>
         </div>
     </section>
@@ -309,8 +309,9 @@ input, select, textarea {
             <table align="center">
                 <tr class="titleSection">
                     <th style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);">제목</th>
-                    <td align="left" style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);"><span
-                            style="margin-left:10px;">외근신청서 결재 부탁드립니다.</span></td>
+                    <td align="left" style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);">
+                    <input type="text" style="margin-left:10px;">
+                    </td>
                 </tr>
                 <tr style="border-top:0.5px solid rgba(143, 143, 143, 0.547);">
                     <th>첨부파일</th>
