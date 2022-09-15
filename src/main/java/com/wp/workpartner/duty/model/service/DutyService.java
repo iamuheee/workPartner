@@ -9,14 +9,13 @@ import com.wp.workpartner.duty.model.vo.Duty;
 import com.wp.workpartner.duty.model.vo.DutyCharge;
 
 public interface DutyService {
-	// ** 고민 **
-	// 개인 업무와 프로젝트 업무 Controller, Service, Dao를 퉁쳐서 쓸 수는 없을까?
 	
 	// 업무 게시글 작성 : 파일 有
-	int insertDutyWithFile(Duty d, String empIC, File f);
+	int insertDutyWithFile(Duty d, File f);
 	
 	// 업무 게시글 작성 : 파일 無
-	int insertDutyWithoutFile(Duty d, String empIC);
+	int insertDutyWithoutFile(Duty d);
+	
 	
 	// 업무 게시글 리스트 조회 (+페이징)
 	int selectDutyListCount();
@@ -31,6 +30,7 @@ public interface DutyService {
 	
 	// 업무 게시글 삭제
 	int deleteDuty(int dutyNo);
+	
 	
 	// 업무 게시글 댓글 작성 (ajax)
 	int insertDutyComment(Comment c);

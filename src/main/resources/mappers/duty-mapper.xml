@@ -41,16 +41,18 @@
 		     ) 
 	</insert>
 	
-	<select id="selectDutyCharge" resultMap="dutyChargeResult">
-		SELECT
-			   EMP_NO
-			 , EMP_NAME
-		  FROM TB_EMPLOYEE
-		 WHERE EMP_NO IN ?
-	</select>
-	
 	<!-- TB_DUTY_CHARGE 테이블에도 담당자 정보 INSERT 해야함 -->
-	<insert id="insertDutyCharge"></insert>
+	<insert id="insertDutyCharge">
+		INSERT
+		  INTO TB_DUTY_CHARGE
+		VALUES
+			 (
+			   SEQ_DNO.CURRVAL
+			 , #{empNo}
+			 , #{empName}
+			 )
+			 
+	</insert>
 	
 	<insert id="insertFile">
 		INSERT

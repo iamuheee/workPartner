@@ -47,10 +47,10 @@ public class DutyController {
 	 * @return "detail.du?no=등록된업무번호" 
 	 */
 	@RequestMapping("insert.du")
-	public String insertDuty(Duty d, MultipartFile upfile, String empIC, HttpSession session, Model m) {
+	public String insertDuty(Duty d, MultipartFile upfile, HttpSession session, Model m) {
 		// 공통적으로 필요한 DDL
 		// TB_DUTY 테이블에 대한 INSERT문 : Duty d 필요
-		// TB_DUTY_CHARGE 테이블에 대한 INSERT문 : dutyNo, empIC 필요 <- Duty d에 담겨있음 / 담당자 사원의 이름은 SELECT문으로 조회해야 함
+		// TB_DUTY_CHARGE 테이블에 대한 INSERT문 : int dutyNo, ArrayList<DutyCharge> empIC 필요 <- Duty d에 담겨있음 / 담당자 사원의 이름은 SELECT문으로 조회해야 함
 		
 		// 첨부파일 있는 경우, TB_FILE에 대한 INSERT문 : File f 필요 ( == File.uploadFile)
 		
@@ -60,11 +60,9 @@ public class DutyController {
 		int result = 0; 
 		
 		if(upfile != null) {
-			// 첨부파일 있는 경우
-			result = dService.insertDutyWithFile(d, empIC, File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/")) );
+			result = dService.insertDutyWithFile(d, File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/")) );
 		}else {
-			// 첨부파일 없는 경우
-			result = dService.insertDutyWithoutFile(d, empIC);
+			result = dService.insertDutyWithoutFile(d);
 		}
 		
 		if(result > 0) {
@@ -87,7 +85,9 @@ public class DutyController {
 		int listCount = dService.selectDutyListCount();
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
 		String empNo = ((Employee)session.getAttribute("loginUser")).getEmpNo(); // 세션에서 loginUser의 사번 받기
+																				 // 그룹웨어이므로 empNo == null이면 아예 이 링크를 접근할 수 없도록 함
 		
+		mv.addObject("dlist", dService.selectDutyList(pi, empNo)).addObject("pi", pi).setViewName("duty/dutyListView");
 		return mv;
 	}
 	
@@ -97,7 +97,7 @@ public class DutyController {
 	 * @return Duty
 	 */
 	@RequestMapping("detail.du")
-	public ModelAndView selectDuty(ModelAndView mv, int no) {
+	public ModelAndView selectDuty(ModelAndView mv, @RequestParam(value="no")int no) {
 		Duty d = dService.selectDuty(no);
 
 		if(d != null) {

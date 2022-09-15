@@ -28,7 +28,7 @@ public class DutyServiceImpl implements DutyService {
 	// 아래부터 Override된 메소드
 
 	@Override
-	public int insertDutyWithFile(Duty d, String empIC, File f) {
+	public int insertDutyWithFile(Duty d, File f) {
 		// TB_DUTY, TB_DUTY_CHARGE, TB_FILE에 각각 INSERT문 실행
 		// 단, TB_DUTY_CHARGE, TB_FILE에는 DUTY_NO가 필요하므로 TB_DUTY를 먼저 변화시켜야 외래키로 쓸 수 있음
 		
@@ -38,9 +38,8 @@ public class DutyServiceImpl implements DutyService {
 		
 		int result1 = dDao.insertDuty(sqlSession, d);
 		
-		ArrayList<DutyCharge> list = dDao.selectDutyCharge(sqlSession, empIC);
 		int result2 = 0;
-		for(DutyCharge dc : list) {
+		for(DutyCharge dc : d.getEmpIC()) {
 			result2 *= dDao.insertDutyCharge(sqlSession, dc);
 		}
 		
@@ -51,12 +50,11 @@ public class DutyServiceImpl implements DutyService {
 	
 	
 	@Override
-	public int insertDutyWithoutFile(Duty d, String empIC) {
+	public int insertDutyWithoutFile(Duty d) {
 		int result1 = dDao.insertDuty(sqlSession, d);
 		
-		ArrayList<DutyCharge> list = dDao.selectDutyCharge(sqlSession, empIC);
 		int result2 = 0;
-		for(DutyCharge dc : list) {
+		for(DutyCharge dc : d.getEmpIC()) {
 			result2 *= dDao.insertDutyCharge(sqlSession, dc);
 		}
 		return result1 * result2;

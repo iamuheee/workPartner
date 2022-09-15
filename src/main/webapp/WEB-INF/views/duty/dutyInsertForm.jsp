@@ -43,7 +43,7 @@
             background-color: lightgray;
             font-size: 12px;
         }
-        .list-mem li{
+        #list-mem li{
             display:inline;
             list-style: none;
             margin-right:10px;
@@ -106,20 +106,22 @@
             
             <div class="setting-left">
                 <span class="title">담당자</span><br>
+                <span style="padding: 10px;">담당자는 최대 3명까지 설정할 수 있습니다.</span>
                 <button type="button" class="btn btn-sm btn-primary" id="search-emp">담당자 검색</button> <!-- 주소록 띄우는 버튼 -->
+                <input type="hidden" id="identifier" value="duty"> 
                 <input type="hidden" name="empIC" value="2,3,4,">
-                <!-- 주소록 만들어봐야 알지만 -->
-                <!-- 담당자의 사번을 ,로 이어서 Controller에 넘기기 => IN(?,?,?)으로 담당자 조회할 수 있도록 -->
-                <!-- 아래의 li요소들은 동적 요소로 for문 돌려 만들어야 할듯../??  -->
-                <ul class="list-mem">
-                    <li>
-                        <span>김개똥</span>
+                
+                <ul id="list-mem">
+                <!-- 
+                반복문 돌려서 동적으로 업무 담당자 ArrayList를 Duty의 한 필드로 넣기
+               	(dutyNo은 어차피 SEQ_DNO.CURRVAL로 채우면 되니까 여기서 필요 X)
+					<li>
+						<span>사원이름</span>
                         <button type="button" class="delete-emp">x</button>
-                    </li>
-                    <li>
-                        <span>김소똥</span>
-                        <button type="button" class="delete-emp">x</button>
-                    </li>
+		                <input type="hidden" name="empIC[i].empNo" value="자식창에서 받은 empNo값"> 
+		                <input type="hidden" name="empIC[o].empName" value="자식창에서 받은 empName값">
+					</li>               		
+                -->
                 </ul>
             </div>
             
@@ -135,7 +137,7 @@
             
             <div class="content">
                 <span class="title">업무 내용</span><br><br>
-                <textarea name="content" class="form-control" rows="10" required style="height:400px; width:100%; overflow:auto; resize:none;"></textarea>
+                <textarea name="content" id="summernote" class="form-control" rows="10" required style="height:400px; width:100%; overflow:auto; resize:none;"></textarea>
             </div>
             
             <br><br>
@@ -162,36 +164,108 @@
         </form>
     </div>
     
+    <!-- summerNote 관련 script-->
+	<script>
+	    $(document).ready(function() {
+	        //여기 아래 부분
+	        $('#summernote').summernote({
+	            height: 400px,                 // 에디터 높이
+	            focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+	            lang: "utf-8",					// 한글 설정
+	            placeholder: '내용을 입력해주세요',	//placeholder 설정                   
+	            toolbar: [
+	                    // 글꼴 설정
+	                    ['fontname', ['fontname']],
+	                    // 글자 크기 설정
+	                    ['fontsize', ['fontsize']],
+	                    // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
+	                    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+	                    // 글자색
+	                    ['color', ['forecolor','color']],
+	                    // 표만들기
+	                    ['table', ['table']],
+	                    // 글머리 기호, 번호매기기, 문단정렬
+	                    ['para', ['ul', 'ol', 'paragraph']],
+	                    // 줄간격
+	                    ['height', ['height']]
+	                ],
+	                // 추가한 글꼴
+	                fontNames: ['맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
+	                // 추가한 폰트사이즈
+	                fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36']
+	        });               
+	        
+	    });
+	</script>
+    
     
     <script>
-    	$(function(){
-	    	// 담당자 이름 옆 x 버튼 클릭시 발생하는 이벤트
-	    	// => 왜 안돼? 선언적 함수로 다시 써보기 혹시모르니까...
-	    	$(".delete-emp").click(function(){
-	    		$(this).parent("li").remove();
-	    	})    
+
+    	// 시작일 날짜로 오늘 이전 날짜 불가능하도록 만들기
+    	let year = new Date().getFullYear();
+    	let month = ('0' + (new Date().getMonth() + 1)).slice(-2);
+    	let date = ('0' + new Date().getDate()).slice(-2);
+   		$("input[name=startDate]").attr("min", year + '-' + month + '-' + date );
     	
-	    	// 시작일 날짜로 오늘 이전 날짜 불가능하도록 만들기
-	    	let year = new Date().getFullYear();
-	    	let month = ('0' + (new Date().getMonth() + 1)).slice(-2);
-	    	let date = ('0' + new Date().getDate()).slice(-2);
-    		$("input[name=startDate]").attr("min", year + '-' + month + '-' + date );
-	    	
-	    	// 마감일 날짜로 시작일 이전 날짜 불가능하도록 만드는 이벤트
-	    	$("input[name=startDate]").change(function(){
-	    		$("input[name=endDate]").attr("min", $(this).val());
-	    	})
-	    	
-	    	// #submit-btn 클릭시 발생하는 이벤트
-	    	$("#submit-btn").click(function(){
-	    		let $empIC = $("input[name=empIC]").val();
-	    		$empIC = $empIC.substr(0, $empIC.length - 1); // substr(시작인덱스, 개수)
-	    		console.log($empIC);
-	    		$("form").submit();
-	    	})
-	    	
+   		
+    	// 마감일 날짜로 시작일 이전 날짜 불가능하도록 만드는 이벤트
+    	$("input[name=startDate]").change(function(){
+    		$("input[name=endDate]").attr("min", $(this).val());
     	})
+    	
+    	
+    	// TB_DUTY의 TITLE 컬럼의 자료형은 VARCHAR2(500BYTE)임 -> 제목 란에 500BYTE 초과하게 적으면 막아줘야 함
+    	$("input[name=title]").keyup(function(){
+    		let totalByte = 0;
+    		for( let i=0; i< $(this).val().length; i++ ){
+	    		if( escape($(this).val().charAt(i)) > 4 ){ 
+	    			// escape("문자열") : 해당 문자열을 16진수로 반환, 아스키코드는 0x??의 4자리로 표현됨 (한글 등은 4자리 초과)
+	    			totalByte += 2;
+	    		}else{
+	    			totalByte++;
+    			}
+	    		
+				if(totalByte > 1000){
+	    			alert("최대 글자수를 초과하였습니다. 다시 입력해주세요.");
+	    			// 마지막 글자 삭제해주기
+					$(this).val().substring( 0, $(this).val().length - 1 );					
+				}	    			
+    		}
+    	})
+    	
+    	
+    	// #submit-btn 클릭시 발생하는 이벤트
+    	$("#submit-btn").click(function(){
+    		let $empIC = $("input[name=empIC]").val();
+    		$empIC = $empIC.substr(0, $empIC.length - 1); // substr(시작인덱스, 개수)
+    		$("form").submit();
+    	})
+    	
+    	
+		// 조직도 팝업 띄우는 함수
+		$("#search-emp").click(function(){
+			window.name = "parentWindow"
+			let childWindow; // 자식창
+			childWindow = window.open("addressAdmin.ad","childWindow", "height=700, width=1100, resizable=no, scrollbars=no");  
+		})
+	   	
+		// 담당자 이름 옆 x 버튼 클릭이벤트 발생시 해당 li요소 삭제
+		$(".delete-emp").click(function(){
+			$(this).parent("li").remove();
+	   	})
+
     </script>
+    	
+   	
+   	<script>
+		// 조직도 팝업에서 담당자에 대한 정보 넘겨받고, 반복문 돌려 li요소로 담당자들을 출력하는 함수 ( html(문자열) 이용 )
+		let liEl = ""; // for문 돌려가며 li요소 추가할 것임 (에이작스 석세스펑션처럼)
+		
+		   	
+   	</script>
+	    	
+	    	
+	    	
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="js/scripts.js"></script>

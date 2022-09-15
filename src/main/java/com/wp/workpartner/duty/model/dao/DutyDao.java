@@ -25,9 +25,6 @@ public class DutyDao {
 		return sqlSession.insert("dutyMapper.insertDuty", d);
 	}
 	
-	public ArrayList<DutyCharge> selectDutyCharge(SqlSessionTemplate sqlSession, String empIC){
-		return (ArrayList)sqlSession.selectList("dutyMapper.selectDutyCharge", "("+empIC+")");
-	}
 	
 	public int insertDutyCharge(SqlSessionTemplate sqlSession, DutyCharge dc) {
 		return sqlSession.insert("dutyMapper.insertDutyCharge", dc);
