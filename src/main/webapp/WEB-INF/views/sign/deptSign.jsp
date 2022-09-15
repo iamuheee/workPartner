@@ -44,13 +44,16 @@ table {
 #layoutSidenav_content {
 	font-family: 'Noto Sans KR', sans-serif;
 }
+.mainOuter{
+	margin-top:0 !important;
+}
 </style>
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"/>
 	
                 <c:choose>
-                    <c:when test="">
+                    <c:when test="${ flag == 'deptSign' }">
                         <div class="container-fluid px-4" style="margin-top: 30px;">
                             <div style="margin-bottom: 50px; line-height: 10px;">
                                 <ol class="breadcrumb mb-4" style="font-size:18px; width: 100%;">
