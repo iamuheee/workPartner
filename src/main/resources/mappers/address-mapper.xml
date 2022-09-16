@@ -77,7 +77,7 @@
 	
 	<select id="selectEmpAdList" resultMap="empResult">
 		 select 
-		         emp_no
+		          emp_no
 		        , emp_Id
 		        , emp_pwd
 		        , emp_name

@@ -60,6 +60,7 @@
 		<result column="rnum" property="rnum"/>
 	</resultMap>
 	
+	<!-- 등록된 서명 조회  -->
 	<select id="selectSigList" resultMap="sigResult">
 		SELECT ROWNUM RNUM, A.*
 	      FROM (
@@ -76,11 +77,104 @@
 	                  , sig_email
 	                  , sig_basic
 	              from  tb_signature 
-	             where emp_no = 5
+	             where emp_no = #{empNo}
 	               and sig_status = 'Y'
 	             ) A             
 	</select>
 	
+	<!-- 서명 삭제  -->
+	<update id="deleteSig">
+		update 
+		        tb_signature 
+		    set sig_status = 'N'
+		  where sig_no =  #{sigNo}	
+	</update>
+	
+	<!-- 기본서명 조회 -->
+	<select id="selectSigBasic" resultMap="sigResult">
+		    SELECT  sig_no
+	              , emp_no		      
+	              , sig_name
+	              , sig_dep
+	              , sig_position
+	              , CASE WHEN sig_address = 'N' THEN ' '
+	                WHEN sig_address = 'Y' THEN '서울특별시 금천구 가산디지털2로 115'
+	                END "sig_address"
+	              , sig_extension  
+	              , sig_tel
+	              , sig_email
+	              , sig_basic
+	          from  tb_signature 
+	         where emp_no = #{empNo}
+	           and sig_status = 'Y'
+	           and sig_basic = 'Y'
+	</select>
+			
+	<!-- 기본서명 갯수 조회  -->
+	<select id="selectBasicCount" resultType="_int">
+		    SELECT count(*)
+	          from tb_signature 
+	         where emp_no = #{empNo}
+	           and sig_status = 'Y'
+	           and sig_basic = 'Y'
+	</select>
+	
+	<!-- 기본설정된 서명이 없을 경우 실행 될 것  -->
+	<!-- rnum 1인 서명이 자동으로 기본으로 될 것 -->	
+	<update id="updateBasic">
+	  update
+             tb_signature
+         set sig_basic = 'Y'
+       where sig_no = ( 
+                       select sig_no
+                            from (
+                                    (
+                                     select *
+                                       from (
+                                          select ROWNUM RNUM, A.*
+                                            from (
+                                                  select  sig_no
+                                                        , emp_no
+                                                        , sig_basic
+                                                    from  tb_signature 
+                                                   where emp_no = #{empNo}
+                                                     and sig_status = 'Y'
+                                                   ) A
+                                              )
+                                        where  rnum = 1 
+                                       ) 
+                                   )
+                        )
+	
+	</update>
+	
+	<insert id="insertSig">
+		insert 
+		  into tb_signature
+		 	 (
+			  	sig_no
+	          , emp_no		      
+	          , sig_name
+	          , sig_dep
+	          , sig_position
+	          , sig_address           
+	          , sig_extension  
+	          , sig_tel
+	          , sig_email          	  
+		 	 )
+			  values
+			  (
+			    SEQ_SIGNO.nextval
+			  , #{empNo}
+			  , #{sigName}
+			  , #{sigDepartment}
+			  , #{sigPosition}
+			  , #{sigAddress}
+			  , #{sigExtension}
+			  , #{sigTel}
+			  , #{sigEmail}
+			  )		  
+	</insert>
 	
 
 </mapper>

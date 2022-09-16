@@ -30,11 +30,12 @@
 	    border-spacing: 0 20px;
     }
     
-    .formInput{
+    .sigTableModal input{
         border: 1px solid #ced4da;
         border-radius: 0.25rem;     
-        /* margin: 5px;    */
+        margin: 10px;  
     }
+    
 </style>
 </head>
 <body>
@@ -47,38 +48,32 @@
 
         <form action="" method="post">
             
+            <!-- 서명사용설정  -->
             <table class="sigTable">
-                <tr>
-                    <th width="60px">서명</th>
-                    <td width="80px">
-                        <input type="radio" id="use" name="sigBasic" value="N" checked> 
-                        <label for="use">사용함</label>    
-                    </td>
-                    <td>
-                        <input type="radio" id="noUse" name="sigBasic" value="Y"> 
-                        <label for="noUse">사용 안함</label>    
-                    </td>
-                </tr>
+            
+            
+            </table>
+                          
+             <table>   
                 <tr>
                     <th>서명관리</th>
                     <td>
-                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#sigInsert">서명추가</button> 
-                    </td> 
-                    <td> 2개까지 설정가능합니다.</td>                   
+                        <button type="button" class="btn btn-sm btn-secondary sigAddBtn" data-toggle="modal" data-target="#sigInsert">서명추가</button> 
+                    </td>                                
                 </tr>
-                
-                <!-- 등록된 서명 조회 -->
-                <tr>                    
-                    <td colspan="2" align="end">
-                        <span class="roundStyle">기본</span>  &nbsp;
-                        <input type="radio" name="sigNo" value="4" id="4">
-                        <label for="4">서명4</label>
-                    </td>                    
-                    <td align="end"><button type="button" class="btn btn-sm btn-secondary" onclick="deleteSig();">삭제</button></td>
-                </tr>
-                
             </table>
-
+             
+            <br>
+                
+            <!-- 등록된 서명 list 조회 -->
+            <table id="sigListTb">
+            
+            </table>    
+                
+                                
+			<div align="end">
+                <button type="submit" class="btn btn-sm btn-primary">확인</button>                
+            </div>
         </form>
       
         <!-- ====================================================  Modal ================================================================ -->
@@ -94,49 +89,45 @@
                         </button>
                     </div>
                     <div class="modal-body">                          
-                        <form action="">                                                 
+                         <form action="insertSig.ma" method="post">                                              
                             <div align="center">
-                                <table class="sigTable">                                                               
+                                <table class="sigTableModal">                                                               
                                     <tr>                                    
                                         <th colspan="2">이름</th>                                                                      
                                         <td>
-                                            김나라
-                                            <input type="hidden" name="" value="김나라">
+                                            <input type="text" name="sigName" id="sigName" value="" readonly>     
+                                            <input type="hidden" name="empNo" value="${loginUser.empNo }">                                     
                                         </td>                                                                             
                                     </tr>                               
                                     <tr>
                                         <th colspan="2">부서</th>
                                         <td>
-                                            인사부
-                                            <input type="hidden" name="" value="인사부">
+                                            <input type="text" name="sigDepartment" id="sigDepartment" value="" readonly>
                                         </td>                                       
                                     </tr>                                         
                                     <tr>
                                         <th colspan="2">직급</th>                                     
                                         <td>
-                                            사원
-                                            <input type="hidden" name="" value="사원">
+                                            <input type="text" name="sigPosition" id="sigPosition" value="" readonly>
                                         </td>
                                     </tr> 
                                     <tr>
                                         <th colspan="2">휴대전화</th> 
-                                        <td><input class="formInput" type="text" name="addTel" placeholder=" -도 함께 입력해주세요." maxlength="13" value="010-5869-2583"></td>
+                                        <td><input class="formInput" type="text" name="sigTel" id="sigTel" placeholder=" -도 함께 입력해주세요." maxlength="13" value=""></td>
                                     </tr>                 
                                     <tr>
                                         <th colspan="2">이메일</th> 
-                                        <td><input class="formInput" type="email" name="addEmail" value="df234@jojik.com"></td>
+                                        <td><input class="formInput" type="email" name="sigEmail" id="sigEmail" value="" required></td>
                                     </tr>
                                     <tr>
-                                        <td><input type="checkbox" name="address" value="Y"></td>
+                                        <th colspan="2">사내번호</th> 
+                                        <td><input class="formInput" type="text" name="sigExtension" id="sigExtension" value="" ></td>                                      
+                                    </tr>                                     
+                                    <tr>
+                                        <td><input type="checkbox" name="sigAddress" id="sigAddress" value="Y"></td>
                                         <th>회사주소 :  &nbsp;</th>
                                         <td>서울 금천구 가산디지털2로 115</td>
-                                    </tr>        
-                                    <tr>
-                                        <td><input type="checkbox" name="" value="031-1234-5678"></td>
-                                        <th>사내번호 :  &nbsp;</th> 
-                                        <td>031-1234-5678</td>
-                                    </tr>                               
-                                    
+                                    </tr>   
                                 </table>
                             </div>
                             <br>
@@ -145,7 +136,7 @@
                                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
                             </div>
                             
-                        </form>
+                       </form>
                     </div>
                     
                 </div>
@@ -155,18 +146,121 @@
         <script>
         
 	        $(function(){
-	    		$(document).on("click", "sigTable #deleteSig" function(){
+	             	
+	    		// 등록 된 서명리스트 조회
+	    		selectSigList();
+	    		    		
+	    		// 서명 삭제
+	    		$(document).on("click", "#sigListTb #sigDelete", function(){	    		
+	    			//console.log($(this).parent().prev().children("input").val());
 	    			deleteSig($(this).parent().prev().children("input").val());
 	    		});
+	    		
+				// 서명 등록에 필요한 정보 employee 가져오기 
+				selectEmp();
 	    	})
-	    
-	        function deleteSig(){
-	            if(confirm("해당 서명을 삭제하시겠습니까??")){
-	
-	            }else{
-	                //$("").focus();
-	            }
+	    	
+	    	// 등록된 서명 리스트 조회용 ajax
+	    	function selectSigList(){
+	        	$.ajax({
+	        		url:"selectSigList.ma",
+	        		data:{empNo:${loginUser.empNo}},
+	        		success:function(list){	 
+	        			
+	        			let value= "";	  
+	        			
+	        			for(let i=0; i<list.length; i++){
+	        				value += '<tr>'                    
+					               +     '<td colspan="2" align="end" width="180px">';
+					      if(list[i].sigBasic == 'Y'){
+					         value += 	 	'<span class="roundStyle">기본</span>  &nbsp;';
+					        }       
+					         value +=       '<input type="radio" name="sigNo" value="'+ list[i].sigNo +'" id="'+list[i].sigNo+'">'
+					               +        '<label for="'+list[i].sigNo+'"> 서명' + list[i].rnum + '</label>'
+					               +     '</td>'                  
+					               +     '<td align="end" width="100px"><button type="button" class="btn btn-sm btn-secondary" id="sigDelete">삭제</button></td>'
+					               + '</tr>';
+	        			}
+	        			
+	        			$("#sigListTb").html(value);
+	        		},
+	        		error:function(){
+	        			console.log("등록한 서명 조회용 ajax실패");
+	        		}
+	        	})
 	        }
+	    
+	        // 삭제 기능  
+	        function deleteSig(sigNo){
+	            if(confirm("해당 서명을 삭제하시겠습니까??")){
+					$.ajax({
+						url: "deleteSig.ma",
+						data:{
+								sigNo:sigNo,
+								empNo:${loginUser.empNo}
+							},
+						success:function(result){
+							if(result == 'success'){
+								alert("서명을 삭제했습니다.");
+								// 등록된 서명조회 호출
+								selectSigList();								
+							}
+						},
+						error:function(){
+							console.log("서명삭제 실패");
+						}
+					})
+	            }else{	              
+	            } 
+	        }
+	        
+	        // 서명등록을 위한 사원정보 조회
+	        function selectEmp(){
+	        	$.ajax({
+	        		url:"selectSigEmp.ma",
+	        		data:{
+	        			empNo:${loginUser.empNo}
+	        		},
+	        		success:function(result){	   
+	        			//console.log(result);
+	        			const el = $(".sigTableModal");
+	        			el.find("#sigName").val(result.empName);
+	        			el.find("#sigDepartment").val(result.depCd);
+	        			el.find("#sigPosition").val(result.posCd);
+	        			el.find("#sigExtension").val(result.empExtension);	        			
+	        			el.find("#sigTel").val(result.empPhone);
+	        			el.find("#sigEmail").val(result.empEmail);
+	        			
+	        			let value = "";
+	        			value += '<tr>'
+				               +     '<th width="60px">서명</th>'
+				               +     '<td width="80px">'
+				               +         '<input type="radio" id="use" name="empSigUse" value="Y"';
+				               
+				        if(result.empSigUse == 'Y'){
+				        	 value +=   														'checked';
+				         	}      				               							
+				         value +=         '><label for="use">사용함</label>'    
+				               +     '</td>'
+				               +     '<td>'
+				               +         '<input type="radio" id="noUse" name="empSigUse" value="N"';
+				         if(result.empSigUse == 'N'){
+					         value +=   													     'checked';
+					         } 
+				         value +=         '><label for="noUse">사용 안함</label>'    
+				               +     '</td>'
+				               + '</tr>';
+				               
+				         $(".sigTable").html(value);   
+	        			
+	        		},
+	        		error:function(){
+	        			console.log("서명추가 시 사원정보 조회용 ajax 실패");
+	        		}
+	        		
+	        	})
+	        }
+	        
         
         </script>
 

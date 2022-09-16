@@ -22,9 +22,32 @@ public class MailServiceImpl implements MailService {
 	public ArrayList<Signature> selectSigList(String empNo) {
 		return mDao.selectSigList(sqlSession, empNo);
 	}
+
+	@Override
+	public int deleteSig(String sigNo) {
+		return mDao.deleteSig(sqlSession, sigNo);
+	}
+
+	@Override
+	public int updateBasic(String empNo) {
+		return mDao.updateBasic(sqlSession, empNo);
+	}
+
+	@Override
+	public int selectBasicCount(String empNo) {
+		return mDao.selectBasicCount(sqlSession, empNo);
+	}
 	
-	
-	
+	// 기본서명 조회
+	@Override
+	public Signature selectSigBasic(String empNo) {
+		return mDao.selectSigBasic(sqlSession, empNo);
+	}
+
+	@Override
+	public int insertSig(Signature s) {
+		return mDao.insertSig(sqlSession, s);
+	}	
 	
 	
 	
