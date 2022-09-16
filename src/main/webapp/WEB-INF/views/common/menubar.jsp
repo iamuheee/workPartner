@@ -29,6 +29,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet">
 
+<!-- Google Raleway Sans 폰트 -->
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600&display=swap" rel="stylesheet">
 
  <style>
 * {
@@ -189,6 +191,10 @@
         margin:auto;
         padding:10px;
     }
+    
+   #workpartnerLogo {
+   		font-family:'Raleway', 'Noto Sans KR', sans-serif;
+   } 
    
 </style>
 </head>
@@ -205,7 +211,7 @@
 
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-blue" style="font-size: 14px;">
 	          <!-- 클릭시 메인페이지 이동-->
-	          <a class="navbar-brand ps-3" href="${ pageContext.servletContext.contextPath }">Work Partner!</a>
+	          <a class="navbar-brand ps-3" href="workpartner" id="workpartnerLogo">Work Partner!</a>
 	
 	          <!-- Sidebar Toggle-->
 	          <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
@@ -308,7 +314,7 @@
 	                           <div class="collapse" id="collapseHome" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 	                               <nav class="sb-sidenav-menu-nested nav">
 	                                   <a class="nav-link nav-choice" href="">마이페이지</a>
-	                                   <a class="nav-link nav-choice" href="list.nt">공지사항</a>
+	                                   <a class="nav-link nav-choice" href="">공지사항</a>
 	                                   <a class="nav-link nav-choice" href="">쪽지함</a>
 	                               </nav>
 	                           </div>
@@ -416,10 +422,10 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseAuth2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="saveSi.si">임시저장</a>
-	                                           <a class="nav-link nav-choice" href="contSi.si">진행중</a>
-	                                           <a class="nav-link nav-choice" href="reSi.si">반려됨</a>
-	                                           <a class="nav-link nav-choice" href="endSi.si">완료됨</a>                                            
+	                                           <a class="nav-link nav-choice" href="">임시저장</a>
+	                                           <a class="nav-link nav-choice" href="">진행중</a>
+	                                           <a class="nav-link nav-choice" href="">반려됨</a>
+	                                           <a class="nav-link nav-choice" href="">완료됨</a>                                            
 	                                       </nav>
 	                                   </div>
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseApproval1" aria-expanded="false" aria-controls="pagesCollapseApproval1">
@@ -428,8 +434,8 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseApproval1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="othSi.si">결재할기안서 </a>
-	                                           <a class="nav-link nav-choice" href="othEndSi.si">결재완료</a>                                         
+	                                           <a class="nav-link nav-choice" href="">결재할기안서 </a>
+	                                           <a class="nav-link nav-choice" href="">결재완료</a>                                         
 	                                       </nav>
 	                                   </div>
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseApproval2" aria-expanded="false" aria-controls="pagesCollapseApproval2">
@@ -438,8 +444,8 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseApproval2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="deptSi.si">결재할기안서 </a>
-	                                           <a class="nav-link nav-choice" href="deptEndSi.si">결재완료</a>                                         
+	                                           <a class="nav-link nav-choice" href="">결재할기안서 </a>
+	                                           <a class="nav-link nav-choice" href="">결재완료</a>                                         
 	                                       </nav>
 	                                   </div>
 	                               </nav>
@@ -488,7 +494,8 @@
 	
 	                          <!-- 인사관리 -->
 	                          <!-- 인사부 직원에게만 보이는 메뉴 -->
-	                          <c:if test="${ loginUser.depCd eq '인사부' }">
+	                          <!-- 기능 구현 끝난 뒤에 활성화 -->
+	                          <%-- <c:if test="${ loginUser.depCd eq '인사부' }"> --%>
 		                          <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
 		                           <span class="material-symbols-outlined">
 		                               manage_accounts
@@ -511,7 +518,7 @@
 		                                   <a class="nav-link collapsed nav-choice" href="">직위/직무등록</a>
 		                               </nav>
 		                           </div>
-	                           </c:if>
+	                           <%-- </c:if> --%>
 	                       </div>
 	                   </div>
 	                   

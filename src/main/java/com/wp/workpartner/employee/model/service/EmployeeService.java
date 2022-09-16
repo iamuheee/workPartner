@@ -1,5 +1,10 @@
 package com.wp.workpartner.employee.model.service;
 
+import java.util.ArrayList;
+
+import com.wp.workpartner.address.model.vo.Department;
+import com.wp.workpartner.address.model.vo.Position;
+import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.employee.model.vo.Employee;
 
 public interface EmployeeService {
@@ -15,7 +20,11 @@ public interface EmployeeService {
 	// 구성원 등록 서비스 (insert)
 	int insertEmployee(Employee e);
 	
-	// 개인정보 수정 서비스 (update)
+	// 전체 구성원 조회 서비스 (select) -- ajax
+	int selectEmpListCount();
+	ArrayList<Employee> selectEmpList(PageInfo pi);
+	
+	// 사용자 정보 수정 서비스 (update)
 	int updateEmployee(Employee e);
 	
 	// 계정 비활성화 서비스 (update)
@@ -32,4 +41,16 @@ public interface EmployeeService {
 	// 프로필 이미지 변경 서비스 (update) -- ajax
 	int updateProfile(Employee e);
 
+	// 구성원 검색 서비스 (select) -- ajax
+	int selectSearchCount(String condition, String keyword);
+	ArrayList<Employee> selectSearchList(String condition, String keyword, PageInfo pi);
+	
+	// 개별 구성원 조회 서비스 (select) -- ajax
+	Employee selectEmployee(String empId);
+	
+	// 전체 부서 조회 서비스 (select) -- ajax
+	ArrayList<Department> selectDepartment();
+	
+	// 전체 직급 조회 (select) -- ajax
+	ArrayList<Position> selectPosition();
 }

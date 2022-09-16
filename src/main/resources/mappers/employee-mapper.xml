@@ -25,6 +25,7 @@
 		<result column="emp_movedate" property="empMoveDate" />
 		<result column="emp_holtake" property="empHolTake" />
 		<result column="emp_holuse" property="empHolUse" />
+		<result column="emp_createdate" property="empCreateDate" />
 	</resultMap>
 	
 	<resultMap id="departmentResult" type="Department">
@@ -96,11 +97,11 @@
 		  <!-- 사번 == 입사연도 끝 두 자리 + 부서코드 + seq_empno.nextval 로 생성 -->
 		  <!-- 입사연도 + #{depCd} + seq_empno.nextval -->
 		  <!-- 2 + 2 + 3 ==> 총 7자리로 생성 -->
-		    #{empEnrollYear} || LPAD(#{depCd}, 2, '0') || LPAD(seq_empno.nextval, 3, '0')
+		    SUBSTR(#{empEnrollDate}, 3, 2) || LPAD(#{depCd}, 2, '0') || LPAD(seq_empno.nextval, 3, '0')
 		  , #{empId}
 		  , #{empPwd}
 		  , #{empName}
-		  , #{empEmail}
+		  , #{empId} || '@workpartner.com'	<!-- 간편 등록 시 empEmail 따로 전달하지 않으므로 추가 -->
 		  <choose>
 		  	<when test="depCd == 1"> <!-- 인사부일 경우 공지사항 작성 권한 'A' -->
 		  	, 'A'
@@ -126,5 +127,176 @@
 		  from tb_employee
 		 where emp_id = lower(#{empId})	<!-- 대소문자 구분없이 중복체크 -->
 	</select>
+	
+	<!-- 사용자 list count -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectEmpListCount" resultType="_int">
+		select 
+		       count(*)
+		  from tb_employee
+		 where not (emp_status = 'N' and emp_acc_status ='N')
+	</select>
+	
+	<!-- 전체 사용자 list -->
+	<!-- 작성자 : 박태은 -->
+	<!-- empPwd는 자리수만큼 *로 표시해서 출력해야 함 -->
+	<!-- db상의 비밀번호는 어차피 암호화되어 있으므로 따로 치환 불가 (?) -->
+	<!-- 기본적으로 생성일 순으로 정렬하고, 생성일이 동일할 시에는 수정일을 기준으로 desc 정렬 -->
+	<select id="selectEmpList" resultMap="employeeResult">
+		select 
+		       emp_no
+		     , emp_id
+		     , emp_name
+		     , emp_phone
+		     , emp_extension
+		     , emp_email
+		     , emp_exemail
+		     , emp_enrolldate
+		     , emp_retiredate
+		     , emp_modifydate
+		     , emp_status
+		     , emp_acc_status
+		     , emp_profile
+		     , dep_name
+		     , pos_name
+		     , emp_movedate
+		  from tb_employee
+		  join tb_department using(dep_cd)
+		  join tb_position using(pos_cd)
+		 where not (emp_status = 'N' and emp_acc_status ='N')
+		 order
+		    by emp_createdate desc	
+		     , emp_modifydate desc
+	</select>
+	
+	<!-- 사용자 검색 list count -->
+	<!-- 작성자 : 박태은 -->
+	<!-- emp_no의 경우 어차피 한 명일 텐데 페이징 처리가 필요한가? -->
+	<!-- 사번의 일부만 입력될 수도 있으므로 고려해서 페이징 처리 -->
+	<select id="selectSearchCount" resultType="_int">
+		select
+		       count(*)
+		  from tb_employee
+		 where not (emp_status = 'N' and emp_acc_status='N')
+		 <if test="condition == 'empNo'">
+		   and emp_no
+		 </if>
+		 <if test="condition == 'empName'">
+		   and emp_name
+		 </if>
+		 <if test="condition == 'empId'">
+		   and emp_id
+		 </if> 
+		  like '%' || #{keyword} || '%'
+	</select>
+	
+	<!-- 사용자 검색 list -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectSearch" resultMap="employeeResult">
+		select
+    		   emp_no
+		     , emp_id
+		     , emp_name
+		     , emp_phone
+		     , emp_extension
+		     , emp_email
+		     , emp_exemail
+		     , emp_enrolldate
+		     , emp_retiredate
+		     , emp_modifydate
+		     , emp_status
+		     , emp_acc_status
+		     , emp_profile
+		     , dep_name
+		     , pos_name
+		     , emp_movedate
+		  from tb_employee
+		  join tb_department using(dep_cd)
+		  join tb_position using(pos_cd)
+		 where not (emp_status = 'N' and emp_acc_status='N')
+		 <if test="condition == 'empNo'">
+		   and emp_no
+		 </if>
+		 <if test="condition == 'empName'">
+		   and emp_name
+		 </if>
+		 <if test="condition == 'empId'">
+		   and emp_id
+		 </if> 
+		 like '%' || #{keyword} || '%'
+		order
+		   by emp_createdate desc	
+		    , emp_modifydate desc
+	</select>
+	
+	<!-- 부서 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectDepartment" resultMap="departmentResult">
+		select
+			   dep_cd
+			 , dep_name
+		  from tb_department
+	</select>
+	
+	<!-- 직위 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectPosition" resultMap="positionResult">
+		select
+			   pos_cd
+			 , pos_name
+		  from tb_position
+	</select>
+	
+	<!-- 개별 사용자 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectEmployee" resultMap="employeeResult">
+		select 
+		       emp_no
+		     , emp_id
+		     , emp_pwd
+		     , emp_name
+		     , emp_phone
+		     , emp_extension
+		     , emp_email
+		     , NVL(emp_exemail, '-') as emp_exemail
+		     , emp_enrolldate
+		     , emp_retiredate
+		     , emp_modifydate
+		     , emp_status
+		     , NVL(emp_profile, 'resources/profile_images/defaultProfile.png') as emp_profile
+		     , emp_acc_status
+		     , dep_name
+		     , pos_name
+		  from tb_employee
+		  join tb_department using(dep_cd)
+		  join tb_position using(pos_cd)
+	  	 where emp_id = #{empId}
+	</select>
+	
+	<!-- 사용자 정보 수정 -->
+	<!-- 작성자 : 박태은 -->
+	<update id="updateEmployee">
+		update
+			   tb_employee
+		   set
+	    	   emp_phone = #{empPhone}
+	    	 , emp_extension = #{empExtension}
+	    	 , emp_retiredate = #{empRetireDate}
+	    	 , emp_status = #{empStatus}
+	    <!-- 인사부일 경우 공지사항 권한도 같이 수정해야 함 -->
+	    	 , dep_cd = #{depCd}
+	   <choose>
+		  	<when test="depCd == 1"> <!-- 인사부일 경우 공지사항 작성 권한 'A' -->
+		  	 , emp_nt_admin ='A'
+		  	</when>
+		  	<otherwise>	<!-- 인사부가 아닐 경우 default -->
+		  	 , emp_nt_admin = default
+		  	</otherwise>
+	  	</choose>
+	    	 , pos_cd = #{posCd}
+	    	 , emp_modifydate = default
+	     where emp_id = #{empId}
+	</update>
+	
 
 </mapper>

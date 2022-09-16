@@ -45,17 +45,17 @@
         <h5><b>메일 서명관리</b></h5>
         <hr>
 
-        <form action="">
+        <form action="" method="post">
             
             <table class="sigTable">
                 <tr>
                     <th width="60px">서명</th>
                     <td width="80px">
-                        <input type="radio" id="use" name="sigUse" value="N" checked> 
+                        <input type="radio" id="use" name="sigBasic" value="N" checked> 
                         <label for="use">사용함</label>    
                     </td>
                     <td>
-                        <input type="radio" id="noUse" name="sigUse" value="Y"> 
+                        <input type="radio" id="noUse" name="sigBasic" value="Y"> 
                         <label for="noUse">사용 안함</label>    
                     </td>
                 </tr>
@@ -66,6 +66,8 @@
                     </td> 
                     <td> 2개까지 설정가능합니다.</td>                   
                 </tr>
+                
+                <!-- 등록된 서명 조회 -->
                 <tr>                    
                     <td colspan="2" align="end">
                         <span class="roundStyle">기본</span>  &nbsp;
@@ -74,29 +76,11 @@
                     </td>                    
                     <td align="end"><button type="button" class="btn btn-sm btn-secondary" onclick="deleteSig();">삭제</button></td>
                 </tr>
-                <tr>
-                    <td colspan="2" align="end">                        
-                        <input type="radio" name="sigNo" value="5" id="5">
-                        <label for="5">서명5</label>
-                    </td>                   
-                    <td align="end"><button type="button" class="btn btn-sm btn-secondary" onclick="deleteSig();">삭제</button></td>
-                </tr>
-
+                
             </table>
 
         </form>
-
-        <script>
-            function deleteSig(){
-                if(confirm("해당 서명을 삭제하시겠습니까??")){
-
-                }else{
-                    //$("").focus();
-                }
-            }
-        </script>
-
-
+      
         <!-- ====================================================  Modal ================================================================ -->
 
         <!-- 서명등록 -->
@@ -167,6 +151,24 @@
                 </div>
             </div>
         </div>
+        
+        <script>
+        
+	        $(function(){
+	    		$(document).on("click", "sigTable #deleteSig" function(){
+	    			deleteSig($(this).parent().prev().children("input").val());
+	    		});
+	    	})
+	    
+	        function deleteSig(){
+	            if(confirm("해당 서명을 삭제하시겠습니까??")){
+	
+	            }else{
+	                //$("").focus();
+	            }
+	        }
+        
+        </script>
 
                 
 

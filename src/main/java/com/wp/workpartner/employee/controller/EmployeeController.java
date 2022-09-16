@@ -1,5 +1,8 @@
 package com.wp.workpartner.employee.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +10,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.wp.workpartner.address.model.vo.Department;
+import com.wp.workpartner.address.model.vo.Position;
+import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.common.template.FileUpload;
+import com.wp.workpartner.common.template.Pagination;
 import com.wp.workpartner.employee.model.service.EmployeeServiceImpl;
 import com.wp.workpartner.employee.model.vo.Employee;
 
@@ -56,7 +65,7 @@ public class EmployeeController {
 		
 		if(loginUser != null && bcryptPasswordEncoder.matches(e.getEmpPwd(), loginUser.getEmpPwd())) {	// 로그인 성공
 			session.setAttribute("loginUser", loginUser);
-			mv.setViewName("redirect:/");
+			mv.setViewName("common/mainPage");
 		}else {	// 로그인 성공
 			mv.addObject("errorMsg", "로그인 실패");
 			mv.setViewName("common/error");
@@ -77,6 +86,10 @@ public class EmployeeController {
 		return "employee/loginForm";
 	}
 	
+	@RequestMapping("main")
+	public String mainPage() {
+		return "common/mainPage";
+	}
 	
 	/**
 	 * @author	: Taeeun Park
@@ -97,7 +110,6 @@ public class EmployeeController {
 	 * @param	: Employee e, upfile(프로필 사진 파일)
 	 * @return	: String "redirect:list.em" 
 	 */
-	@RequestMapping("insert.em")
 	public String insertEmployee(Employee e, MultipartFile upfile, HttpSession session, Model model) {
 
 		// 비밀번호 암호화
@@ -105,20 +117,12 @@ public class EmployeeController {
 //		System.out.println("암호화된 비밀번호 : " + encPwd);
 		e.setEmpPwd(encPwd);
 					
-		// 사번 생성을 위한 입사연도 끝 두 자리 추출
-		String enrollYear = e.getEmpEnrollDate().substring(2, 4);
-//		System.out.println(e);
-//		System.out.println(enrollYear);
-		e.setEmpEnrollYear(enrollYear);
-
 		// 프로필 사진을 등록한 경우
 		if(!upfile.getOriginalFilename().equals("")) {
 			String saveFilePath = FileUpload.saveFile(upfile, session, "resources/profile_images/");
 			e.setEmpProfile(saveFilePath);
 		}
-		
-		System.out.println(e.getEmpProfile());
-		
+				
 		int result = eService.insertEmployee(e);
 		
 		if(result > 0) {	// 사용자 등록 성공
@@ -126,7 +130,7 @@ public class EmployeeController {
 			return "redirect:list.em";	// 사용자 조회 페이지 url 재요청
 			
 		}else {	// 사용자 등록
-			model.addAttribute("errorMsg", "회원가입 실패");
+			model.addAttribute("errorMsg", "사용자 등록 실패");
 			return "common/error";
 		}
 	}
@@ -180,17 +184,132 @@ public class EmployeeController {
 		return "employee/myPage";
 	}
 		
+	
 	/**
 	 * @author	: Taeeun Park
-	 * @date	: 2022. 9. 11.
-	 * @method	: 사용자 조회 요청 처리 메소드 
-	 * @return	: String "employee/employeeListView"
+	 * @date	: 2022. 9. 14.
+	 * @method	: 사용자 조회/수정 페이지 이동 요청 처리
+	 * @return	: String "employee/employeeListView.jsp"
 	 */
 	@RequestMapping("list.em")
-	public String selectEmpList() {
+	public String selectList() {
 		return "employee/employeeListView";
 	}
 	
 	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 14.
+	 * @method	: (ajax) 사용자 조회 요청 처리 
+	 * @return	: list(사용자 리스트), pi(페이징처리)
+	 */
+	@ResponseBody
+	@RequestMapping(value="listSelect.em", produces="application/json; charset=UTF-8")
+	public String ajaxSelectEmpList(@RequestParam(value="cpage", defaultValue="1") int currentPage, @RequestParam(value="sort", defaultValue="10") int boardLimit) {
+		
+		int listCount = eService.selectEmpListCount();
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, boardLimit);
+		ArrayList<Employee> list = eService.selectEmpList(pi);
+		
+//		System.out.println(list);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("list", list);
+		map.put("pi", pi);
+		
+		return new Gson().toJson(map);
+	}
 	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 15.
+	 * @method	: (ajax) 사용자 검색 결과 목록 조회 요청 처리
+	 * @param	: condition(검색조건), keyword(검색어), currentPage, boardLimit(셀렉트 옵션으로 받아옴)
+	 * @return	: list, pi
+	 */
+	@ResponseBody
+	@RequestMapping(value="search.em", produces="application/json; charset=UTF-8")
+	public String ajaxSelectSearchList(String condition, @RequestParam(defaultValue="none") String keyword, @RequestParam(value="cpage", defaultValue="1") int currentPage, @RequestParam(value="sort", defaultValue="10") int boardLimit) {
+		
+		// 검색 결과에 맞는 페이징 처리 필요
+		int searchCount = eService.selectSearchCount(condition, keyword);
+		PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, boardLimit);
+		
+		ArrayList<Employee> searchList = eService.selectSearchList(condition, keyword, pi);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("list", searchList);
+		map.put("pi", pi);
+		
+		return new Gson().toJson(map);
+	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 15.
+	 * @method	: (ajax) 사용자 간편 등록 요청 처리
+	 * @param	: Employee e
+	 * @return	: Employee e (새로 추가된 사용자에 대한 정보)
+	 */
+	@ResponseBody
+	@RequestMapping(value="insertSimply.em", produces="application/json; charset=UTF-8")
+	public String ajaxInsertEmployeeSimply(Employee e) {
+				
+		// 비밀번호 암호화
+		String encPwd = bcryptPasswordEncoder.encode(e.getEmpPwd());
+		e.setEmpPwd(encPwd);
+//		System.out.println(e);
+		
+		int result = eService.insertEmployee(e);
+//		System.out.println(result);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		
+		if(result > 0) {	// 성공 시 새로 추가된 사용자 정보를 리턴
+			Employee newEmp = eService.selectEmployee(e.getEmpId());
+			map.put("e", newEmp);
+		}
+		return new Gson().toJson(map);
+	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 15.
+	 * @method	: (ajax) 개별 사용자 정보 조회 요청 처리 
+	 * @param	: empId
+	 * @return	: Employee e, Department d, Position p
+	 */
+	@ResponseBody
+	@RequestMapping(value="select.em", produces="application/json; charset=UTF-8")
+	public String ajaxSelectEmployee(String empId) {
+//		System.out.println(empId);
+		Employee e = eService.selectEmployee(empId);
+		
+		ArrayList<Department> d = eService.selectDepartment();
+		ArrayList<Position> p = eService.selectPosition();
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("e", e);
+		map.put("d", d);
+		map.put("p", p);
+		
+		return new Gson().toJson(map);
+	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 16.
+	 * @method	: (ajax) 관리자의 사용자 정보 수정 요청 처리
+	 * @param	: Employee e
+	 * @return	: String result
+	 */
+	@ResponseBody
+	@RequestMapping("update.em")
+	public String updateEmployee(Employee e) {
+//		System.out.println(e);
+		
+		int result = eService.updateEmployee(e);
+		
+		return (result > 0) ? "success" : "fail";
+	}
 }

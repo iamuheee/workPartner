@@ -23,4 +23,5 @@ public class Signature {
 	 private String sigEmail;
 	 private String sigStatus;
 	 private String sigBasic;
+	 private String rnum;
 }

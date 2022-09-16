@@ -318,8 +318,8 @@
 
                 <tr>
                     <td colspan="4">
-                        <script src="${pageContext.request.contextPath}/resources/js/summerNote/lang/summernote-ko-KR.js"></script>
                         <script src="${pageContext.request.contextPath}/resources/js/summerNote/summernote-lite.js"></script>
+                        <script src="${pageContext.request.contextPath}/resources/js/summerNote/lang/summernote-ko-KR.js"></script>
                         <textarea id="summernote" name="editordata" required></textarea>
                     </td>
                 </tr>

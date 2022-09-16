@@ -1,10 +1,14 @@
 package com.wp.workpartner.mail.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.wp.workpartner.mail.model.service.MailService;
+import com.wp.workpartner.mail.model.vo.Signature;
 
 @Controller
 public class MailController {
@@ -72,9 +76,18 @@ public class MailController {
 		return "email/emailSelectForm";
 	}
 	
-	//서명설정
+	
+	/** 서명설정페이지
+	 * @param empNo 사번
+	 * @param model 등록한 서명리스트
+	 * @return
+	 */
 	@RequestMapping("sig.ma")
-	public String emailSignatureList() {
+	public String emailSignatureList(String empNo, Model model) {
+		
+		ArrayList<Signature> list = mService.selectSigList(empNo);
+		model.addAttribute("list", list);
+		
 		return "email/emailSignature";
 	}
 }

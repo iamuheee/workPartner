@@ -38,7 +38,5 @@ public class Employee {
 	private String empMoveDate;
 	private String empHolTake;
 	private String empHolUse;
-	
-	private String empEnrollYear;	// 사번 생성을 위해 추출한 입사년도
-
+	private String empCreateDate;
 }
