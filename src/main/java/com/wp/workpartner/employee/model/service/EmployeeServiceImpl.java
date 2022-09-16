@@ -1,9 +1,14 @@
 package com.wp.workpartner.employee.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wp.workpartner.address.model.vo.Department;
+import com.wp.workpartner.address.model.vo.Position;
+import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.employee.model.dao.EmployeeDao;
 import com.wp.workpartner.employee.model.vo.Employee;
 
@@ -33,7 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public int updateEmployee(Employee e) {
-		return 0;
+		return eDao.updateEmployee(sqlSession, e);
 	}
 
 	@Override
@@ -55,5 +60,43 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int updateProfile(Employee e) {
 		return 0;
 	}
+
+
+	@Override
+	public int selectEmpListCount() {
+		return eDao.selectEmpListCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Employee> selectEmpList(PageInfo pi) {
+		return eDao.selectEmpList(sqlSession, pi);
+	}
+
+	@Override
+	public int selectSearchCount(String condition, String keyword) {
+		return eDao.selectSearchCount(sqlSession, condition, keyword);
+	}
+
+	@Override
+	public ArrayList<Employee> selectSearchList(String condition, String keyword, PageInfo pi) {
+		return eDao.selectSearchList(sqlSession, condition, keyword, pi);
+	}
+
+	@Override
+	public Employee selectEmployee(String empId) {
+		return eDao.selectEmployee(sqlSession, empId);
+	}
+
+	@Override
+	public ArrayList<Department> selectDepartment() {
+		return eDao.selectDepartment(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Position> selectPosition() {
+		return eDao.selectPosition(sqlSession);
+	}
+	
+	
 
 }
