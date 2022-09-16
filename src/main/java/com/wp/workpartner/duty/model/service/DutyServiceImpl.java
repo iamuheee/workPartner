@@ -61,21 +61,29 @@ public class DutyServiceImpl implements DutyService {
 	}
 	
 	@Override
-	public int selectDutyListCount() {
-		return dDao.selectDutyListCount(sqlSession);
+	public int selectDutyListCount(String empNo) {
+		return dDao.selectDutyListCount(sqlSession, empNo);
 	}
 
 	@Override
 	public ArrayList<Duty> selectDutyList(PageInfo pi, String empNo) {
 		// 업무 리스트도 조회하고
 		// 업무별 담당자 리스트도 조회해야 함 (조회 후 같은 업무별 담당자 이름끼리 묶기)
-		// To do 리스트 조회에서처럼 Duty 객체 안에 String[] 또는 ArrayList<TodoCharge>에 담당자 객체를 담아보기
-		return dDao.selectDutyList(sqlSession, pi, empNo);
+		
+		ArrayList<Duty> dlist = dDao.selectDutyList(sqlSession, pi, empNo);
+		for(Duty d : dlist) {
+			d.setEmpIC( dDao.selectDutyChargeList(sqlSession, pi, d.getDutyNo()) );
+		}
+		System.out.println(dlist);
+		
+		return dlist;
 	}
 
 	@Override
 	public Duty selectDuty(int dutyNo) {
-		return dDao.selectDuty(sqlSession, dutyNo);
+		Duty d = dDao.selectDuty(sqlSession, dutyNo);
+		d.setEmpIC( dDao.selectDutyCharge(sqlSession, dutyNo) );
+		return d;
 	}
 
 	@Override

@@ -19,6 +19,7 @@ public class Duty {
 	
 	private int dutyNo;
 	private String empNo;
+	private String empName;
 	private String calendarYN;
 	private String importance;
 	private String progress;

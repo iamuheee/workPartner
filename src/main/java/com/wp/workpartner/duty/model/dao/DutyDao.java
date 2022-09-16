@@ -47,8 +47,8 @@ public class DutyDao {
 	 * @param sqlSession
 	 * @return
 	 */
-	public int selectDutyListCount(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectOne("dutyMapper.selectDutyListCount");
+	public int selectDutyListCount(SqlSessionTemplate sqlSession, String empNo) {
+		return sqlSession.selectOne("dutyMapper.selectDutyListCount", empNo);
 	}
 	
 	
@@ -71,8 +71,8 @@ public class DutyDao {
 	 * @param empNo
 	 * @return
 	 */
-	public ArrayList<DutyCharge> selectDutyChargeList(SqlSessionTemplate sqlSession, PageInfo pi, String empNo){
-		return (ArrayList)sqlSession.selectList("dutyMapper.selectDutyChargeList", empNo, new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit(), pi.getBoardLimit()) );
+	public ArrayList<DutyCharge> selectDutyChargeList(SqlSessionTemplate sqlSession, PageInfo pi, int dutyNo){
+		return (ArrayList)sqlSession.selectList("dutyMapper.selectDutyChargeList", dutyNo, new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit(), pi.getBoardLimit()) );
 	}
 	
 	
@@ -84,6 +84,10 @@ public class DutyDao {
 	 */
 	public Duty selectDuty(SqlSessionTemplate sqlSession, int dutyNo) {
 		return sqlSession.selectOne("dutyMapper.selectDuty", dutyNo);
+	}
+	
+	public ArrayList<DutyCharge> selectDutyCharge(SqlSessionTemplate sqlSession, int dutyNo){
+		return (ArrayList)sqlSession.selectList("dutyMapper.selectDutyCharge", dutyNo);
 	}
 
 }

@@ -2,6 +2,7 @@ package com.wp.workpartner.duty.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,10 @@ public class DutyController {
 		
 		// 첨부파일 있는 경우, TB_FILE에 대한 INSERT문 : File f 필요 ( == File.uploadFile)
 		
-		// => 첨부파일 유무에 따라 Service를 한번만 쓰되
-		//	  한 Service에서 여러 Dao를 이용하기
+		// 날짜형식 yyyy.MM.dd 로 저장하기 위해 먼저 처리하기
+		d.setStartDate( d.getStartDate().replace('-', '.') );
+		d.setEndDate( d.getEndDate().replace('-', '.') );
+		
 
 		int result = 0; 
 		
@@ -80,14 +83,15 @@ public class DutyController {
 	 * @return ModelAndView <- ArrayList<Duty> dlist, ArrayList<DutyCharge> dclist
 	 */
 	@RequestMapping("list.du")
-	public ModelAndView selectDutyList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv){
+	public ModelAndView selectDutyList(@RequestParam(value="cpage", defaultValue="1") int currentPage, HttpSession session, ModelAndView mv){
 															// currentPage의 키값은 cpage, 기본값은 1
-		int listCount = dService.selectDutyListCount();
+		String empNo = ((Employee)session.getAttribute("loginUser")).getEmpNo();
+		int listCount = dService.selectDutyListCount(empNo);
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
-		String empNo = ((Employee)session.getAttribute("loginUser")).getEmpNo(); // 세션에서 loginUser의 사번 받기
-																				 // 그룹웨어이므로 empNo == null이면 아예 이 링크를 접근할 수 없도록 함
 		
-		mv.addObject("dlist", dService.selectDutyList(pi, empNo)).addObject("pi", pi).setViewName("duty/dutyListView");
+		mv.addObject("dlist", dService.selectDutyList(pi, empNo))
+		  .addObject("pi", pi)
+		  .setViewName("duty/dutyListView");
 		return mv;
 	}
 	

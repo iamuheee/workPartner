@@ -7,13 +7,14 @@
 		<result column="EMP_NO" property="empNo" />
 		<result column="CALENDAR_YN" property="calendarYN" />
 		<result column="IMPORTANCE" property="importance" />
-		<result column="PROGESS" property="progress" />
+		<result column="PROGRESS" property="progress" />
 		<result column="TITLE" property="title" />
 		<result column="CONTENT" property="content" />
 		<result column="ENROLL_DATE" property="enrollDate" />
 		<result column="START_DATE" property="startDate" />
 		<result column="END_DATE" property="endDate" />
 		<result column="STATUS" property="status" />
+		<result column="EMP_NAME" property="empName" />
 	</resultMap>
 	
 	<resultMap id="dutyChargeResult" type="DutyCharge">
@@ -38,6 +39,7 @@
 		     , #{startDate}
 		     , #{endDate}
 		     , 'Y'
+		     , #{dutyName}
 		     ) 
 	</insert>
 	
@@ -73,44 +75,52 @@
 	
 	<select id="selectDutyListCount" resultType="_int">
 		SELECT COUNT(*)
-		  FROM TB_DUTY
-		 WHERE STATUS = 'Y'
-	</select>
-	
-	<select id="selectDutyList" resultMap="dutyResult">
-		SELECT
-			   DUTY_NO
-			 , D.EMP_NO AS "EMP_NO" <!-- 작성자 -->
-			 , CALENDAR_YN
-			 , IMPORTANCE
-			 , PROGRESS
-			 , TITLE
-			 , CONTENT
-			 , ENROLL_DATE
-			 , START_DATE
-			 , END_DATE
-			 , STATUS
 		  FROM TB_DUTY D
 		  JOIN TB_DUTY_CHARGE DC
 		 USING (DUTY_NO)
 		 WHERE STATUS = 'Y'
-		   AND D.EMP_NO = #{ empNo }
-		    OR DC.EMP_NO = #{ empNo }
-		 ORDER
-		 	BY DUTY_NO DESC
+		   AND D.EMP_NO = #{empNo}
+		    OR DC.EMP_NO = #{empNo}
+	</select>
+	
+	<select id="selectDutyList" resultMap="dutyResult">
+		SELECT A.*
+			 , D.CONTENT
+		  FROM (
+		  		SELECT DISTINCT
+					   D.DUTY_NO AS "DUTY_NO"
+					 , D.EMP_NO AS "EMP_NO" <!-- 작성자 사번 -->
+					 , D.EMP_NAME AS "EMP_NAME" <!-- 작성자 이름 -->
+					 , CALENDAR_YN
+					 , IMPORTANCE
+					 , PROGRESS
+					 , TITLE
+					 , ENROLL_DATE
+					 , START_DATE
+					 , END_DATE
+					 , STATUS
+				  FROM TB_DUTY D
+				  JOIN TB_DUTY_CHARGE DC
+				 	ON D.DUTY_NO = DC.DUTY_NO
+				 WHERE STATUS = 'Y'
+				   AND D.EMP_NO = #{ empNo }
+				    OR DC.EMP_NO = #{ empNo }
+				 ORDER
+				 	BY D.DUTY_NO DESC
+		 	   ) A
+			JOIN TB_DUTY D
+			  ON A.DUTY_NO = D.DUTY_NO	 
 	</select>
 	
 	<select id="selectDutyChargeList" resultMap="dutyChargeResult">
 		SELECT 
 			   DC.DUTY_NO AS "DUTY_NO"
-			   DC.EMP_ID AS "EMP_NO"
+			 , DC.EMP_NO AS "EMP_NO" <!-- 담당자 사번 -->
 			 , DC.EMP_NAME AS "EMP_NAME"
 		  FROM TB_DUTY_CHARGE DC
 		  JOIN TB_DUTY D
-		 USING (DUTY_NO)
-		 WHERE STATUS = 'Y'
-		   AND D.EMP_NO = #{ empNo }
-		    OR DC.EMP_NO = #{ empNo }
+		    ON DC.DUTY_NO = D.DUTY_NO
+		 WHERE DC.DUTY_NO = #{dutyNo}
    		 ORDER
 		 	BY DUTY_NO DESC
 	</select>
@@ -119,6 +129,7 @@
 		SELECT
 			   DUTY_NO
 			 , EMP_NO
+			 , EMP_NAME
 			 , CALENDAR_YN
 			 , IMPORTANCE
 			 , PROGRESS
@@ -131,6 +142,14 @@
 		  FROM TB_DUTY
 		 WHERE DUTY_NO = #{dutyNo}
 		   AND STATUS = 'Y'
+	</select>
+	
+	<select id="selectDutyCharge" resultMap="dutyChargeResult">
+		SELECT
+			   EMP_NO
+			 , EMP_NAME
+		  FROM TB_DUTY_CHARGE 
+		 WHERE DUTY_NO = #{dutyNo}
 	</select>
 	
 </mapper>

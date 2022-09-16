@@ -18,7 +18,7 @@ public interface DutyService {
 	
 	
 	// 업무 게시글 리스트 조회 (+페이징)
-	int selectDutyListCount();
+	int selectDutyListCount(String empNo);
 	ArrayList<Duty> selectDutyList(PageInfo pi, String empNo);
 	
 	
