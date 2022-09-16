@@ -65,7 +65,7 @@ public class EmployeeController {
 		
 		if(loginUser != null && bcryptPasswordEncoder.matches(e.getEmpPwd(), loginUser.getEmpPwd())) {	// 로그인 성공
 			session.setAttribute("loginUser", loginUser);
-			mv.setViewName("redirect:/");
+			mv.setViewName("common/mainPage");
 		}else {	// 로그인 성공
 			mv.addObject("errorMsg", "로그인 실패");
 			mv.setViewName("common/error");
@@ -86,6 +86,10 @@ public class EmployeeController {
 		return "employee/loginForm";
 	}
 	
+	@RequestMapping("main")
+	public String mainPage() {
+		return "common/mainPage";
+	}
 	
 	/**
 	 * @author	: Taeeun Park
