@@ -60,7 +60,7 @@ public class EmployeeController {
 //		System.out.println("pwd : " + e.getEmpPwd());
 				
 		Employee loginUser = eService.loginEmployee(e);
-		
+				
 //		System.out.println(loginUser);
 		
 		if(loginUser != null && bcryptPasswordEncoder.matches(e.getEmpPwd(), loginUser.getEmpPwd())) {	// 로그인 성공
@@ -110,6 +110,7 @@ public class EmployeeController {
 	 * @param	: Employee e, upfile(프로필 사진 파일)
 	 * @return	: String "redirect:list.em" 
 	 */
+	@RequestMapping("insert.em")
 	public String insertEmployee(Employee e, MultipartFile upfile, HttpSession session, Model model) {
 
 		// 비밀번호 암호화
@@ -162,6 +163,7 @@ public class EmployeeController {
 		return "employee/idSelectForm";
 	}
 	
+	
 	/**
 	 * @author	: Taeeun Park
 	 * @date	: 2022. 9. 11.
@@ -172,6 +174,7 @@ public class EmployeeController {
 	public String pwdUpdateForm() {
 		return "employee/pwdUpdateForm";
 	}
+	
 	
 	/**
 	 * @author	: Taeeun Park
@@ -220,6 +223,7 @@ public class EmployeeController {
 		return new Gson().toJson(map);
 	}
 	
+	
 	/**
 	 * @author	: Taeeun Park
 	 * @date	: 2022. 9. 15.
@@ -243,6 +247,7 @@ public class EmployeeController {
 		
 		return new Gson().toJson(map);
 	}
+	
 	
 	/**
 	 * @author	: Taeeun Park
@@ -272,6 +277,7 @@ public class EmployeeController {
 		return new Gson().toJson(map);
 	}
 	
+	
 	/**
 	 * @author	: Taeeun Park
 	 * @date	: 2022. 9. 15.
@@ -296,6 +302,7 @@ public class EmployeeController {
 		return new Gson().toJson(map);
 	}
 	
+	
 	/**
 	 * @author	: Taeeun Park
 	 * @date	: 2022. 9. 16.
@@ -305,11 +312,29 @@ public class EmployeeController {
 	 */
 	@ResponseBody
 	@RequestMapping("update.em")
-	public String updateEmployee(Employee e) {
+	public String ajaxUpdateEmployee(Employee e) {
 //		System.out.println(e);
 		
 		int result = eService.updateEmployee(e);
 		
 		return (result > 0) ? "success" : "fail";
 	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 16.
+	 * @method	: (ajax) 사용자 계정 상태 변경 요청 처리 
+	 * @param	: empId, accStatus(현재 계정 상태 - "정상" || "휴면)
+	 * @return	: String result
+	 */
+	@ResponseBody
+	@RequestMapping("updateAcc.em")
+	public String ajaxUpdateAccStatus(String empId, String accStatus) {
+		System.out.println("empId : " + empId);
+		System.out.println("accStatus : " + accStatus);
+		
+		int result = eService.updateAccStatus(empId, accStatus);
+		return (result > 0) ? "success" : "fail";
+	}
+	
 }

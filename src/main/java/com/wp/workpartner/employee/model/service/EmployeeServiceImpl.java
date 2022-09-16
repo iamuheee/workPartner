@@ -96,6 +96,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public ArrayList<Position> selectPosition() {
 		return eDao.selectPosition(sqlSession);
 	}
+
+	@Override
+	public int updateAccStatus(String empId, String accStatus) {
+		return eDao.updateAccStatus(sqlSession, empId, accStatus);
+	}
 	
 	
 

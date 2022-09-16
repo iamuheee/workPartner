@@ -24,7 +24,11 @@
 	
 	#empList {
 	    width:100%;
-	    font-size:13.5px;
+	    
+	}
+	
+	#empList * {
+		font-size:14px;
 	}
 			
 	#insertEmp input{
@@ -239,7 +243,47 @@
 			
 			$(function(){
 				selectEmpList();
+				
+				/* empId, 계정상태 가져오기 */
+				// ajax에 작성한 요소에 이벤트 걸 때는 이렇게 써야 함
+				$(document).on("click", ".updateAcc", function(){ 
+					
+					var empId = $(this).parent().siblings(".employeeId").children().text();
+					//var status = $(this).parent().siblings(".employeeStatus").text(); 
+					var accStatus = $(this).parent().siblings(".employeeAccStatus").text(); 
+					
+					//console.log(empId);
+					//console.log(status);
+					//console.log(accStatus);
+					
+					updateAccStatus(empId, accStatus);
+				})
+				
 			})
+			
+			/* 사용자 계정 상태 변경 ajax */
+			function updateAccStatus(empId, accStatus) {
+						$.ajax({
+							url:"updateAcc.em",
+							type:"post",
+							data:{
+								empId:empId,
+								accStatus:accStatus
+							},
+							success:function(result){
+								console.log("계정 상태 수정용 ajax 통신 성공");
+								
+								if(result == "success") {
+									// 전체 사용자 목록 조회
+									selectEmpList();
+								}
+							},
+							error:function(){
+								console.log("계정 상태 수정용 ajax 통신 실패");
+								
+							}
+						})
+					}
 						
 			/* 검색 전 - 후 실행할 함수 구분을 위한 조건 검사 */
 			function selectList(){
@@ -275,30 +319,30 @@
 								value += '<tr>'
 									   	+ '<td>' + list[i].empNo + '</td>'
 									   	+ '<td>' + list[i].empName + '</td>'
-									   	+ '<td><a data-toggle="modal" data-target="#updateEmp" class="empIdArea" onclick="selectEmployee(this);">' + list[i].empId + '</a></td>'
-									   	+ '<td id="updatePwd">********</td>'
+									   	+ '<td class="employeeId"><a data-toggle="modal" data-target="#updateEmp" class="empIdArea" onclick="selectEmployee(this);">' + list[i].empId + '</a></td>'
+									   	+ '<td class="updatePwd">********</td>'
 									   	+ '<td>' + list[i].empEnrollDate + '</td>'
 									   	+ '<td>' + list[i].depCd + '</td>'
 									   	+ '<td>' + list[i].posCd + '</td>';
 									   	
 									   	if(list[i].empStatus == 'Y') {
-											value += '<td>재직</td>';
+											value += '<td class="employeeStatus">재직</td>';
 									   	}else {
-									   		value += '<td>퇴사</td>';
+									   		value += '<td class="employeeStatus">퇴사</td>';
 									   	}
 									   	
 									   	if(list[i].empAccStatus == 'Y') {
-									   		value += '<td>정상</td>';
+									   		value += '<td class="employeeAccStatus">정상</td>';
 									   	}else {
-									   		value += '<td>휴면</td>';
+									   		value += '<td class="employeeAccStatus">휴면</td>';
 									   	}
 	                			
 									   	if(list[i].empStatus == 'Y' && list[i].empAccStatus == 'Y') {
-									   		value += '<td><button type="button" class="btn btn-secondary btn-sm" onclick="계정상태변경">정지</td>';
+									   		value += '<td><button type="button" class="btn btn-secondary btn-sm updateAcc" >정지</td>';
 									   	}else if(list[i].empStatus == 'Y' && list[i].empAccStatus == 'N') {
-									   		value += '<td><button type="button" class="btn btn-warning btn-sm" onclick="계정상태변경">복구</td>';
+									   		value += '<td><button type="button" class="btn btn-warning btn-sm updateAcc">복구</td>';
 									   	}else {
-									   		value += '<td><button type="button" class="btn btn-danger btn-sm" onclick="계정상태변경">삭제</td>';
+									   		value += '<td><button type="button" class="btn btn-danger btn-sm updateAcc">삭제</td>';
 									   	}
 						   	}
 							
@@ -363,30 +407,30 @@
 										value += '<tr>'
 											   	+ '<td>' + list[i].empNo + '</td>'
 											   	+ '<td>' + list[i].empName + '</td>'
-											   	+ '<td id=""><a data-toggle="modal" data-target="#updateEmp" class="empIdArea" onclick="selectEmployee(this);">' + list[i].empId + '</a></td>'
-											   	+ '<td id="updatePwd">********</td>'
+											   	+ '<td class="employeeId"><a data-toggle="modal" data-target="#updateEmp" class="empIdArea" onclick="selectEmployee(this);">' + list[i].empId + '</a></td>'
+											   	+ '<td class="updatePwd">********</td>'
 											   	+ '<td>' + list[i].empEnrollDate + '</td>'
 											   	+ '<td>' + list[i].depCd + '</td>'
 											   	+ '<td>' + list[i].posCd + '</td>';
 											   	
 											   	if(list[i].empStatus == 'Y') {
-													value += '<td>재직</td>';
+													value += '<td class="employeeStatus">재직</td>';
 											   	}else {
-											   		value += '<td>퇴사</td>';
+											   		value += '<td class="employeeStatus">퇴사</td>';
 											   	}
 											   	
 											   	if(list[i].empAccStatus == 'Y') {
-											   		value += '<td>정상</td>';
+											   		value += '<td class="employeeAccStatus">정상</td>';
 											   	}else {
-											   		value += '<td>휴면</td>';
+											   		value += '<td class="employeeAccStatus">휴면</td>';
 											   	}
 			                			
 											   	if(list[i].empStatus == 'Y' && list[i].empAccStatus == 'Y') {
-											   		value += '<td><button type="button" class="btn btn-secondary btn-sm" onclick="계정상태변경">정지</td>';
+											   		value += '<td><button type="button" class="btn btn-secondary btn-sm updateAcc">정지</td>';
 											   	}else if(list[i].empStatus == 'Y' && list[i].empAccStatus == 'N') {
-											   		value += '<td><button type="button" class="btn btn-warning btn-sm" onclick="계정상태변경">복구</td>';
+											   		value += '<td><button type="button" class="btn btn-warning btn-sm updateAcc">복구</td>';
 											   	}else {
-											   		value += '<td><button type="button" class="btn btn-danger btn-sm" onclick="계정상태변경">삭제</td>';
+											   		value += '<td><button type="button" class="btn btn-danger btn-sm updateAcc">삭제</td>';
 											   	}
 								   	}
 								
@@ -447,7 +491,7 @@
 								value += '<td>' + e.empNo + '</td>'
 							   		   + '<td>' + e.empName + '</td>'
 							   		   + '<td><a data-toggle="modal" data-target="#updateEmp" class="empIdArea">' + e.empId + '</a></td>'
-							   		   + '<td id="updatePwd">********</td>'
+							   		   + '<td class="updatePwd">********</td>'
 							   		   + '<td>' + e.empEnrollDate + '</td>'
 							   		   + '<td>' + e.depCd + '</td>'
 							   		   + '<td>' + e.posCd + '</td>';
@@ -528,7 +572,7 @@
 							var headerValue = '';
 							var value = "";
 							
-							headerValue += '<h4 class="modal-title">사용자 정보 - ' + e.empName + ' (' + e.depCd + ' / ' + e.posCd + ')</h4>'
+							headerValue += '<h4 class="modal-title"><i class="fa-regular fa-id-card"></i>&nbsp;&nbsp;' + e.empName + ' (' + e.depCd + ' / ' + e.posCd + ')</h4>'
 			                    		 + '<button type="button" class="close" data-dismiss="modal">&times;</button>'; 
 							
 							value += '<tr>'
@@ -678,7 +722,7 @@
 						}
 					})
 				}
-				
+
 		        </script> 
 
 <!-- 아이디 클릭 시 뜨는 모달 ==> 사용자 정보 수정 -->

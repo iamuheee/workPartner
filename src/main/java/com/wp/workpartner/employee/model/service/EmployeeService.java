@@ -53,4 +53,7 @@ public interface EmployeeService {
 	
 	// 전체 직급 조회 (select) -- ajax
 	ArrayList<Position> selectPosition();
+	
+	// 계정 상태 수정 서비스 (update) -- ajax
+	int updateAccStatus(String empId, String accStatus);
 }

@@ -74,4 +74,12 @@ public class EmployeeDao {
 	public int updateEmployee(SqlSessionTemplate sqlSession, Employee e) {
 		return sqlSession.update("employeeMapper.updateEmployee", e);
 	}
+	
+	public int updateAccStatus(SqlSessionTemplate sqlSession, String empId, String accStatus) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("empId", empId);
+		map.put("accStatus", accStatus);
+		
+		return sqlSession.update("employeeMapper.updateAccStatus", map);
+	}
 }

@@ -298,5 +298,20 @@
 	     where emp_id = #{empId}
 	</update>
 	
+	<!-- 사용자 계정 상태 수정 -->
+	<!-- 작성자 : 박태은 -->
+	<update id="updateAccStatus">
+		update
+			   tb_employee
+		   set
+		<if test="accStatus == '정상'">	<!-- 계정 상태가 정상이면 정지로 -->
+		  	   emp_acc_status = 'N'
+		</if>
+		<if test="accStatus == '휴면'">	<!-- 정지면 정상으로 반대로 바꿔주기만 하면 됨 -->
+			   emp_acc_status = 'Y'
+		</if>
+		 where emp_id = #{empId}
+	</update>
+	
 
 </mapper>
