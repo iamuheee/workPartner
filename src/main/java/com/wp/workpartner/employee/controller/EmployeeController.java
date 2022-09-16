@@ -331,8 +331,8 @@ public class EmployeeController {
 	@ResponseBody
 	@RequestMapping("updateAcc.em")
 	public String ajaxUpdateAccStatus(String empId, String accStatus) {
-		System.out.println("empId : " + empId);
-		System.out.println("accStatus : " + accStatus);
+//		System.out.println("empId : " + empId);
+//		System.out.println("accStatus : " + accStatus);
 		
 		int result = eService.updateAccStatus(empId, accStatus);
 		return (result > 0) ? "success" : "fail";
