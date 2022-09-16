@@ -149,6 +149,10 @@
 	margin-bottom:0 !important;
 }
 
+.card-title span {
+	margin:3px;
+}
+
 .header-title {
 	font-size: 16px;
 	font-weight: 300;
@@ -171,6 +175,7 @@
 	cursor:pointer;
 }
 
+
 </style>
 </head>
 <body>
@@ -188,7 +193,7 @@
 								<table id="profile-tb">
 									<tr align="center">
 										<td rowspan="2" width="50%;">
-											<img src="resources/profile_images/defaultProfile.png" id="profileImg">
+											<img src="<c:out value='${ loginUser.empProfile }' default='resources/profile_images/defaultProfile.png'/>" id="profileImg">
 										</td>
 										<td style="padding-top: 15px;"><h4>${ loginUser.empName }</h4></td>
 									</tr>
@@ -202,7 +207,7 @@
 								</table>
 							</div>
 							<div class="card-footer d-flex align-items-center" id="pf-card-footer">
-								<a href="mypage.em" style="text-decoration: none; color: black;text-align:center;">내 정보 수정</a>
+								<a href="mypage.em" style="text-decoration: none; color: black;text-align:center;">내 정보 관리</a>
 							</div>
 						</div>
 					</div>
@@ -327,7 +332,7 @@
 						<div class="card-header">
 							<div class="card-total-title">
 								<div class="card-title">
-									<span class="material-symbols-outlined">keyboard_voice</span>&nbsp;
+									<span class="material-symbols-outlined">keyboard_voice</span>
 									<span class="header-title">공지사항</span>
 								</div>
 								<a href="" class="read-more">더보기 +</a>
@@ -376,7 +381,7 @@
 						<div class="card-header">
 							<div class="card-total-title">
 								<div class="card-title">
-									<span class="material-symbols-outlined">approval_delegation</span>&nbsp;
+									<span class="material-symbols-outlined">approval_delegation</span>
 									<span class="header-title">전자결재</span>
 								</div>
 								<a href="" class="read-more">더보기 +</a>
@@ -420,7 +425,7 @@
 						<div class="card-header">
 							<div class="card-total-title">
 								<div class="card-title">
-									<span class="material-symbols-outlined">mail</span>&nbsp; <span	class="header-title">메일</span>
+									<span class="material-symbols-outlined">mail</span>  <span	class="header-title">메일</span>
 								</div>
 								<a href="" class="read-more">더보기 +</a>
 							</div>
@@ -478,7 +483,7 @@
 						<div class="card-header">
 							<div class="card-total-title">
 								<div class="card-title">
-									<span class="material-symbols-outlined">trending_up</span>&nbsp;&nbsp;
+									<span class="material-symbols-outlined">trending_up</span> 
 									<span class="header-title">업무 현황</span>
 								</div>
 								<a href="" class="read-more">더보기 +</a>
@@ -514,7 +519,7 @@
 						<div class="card-header">
 							<div class="card-total-title">
 								<div class="card-title">
-									<span class="material-symbols-outlined">checklist</span>&nbsp;&nbsp;
+									<span class="material-symbols-outlined">checklist</span>
 									<span class="header-title">To do List</span>
 								</div>
 								<a href="" class="read-more">더보기 +</a>
@@ -559,7 +564,7 @@
 						<div class="card-header">
 							<div class="card-total-title">
 								<div class="card-title">
-									<span class="material-symbols-outlined">calendar_month</span>&nbsp;&nbsp;
+									<span class="material-symbols-outlined">calendar_month</span>
 									<span class="header-title">캘린더</span>
 								</div>
 								<a href="" class="padding:0px;"></a>

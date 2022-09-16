@@ -313,7 +313,7 @@
 	                           </a>
 	                           <div class="collapse" id="collapseHome" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 	                               <nav class="sb-sidenav-menu-nested nav">
-	                                   <a class="nav-link nav-choice" href="">마이페이지</a>
+	                                   <a class="nav-link nav-choice" href="mypage.em">마이페이지</a>
 	                                   <a class="nav-link nav-choice" href="list.nt">공지사항</a>
 	                                   <a class="nav-link nav-choice" href="">쪽지함</a>
 	                               </nav>
