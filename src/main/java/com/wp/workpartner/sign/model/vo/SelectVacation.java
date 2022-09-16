@@ -28,7 +28,7 @@ public class SelectVacation {
 	private String vaStart;
 	private String vaEnd;
 	private String vaCategory;
-	private Clob vaContent;
+	private String vaContent;
 	private int vaUseday; 
 	private ArrayList<Sign> signList;
 }

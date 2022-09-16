@@ -29,6 +29,6 @@ public class SelectReSign {
 	private String resRedate;
 	private String resAccount;
 	private String resBank;
-	private Clob resContent;
+	private String resContent;
 	private ArrayList<Sign> signList;
 }

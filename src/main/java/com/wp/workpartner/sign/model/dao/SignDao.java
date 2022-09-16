@@ -14,4 +14,7 @@ public class SignDao {
 	public int insertVacation(SqlSessionTemplate sqlSession, Vacation v) {
 		return sqlSession.insert("signMapper.insertVacation", v);
 	}
+	public int insertSign(SqlSessionTemplate sqlSession, int empNo) {
+		
+	}
 }

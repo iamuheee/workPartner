@@ -45,7 +45,7 @@ public class SignController {
 //		return "sign/signMain";
 //	}
 	@RequestMapping("insertV.si")
-	public String insertVacation(Dtpaper d, Vacation v, MultipartFile upfile, HttpSession session, Model model) {
+	public String insertVacation(Dtpaper d,int empNo, Vacation v, MultipartFile upfile, HttpSession session, Model model) {
 		
 		if(!upfile.getOriginalFilename().equals("")) {
 			
@@ -61,6 +61,7 @@ public class SignController {
 		
 		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
 			int reuslt2 = sService.insertVacation(v);
+			int result3 = sService.insertSign(empNo);
 			session.setAttribute("alertMsg", "결재 신청 되었습니다.");
 			return "redirect:workpartner"; //위에 cpage 선언해둠. list.bo?cpage=1 이렇게 작성필요 x
 		}else { // 실패 => 에러문구, 에러페이지
@@ -112,6 +113,11 @@ public class SignController {
 	public String selectDeptSignEndList(Model model) {
 		model.addAttribute("flag", "deptEndSign");
 		return "sign/deptSign";
+	}
+//	결재자주소록
+	@RequestMapping("addressAdmin.si")
+	public String addressAdminNotice() {
+		return "sign/signAddressAdmin";
 	}
 }
 	

@@ -18,7 +18,7 @@ public class Vacation {
 	private String vaStart;
 	private String vaEnd;
 	private String vaCategory;
-	private Clob vaContent;
+	private String vaContent;
 	private int vaUseday; 
 	
 }

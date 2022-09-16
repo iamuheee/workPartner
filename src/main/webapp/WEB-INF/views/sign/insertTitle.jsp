@@ -6,7 +6,43 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+<!-- 구글폰트 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&family=Poppins:wght@300&display=swap"
+	rel="stylesheet">
+
+<!-- 부트스트랩 4.6 -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+	integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+	crossorigin="anonymous">
+<script
+	src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+	crossorigin="anonymous"></script>
+
+<!-- jQuery 라이브러리 -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- css -->
+
+
 <style>
+
+
 .insertBtn {
 	font-size: 18px;
 	color: black;
@@ -149,8 +185,8 @@ input, select, textarea {
 	-webkit-backdrop-filter: blur(13.5px);
 	border-radius: 10px;
 	border: 1px solid rgba(255, 255, 255, 0.18);
-	width: 600px;
-	height: 500px;
+	width: 700px;
+	height: 1100px;
 	position: relative;
 	top: 0;
 }
@@ -232,6 +268,7 @@ input, select, textarea {
 	cursor: pointer;
 	color: black;
 }
+
 input[type=text] {
 	width: 97%;
 	box-sizing: border-box;
@@ -243,158 +280,130 @@ input[type=text] {
 	padding: auto;
 }
 </style>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-	$(document).ready(function() {
 
-		$("#selectVacation").change(function() {
-			console.log($("#selectVacation").val());
 
-			if ($("#selectVacation").val() == "연차") {
-				$("#startTime").hide();
-				$("#endTime").hide();
-			} else {
-				$("#startTime").show();
-				$("#endTime").show();
-			}
 
-		});
-	});
-</script>
 </head>
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-    <section class="mainTitle">
-    	<c:choose>
-    	<c:when test="${ paperName == '연차' }">
-        <form action="insertV.si" name="insertForm" style="float: left" enctype="multipart/form-data">
-            <a class="insertBtn" onclick="insertCheck();">기안하기</a>
-        
-        </c:when>
-    	<c:when test="${ paperName == '외근' }">
-        <form action="insertD.bo" name="insertForm" style="float: left" enctype="multipart/form-data">
-            <a class="insertBtn" onclick="insertCheck();">기안하기</a>
-        </form>
-        </c:when>
-    	<c:when test="${ paperName == '퇴직원' }">
-        <form action="insertD.bo" name="insertForm" style="float: left" enctype="multipart/form-data">
-            <a class="insertBtn" onclick="insertCheck();">기안하기</a>
-        </form>
-        </c:when>
-    	<c:when test="${ paperName == '업무협조' }">
-        <form action="insertD.bo" name="insertForm" style="float: left" enctype="multipart/form-data">
-            <a class="insertBtn" onclick="insertCheck();">기안하기</a>
-        </form>
-        </c:when>
-        </c:choose>
-        <form action="insertSave.bo" name="saveForm" style="float: left" enctype="multipart/form-data">
-            <a class="insertBtn" onclick="saveCheck()">임시저장</a>
-        </form>
-            <a class="insertBtn" id="btn-modal">결재선 추가</a>
-        <hr>
-    </section>
-    <script>
-        function saveCheck() {
-            if (confirm("임시 저장하시겠습니까?") == true){    //확인
-                document.saveForm.submit();
-            }else{   //취소
-                return false;
-            }
-            }
-    </script>
-    <script>
-        function insertCheck() {
-            if (confirm("기안하시겠습니까?") == true){    //확인
-                document.insertForm.submit();
-            }else{   //취소
-                return false;
-            }
-            }
-    </script>
-    <section>
-        <div>
-            <h1 class="dtpaperName"><span id="dpCategory">${ paperName }</span> 신청서 - <span style="font-weight:lighter;">${ loginUser.empName }(${ loginUser.depCd })</span></h1>
-            <hr>
-        </div>
-    </section>
-    <section class="signSelect">
-        <div>
-            <h3>결재선</h3>
-            <table align="center">
-                <tr>
-                    <th width="100">결재</th>
-                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><input type="text" name="sign1" value="김종군" readonly></td>
-                    <th>결재</th>
-                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><input type="text" name="sign2" value="김종군" readonly></td>
-                    <th>결재</th>
-                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><input type="text" name="sign3" value="김종군(마케팅)" readonly></td>
-                </tr>
-            </table>
-        </div>
-    </section>
-    <hr style="margin-top: 10px;">
-    <section class="publicPaper">
-        <div>
-            <table align="center">
-                <tr class="titleSection">
-                    <th style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);">제목</th>
-                    <td align="left" style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);">
-                    <input type="text" style="margin-left:10px; width:95%;" name="dpTitle">
-                    </td>
-                </tr>
-                <tr style="border-top:0.5px solid rgba(143, 143, 143, 0.547);">
-                    <th>첨부파일</th>
-                    <td align="left"><input type="file" id="upfile" name="upfile" style="margin-left:10px; border:0;"></td>
-                </tr>
-            </table>
-        </div>
-    </section>
-	</form>
-    <section class="modal">
-        <div id="modal" class="modal-overlay">
-            <div class="modal-window">
-                <div class="modaltitle">
-                    <h2>결재선 설정</h2>
-                    <span class="material-symbols-outlined close-area">
-                        close
-                    </span>
-                </div>
-
-                <div class="searchEmp">
-                    <div>
-                        <input type="text" class="modalSearch"><button type="button"
-                            class="searchBtn material-symbols-outlined">
-                            search
-                        </button>
-                            <ul>
-                                <li>
-                                    WorkPartner!
-                                </li>
-                            </ul>
-                    </div>
-                </div>
-               
-               
-            </div>
-        </div>
-    </section>
+	<section class="mainTitle">
+		<c:choose>
+			<c:when test="${ paperName == '연차' }">
+				<form action="insertV.si" name="insertForm" style="float: left"
+					enctype="multipart/form-data">
+					<a class="insertBtn" onclick="insertCheck();">기안하기</a>
+				</form>
+			</c:when>
+			<c:when test="${ paperName == '외근' }">
+				<form action="insertD.bo" name="insertForm" style="float: left"
+					enctype="multipart/form-data">
+					<a class="insertBtn" onclick="insertCheck();">기안하기</a>
+				</form>
+			</c:when>
+			<c:when test="${ paperName == '퇴직원' }">
+				<form action="insertD.bo" name="insertForm" style="float: left"
+					enctype="multipart/form-data">
+					<a class="insertBtn" onclick="insertCheck();">기안하기</a>
+				</form>
+			</c:when>
+			<c:when test="${ paperName == '업무협조' }">
+				<form action="insertD.bo" name="insertForm" style="float: left"
+					enctype="multipart/form-data">
+					<a class="insertBtn" onclick="insertCheck();">기안하기</a>
+				</form>
+			</c:when>
+		</c:choose>
+		<form action="insertSave.bo" name="saveForm" style="float: left"
+			enctype="multipart/form-data">
+			<a class="insertBtn" onclick="saveCheck()">임시저장</a>
+		</form>
+		
+		<a class="insertBtn" id="btn-modal" onclick="openAddressWindow();">결재선 추가</a>
+		<hr>
+	</section>
+	<script>
+		function saveCheck() {
+			if (confirm("임시 저장하시겠습니까?") == true) { //확인
+				document.saveForm.submit();
+			} else { //취소
+				return false;
+			}
+		}
+	</script>
+	<script>
+		function insertCheck() {
+			if (confirm("기안하시겠습니까?") == true) { //확인
+				document.insertForm.submit();
+			} else { //취소
+				return false;
+			}
+		}
+	</script>
+	<section>
+		<div>
+			<h3 class="dtpaperName">
+				<span id="dpCategory">${ paperName }</span> 신청서 - <span
+					style="font-weight: lighter;">${ loginUser.empName }(${ loginUser.depCd })</span>
+			</h3>
+			<hr>
+		</div>
+	</section>
+	<section class="signSelect">
+		<div>
+			<h3>결재선</h3>
+			<table align="center" id="adminList" style="">
+					<!-- <th width="100">결재</th>
+					<td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);" id="adminName"></td>
+					<th>결재</th>
+					<td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><input
+						type="text" name="sign2" value="김종군" readonly></td>
+					<th>결재</th>
+					<td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><input
+						type="text" name="sign3" value="김종군(마케팅)" readonly></td> -->
+			</table>
+		</div>
+	</section>
+	<hr style="margin-top: 10px;">
+	<section class="publicPaper">
+		<div>
+			<table align="center">
+				<tr class="titleSection" align="center">
+					<th style="border-bottom: 0.5px solid rgba(143, 143, 143, 0.547);">제목</th>
+					<td align="left"
+						style="border-bottom: 0.5px solid rgba(143, 143, 143, 0.547);">
+						<input type="text" style="margin-left: 10px; width: 95%;"
+						name="dpTitle">
+					</td>
+				</tr>
+				<tr style="border-top: 0.5px solid rgba(143, 143, 143, 0.547);"  align="center">
+					<th>첨부파일</th>
+					<td align="left"><input type="file" id="upfile" name="upfile"
+						style="margin-left: 10px; border: 0;"></td>
+				</tr>
+			</table>
+		</div>
+	</section>
 
 
-    <script>
-        const modal = document.getElementById("modal")
-        const btnModal = document.getElementById("btn-modal")
-        btnModal.addEventListener("click", e => {
-            modal.style.display = "flex"
-        })
-        const closeBtn = modal.querySelector(".close-area")
-        closeBtn.addEventListener("click", e => {
-            modal.style.display = "none"
-        })
-        window.addEventListener("keyup", e => {
-            if (modal.style.display === "flex" && e.key === "Escape") {
-                modal.style.display = "none"
-            }
-        })
-    </script>
+
+
+	<script>
+		var chartPopup;
+		function openAddressWindow() {
+			chartPopup = window.open(
+					"${pageContext.request.contextPath}/addressAdmin.si",
+					"addressWindow", "height=700, width=1100");
+		}
+
+		/* 자식창으로부터 전달된 정보  */
+		function sendMeData(data) {
+			//console.log(data);
+			$("#adminList").append(data);
+		}
+		$(function() {
+			$(document).on("click", ".removeAdmin", function() {
+				$(this).parent().parent().remove();
+			})
+		})
+	</script> 
 </body>
 </html>

@@ -19,6 +19,6 @@ public class ReSign {
 	private String resRedate;
 	private String resAccount;
 	private String resBank;
-	private Clob resContent;
+	private String resContent;
 	
 }

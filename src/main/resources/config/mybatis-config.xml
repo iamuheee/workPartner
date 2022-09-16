@@ -49,6 +49,7 @@
 		<mapper resource="/mappers/employee-mapper.xml" />
 		<mapper resource="/mappers/mail-mapper.xml" />
 		<mapper resource="/mappers/notice-mapper.xml" />
+		<mapper resource="/mappers/Sign-mapper.xml"/>
 	</mappers>
 	
 </configuration>

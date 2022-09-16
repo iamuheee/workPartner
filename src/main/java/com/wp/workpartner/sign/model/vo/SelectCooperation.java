@@ -28,7 +28,7 @@ public class SelectCooperation {
 	private String depRec;
 	private String cpRequestor;
 	private String cpRequestDay;
-	private Clob cpContent;
+	private String cpContent;
 	
 	private ArrayList<Sign> signList;
 }

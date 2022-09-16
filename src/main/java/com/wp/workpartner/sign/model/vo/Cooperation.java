@@ -17,5 +17,5 @@ public class Cooperation {
 	private String depRec;
 	private String cpRequestor;
 	private String cpRequestDay;
-	private Clob cpContent;
+	private String cpContent;
 }

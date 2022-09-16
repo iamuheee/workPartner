@@ -182,6 +182,11 @@ public class SignServiceImpl implements SignService {
 	public SelectOtwork selectOtwork(int dpNo) {
 		return null;
 	}
+
+	@Override
+	public int insertSign(int empNo) {
+		return sDao.insertSign(sqlSession, empNo);
+	}
 	
 	
 

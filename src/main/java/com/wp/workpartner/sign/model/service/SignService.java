@@ -15,6 +15,7 @@ import com.wp.workpartner.sign.model.vo.Vacation;
 
 public interface SignService {
 //	기안서 작성
+	int insertSign(int empNo);
 	int insertDtpaper(Dtpaper d);
 	int insertCooperation(Cooperation c);
 	int insertVacation(Vacation v);
