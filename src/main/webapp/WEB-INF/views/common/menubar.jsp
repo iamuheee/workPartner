@@ -314,7 +314,7 @@
 	                           <div class="collapse" id="collapseHome" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 	                               <nav class="sb-sidenav-menu-nested nav">
 	                                   <a class="nav-link nav-choice" href="">마이페이지</a>
-	                                   <a class="nav-link nav-choice" href="">공지사항</a>
+	                                   <a class="nav-link nav-choice" href="list.nt">공지사항</a>
 	                                   <a class="nav-link nav-choice" href="">쪽지함</a>
 	                               </nav>
 	                           </div>
@@ -422,10 +422,10 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseAuth2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="">임시저장</a>
-	                                           <a class="nav-link nav-choice" href="">진행중</a>
-	                                           <a class="nav-link nav-choice" href="">반려됨</a>
-	                                           <a class="nav-link nav-choice" href="">완료됨</a>                                            
+	                                           <a class="nav-link nav-choice" href="saveSi.si">임시저장</a>
+	                                           <a class="nav-link nav-choice" href="contSi.si">진행중</a>
+	                                           <a class="nav-link nav-choice" href="reSi.si">반려됨</a>
+	                                           <a class="nav-link nav-choice" href="endSi.si">완료됨</a>                                            
 	                                       </nav>
 	                                   </div>
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseApproval1" aria-expanded="false" aria-controls="pagesCollapseApproval1">
@@ -434,8 +434,8 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseApproval1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="">결재할기안서 </a>
-	                                           <a class="nav-link nav-choice" href="">결재완료</a>                                         
+	                                           <a class="nav-link nav-choice" href="othSi.si">결재할기안서 </a>
+	                                           <a class="nav-link nav-choice" href="othEndSi.si">결재완료</a>                                         
 	                                       </nav>
 	                                   </div>
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseApproval2" aria-expanded="false" aria-controls="pagesCollapseApproval2">
@@ -444,8 +444,8 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseApproval2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="">결재할기안서 </a>
-	                                           <a class="nav-link nav-choice" href="">결재완료</a>                                         
+	                                           <a class="nav-link nav-choice" href="deptSi.si">결재할기안서 </a>
+	                                           <a class="nav-link nav-choice" href="deptEndSi.si">결재완료</a>                                         
 	                                       </nav>
 	                                   </div>
 	                               </nav>
