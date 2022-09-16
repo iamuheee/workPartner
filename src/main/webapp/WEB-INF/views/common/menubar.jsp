@@ -394,7 +394,7 @@
 	                                   <a class="nav-link nav-choice" href="receiveList.ma">받은메일함</a>
 	                                   <a class="nav-link nav-choice" href="sendList.ma">보낸메일함</a>
 	                                   <a class="nav-link nav-choice" href="bin.ma">휴지통</a>
-	                                   <a class="nav-link nav-choice" href="sig.ma">설정</a>
+	                                   <a class="nav-link nav-choice" href="sig.ma?no=" + ${ loginUser.empNo }>설정</a>
 	                               </nav>
 	                           </div>
 	
