@@ -24,13 +24,13 @@
 		<mapping> : 인터셉터를 거쳐갈 URL매핑값을 작성 (path="/매핑값")
 		<bean>	  : 인터셉터를 빈으로 등록 (class="" id="")
 	-->	
-	<interceptors>
+<!-- 	<interceptors>
 		<interceptor>
 			<mapping path="/**" />
 			<exclude-mapping path="/loginForm.em" />
 			<exclude-mapping path="/login.em" />
 			<beans:bean class="com.wp.workpartner.common.interceptor.LoginInterceptor" id="loginInterceptor"/>
 		</interceptor>
-	</interceptors>
+	</interceptors> -->
 	
 </beans:beans>
