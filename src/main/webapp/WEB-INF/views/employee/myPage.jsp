@@ -156,7 +156,7 @@
 	            <div id="profileArea" align="center">
 	                <!-- 프로필 이미지 변경 -->
 	                <div class="updateImg">
-	                    <img id="profileImg" src="${pageContext.request.contextPath}/resources/profile_images/defaultProfile.png" onclick="$('#profileImgFile').click();">
+	                    <img id="profileImg" src="<c:out value='${ loginUser.empProfile }' default='resources/profile_images/defaultProfile.png'/>" onclick="$('#profileImgFile').click();">
 	                    <input type="file" id="profileImgFile" style="display:none;">
 	                </div>
 	                <br>
@@ -169,15 +169,15 @@
 	                        <td colspan="2" class="tableTitle">기본 정보</td>
 	                    <tr>
 	                        <th width="30%">이름</th>
-	                        <td>이름 자리</td>
+	                        <td>${ loginUser.empName }</td>
 	                    </tr>
 	                    <tr>
 	                        <th>사번</th>
-	                        <td>사번 자리</td>
+	                        <td>${ loginUser.empNo }</td>
 	                    </tr>
 	                    <tr>
 	                        <th>아이디</th>
-	                        <td>아이디 자리</td>
+	                        <td>${ loginUser.empId }</td>
 	                    </tr>
 	                    <tr>
 	                        <th>비밀번호</th>
@@ -244,15 +244,15 @@
 	                        <td colspan="4" class="tableTitle">인사 정보</td>
 	                    <tr>
 	                        <th>부서</th>
-	                        <td>부서 자리</td>
-	                        <th>직위 이메일</th>
-	                        <td>직위 자리</td>
+	                        <td>${ loginUser.depCd }</td>
+	                        <th>직위</th>
+	                        <td>${ loginUser.posCd }</td>
 	                    </tr>
 	                    <tr>
 	                        <th>입사일</th>
-	                        <td>입사일 자리</td>
+	                        <td>${ loginUser.empEnrollDate }</td>
 	                        <th>최종 부서 이동일</th>
-	                        <td>부서 이동일 자리</td>
+	                        <td></td>
 	                    </tr>
 	                </table>
 	            </div>
@@ -269,20 +269,20 @@
 	                            </tr>
 	                            <tr>
 	                                <th>이메일</th>
-	                                <td>이메일 자리</td>
+	                                <td>${ loginUser.empEmail }</td>
 	                                <th>외부 이메일</th>
 	                                <td>
-	                                    <input type="email" class="updateInfo" name="empEmail" required>
+	                                    <input type="email" class="updateInfo" name="empEmail" placeholder="${ loginUser.empExEmail }" required>
 	                                </td>
 	                            </tr>
 	                            <tr>
 	                                <th style="width:100px">내선번호</th>
 	                                <td>
-	                                    <input type="phone" class="updateInfo " name="empPhone" required>
+	                                    <input type="phone" class="updateInfo " name="empPhone" placeholder="${ loginUser.empExtension }" required>
 	                                </td>
 	                                <th>전화번호</th>
 	                                <td>
-	                                    <input type="phone" class="updateInfo" name="empExtension" required>
+	                                    <input type="phone" class="updateInfo" name="empExtension" placeholder="${ loginUser.empPhone }" required>
 	                                </td>
 	                            </tr>
 	                        </table>

@@ -49,7 +49,7 @@
 		     , emp_phone
 		     , emp_extension
 		     , emp_email
-		     , emp_exemail
+		     , NVL(emp_exemail, '반드시 입력해 주세요!') as emp_exemail
 		     , emp_enrolldate
 		     , emp_retiredate
 		     , emp_modifydate
