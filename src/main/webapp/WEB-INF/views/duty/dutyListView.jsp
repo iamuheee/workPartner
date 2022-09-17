@@ -47,7 +47,6 @@
 			text-decoration:none;
 		}
 		.paging{
-			margin-top:20px;
 			float:right;
 		}
      </style>
@@ -132,9 +131,11 @@
                 </table>
 				
 				<br><br>
+				<a class="btn btn-sm btn-primary btn-size" href="enroll.du" style="width:150px;height:40px;line-height:30px;float:left;">업무등록 바로가기</a>
 				
 				<!-- 페이징 -->
 				<div class="paging">
+					
 			    	<ul class="pagination">
 						<li class="page-item">
 					        <a class="page-link" href="list.du?cpage=${ pi.currentPage - 1 }" aria-label="Previous">
@@ -151,8 +152,8 @@
 						</li>
 				    </ul>
 				</div>
-				<div style="height:100px;"></div>
             </div>
+			<div style="height:100px;clear:both;"></div>
         </main>
     </div>
     
