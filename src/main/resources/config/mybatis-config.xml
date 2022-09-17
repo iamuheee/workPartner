@@ -27,6 +27,7 @@
 		<typeAlias type="com.wp.workpartner.notice.model.vo.Notice" alias="Notice" />
 		<typeAlias type="com.wp.workpartner.notice.model.vo.NoticeComment" alias="NoticeComment" />	
 		
+		<typeAlias type="com.wp.workpartner.common.model.vo.Comment" alias="Comment" />	
 		<typeAlias type="com.wp.workpartner.common.model.vo.File" alias="File"/>
 		
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Cooperation" alias="Cooperation"/>
@@ -55,6 +56,7 @@
 		<mapper resource="/mappers/notice-mapper.xml" />
 		<mapper resource="/mappers/Sign-mapper.xml"/>
 		<mapper resource="/mappers/room-mapper.xml" />
+		<mapper resource="/mappers/comment-mapper.xml"/>
 	</mappers>
 	
 </configuration>
