@@ -294,6 +294,12 @@ public class AddressController {
 		return "address/addressEmailCC";
 	}
 	
+	// 업무용 주소록
+	@RequestMapping("addressDuty.ad")
+	public String addressDuty() {
+		return "address/addressDuty";
+	}
+	
 	
 	
 	

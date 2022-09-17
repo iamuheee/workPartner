@@ -30,6 +30,7 @@
 		     (
 		       SEQ_DNO.NEXTVAL
 		     , #{empNo}
+		     , #{empName}
 		     , #{calendarYN}
 		     , #{importance}
 		     , #{progress}
@@ -39,7 +40,6 @@
 		     , #{startDate}
 		     , #{endDate}
 		     , 'Y'
-		     , #{dutyName}
 		     ) 
 	</insert>
 	
@@ -50,10 +50,9 @@
 		VALUES
 			 (
 			   SEQ_DNO.CURRVAL
-			 , #{empNo}
-			 , #{empName}
+			 , #{empICNo}
+			 , #{empICName}
 			 )
-			 
 	</insert>
 	
 	<insert id="insertFile">

@@ -31,6 +31,7 @@ public class Duty {
 	private String status;
 	
 	private ArrayList<DutyCharge> empIC;
-	
+	private String empICNo;
+	private String empICName;
 	private String value;
 }

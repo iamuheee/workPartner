@@ -6,12 +6,12 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.duty.model.dao.DutyDao;
 import com.wp.workpartner.duty.model.vo.Duty;
 import com.wp.workpartner.duty.model.vo.DutyCharge;
+import com.wp.workpartner.employee.model.vo.Employee;
 
 @Service
 public class DutyServiceImpl implements DutyService {
@@ -40,9 +40,23 @@ public class DutyServiceImpl implements DutyService {
 		int result1 = dDao.insertDuty(sqlSession, d);
 		
 		int result2 = 1;
-		for(DutyCharge dc : d.getEmpIC()) {
+		ArrayList<DutyCharge> dclist = new ArrayList<>();
+		String[] empICNos = d.getEmpICNo().split(",");
+		String[] empICNames = d.getEmpICName().split(",");
+		
+		for(int i=0; i<empICNos.length; i++) {
+			DutyCharge dc = new DutyCharge();
+			dc.setEmpICNo(empICNos[i]);
+			dc.setEmpICName(empICNames[i]);
+			dclist.add(dc);
+		}
+		
+		System.out.println(dclist);
+		
+		for(DutyCharge dc : dclist) {
 			result2 *= dDao.insertDutyCharge(sqlSession, dc);
 		}
+		
 		
 		int result3 = dDao.insertFile(sqlSession, f);
 		
@@ -54,10 +68,28 @@ public class DutyServiceImpl implements DutyService {
 	public int insertDutyWithoutFile(Duty d) {
 		int result1 = dDao.insertDuty(sqlSession, d);
 		
-		int result2 = 0;
-		for(DutyCharge dc : d.getEmpIC()) {
+		int result2 = 1;
+		ArrayList<DutyCharge> dclist = new ArrayList<>();
+		String[] empICNos = d.getEmpICNo().split(",");
+		String[] empICNames = d.getEmpICName().split(",");
+		
+		System.out.println(empICNos);
+		System.out.println(empICNames);
+		
+		for(int i=0; i<empICNos.length; i++) {
+			DutyCharge dc = new DutyCharge();
+			dc.setEmpICNo(empICNos[i]);
+			dc.setEmpICName(empICNames[i]);
+			dclist.add(dc);
+		}
+		
+		System.out.println(dclist);
+		
+		for(DutyCharge dc : dclist) {
 			result2 *= dDao.insertDutyCharge(sqlSession, dc);
 		}
+		
+		
 		return result1 * result2;
 	}
 	

@@ -43,7 +43,7 @@
             background-color: lightgray;
             font-size: 12px;
         }
-        #list-mem li{
+        #empICList li{
             display:inline;
             list-style: none;
             margin-right:10px;
@@ -77,7 +77,7 @@
         </div>
         <form action="insert.du" method="post" enctype="multipart/form-data" class="inner-area">
         	<input type="hidden" name="empNo" value="${ loginUser.empNo }">
-            
+        	<input type="hidden" name="empName" value="${loginUser.empName}">            
             <span class="title">업무 제목</span> <br><br>
             <input type="text" name="title" class="form-control" required>
             <br><br>
@@ -104,25 +104,28 @@
             
             <br style="clear:both;"><br>
             
-            <div class="setting-left">
+            <div class="setting-left" id="duty-incharge">
                 <span class="title">담당자</span><br>
                 <span style="padding: 10px;">담당자는 최대 3명까지 설정할 수 있습니다.</span>
                 <button type="button" class="btn btn-sm btn-primary" id="search-emp">담당자 검색</button> <!-- 주소록 띄우는 버튼 -->
-                <input type="hidden" id="identifier" value="duty"> 
-                <input type="hidden" name="empIC" value="2,3,4,">
                 
-                <ul id="list-mem">
-                <!-- 
-                반복문 돌려서 동적으로 업무 담당자 ArrayList를 Duty의 한 필드로 넣기
-               	(dutyNo은 어차피 SEQ_DNO.CURRVAL로 채우면 되니까 여기서 필요 X)
-					<li>
-						<span>사원이름</span>
-                        <button type="button" class="delete-emp">x</button>
-		                <input type="hidden" name="empIC[i].empNo" value="자식창에서 받은 empNo값"> 
-		                <input type="hidden" name="empIC[o].empName" value="자식창에서 받은 empName값">
-					</li>               		
-                -->
-                </ul>
+                <script>
+	        		// 조직도 팝업 띄우는 함수
+	        		$("#search-emp").click(function(){
+	        			$("#empIC").remove();
+	        			window.name = "parentWindow"
+	        			let childWindow; // 자식창
+	        			childWindow = window.open("addressDuty.ad","childWindow", "height=700, width=1100, resizable=no, scrollbars=no");  
+	        		})
+	        		
+	        		// 조직도에서부터 empICNo을 ,로 연결한 문자열 받아오는 함수
+                	function sendMeData(data){
+                		console.log(data);
+                		$("#search-emp").after(data);
+                	}
+                	
+                </script>
+                
             </div>
             
             <div class="setting-right">
@@ -198,40 +201,9 @@
 				}	    			
     		}
     	})
-    	
-    	
-    	// #submit-btn 클릭시 발생하는 이벤트
-    	$("#submit-btn").click(function(){
-    		let $empIC = $("input[name=empIC]").val();
-    		$empIC = $empIC.substr(0, $empIC.length - 1); // substr(시작인덱스, 개수)
-    		$("form").submit();
-    	})
-    	
-    	
-		// 조직도 팝업 띄우는 함수
-		$("#search-emp").click(function(){
-			window.name = "parentWindow"
-			let childWindow; // 자식창
-			childWindow = window.open("addressAdmin.ad","childWindow", "height=700, width=1100, resizable=no, scrollbars=no");  
-		})
-	   	
-		// 담당자 이름 옆 x 버튼 클릭이벤트 발생시 해당 li요소 삭제
-		$(".delete-emp").click(function(){
-			$(this).parent("li").remove();
-	   	})
-
     </script>
     	
    	
-   	<script>
-		// 조직도 팝업에서 담당자에 대한 정보 넘겨받고, 반복문 돌려 li요소로 담당자들을 출력하는 함수 ( html(문자열) 이용 )
-		let liEl = ""; // for문 돌려가며 li요소 추가할 것임 (에이작스 석세스펑션처럼)
-		
-		   	
-   	</script>
-	    	
-	    	
-	    	
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="js/scripts.js"></script>

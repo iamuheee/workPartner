@@ -10,6 +10,7 @@ import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.duty.model.vo.Duty;
 import com.wp.workpartner.duty.model.vo.DutyCharge;
+import com.wp.workpartner.employee.model.vo.Employee;
 
 @Repository
 public class DutyDao {
@@ -23,6 +24,10 @@ public class DutyDao {
 	 */
 	public int insertDuty(SqlSessionTemplate sqlSession, Duty d) {
 		return sqlSession.insert("dutyMapper.insertDuty", d);
+	}
+	
+	public ArrayList<Employee> selectEmpICList(SqlSessionTemplate sqlSession, String empICNo){
+		return (ArrayList)sqlSession.selectList("dutyMapper.selectEmpICList", empICNo);
 	}
 	
 	

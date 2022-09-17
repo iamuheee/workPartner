@@ -56,10 +56,12 @@ public class DutyController {
 		d.setStartDate( d.getStartDate().replace('-', '.') );
 		d.setEndDate( d.getEndDate().replace('-', '.') );
 		
+		// empICNo : empNo,empNo,empNo 의 형태
+		// => tb_employee에서 employee 객체의 ArrayList 조회, 각각을 TB_DUTY_CHARGE에 담기
 
 		int result = 0; 
 		
-		if(upfile != null) {
+		if(upfile.getOriginalFilename().length() > 0) {
 			result = dService.insertDutyWithFile(d, File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/")) );
 		}else {
 			result = dService.insertDutyWithoutFile(d);
@@ -67,7 +69,7 @@ public class DutyController {
 		
 		if(result > 0) {
 			session.setAttribute("alertMsg", "업무 등록에 성공했습니다.");
-			return "list.du";
+			return "redirect:list.du";
 		}else {
 			m.addAttribute("errorMsg", "업무 등록에 실패했습니다.");
 			return "common/errorPage";
