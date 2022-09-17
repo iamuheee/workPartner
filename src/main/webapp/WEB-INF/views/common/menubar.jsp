@@ -330,17 +330,17 @@
 	                           <div class="collapse" id="collapseTA" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 	                               
 	                               <nav class="sb-sidenav-menu-nested nav">                                                                    
-	                                   <a class="nav-link nav-choice" href="">근태등록</a>
-	                                   <a class="nav-link nav-choice" href="">내 근태현황</a>
-	                                   <a class="nav-link nav-choice" href="">근태 이력</a>
-	                                   <a class="nav-link nav-choice" href="">휴가관리</a>
+	                                   <a class="nav-link nav-choice" href="check.att">근태등록</a>
+	                                   <a class="nav-link nav-choice" href="my.att">내 근태현황</a>
+	                                   <a class="nav-link nav-choice" href="myAttHis.att">근태 이력</a>
+	                                   <a class="nav-link nav-choice" href="myVacation.att">휴가관리</a>
 	                               </nav>
 	                               
 	                               <div class="menu-side-head">관리자 메뉴</div>
 	                               <nav class="sb-sidenav-menu-nested nav">                                   
-	                                   <a class="nav-link nav-choice" href="">전사원근태현황</a>
-	                                   <a class="nav-link nav-choice" href="">전사원휴가현황</a>
-	                                   <a class="nav-link nav-choice" href="">근태조정내역</a>                                   
+	                                   <a class="nav-link nav-choice" href="adminAtt.att">전사원근태현황</a>
+	                                   <a class="nav-link nav-choice" href="adminAttAdjust.att">근태조정내역</a>
+	                                   <a class="nav-link nav-choice" href="adminVacation.att">전사원휴가현황</a>
 	                               </nav>                                
 	                           </div>
 	
@@ -515,7 +515,7 @@
 		                                           <a class="nav-link nav-choice" href="list.em">사용자 조회/수정</a>                                        
 		                                       </nav>
 		                                   </div>
-		                                   <a class="nav-link collapsed nav-choice" href="">직위/직무등록</a>
+		                                   <a class="nav-link collapsed nav-choice" href="adminPosition.att">직위/직무등록</a>
 		                               </nav>
 		                           </div>
 	                           <%-- </c:if> --%>
