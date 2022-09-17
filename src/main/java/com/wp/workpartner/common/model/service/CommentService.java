@@ -23,7 +23,7 @@ public interface CommentService {
 	 * @param f
 	 * @return
 	 */
-	int insertFile(Comment c);
+	int insertCommentFile(Comment c);
 	
 	/**
 	 * TB_COMMENT 테이블에서 댓글 조회 
@@ -31,5 +31,9 @@ public interface CommentService {
 	 * @return
 	 */
 	ArrayList<Comment> selectCommentList(Comment c);
+	
+	int deleteComment(String comNo);
+	
+	int deleteCommentFile(String comNo);
 
 }

@@ -183,7 +183,7 @@
                 </div>
                 <div class="card-comment">
                     <div class="read-comment">
-                        <table width="100%" id="comment-table">
+                        <table width="100%" id="comment-table" style="border-collapse: collapse">
                         	
                         </table>
                     </div>
@@ -228,22 +228,22 @@
         				comRefBno:${d.dutyNo}
         			},
         			success:function(clist){
-        				if(clist == null){
+        				if(clist.length == 0){
         					// 조회되는 댓글이 없는 경우
-        					html += '<th style="padding:30px;" align="center"><span>아직 작성된 댓글이 없습니다.</span></th>';
+        					html += '<th style="padding:30px;text-align:center"><span>아직 작성된 댓글이 없습니다.</span></th>';
         				}else{
         					// 조회되는 댓글이 있는 경우
 	        				for(let i=0; i<clist.length; i++){
-	        					html += '<tr width="100%" height="10px;">'
+	        					html += '<tr>'
 	        						  + 	'<th width="8%" style="padding-left:20px;">' + clist[i].empName + '</th>'
-	        						  + 	'<td width="72%;" style="padding:10px; white-space:pre-line;">' + clist[i].comContent + '</td>'
-									  +		'<td width="10%;" style="color:gray;">' + clist[i].comCreateDate + '</td>'
-									  +		'<td><a width="5%" href="update.co?no=' + clist[i].comNo + '">수정</a></td>'
-								  	  +		'<td><a width="5%" href="update.co?no=' + clist[i].comNo + '">삭제</a></td>'
+	        						  + 	'<td width="77%;" style="padding:10px; white-space:pre-line;">' + clist[i].comContent + '</td>'
+									  +		'<td width="10%;" style="color:gray;font-size:small;">' + clist[i].comCreateDate + '</td>'
+								  	  +		'<td><a width="5%" href="delete.co?dno=' + ${d.dutyNo} + '&cno=' + clist[i].comNo + '">삭제</a></td>'
 	        						  + '</tr>';
 	        						  // 첨부파일이 있는 경우에만 한 행 추가하여 파일 다운로드 받을 수 있도록 함
 								if(clist[i].file != null){ 
-									html += '<tr><td colspan="5"><a href="' + clist[i].file.filePath + '">' + clist[i].file.fileOriginName + '</a></td><tr>';
+									console.log(clist[i].file);
+									html += '<tr><td/><td colspan="4" style="padding-left:15px;font-size:small;color:gray;">└ 댓글 첨부파일 : <a href="' + clist[i].file.filePath + '">' + clist[i].file.fileOriginName + '</a></td><tr>';
 								}
 	        				}
         				}
@@ -289,10 +289,8 @@
             			success:function(alertMsg){
             				// INSERT 요청처리 후에는, 성공/실패 메시지 보낸 후 새롭게 댓글 리스트를 조회
             				alert(alertMsg);
-            				// 혹시 기존의 요소를 지워줘야 하나?
-            						// 특정 요소만 reload : $("comment-table").load(location.href + ' #comment-table')
             				selectCommentList();
-            				// 잘 안되면 걍 location.reload();
+            				$("textarea[name=comContent]").val("");
             			},
             			error:function(){
             				console.log("댓글 작성 AJAX 통신 실패");

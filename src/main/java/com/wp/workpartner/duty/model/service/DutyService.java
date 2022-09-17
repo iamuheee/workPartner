@@ -39,14 +39,4 @@ public interface DutyService {
 	// 업무 게시글 삭제
 	int deleteDuty(String dutyNo);
 	
-	// 업무 게시글 댓글 작성 (ajax)
-	int insertDutyComment(Comment c);
-	
-	// 업무 게시글 댓글 수정 (ajax)
-	int updateDutyComment(Comment c);
-	
-	// 업무 게시글 댓글 삭제 (ajax)
-	int deleteDutyComment(int comNo);
-	
-
 }

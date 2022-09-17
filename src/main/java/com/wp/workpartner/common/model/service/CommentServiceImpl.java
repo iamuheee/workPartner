@@ -37,8 +37,23 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public int insertFile(Comment c) {
-		return cDao.insertFile(sqlSession, c);
+	public int insertCommentFile(Comment c) {
+		return cDao.insertCommentFile(sqlSession, c);
+	}
+
+	@Override
+	public int deleteComment(String comNo) {
+		return cDao.deleteComment(sqlSession, comNo);
+	}
+
+	@Override
+	public int deleteCommentFile(String comNo) {
+		if( cDao.selectComment(sqlSession, comNo).getFile() != null) {
+			return cDao.deleteCommentFile(sqlSession, comNo);
+		}else {
+			return 1;
+		}
+		
 	}
 
 

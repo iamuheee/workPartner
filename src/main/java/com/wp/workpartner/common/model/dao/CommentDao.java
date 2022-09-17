@@ -21,13 +21,25 @@ public class CommentDao {
 		return sqlSession.selectOne("commentMapper.selectCommentFile", c);
 	}
 	
+	public Comment selectComment(SqlSessionTemplate sqlSession, String comNo) {
+		return sqlSession.selectOne("commentMapper.selectComment", comNo);
+	}
+	
 	
 	public int insertComment(SqlSessionTemplate sqlSession, Comment c) {
 		return sqlSession.insert("commentMapper.insertComment", c);
 	}
 	
-	public int insertFile(SqlSessionTemplate sqlSession, Comment c) {
+	public int insertCommentFile(SqlSessionTemplate sqlSession, Comment c) {
 		return sqlSession.insert("commentMapper.insertFile", c);
+	}
+	
+	public int deleteComment(SqlSessionTemplate sqlSession, String comNo) {
+		return sqlSession.update("commentMapper.deleteComment", comNo);
+	}
+	
+	public int deleteCommentFile(SqlSessionTemplate sqlSession, String comNo) {
+		return sqlSession.update("commentMapper.deleteCommentFile", comNo);
 	}
 	
 

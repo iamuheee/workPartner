@@ -43,7 +43,7 @@ public class CommentController {
 			// 첨부파일 있는 경우
 			File f = File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/"));
 			c.setFile(f);
-			result2 = cService.insertFile(c);
+			result2 = cService.insertCommentFile(c);
 		}
 		
 		if(result1 * result2 > 0) {
@@ -52,6 +52,19 @@ public class CommentController {
 		}else {
 			return "댓글 등록에 실패하였습니다.";
 		}
+	}
+	
+	@RequestMapping("delete.co")
+	public String deleteComment(String dno, String cno, HttpSession session) {
+		int result1 = cService.deleteComment(cno);
+		int result2 = cService.deleteCommentFile(cno);
+		
+		if(result1 * result2 > 0) {
+			session.setAttribute("alertMsg", "성공적으로 댓글을 삭제하였습니다.");
+		}else {
+			session.setAttribute("alertMsg", "댓글 삭제에 실패했습니다.");
+		}
+		return "redirect:detail.du?no=" + dno;
 	}
 	
 	

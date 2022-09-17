@@ -121,23 +121,6 @@ public class DutyServiceImpl implements DutyService {
 		return 0;
 	}
 
-	@Override
-	public int insertDutyComment(Comment c) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int updateDutyComment(Comment c) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int deleteDutyComment(int comNo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 
 }
