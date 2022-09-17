@@ -27,6 +27,7 @@
 		<typeAlias type="com.wp.workpartner.notice.model.vo.Notice" alias="Notice" />
 		<typeAlias type="com.wp.workpartner.notice.model.vo.NoticeComment" alias="NoticeComment" />	
 		
+		<typeAlias type="com.wp.workpartner.common.model.vo.File" alias="File"/>
 		
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Cooperation" alias="Cooperation"/>
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Dtpaper" alias="Dtpaper"/>
@@ -38,6 +39,9 @@
 		<typeAlias type="com.wp.workpartner.sign.model.vo.SelectVacation" alias="SelectVacation"/>
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Sign" alias="Sign"/>
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Vacation" alias="Vacation"/>	
+		
+		<typeAlias type="com.wp.workpartner.room.model.vo.Room" alias="Room"/>
+		<typeAlias type="com.wp.workpartner.room.model.vo.Equip" alias="Equip"/>
 	</typeAliases>
 	
 	<!-- <유의사항> -->
@@ -50,6 +54,7 @@
 		<mapper resource="/mappers/mail-mapper.xml" />
 		<mapper resource="/mappers/notice-mapper.xml" />
 		<mapper resource="/mappers/Sign-mapper.xml"/>
+		<mapper resource="/mappers/room-mapper.xml" />
 	</mappers>
 	
 </configuration>
