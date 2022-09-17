@@ -754,7 +754,7 @@
                             	value  +=			'"></th>'
                                 		+			'<th align="left"><h5><b>'+ result.empName +'</b></h5></th>'                               
                                 		+           '<th  align="right">'
-                                    	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.em?email='+ result.empEmail +'">mail</a>'
+                                    	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.ma?email='+ result.empEmail +'">mail</a>'
                                 		+			'</th>'
                                 		+			'<th><button type="button" class="material-symbols-outlined aHover btn-text" data-toggle="modal" data-target="#addressChat">chat</button></th>'
                            				+		 '</tr>'                       
@@ -938,7 +938,7 @@
                           		value += '<th class="fontSmallSize" style="width: 70px;">'+ result.addressNickName+'</th>';
                           	} 		
                              value +=           '<th  align="right">'
-                                	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.em?no='+ result.addressEmail +'">mail</a>'
+                                	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.ma?email='+ result.addressEmail +'">mail</a>'
                             		+			'</th>'
                        				+		 '</tr>'                       
                     				+'</thead>'

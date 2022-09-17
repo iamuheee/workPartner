@@ -176,7 +176,7 @@ font-family: 'Noto Sans KR', sans-serif;
 					for(let i=0; i<arr.length; i++){
 						 value  += '<tr>'                                   
 	                            +       '<td><span>'+  arr[i] + '</span></td>'
-	                            +       '<td><input type="hidden" name="emailRecipient" value="'+  arr[i]  +'"></td>'
+	                            +       '<td><input type="hidden" name="mailRecipient" value="'+  arr[i]  +'"></td>'
 	                            +       '<td><span class="removeMail">x</span></td>'
 	                            + '</tr>';
 					}

@@ -1,6 +1,6 @@
 package com.wp.workpartner.mail.model.vo;
 
-import java.sql.Date;
+import java.util.ArrayList;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,4 +24,6 @@ public class Signature {
 	 private String sigStatus;
 	 private String sigBasic;
 	 private String rnum;
+	 
+	 private ArrayList<Signature> sigList;
 }
