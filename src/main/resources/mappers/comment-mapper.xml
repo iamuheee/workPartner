@@ -15,11 +15,79 @@
 		<result column="COM_STATUS" property="comStatus" />
 	</resultMap>
 	
+	<resultMap id="fileResult" type="File">
+		<result column="FILE_NO" property="fileNo"/>
+		<result column="FILE_REF_NO" property="refNo"/>
+		<result column="FILE_CATEGPRY" property="fileCategory"/>
+		<result column="FILE_ORIGIN_NAME" property="fileOriginName"/>
+		<result column="FILE_CHANGE_NAME" property="fileChangeName"/>
+		<result column="FILE_PATH" property="filePath"/>
+		<result column="FILE_UPLOAD_DATE" property="fileUploadDate"/>
+		<result column="FILE_LEVEL" property="fileLevel"/>
+		<result column="FILE_STATUS" property="fileStatus"/>
+	</resultMap>
 	
 
-	<select id="selectCommentList">
-	
+	<select id="selectCommentList" resultMap="commentResult">
+		SELECT 
+			   COM_NO
+			 , EMP_NO
+			 , EMP_NAME
+			 , COM_CONTENT
+			 , to_char(COM_CREATE_DATE, 'YYYYMMDD') AS "COM_CREATE_DATE"
+		  FROM TB_COMMENT
+		 WHERE COM_STATUS = 'Y'
+		   AND COM_TYPE = #{comType}
+		   AND COM_REF_BNO = #{comRefBno}
+		 ORDER
+		 	BY COM_NO DESC
 	</select>
+	
+	<select id="selectCommentFile" resultMap="fileResult">
+		SELECT 
+			   FILE_NO
+			 , FILE_ORIGIN_NAME
+			 , FILE_PATH
+		  FROM TB_FILE
+		 WHERE FILE_STATUS = 'Y'
+		   AND FILE_CATEGORY = #{comType}
+		   AND FILE_REF_NO = #{comRefBno}
+	</select>
+	
+	<insert id="insertComment">
+		INSERT
+		  INTO TB_COMMENT
+		VALUES
+			 (
+			   SEQ_CNO.NEXTVAL
+			 , #{comType}
+			 , #{comRefBno}
+			 , #{empNo}
+			 , DEFAULT
+			 , #{empName}
+			 , #{comContent}
+			 , DEFAULT
+			 , DEFAULT
+			 , DEFAULT
+			 )
+	</insert>
+	
+	<insert id="insertFile">
+		INSERT
+		  INTO TB_FILE
+		VALUES
+			 (
+			   SEQ_FILENO.NEXTVAL
+			 , #{comRefBno}
+			 , #{comType}
+			 , #{file.fileOriginName}
+			 , #{file.fileChangeName}
+			 , #{file.filePath}
+			 , DEFAULT
+			 , DEFAULT
+			 , DEFAULT
+			 )
+	</insert>
 
 
 </mapper>

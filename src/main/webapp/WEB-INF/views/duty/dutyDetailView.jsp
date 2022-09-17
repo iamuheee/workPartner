@@ -172,45 +172,32 @@
                 
                 <hr>
                 <div class="card-body">
-                    <div class="content">
-                        <p style="white-space:pre-line; padding-left:20px;padding-right:20px;padding-bottom:50px;">
+                    <div class="content-area">
+                        <p id="content" style="white-space:pre-line; padding-left:20px;padding-right:20px;padding-bottom:50px;">
                             ${d.content}
                         </p>
                     </div>
                     <div class="content-file" align="center">
-                        <a  download="${f.fileOriginName}" href="${ f.filePath }"></a>
+                        <a href="${ f.filePath }">${f.fileOriginName}</a>
                     </div>
                 </div>
                 <div class="card-comment">
                     <div class="read-comment">
-                        <table width="100%;">
-                        	<c:choose>
-                        		<c:when test="${ not empty clist }">
-                        			<c:forEach var="c" items="${clist}">
-			                            <tr width="100%" height="10px;">
-			                                <th width="8%" style="padding-left:20px;">${c.empName}</th>
-			                                <td width="72%;" style="padding:10px; white-space:pre-line;">${c.comContent}</td>
-			                                <td width="10%;" style="color:gray;">${c.comCreateDate}</td>
-			                                <td><a width="5%" href="update.co?no=${c.comNo}">수정</a></td>
-			                                <td><a width="5%" href="update.co?no=${c.comNo}">삭제</a></td>
-			                            </tr>
-                        			</c:forEach>
-                        		</c:when>
-                        		<c:otherwise>
-                        			<div style="padding:30px;" align="center"><span>아직 작성된 댓글이 없습니다.</span></div>
-                        		</c:otherwise>
-                        	</c:choose>
+                        <table width="100%" id="comment-table">
+                        	
                         </table>
                     </div>
-                    <form class="write-comment" action="upload.fi" method="post"  enctype="multipart/form-data">
+                    <form class="write-comment" id="commentForm" >
                         <input type="hidden" name="empNo" value="${loginUser.empNo}">
+                        <input type="hidden" name="empName" value="${loginUser.empName}">
+                        <input type="hidden" name="comType" value="1">
                         <input type="hidden" name="comRefBno" value="${d.dutyNo}">
                         <input type="file" name="upfile" class="hidden-info">
                         <textarea name="comContent" class="form-control" style="width:90%; height:80px; margin:10px; float:left; resize:none"></textarea>
-                        <button class="btn btn-sm btn-success" onclick="insertFile();" style="float:left; height:80px; width:3%; margin-top:10px; margin-right:5px;">
+                        <button type="button" class="btn btn-sm btn-success" onclick="insertFile()" style="float:left; height:80px; width:3%; margin-top:10px; margin-right:5px;">
                             <i class="fa fa-paperclip" aria-hidden="true"></i>
                         </button>
-                        <button class="btn btn-sm btn-secondary" onclick="insertComment();" style="float:left; height:80px; width:3%; margin-top:10px;">확인</button>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="insertComment()" style="float:left; height:80px; width:3%; margin-top:10px;">확인</button>
                         <br style="clear:both;">
                         <a id="fileName" style="padding:20px; color:gray;"></a>
                     </form>
@@ -220,12 +207,101 @@
 		</div>
 
         <script>
+        	
+        	/////////////////////////////
+        	// 댓글 조회 관련 function //
+        	/////////////////////////////
+        	
+        	// 페이지가 로드되자마자 댓글 리스트를 조회하는 함수
+        	$(function(){
+        		selectCommentList();
+        	})
+        	
+        	// 댓글 조회 함수 (AJAX)
+        	function selectCommentList(){
+        		html = "";
+        		
+        		$.ajax({
+        			url:"select.co",
+        			data:{
+        				comType:"1",
+        				comRefBno:${d.dutyNo}
+        			},
+        			success:function(clist){
+        				if(clist == null){
+        					// 조회되는 댓글이 없는 경우
+        					html += '<th style="padding:30px;" align="center"><span>아직 작성된 댓글이 없습니다.</span></th>';
+        				}else{
+        					// 조회되는 댓글이 있는 경우
+	        				for(let i=0; i<clist.length; i++){
+	        					html += '<tr width="100%" height="10px;">'
+	        						  + 	'<th width="8%" style="padding-left:20px;">' + clist[i].empName + '</th>'
+	        						  + 	'<td width="72%;" style="padding:10px; white-space:pre-line;">' + clist[i].comContent + '</td>'
+									  +		'<td width="10%;" style="color:gray;">' + clist[i].comCreateDate + '</td>'
+									  +		'<td><a width="5%" href="update.co?no=' + clist[i].comNo + '">수정</a></td>'
+								  	  +		'<td><a width="5%" href="update.co?no=' + clist[i].comNo + '">삭제</a></td>'
+	        						  + '</tr>';
+	        						  // 첨부파일이 있는 경우에만 한 행 추가하여 파일 다운로드 받을 수 있도록 함
+								if(clist[i].file != null){ 
+									html += '<tr><td colspan="5"><a href="' + clist[i].file.filePath + '">' + clist[i].file.fileOriginName + '</a></td><tr>';
+								}
+	        				}
+        				}
+        				// 위의 문자열 html을 테이블에 넣어주자
+        				$("#comment-table").html(html);
+        			},
+        			error:function(){
+        				console.log("댓글 조회 AJAX 통신 실패");
+        			}
+        		})
+        	}
+        	
+        									
+        	/////////////////////////////
+        	// 댓글 작성 관련 function //
+        	/////////////////////////////
+        	
+        	// 댓글 작성에 파일 첨부하는 기능
             function insertFile(){
                 $("input[name=upfile]").click();
             }
+        	
             $("input[name=upfile]").change(function(){
                 $("#fileName").html( $(this)[0].files[0].name + "파일 첨부됨");
             })
+            
+            // 댓글 작성하는 기능
+            function insertComment(){
+            	console.log("함수 호출됨 ㅎ ")
+           		// trim() : 문자열에서 좌우 공백을 제거하는 함수 => 만약 "   "일 때에는 요청하지 않도록! (유효성 검사)
+            	if( $("textarea[name=comContent]").val().trim().length > 0 ){
+            		// ajax로 form을 전송하기 위해 formData 객체를 선언, 생성
+            		let formData = new FormData($("#commentForm")[0]);
+            		
+            		console.log(formData);
+            		
+            		$.ajax({
+            			url:"insert.co",
+            			data:formData,
+            			contentType:false,
+            			processData:false,
+            			type:"POST",
+            			success:function(alertMsg){
+            				// INSERT 요청처리 후에는, 성공/실패 메시지 보낸 후 새롭게 댓글 리스트를 조회
+            				alert(alertMsg);
+            				// 혹시 기존의 요소를 지워줘야 하나?
+            						// 특정 요소만 reload : $("comment-table").load(location.href + ' #comment-table')
+            				selectCommentList();
+            				// 잘 안되면 걍 location.reload();
+            			},
+            			error:function(){
+            				console.log("댓글 작성 AJAX 통신 실패");
+            			}
+            		})
+            	}
+            }
+            
+            
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
