@@ -16,11 +16,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
         <style>
-            a{
-                text-decoration: none;
-                color:black;
-                font-size: small;
-            }
             .title{
                 font-size: larger;
                 font-weight: bolder;
@@ -63,6 +58,11 @@
                 border-bottom-left-radius: 5px;
                 border-bottom-right-radius: 5px;
             }
+            a{
+                text-decoration: none;
+                color:black;
+                font-size: small;
+            }
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </head>
@@ -74,7 +74,6 @@
         <div class="container">
             <div class="title-area">
                 <h1 style="font-weight:bolder;">개인 업무 상세 조회</h1>
-                <hr>
             </div>
 
             <!-- =================== 여기부터 업무 게시글 ======================== -->
@@ -85,13 +84,17 @@
                             <input type="hidden" name="dutyNo" value="${d.dutyNo}">
                             <table width="100%">
                                 <tr>
-                                    <td width="90%" style="padding-left:35px;padding-top:5px;">
-                                        <span style="font-size:small; color:gray;">담당자</span>
-                                        <span style="font-size:small; color:gray;">박혜진</span>
+                                    <td width="85%" style="padding-left:35px;padding-top:10px;">
+                                        <span style="font-size:small; color:gray;">[담당자]</span>
+                                        <span style="font-size:small; color:gray;">
+                                        	<c:forEach var="e" items="${d.empIC}">
+                                        		<span>${e.empICName} </span>
+                                        	</c:forEach>
+                                        </span>
                                         <h4 style="font-weight:bold;">${ d.title }</h4>
                                     </td>
-
-                                    <td width="5%"><a onclick="$('.edit-form').click();">수정</a></td>
+                                    <td width="5%"><a href="list.du">목록</a></td>
+                                    <td width="5%"><a href="update.du?no=${d.dutyNo}">수정</a></td>
                                     <td width="5%"><a class="delete-board" onclick="deleteBoard();">삭제</a></td>
                                 </tr>
                             </table>
@@ -99,36 +102,23 @@
                     </div>
 
                     <script>
-                        // 수정 버튼을 누르면 해당 게시글의 정보를 담아 수정 페이지로 이동하는 함수
-                        // (필요할까?)
-                        function submitEdit(){
-                            // 수정을 위해 필요한 게시글 정보 : 게시글의 번호뿐
-                        }
-
-                        // 삭제 버튼 > 삭제 확인을 누르면 해당 게시글이 삭제되도록하는 ajax
+                        // 삭제 버튼 > 삭제 확인을 누르면 해당 게시글이 삭제되도록하는 함수
+                        // AJAX 필요 없음 (목록으로 돌아가면 됨)
                         function deleteBoard(){
                             if( window.confirm("정말 삭제하시겠습니까?") ){
-                                $.ajax({
-                                    url:"매핑값",
+                                $.post({
+                                    url:"delete.du",
                                     data:{
-                                        boardNo:$(this).parent().siblings("input[name=boardNo]").val()
-                                    },
-                                    success:function(){
-                                        // Controller - Service - Dao - DB 순서로 가서 해당 게시글 번호의 게시글 삭제 후
-                                        // 다시 돌아와서 reload 해주어야 함
-                                    },
-                                    error:function(){
-                                        console.log("ajax 통신 실패 : 업무 게시글 삭제")
+                                        boardNo:${d.dutyNo}
                                     }
                                 })
                             }
                         }
                     </script>
-
                 </div>
-                <hr>
+                <hr style="height:0.1px;">
                 <div class="card-description">
-                    <table width="30%;" style="float:left; margin-right:50px; margin-left: 30px;">
+                    <table width="30%;" style="float:left; margin-right:100px; margin-left:40px;">
                         <tr>
                             <th>업무번호</th>
                             <td>${ d.dutyNo }</td>
@@ -141,19 +131,19 @@
                         </tr>
                     </table>
                     <table width="30%" class="btn-area" style="float:left;">
-                        <tr class="tr-progress">
-                            <th>상태</th>
-                            <td><button class="btn btn-sm">준비</button></td>
-                            <td><button class="btn btn-sm">진행</button></td>
-                            <td><button class="btn btn-sm">지연</button></td>
-                            <td><button class="btn btn-sm">완료</button></td>
-                        </tr>
                         <tr class="tr-importance">
                             <th>우선순위</th>
                             <td><button class="btn btn-sm">긴급</button></td>
                             <td><button class="btn btn-sm">중요</button></td>
                             <td><button class="btn btn-sm">보통</button></td>
                             <td><button class="btn btn-sm">낮음</button></td>
+                        </tr>
+                        <tr class="tr-progress">
+                            <th>진행상태</th>
+                            <td><button class="btn btn-sm">준비</button></td>
+                            <td><button class="btn btn-sm">진행</button></td>
+                            <td><button class="btn btn-sm">지연</button></td>
+                            <td><button class="btn btn-sm">완료</button></td>
                         </tr>
                     </table>
                 </div>
@@ -162,19 +152,19 @@
                     // 게시글의 상태, 우선 순위에 따라 색깔 보여지도록
                     $(function(){
                         $(".tr-progress").each(function(){
-                            switch( ${d.progress} ){
-                                case 1 : $(this).children().eq(0).css("background-color", "skyblue"); break;
-                                case 2 : $(this).children().eq(1).css("background-color", "lightgreen"); break;
-                                case 3 : $(this).children().eq(2).css("background-color", "yellow"); break;
-                                case 4 : $(this).children().eq(3).css("background-color", "violet"); break;
+                            switch( "${d.progress}" ){
+                                case '준비' : $(this).children("td").eq(0).children().css("background-color", "lightgreen"); break;
+                                case '진행' : $(this).children("td").eq(1).children().css("background-color", "skyblue"); break;
+                                case '지연' : $(this).children("td").eq(2).children().css("background-color", "yellow"); break;
+                                case '완료' : $(this).children("td").eq(3).children().css("background-color", "violet"); break;
                             }
                         })
                         $(".tr-importance").each(function(){
-                            switch( ${d.importance} ){
-                                case 1 : $(this).children().eq(0).css("background-color", "red"); break;
-                                case 2 : $(this).children().eq(1).css("background-color", "orange"); break;
-                                case 3 : $(this).children().eq(2).css("background-color", "lightgreen"); break;
-                                case 4 : $(this).children().eq(3).css("background-color", "gray").color("color", "white"); break;
+                            switch( "${d.importance}" ){
+                                case '긴급' : $(this).children("td").eq(0).children().css("background-color", "red"); break;
+                                case '중요' : $(this).children("td").eq(1).children().css("background-color", "orange"); break;
+                                case '보통' : $(this).children("td").eq(2).children().css("background-color", "lightgreen"); break;
+                                case '낮음' : $(this).children("td").eq(3).children().css("background-color", "gray").color("color", "white"); break;
                             }
                         })
                     })
@@ -183,38 +173,39 @@
                 <hr>
                 <div class="card-body">
                     <div class="content">
-                        <p>
-                            업무 내용
+                        <p style="white-space:pre-line; padding-left:20px;padding-right:20px;padding-bottom:50px;">
+                            ${d.content}
                         </p>
                     </div>
                     <div class="content-file" align="center">
-                        첨부파일 있다면 여기에 파일이 뜸
-                        <input type="file" class="form-control hidden-info" name="" class="hidden-info">
+                        <a  download="${f.fileOriginName}" href="${ f.filePath }"></a>
                     </div>
                 </div>
                 <div class="card-comment">
                     <div class="read-comment">
                         <table width="100%;">
-                            <tr width="100%" height="10px;">
-                                <th width="8%" style="padding-left:20px;">이름</th>
-                                <td width="72%;" style="padding:20px; white-space:pre-line;">Lorem ipsum dolor sit amet, consectetur adipiscing vitae</td>
-                                <td width="10%;" style="color:gray;">2022-09-02</td>
-                                <td><a width="5%" href="">수정</a></td>
-                                <td><a width="5%" href="">삭제</a></td>
-                            </tr>
-                            <tr width="100%" height="10px;">
-                                <th width="8%" style="padding-left:20px;">이름</th>
-                                <td width="72%;" style="padding:20px; white-space:pre-line;">Lorem ipsum dolor sit amet, consectetur adipiscing vitae</td>
-                                <td width="10%;" style="color:gray;">2022-09-02</td>
-                                <td><a width="5%" href="">수정</a></td>
-                                <td><a width="5%" href="">삭제</a></td>
-                            </tr>
+                        	<c:choose>
+                        		<c:when test="${ not empty clist }">
+                        			<c:forEach var="c" items="${clist}">
+			                            <tr width="100%" height="10px;">
+			                                <th width="8%" style="padding-left:20px;">${c.empName}</th>
+			                                <td width="72%;" style="padding:10px; white-space:pre-line;">${c.comContent}</td>
+			                                <td width="10%;" style="color:gray;">${c.comCreateDate}</td>
+			                                <td><a width="5%" href="update.co?no=${c.comNo}">수정</a></td>
+			                                <td><a width="5%" href="update.co?no=${c.comNo}">삭제</a></td>
+			                            </tr>
+                        			</c:forEach>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<div style="padding:30px;" align="center"><span>아직 작성된 댓글이 없습니다.</span></div>
+                        		</c:otherwise>
+                        	</c:choose>
                         </table>
                     </div>
-                    <form class="write-comment" action="" method="post"  enctype="multipart/form-data">
-                        <input type="hidden" name="empNo" value="로그인유저의사번">
+                    <form class="write-comment" action="upload.fi" method="post"  enctype="multipart/form-data">
+                        <input type="hidden" name="empNo" value="${loginUser.empNo}">
                         <input type="hidden" name="comRefBno" value="${d.dutyNo}">
-                        <input type="file" name="commentAtt" class="hidden-info">
+                        <input type="file" name="upfile" class="hidden-info">
                         <textarea name="comContent" class="form-control" style="width:90%; height:80px; margin:10px; float:left; resize:none"></textarea>
                         <button class="btn btn-sm btn-success" onclick="insertFile();" style="float:left; height:80px; width:3%; margin-top:10px; margin-right:5px;">
                             <i class="fa fa-paperclip" aria-hidden="true"></i>
@@ -230,10 +221,10 @@
 
         <script>
             function insertFile(){
-                $("input[name=commentAtt]").click();
+                $("input[name=upfile]").click();
             }
-            $("input[name=commentAtt]").change(function(){
-                $("#fileName").html( $(this)[0].files[0].name + "파일 업로드됨");
+            $("input[name=upfile]").change(function(){
+                $("#fileName").html( $(this)[0].files[0].name + "파일 첨부됨");
             })
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

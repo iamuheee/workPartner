@@ -85,20 +85,20 @@
             <div class="setting-left">
                 <span class="title">상태</span><br>
 				<select name="progress" class="form-select">
-					<option value="1" selected>준비</option>
-					<option value="2">진행</option>
-					<option value="3">지연</option>
-					<option value="4">완료</option>
+					<option selected>준비</option>
+					<option >진행</option>
+					<option >지연</option>
+					<option >완료</option>
 				</select>
             </div>
             
             <div class="setting-right">
                 <span class="title">우선 순위</span><br>
 				<select name="importance" class="form-select">
-					<option value="1">긴급</option>
-					<option value="2">중요</option>
-					<option value="3" selected>보통</option>
-					<option value="4">낮음</option>
+					<option >긴급</option>
+					<option >중요</option>
+					<option selected>보통</option>
+					<option >낮음</option>
 				</select>
             </div>
             
@@ -137,7 +137,7 @@
             
             <div class="content">
                 <span class="title">업무 내용</span><br><br>
-                <textarea name="content" id="summernote" class="form-control" rows="10" required style="height:400px; width:100%; overflow:auto; resize:none;"></textarea>
+                <textarea name="content" id="summernote" required style="height:400px; width:100%; overflow:auto; resize:none;"></textarea>
             </div>
             
             <br><br>
@@ -164,40 +164,6 @@
         </form>
     </div>
     
-    <!-- summerNote 관련 script-->
-	<script>
-	    $(document).ready(function() {
-	        //여기 아래 부분
-	        $('#summernote').summernote({
-	            height: 400px,                 // 에디터 높이
-	            focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
-	            lang: "utf-8",					// 한글 설정
-	            placeholder: '내용을 입력해주세요',	//placeholder 설정                   
-	            toolbar: [
-	                    // 글꼴 설정
-	                    ['fontname', ['fontname']],
-	                    // 글자 크기 설정
-	                    ['fontsize', ['fontsize']],
-	                    // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
-	                    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
-	                    // 글자색
-	                    ['color', ['forecolor','color']],
-	                    // 표만들기
-	                    ['table', ['table']],
-	                    // 글머리 기호, 번호매기기, 문단정렬
-	                    ['para', ['ul', 'ol', 'paragraph']],
-	                    // 줄간격
-	                    ['height', ['height']]
-	                ],
-	                // 추가한 글꼴
-	                fontNames: ['맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
-	                // 추가한 폰트사이즈
-	                fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36']
-	        });               
-	        
-	    });
-	</script>
-    
     
     <script>
 
@@ -208,13 +174,13 @@
    		$("input[name=startDate]").attr("min", year + '-' + month + '-' + date );
     	
    		
-    	// 마감일 날짜로 시작일 이전 날짜 불가능하도록 만드는 이벤트
+    	// 마감일 날짜로 시작일 이전 날짜 불가능하도록 만들기
     	$("input[name=startDate]").change(function(){
     		$("input[name=endDate]").attr("min", $(this).val());
     	})
     	
     	
-    	// TB_DUTY의 TITLE 컬럼의 자료형은 VARCHAR2(500BYTE)임 -> 제목 란에 500BYTE 초과하게 적으면 막아줘야 함
+    	// TB_DUTY의 TITLE 컬럼의 자료형은 VARCHAR2(500BYTE)임 -> 제목 란에 500BYTE 초과하게 적으면 막아주기
     	$("input[name=title]").keyup(function(){
     		let totalByte = 0;
     		for( let i=0; i< $(this).val().length; i++ ){
@@ -225,7 +191,7 @@
 	    			totalByte++;
     			}
 	    		
-				if(totalByte > 1000){
+				if(totalByte > 500){
 	    			alert("최대 글자수를 초과하였습니다. 다시 입력해주세요.");
 	    			// 마지막 글자 삭제해주기
 					$(this).val().substring( 0, $(this).val().length - 1 );					
