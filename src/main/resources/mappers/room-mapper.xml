@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="roomMapper">
+
+	<resultMap id="equipResult" type="Equip">
+		<result column="eq_no" property="eqNo" />
+		<result column="eq_name" property="eqName" />
+		<result column="eq_status" property="eqStatus" />
+	</resultMap>
+	
+	<resultMap id="roomResult" type="Room">
+		<result column="rm_no" property="rmNo" />
+		<result column="eq_no" property="eqNo" />
+		<result column="rm_name" property="rmName" />
+		<result column="rm_status" property="rmStatus" />
+		<result column="rm_enroll" property="rmEnroll" />
+		<result column="rm_modify" property="rmModify" />
+		<result column="rm_person" property="rmPerson" />
+	</resultMap>
+	
+	<resultMap id="fileResult" type="File">
+		<result column="file_no" property="fileNo" />
+		<result column="file_ref_no" property="refNo" />
+		<result column="file_category" property="fileCategory" />
+		<result column="file_origin_name" property="fileOriginName" />
+		<result column="file_change_name" property="fileChangeName" />
+		<result column="file_path" property="filePath" />
+		<result column="file_upload_date" property="fileUploadDate" />
+		<result column="file_level" property="fileLevel" />
+		<result column="file_status" property="fileStatus" />
+	</resultMap>
+	
+	<!-- 회의 장비 추가 -->
+	<!-- 작성자 : 박태은 -->
+	<insert id="insertEquip">
+		insert 
+		  into tb_equip
+		  (
+		    eq_no
+		  , eq_name     
+		  )
+		  values
+		  (
+		    seq_eqno.nextval
+		  , #{eqName}
+		  )
+	</insert>
+	
+	<!-- 회의 장비 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectEquipList" resultMap="equipResult">
+		select
+		       eq_no
+		     , eq_name
+		  from tb_equip
+		 where eq_status = 'Y'
+	</select>
+	
+	<!-- 회의실 등록 -->
+	<!-- 작성자 : 박태은 -->
+	<insert id="insertRoom">
+		insert
+		  into tb_room
+		  (
+		    rm_no
+		  , eq_no
+		  , rm_name
+		  , rm_person
+		  )
+		  values
+		  (
+		    seq_rmno.nextval
+		  , #{eqNo}
+		  , #{rmName}
+		  , #{rmPerson}
+		  )
+	</insert>
+	
+	<!-- 회의실 번호 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectRmNo" resultType="_int">
+		select
+		       rm_no
+		  from tb_room
+		 where rm_name = #{rmName}
+	</select>
+	
+	<!-- 회의실 사진 첨부파일 등록 -->
+	<insert id="insertRoomImg">
+		insert
+		  into tb_file
+		  (
+		  	file_no
+		  , file_ref_no
+		  , file_category
+		  , file_path
+		  , file_level
+		  )
+		  values
+		  (
+		    seq_fileno.nextval
+		  , #{rmNo}
+		  , 7
+		  , #{saveFilePath}
+		  , #{fileLevel}
+		  )
+	</insert>
+
+</mapper>
