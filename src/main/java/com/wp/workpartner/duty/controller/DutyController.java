@@ -1,8 +1,5 @@
 package com.wp.workpartner.duty.controller;
 
-import java.util.ArrayList;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,6 @@ import com.wp.workpartner.common.template.FileUpload;
 import com.wp.workpartner.common.template.Pagination;
 import com.wp.workpartner.duty.model.service.DutyServiceImpl;
 import com.wp.workpartner.duty.model.vo.Duty;
-import com.wp.workpartner.duty.model.vo.DutyCharge;
 import com.wp.workpartner.employee.model.vo.Employee;
 
 @Controller
@@ -30,6 +26,7 @@ public class DutyController {
 	
 	@Autowired
 	private HttpSession session;
+	
 	
 	
 	/**
@@ -85,15 +82,18 @@ public class DutyController {
 	@RequestMapping("list.du")
 	public ModelAndView selectDutyList(@RequestParam(value="cpage", defaultValue="1") int currentPage, HttpSession session, ModelAndView mv){
 															// currentPage의 키값은 cpage, 기본값은 1
-		String empNo = ((Employee)session.getAttribute("loginUser")).getEmpNo();
-		int listCount = dService.selectDutyListCount(empNo);
+		Duty d = new Duty();
+		d.setEmpNo( ((Employee)session.getAttribute("loginUser")).getEmpNo() );
+		
+		int listCount = dService.selectDutyListCount(d);
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
 		
-		mv.addObject("dlist", dService.selectDutyList(pi, empNo))
+		mv.addObject("dlist", dService.selectDutyList(pi, d.getEmpNo()))
 		  .addObject("pi", pi)
 		  .setViewName("duty/dutyListView");
 		return mv;
 	}
+	
 	
 	
 	/**
@@ -101,7 +101,7 @@ public class DutyController {
 	 * @return Duty
 	 */
 	@RequestMapping("detail.du")
-	public ModelAndView selectDuty(ModelAndView mv, @RequestParam(value="no")int no) {
+	public ModelAndView selectDuty(ModelAndView mv, @RequestParam(value="no")String no) {
 		Duty d = dService.selectDuty(no);
 
 		if(d != null) {

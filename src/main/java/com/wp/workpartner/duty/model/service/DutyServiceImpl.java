@@ -16,6 +16,7 @@ import com.wp.workpartner.duty.model.vo.DutyCharge;
 @Service
 public class DutyServiceImpl implements DutyService {
 	
+
 	@Autowired
 	private DutyDao dDao;
 	
@@ -38,7 +39,7 @@ public class DutyServiceImpl implements DutyService {
 		
 		int result1 = dDao.insertDuty(sqlSession, d);
 		
-		int result2 = 0;
+		int result2 = 1;
 		for(DutyCharge dc : d.getEmpIC()) {
 			result2 *= dDao.insertDutyCharge(sqlSession, dc);
 		}
@@ -61,8 +62,8 @@ public class DutyServiceImpl implements DutyService {
 	}
 	
 	@Override
-	public int selectDutyListCount(String empNo) {
-		return dDao.selectDutyListCount(sqlSession, empNo);
+	public int selectDutyListCount(Duty d) {
+		return dDao.selectDutyListCount(sqlSession, d);
 	}
 
 	@Override
@@ -74,13 +75,35 @@ public class DutyServiceImpl implements DutyService {
 		for(Duty d : dlist) {
 			d.setEmpIC( dDao.selectDutyChargeList(sqlSession, pi, d.getDutyNo()) );
 		}
-		System.out.println(dlist);
-		
 		return dlist;
+	}
+	
+	@Override
+	public int selectIncompleteListCount(Duty d) {
+		return dDao.selectIncompleteListCount(sqlSession, d);
 	}
 
 	@Override
-	public Duty selectDuty(int dutyNo) {
+	public ArrayList<Duty> selectIncompleteList(Duty d, PageInfo pi){
+		ArrayList<Duty> notDoneList = dDao.selectMyList(sqlSession, pi, d);
+		for(Duty dt : notDoneList) {
+			dt.setEmpIC( dDao.selectDutyChargeList(sqlSession, pi, dt.getDutyNo()) );
+		}
+		return notDoneList;
+	}
+	
+	@Override
+	public ArrayList<Duty> selectMyList(PageInfo pi, Duty d) {
+		ArrayList<Duty> mylist = dDao.selectMyList(sqlSession, pi, d);
+		for(Duty my : mylist) {
+			my.setEmpIC(dDao.selectDutyChargeList(sqlSession, pi, my.getDutyNo()));
+		}
+		return mylist;
+	}
+	
+
+	@Override
+	public Duty selectDuty(String dutyNo) {
 		Duty d = dDao.selectDuty(sqlSession, dutyNo);
 		d.setEmpIC( dDao.selectDutyCharge(sqlSession, dutyNo) );
 		return d;
@@ -93,7 +116,7 @@ public class DutyServiceImpl implements DutyService {
 	}
 
 	@Override
-	public int deleteDuty(int dutyNo) {
+	public int deleteDuty(String dutyNo) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

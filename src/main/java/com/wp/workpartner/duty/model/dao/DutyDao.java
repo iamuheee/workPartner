@@ -41,14 +41,19 @@ public class DutyDao {
 		return sqlSession.insert("dutyMapper.insertFile", f);
 	}
 	
+	
+	// =================================================================================
+	// ============================ 업무 리스트 조회 ===================================
+	
+	
 	/**
 	 * 유효한 업무 게시글의 전체 개수 조회
 	 * 페이징 처리 때 필요
 	 * @param sqlSession
 	 * @return
 	 */
-	public int selectDutyListCount(SqlSessionTemplate sqlSession, String empNo) {
-		return sqlSession.selectOne("dutyMapper.selectDutyListCount", empNo);
+	public int selectDutyListCount(SqlSessionTemplate sqlSession, Duty d) {
+		return sqlSession.selectOne("dutyMapper.selectDutyListCount", d);
 	}
 	
 	
@@ -71,10 +76,35 @@ public class DutyDao {
 	 * @param empNo
 	 * @return
 	 */
-	public ArrayList<DutyCharge> selectDutyChargeList(SqlSessionTemplate sqlSession, PageInfo pi, int dutyNo){
+	public ArrayList<DutyCharge> selectDutyChargeList(SqlSessionTemplate sqlSession, PageInfo pi, String dutyNo){
 		return (ArrayList)sqlSession.selectList("dutyMapper.selectDutyChargeList", dutyNo, new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit(), pi.getBoardLimit()) );
 	}
 	
+	
+	
+	
+	/**
+	 * 완료 업무를 제외한 업무 리스트 조회에 필요한 listCount 조회
+	 * @param sqlSession
+	 * @param d (empNo, dutyNo 사용)
+	 * @return int (해당 empNo의 완료되지 않은 업무의 개수)
+	 */
+	public int selectIncompleteListCount(SqlSessionTemplate sqlSession, Duty d){
+		return sqlSession.selectOne("dutyMapper.selectIncompleteListCount", d);
+	}
+	
+	public ArrayList<Duty> selectIncompleteList(SqlSessionTemplate sqlSession, Duty d, PageInfo pi){
+		return (ArrayList)sqlSession.selectList("dutyMapper.selectIncompleteList", d, new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit(), pi.getBoardLimit()) );
+	}
+	
+	
+	public ArrayList<Duty> selectMyList(SqlSessionTemplate sqlSession, PageInfo pi, Duty d) {
+		return (ArrayList)sqlSession.selectList("dutyMapper.selectMyList", d, new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit(), pi.getBoardLimit()));
+	}
+	
+	
+	
+	//==============================================
 	
 	/**
 	 * 업무 게시글 상세조회를 위한 업무 한 행 조회
@@ -82,11 +112,11 @@ public class DutyDao {
 	 * @param dutyNo
 	 * @return Duty
 	 */
-	public Duty selectDuty(SqlSessionTemplate sqlSession, int dutyNo) {
+	public Duty selectDuty(SqlSessionTemplate sqlSession, String dutyNo) {
 		return sqlSession.selectOne("dutyMapper.selectDuty", dutyNo);
 	}
 	
-	public ArrayList<DutyCharge> selectDutyCharge(SqlSessionTemplate sqlSession, int dutyNo){
+	public ArrayList<DutyCharge> selectDutyCharge(SqlSessionTemplate sqlSession, String dutyNo){
 		return (ArrayList)sqlSession.selectList("dutyMapper.selectDutyCharge", dutyNo);
 	}
 

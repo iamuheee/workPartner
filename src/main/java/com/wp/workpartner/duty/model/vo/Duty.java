@@ -17,12 +17,12 @@ import lombok.ToString;
 
 public class Duty {
 	
-	private int dutyNo;
+	private String dutyNo;
 	private String empNo;
 	private String empName;
 	private String calendarYN;
-	private String importance;
-	private String progress;
+	private String importance; 	// "긴급" "중요" "보통" "낮음"
+	private String progress;	// "준비" "진행" "지연" "완료"
 	private String title;
 	private String content;
 	private Date enrollDate;
@@ -32,4 +32,5 @@ public class Duty {
 	
 	private ArrayList<DutyCharge> empIC;
 	
+	private String value;
 }

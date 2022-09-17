@@ -74,13 +74,34 @@
 	</insert>
 	
 	<select id="selectDutyListCount" resultType="_int">
-		SELECT COUNT(*)
+		SELECT COUNT(COUNT(*))
 		  FROM TB_DUTY D
 		  JOIN TB_DUTY_CHARGE DC
 		 USING (DUTY_NO)
 		 WHERE STATUS = 'Y'
-		   AND D.EMP_NO = #{empNo}
+		 <choose>
+		 	<when test="value == 'enroll'">
+		 	AND D.EMP_NO = #{empNo}
+		 	</when>
+		 	<when test="value == 'incharge'">
+		 	AND DC.EMP_NO = #{empNo}
+		 	</when>
+		 	<when test="value == 'notDone'">
+		 	AND DUTY_NO NOT IN ${dutyNo}
+		 	</when>
+		 	<when test="progress != null and progress != '전체'">
+			 	AND PROGRESS = #{progress}
+ 			AND TITLE LIKE #{title}
+		 	</when>
+		 	<when test="progress == '전체'">
+ 			AND TITLE LIKE #{title}
+		 	</when>
+		 	<otherwise>
+			AND D.EMP_NO = #{empNo}
 		    OR DC.EMP_NO = #{empNo}
+		 	</otherwise>
+		 </choose>
+         GROUP BY DUTY_NO
 	</select>
 	
 	<select id="selectDutyList" resultMap="dutyResult">
@@ -124,6 +145,67 @@
    		 ORDER
 		 	BY DUTY_NO DESC
 	</select>
+	
+	<!-- 충격사실 -->
+	<!-- #{} : 변수를 문자열""로 묶어줌 => #{} 안의 모든 내용은 문자열 취급됨 -->
+	<!-- ${} : 변수를 따로 가공하지 않고 원래 형태 그대로 보냄 => 숫자로 전달하거나 문자열이 아닌 특정한 표현이 필요하면 유용 
+															  	  (단, 문자열을 넘길 때는 ""를 누락한 것이 되니 절대 쓰지 말 것!) -->
+	<!-- 위의 경우에는, IN (숫자, 숫자, 숫자)가 필요한 경우라서 #{}로 묶으면 그냥 괄호가 있는 문자열 취급되어 오류 발생, ${} 써야하는 경우임 -->
+	
+	
+	<select id="selectMyList" resultMap="dutyResult">
+		SELECT A.*
+			 , D.CONTENT
+		  FROM (
+		  		SELECT DISTINCT
+					   D.DUTY_NO AS "DUTY_NO"
+					 , D.EMP_NO AS "EMP_NO" <!-- 작성자 사번 -->
+					 , D.EMP_NAME AS "EMP_NAME" <!-- 작성자 이름 -->
+					 , CALENDAR_YN
+					 , IMPORTANCE
+					 , PROGRESS
+					 , TITLE
+					 , ENROLL_DATE
+					 , START_DATE
+					 , END_DATE
+					 , STATUS
+				  FROM TB_DUTY D
+				  JOIN TB_DUTY_CHARGE DC
+				 	ON D.DUTY_NO = DC.DUTY_NO
+				 WHERE STATUS = 'Y'
+		 	<choose>
+		 		<when test="value == 'incharge'">
+		 		AND DC.EMP_NO = #{empNo}
+		 		</when>
+		 		<when test="value == 'enroll'">
+				AND D.EMP_NO = #{empNo}
+		 		</when>
+		 		<otherwise>
+				AND D.EMP_NO = #{empNo}
+				OR DC.EMP_NO = #{empNo}
+		 		</otherwise>
+		 	</choose>
+		 	   ) A
+			JOIN TB_DUTY D
+		   ON A.DUTY_NO = D.DUTY_NO
+			 <choose>
+				<when test="value == 'notDone'">
+				WHERE D.DUTY_NO NOT IN ${dutyNo}
+				</when>
+				<when test="progress != null and progress != '전체'">
+			 	WHERE A.PROGRESS = #{progress}
+				AND A.TITLE LIKE #{title}
+				</when>
+				<when test="progress == '전체'">
+				WHERE A.TITLE LIKE #{title}
+				</when>
+				<otherwise/>
+			</choose>
+		   ORDER
+		      BY D.DUTY_NO DESC
+				 
+	</select>
+	
 	
 	<select id="selectDuty" resultMap="dutyResult">
 		SELECT
