@@ -46,8 +46,8 @@
         <h5><b>메일 서명관리</b></h5>
         <hr>
 
-        <form action="" method="post">
-            
+       <form action="sigManage.ma" method="post"> 
+            <input type="hidden" name="empNo" value="${loginUser.empNo }">
             <!-- 서명사용설정  -->
             <table class="sigTable">
             
@@ -74,6 +74,7 @@
 			<div align="end">
                 <button type="submit" class="btn btn-sm btn-primary">확인</button>                
             </div>
+            
         </form>
       
         <!-- ====================================================  Modal ================================================================ -->
@@ -158,6 +159,7 @@
 	    		
 				// 서명 등록에 필요한 정보 employee 가져오기 
 				selectEmp();
+								
 	    	})
 	    	
 	    	// 등록된 서명 리스트 조회용 ajax
@@ -174,9 +176,12 @@
 					               +     '<td colspan="2" align="end" width="180px">';
 					      if(list[i].sigBasic == 'Y'){
 					         value += 	 	'<span class="roundStyle">기본</span>  &nbsp;';
-					        }       
-					         value +=       '<input type="radio" name="sigNo" value="'+ list[i].sigNo +'" id="'+list[i].sigNo+'">'
-					               +        '<label for="'+list[i].sigNo+'"> 서명' + list[i].rnum + '</label>'
+					        } 
+					         value +=       '<input type="radio" name="sigNo" value="'+ list[i].sigNo +'" id="'+list[i].sigNo+'"';
+					      if(list[i].sigBasic == 'Y'){
+					    	 value +=             'checked'; 									
+					      }
+					         value +=        '><label for="'+list[i].sigNo+'"> 서명' + list[i].rnum + '</label>'
 					               +     '</td>'                  
 					               +     '<td align="end" width="100px"><button type="button" class="btn btn-sm btn-secondary" id="sigDelete">삭제</button></td>'
 					               + '</tr>';
@@ -260,6 +265,17 @@
 	        		
 	        	})
 	        }
+	        
+	      /*  function sigManage(){
+	    	   $.ajax({
+	    		   url:"sigManage.ma",
+	    		   data:{
+	    			   
+	    			   
+	    		   }
+	    		   
+	    	   })
+	       } */
 	        
         
         </script>
