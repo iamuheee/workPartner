@@ -52,11 +52,10 @@
 			into tb_vacation
 			  	  (
 			  	  	dp_no
-			  	  ,	emp_no
-			  	  , dp_title
-			  	  , dp_category
-			  	  , dp_origin
-			  	  , dp_change
+			  	  ,	va_start
+			  	  , va_end
+			  	  , va_category
+			  	  , va_content
 			  	  )
 			values
 				  (
@@ -65,7 +64,6 @@
 				  , #{ vaEnd }
 				  , #{ vaCategory }
 				  , #{ vaContent }
-				  , #{ vaUseday }
 				  )
 	</insert>
 	<insert id="insertSign">
@@ -73,15 +71,16 @@
 		  into tb_sign
 		     (
 		       dp_no
-		     , emp_no
+		     , signemp_no
 		     , si_seq
 		     , si_asign
 		     ) 
 		 values
 		 (
 			10||seq_vac.currval
-		  , #{ empNo}
-		  , 
+		  , #{ signEmpNo }
+		  , #{ siSeq }
+		  , #{ siAsign }
 		 )
 	</insert>
 </mapper>

@@ -63,7 +63,7 @@
 }
 
 hr {
-	opacity: 0.4;
+	opacity: 0.7;
 	width: 100%;
 }
 
@@ -279,50 +279,57 @@ input[type=text] {
 	background-color: #ffffff48;
 	padding: auto;
 }
+.dtPaper{
+	margin-left:20px;
+}
 </style>
 
 
 
 </head>
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-	<section class="mainTitle">
-		<c:choose>
+		 <c:choose>
 			<c:when test="${ paperName == '연차' }">
-				<form action="insertV.si" name="insertForm" style="float: left"
-					enctype="multipart/form-data">
-					<a class="insertBtn" onclick="insertCheck();">기안하기</a>
-				</form>
+				<form action="insertV.si" method="post" name="insertForm" id="insertForm" style="float: left"
+					enctype="multipart/form-data"> 
+					<input type="hidden" name="dpCategory" value="${ paperName }">
 			</c:when>
 			<c:when test="${ paperName == '외근' }">
-				<form action="insertD.bo" name="insertForm" style="float: left"
+				<form action="insertD.bo" id="insertForm" style="float: left"
 					enctype="multipart/form-data">
-					<a class="insertBtn" onclick="insertCheck();">기안하기</a>
-				</form>
+					<input type="hidden" name="dpCategory" value="${ paperName }">
 			</c:when>
 			<c:when test="${ paperName == '퇴직원' }">
-				<form action="insertD.bo" name="insertForm" style="float: left"
+				<form action="insertD.bo" id="insertForm" style="float: left"
 					enctype="multipart/form-data">
-					<a class="insertBtn" onclick="insertCheck();">기안하기</a>
-				</form>
+					<input type="hidden" name="dpCategory" value="${ paperName }">
 			</c:when>
-			<c:when test="${ paperName == '업무협조' }">
-				<form action="insertD.bo" name="insertForm" style="float: left"
+			<c:otherwise>
+				<form action="insertD.bo" id="insertForm" style="float: left"
 					enctype="multipart/form-data">
-					<a class="insertBtn" onclick="insertCheck();">기안하기</a>
-				</form>
-			</c:when>
-		</c:choose>
-		<form action="insertSave.bo" name="saveForm" style="float: left"
-			enctype="multipart/form-data">
+					<input type="hidden" name="dpCategory" value="${ paperName }">
+			</c:otherwise>
+		</c:choose> 
+ <section class="dtPaper">
+	<section class="mainTitle">
+			<a class="insertBtn" onclick="insertCheck();">기안하기</a>
 			<a class="insertBtn" onclick="saveCheck()">임시저장</a>
-		</form>
-		
 		<a class="insertBtn" id="btn-modal" onclick="openAddressWindow();">결재선 추가</a>
 		<hr>
 	</section>
 	<script>
 		function saveCheck() {
 			if (confirm("임시 저장하시겠습니까?") == true) { //확인
+				
+				if('${paperName}' == '연차'){
+					document.saveForm.action = "insertV.si";
+				}else if('${paperName}' == '외근'){
+					document.saveForm.action = "insertOw.si";
+				}else if('${paperName}' == '업무협조'){
+					document.saveForm.action = "insertCo.si";
+				}else {
+					document.saveForm.action = "insertRe.si";
+				}
 				document.saveForm.submit();
 			} else { //취소
 				return false;
@@ -332,17 +339,31 @@ input[type=text] {
 	<script>
 		function insertCheck() {
 			if (confirm("기안하시겠습니까?") == true) { //확인
+				
+				if('${paperName}' == '연차'){
+					document.insertForm.action = "insertV.si";
+				}else if('${paperName}' == '외근'){
+					document.insertForm.action = "insertOw.si";
+				}else if('${paperName}' == '업무협조'){
+					document.insertForm.action = "insertCo.si";
+				}else {
+					document.insertForm.action = "insertRe.si";
+				}
 				document.insertForm.submit();
+				
 			} else { //취소
 				return false;
 			}
 		}
 	</script>
+	
+	
+	
 	<section>
 		<div>
 			<h3 class="dtpaperName">
-				<span id="dpCategory">${ paperName }</span> 신청서 - <span
-					style="font-weight: lighter;">${ loginUser.empName }(${ loginUser.depCd })</span>
+				<span>${ paperName }</span> 신청서 - <span
+					style="font-weight: lighter;"><input type="hidden" name="empNo" value="${ loginUser.empNo }">${ loginUser.empName }(${ loginUser.depCd })</span>
 			</h3>
 			<hr>
 		</div>
@@ -350,7 +371,7 @@ input[type=text] {
 	<section class="signSelect">
 		<div>
 			<h3>결재선</h3>
-			<table align="center" id="adminList" style="">
+			<table align="center" id="adminList">
 					<!-- <th width="100">결재</th>
 					<td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);" id="adminName"></td>
 					<th>결재</th>
@@ -376,15 +397,19 @@ input[type=text] {
 				</tr>
 				<tr style="border-top: 0.5px solid rgba(143, 143, 143, 0.547);"  align="center">
 					<th>첨부파일</th>
-					<td align="left"><input type="file" id="upfile" name="upfile"
-						style="margin-left: 10px; border: 0;"></td>
+					<td align="left"><input type="file" id="upfile" name="upfile" style="margin-left: 10px; border: 0;"></td>
 				</tr>
 			</table>
 		</div>
 	</section>
 
-
-
+	<script>
+	
+		function fn_editFL()
+			{
+				
+			}
+	</script>
 
 	<script>
 		var chartPopup;
@@ -399,11 +424,6 @@ input[type=text] {
 			//console.log(data);
 			$("#adminList").append(data);
 		}
-		$(function() {
-			$(document).on("click", ".removeAdmin", function() {
-				$(this).parent().parent().remove();
-			})
-		})
 	</script> 
 </body>
 </html>

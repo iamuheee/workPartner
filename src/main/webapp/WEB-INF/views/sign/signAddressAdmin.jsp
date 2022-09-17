@@ -156,7 +156,7 @@
 
 					if (count > 3 ) {
 						$("input[name='chk']").prop("checked", false);
-						alert("3명까지 선택 가능합니다.");
+						alert("결재선은 3명까지 선택 가능합니다.");
 					} else {
 
 						let value = "";
@@ -189,12 +189,14 @@
 						for (let i = 0; i < arr.length; i++) {
 							value += '<tr>'
 									+ '<td width="80px" style="border:0.5px solid #878787; background: #f1f1f1;"> '
-									+ '결재'
+									+ '<input type="hidden" name="signList['+ i + '].siSeq" value="'+ (i+1) + '">' + '결재'
 									+ ' </td>'
 									+ '<td width="80px" style="border:0.5px solid #878787">'
-									+ arr[i].empName + '(' + arr[i].depCd + ')' + '<input type="hidden" name="empNo" value="'+ arr[i].empNo +'">'
+									+ arr[i].empName + '(' + arr[i].depCd + ')' + '<input type="hidden" name="signList[' + i + '].signEmpNo" value="'+ arr[i].empNo +'">'
 									+ '  </td>'
-									+ '<td width="10px" align="left"><span class="removeAdmin" style="cursor: pointer;"> x</span></td>'
+									+ '<td width="10px" align="left">'
+									+ '<input type="hidden" name="signList[' + i + '].siAsign" value="' + arr.length + '">' + '<span class="removeAdmin" style="cursor: pointer;"> x</span>'
+									+ '</td>'
 									+ '</tr>';
 
 							console.log(arr[i].empNo);

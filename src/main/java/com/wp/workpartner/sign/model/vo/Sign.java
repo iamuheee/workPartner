@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class Sign {
 	private int dpNo;
-	private String empNo;
+	private String signEmpNo;
 	private int siSeq;
 	private String siAppdate;
 	private String siStatus;

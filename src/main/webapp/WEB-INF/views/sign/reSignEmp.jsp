@@ -222,6 +222,9 @@
         document.getElementById('currentDate').value = new Date().toISOString().substring(0, 10);
         document.getElementById('currentDate2').value = new Date().toISOString().substring(0, 10);;
     </script>
+    	</section>
+	</form>
+	</form>
 	
 </body>
 </html>

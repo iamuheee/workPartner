@@ -11,11 +11,12 @@ import com.wp.workpartner.sign.model.vo.SelectCooperation;
 import com.wp.workpartner.sign.model.vo.SelectOtwork;
 import com.wp.workpartner.sign.model.vo.SelectReSign;
 import com.wp.workpartner.sign.model.vo.SelectVacation;
+import com.wp.workpartner.sign.model.vo.Sign;
 import com.wp.workpartner.sign.model.vo.Vacation;
 
 public interface SignService {
 //	기안서 작성
-	int insertSign(int empNo);
+	int insertSign(ArrayList<Sign> signList);
 	int insertDtpaper(Dtpaper d);
 	int insertCooperation(Cooperation c);
 	int insertVacation(Vacation v);

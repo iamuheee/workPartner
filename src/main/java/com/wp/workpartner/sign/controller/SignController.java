@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.wp.workpartner.common.template.FileUpload;
 import com.wp.workpartner.sign.model.service.SignService;
 import com.wp.workpartner.sign.model.vo.Dtpaper;
+import com.wp.workpartner.sign.model.vo.Otwork;
+import com.wp.workpartner.sign.model.vo.Sign;
 import com.wp.workpartner.sign.model.vo.Vacation;
 
 @Controller
@@ -45,25 +47,68 @@ public class SignController {
 //		return "sign/signMain";
 //	}
 	@RequestMapping("insertV.si")
-	public String insertVacation(Dtpaper d,int empNo, Vacation v, MultipartFile upfile, HttpSession session, Model model) {
+	public String insertVacation(Dtpaper d, Vacation v, MultipartFile upfile, HttpSession session, Model model) {
 		
+//		System.out.println(upfile);
+//		System.out.println(d);
+//		System.out.println(d.getSignList()); // ArrayList<Sign> 결재자리스
+//		System.out.println(v);
 		if(!upfile.getOriginalFilename().equals("")) {
-			
 			String saveFilePath = FileUpload.saveFile(upfile, session, "resources/uploadFiles/"); 
 			
 			d.setDpOrigin(upfile.getOriginalFilename());
 			d.setDpChange(saveFilePath);
 		}
-		
-		// 넘어온 첨부파일이 없을 경우 b : 제목, 작성자, 내용
-		// 넘어온 첨부파일이 있을 경우 b : 제목, 작성자, 내용, 파일원본명, 파일저장경로
+		//int siAsign = d.getSignList().size();
+		//System.out.println(siAsign);
+		ArrayList<Sign> signList = d.getSignList();
+//		System.out.println(signList);
+		//signList.add(d.setSignList((d.getSignList).length);
 		int result1 = sService.insertDtpaper(d);
 		
 		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
-			int reuslt2 = sService.insertVacation(v);
-			int result3 = sService.insertSign(empNo);
-			session.setAttribute("alertMsg", "결재 신청 되었습니다.");
-			return "redirect:workpartner"; //위에 cpage 선언해둠. list.bo?cpage=1 이렇게 작성필요 x
+			int result2 = sService.insertVacation(v);
+				if(result2 > 0) {
+					int result3 = sService.insertSign(signList);
+					if(result3 > 0) {
+						session.setAttribute("alertMsg", "결재 신청 되었습니다.");
+					}
+				}
+				return "redirect:selectVacation";
+		}else { // 실패 => 에러문구, 에러페이지
+			model.addAttribute("errorMsg", "결재 신청 실패.");
+			return "common/errorPage";
+		}
+	}
+	@RequestMapping("insertOw.si")
+	public String insertOutWork(Dtpaper d, Otwork o, MultipartFile upfile, HttpSession session, Model model) {
+		
+//		System.out.println(upfile);
+//		System.out.println(d);
+//		System.out.println(d.getSignList()); // ArrayList<Sign> 결재자리스
+//		System.out.println(v);
+		if(!upfile.getOriginalFilename().equals("")) {
+			String saveFilePath = FileUpload.saveFile(upfile, session, "resources/uploadFiles/"); 
+			
+			d.setDpOrigin(upfile.getOriginalFilename());
+			d.setDpChange(saveFilePath);
+		}
+		//int siAsign = d.getSignList().size();
+		//System.out.println(siAsign);
+		ArrayList<Sign> signList = d.getSignList();
+//		System.out.println(signList);
+		//signList.add(d.setSignList((d.getSignList).length);
+		int result1 = sService.insertDtpaper(d);
+		
+		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
+			int result2 = sService.insertOutWork(o);
+				if(result2 > 0) {
+					int result3 = sService.insertSign(signList);
+					if(result3 > 0) {
+						session.setAttribute("alertMsg", "결재 신청 되었습니다.");
+					}
+				}
+				return "redirect:selectOutWork";
 		}else { // 실패 => 에러문구, 에러페이지
 			model.addAttribute("errorMsg", "결재 신청 실패.");
 			return "common/errorPage";

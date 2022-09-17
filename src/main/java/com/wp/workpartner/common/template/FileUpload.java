@@ -23,7 +23,7 @@ public class FileUpload {
 			String changeName = currentTime + ranNum + ext;
 			
 			// 파일을 저장할 폴더의 물리적인 경로 알아내기
-			String savePath = session.getServletContext().getRealPath(folderPath);
+			String savePath = session.getServletContext().getRealPath("resources/uploadFiles/");
 			//System.out.println("저장폴더의 물리적 경로 : " + savePath);
 			
 			try {

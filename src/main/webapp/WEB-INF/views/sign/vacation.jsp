@@ -141,14 +141,19 @@ input, select, textarea {
 			if ($("#selectVacation").val() == "연차") {
 				$("#currentDate").show();
 				$("#currentDate2").show();
-
 				$("#startTime").hide();
 				$("#endTime").hide();
+				$("#currentDate").attr("hidden", false);
+				$("#currentDate2").attr("hidden", false);
 			} else {
 				$("#currentDate").hide();
 				$("#currentDate2").hide();
 				$("#startTime").show();
 				$("#endTime").show();
+				$("#startTime").attr("hidden", false);
+				$("#endTime").attr("hidden", false);
+				$("#currentDate").attr("hidden", true);
+				$("#currentDate2").attr("hidden", true);
 			}
 
 		});
@@ -191,7 +196,6 @@ input, select, textarea {
                         <input type="date" id="currentDate2" name="vaEnd"
                             style="height:30px; border-radius: 4px; text-align: center;" enabled>
                         <input type="datetime-local" name="vaEnd" style="height:30px; border-radius: 4px; text-align: center;" id="endTime" hidden>
-
                     </td>
                 </tr>
                 <tr align="left">
@@ -211,9 +215,9 @@ input, select, textarea {
         document.getElementById('currentDate').value = new Date().toISOString().substring(0, 10);
         document.getElementById('currentDate2').value = new Date().toISOString().substring(0, 10);;
     </script>
-	
-	
-	
+	</section>
+	</form>
+	</form>
 
 
 </body>

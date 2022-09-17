@@ -16,6 +16,7 @@ import com.wp.workpartner.sign.model.vo.SelectCooperation;
 import com.wp.workpartner.sign.model.vo.SelectOtwork;
 import com.wp.workpartner.sign.model.vo.SelectReSign;
 import com.wp.workpartner.sign.model.vo.SelectVacation;
+import com.wp.workpartner.sign.model.vo.Sign;
 import com.wp.workpartner.sign.model.vo.Vacation;
 
 @Service
@@ -44,7 +45,7 @@ public class SignServiceImpl implements SignService {
 
 	@Override
 	public int insertOtwork(Otwork o) {
-		return 0;
+		return sDao.insertOutWork(sqlSession, o);
 	}
 
 	@Override
@@ -184,8 +185,8 @@ public class SignServiceImpl implements SignService {
 	}
 
 	@Override
-	public int insertSign(int empNo) {
-		return sDao.insertSign(sqlSession, empNo);
+	public int insertSign(ArrayList<Sign> signList) {
+		return sDao.insertSign(sqlSession, signList);
 	}
 	
 	
