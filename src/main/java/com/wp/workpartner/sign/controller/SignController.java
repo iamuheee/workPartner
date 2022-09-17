@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wp.workpartner.common.template.FileUpload;
-import com.wp.workpartner.sign.model.service.SignService;
+import com.wp.workpartner.sign.model.service.SignServiceImpl;
 import com.wp.workpartner.sign.model.vo.Dtpaper;
 import com.wp.workpartner.sign.model.vo.Otwork;
 import com.wp.workpartner.sign.model.vo.Sign;
@@ -19,8 +19,9 @@ import com.wp.workpartner.sign.model.vo.Vacation;
 
 @Controller
 public class SignController {
+	
 	@Autowired
-	private SignService sService;
+	private SignServiceImpl sService;
 	@RequestMapping("vaEnroll.si")
 	public String vacationEnrollForm(Model model) {
 		
@@ -81,7 +82,7 @@ public class SignController {
 		}
 	}
 	@RequestMapping("insertOw.si")
-	public String insertOutWork(Dtpaper d, Otwork o, MultipartFile upfile, HttpSession session, Model model) {
+	public String insertOtWork(Dtpaper d, Otwork o, MultipartFile upfile, HttpSession session, Model model) {
 		
 //		System.out.println(upfile);
 //		System.out.println(d);
@@ -101,7 +102,7 @@ public class SignController {
 		int result1 = sService.insertDtpaper(d);
 		
 		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
-			int result2 = sService.insertOutWork(o);
+			int result2 = sService.insertOtwork(o);
 				if(result2 > 0) {
 					int result3 = sService.insertSign(signList);
 					if(result3 > 0) {

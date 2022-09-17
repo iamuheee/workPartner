@@ -45,7 +45,7 @@ public class SignServiceImpl implements SignService {
 
 	@Override
 	public int insertOtwork(Otwork o) {
-		return sDao.insertOutWork(sqlSession, o);
+		return sDao.insertOtwork(sqlSession, o);
 	}
 
 	@Override

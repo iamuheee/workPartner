@@ -43,8 +43,6 @@
 			  , #{ dpOrigin }
 			  , #{ dpChange }
 			  ) 
-			  
-		
 	</insert>
 	<insert id="insertVacation">
 		insert
@@ -82,5 +80,13 @@
 		  , #{ siSeq }
 		  , #{ siAsign }
 		 )
+	</insert>
+	<insert id="insertOtwork">
+		insert
+		  into tb_otwork
+		  (
+		  
+		  )
+	
 	</insert>
 </mapper>
