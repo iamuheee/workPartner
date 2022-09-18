@@ -299,6 +299,26 @@
             	}
             }
             
+            // 댓글 글자수 용량을 초과하면 지워주는 함수
+	    	$("textarea[name=comContent]").keyup(function(){
+	    		let totalByte = 0;
+	    		for( let i=0; i< $(this).val().length; i++ ){
+		    		if( escape($(this).val().charAt(i)) > 4 ){ 
+		    			// escape("문자열") : 해당 문자열을 16진수로 반환, 아스키코드는 0x??의 4자리로 표현됨 (한글 등은 4자리 초과)
+		    			totalByte += 2;
+		    		}else{
+		    			totalByte++;
+	    			}
+		    		
+					if(totalByte > 500){
+		    			alert("최대 글자수를 초과하였습니다. 다시 입력해주세요.");
+		    			// 마지막 글자 삭제해주기
+						$(this).val().substring( 0, $(this).val().length - 1 );					
+					}	    			
+	    		}
+	    	})
+            
+            
             
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
