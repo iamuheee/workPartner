@@ -34,6 +34,12 @@
 		<result column="mail_cc" property="mailCC"/>
 		<result column="mail_sender" property="mailSender"/>
 		<result column="mail_sender_name" property="mailSenderName"/>
+		
+		<result column="mail_email" property="mailEmail"/>
+		<result column="mail_status" property="mailStatus"/>
+		<result column="mail_category" property="mailCategory"/>
+		<result column="mail_read" property="mailRead"/>
+		<result column="mail_star" property="mailStar"/>
 	</resultMap>
 	
 	<resultMap id="statusResult" type="MailStatus">
@@ -160,6 +166,7 @@
 	
 	</update>
 	
+	<!-- 서명등록 -->
 	<insert id="insertSig">
 		insert 
 		  into tb_signature
@@ -188,6 +195,7 @@
 			  )		  
 	</insert>
 	
+	<!-- 서명관리 -->
 	<update id="updateSigUseManage">
 		update 
 			   tb_employee
@@ -303,9 +311,509 @@
 		  	  , #{fileOriginName}
 		  	  , #{fileChangeName}
 		  	  , #{filePath}		  	
-		  	 )  
-		  
+		  	 )  		  
 	</insert>
+	
+	<!-- 전체메일함 listCount -->
+	<select id="selectListTotalCount" resultType="_int">
+		 select count(*)               
+		   from tb_mail
+		   join tb_mail_status using(mail_no)
+		   where 
+		        (
+			        (mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'R'
+			         ) 
+			        or 
+			        (mail_sender = #{email}    
+			        and mail_category = 'S'     
+			        and mail_status = 'Y' )
+			        or
+			        (
+			         mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'C'
+			        )
+		        )
+	        <if test="keyword != null">
+	        	<if test="searchCategory == 'mailSenderName'">
+				   and mail_sender_name
+				</if>
+				<if test="searchCategory == 'mailTitle'">
+				   and mail_title
+				</if>
+				<if test="searchCategory == 'mailContent'">
+				   and mail_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	        </if>
+	         <choose>
+			 	<when test="filter == '6months'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 6
+			 	</when>
+			 	<when test="filter == '1month'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 1
+			 	</when>			 	
+			 	<when test="filter == '1week'">
+			 		and floor(sysdate - mail_create_date) <![CDATA[ <= ]]> 7
+			 	</when>
+			 	<otherwise>
+			 		 and mail_no > 0
+			 	</otherwise>			 	
+			 </choose> 
+	</select>
+	
+	<!-- 전체메일함 조회  -->
+	<select id="selectListTotal" resultMap="mailResult">
+		 select  
+		        mail_no,
+		        mail_title, 
+		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        mail_important,
+		        mail_security,
+		        mail_file,		       
+		        mail_sender_name,		        
+		        mail_status,		      
+		        mail_read,
+		        mail_star,
+		        mail_email,
+		        mail_category        
+		   from tb_mail
+		   join tb_mail_status using(mail_no)
+		   where 
+		        (
+			        (mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'R'
+			         ) 
+			        or 
+			        (mail_sender = #{email}    
+			        and mail_category = 'S'     
+			        and mail_status = 'Y' )
+			        or
+			        (
+			         mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'C'
+			        )
+		        )
+		    <if test="keyword != null">
+	        	<if test="searchCategory == 'mailSenderName'">
+				   and mail_sender_name
+				</if>
+				<if test="searchCategory == 'mailTitle'">
+				   and mail_title
+				</if>
+				<if test="searchCategory == 'mailContent'">
+				   and mail_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	         </if>
+			 <choose>
+			 	<when test="filter == '6months'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 6
+			 	</when>
+			 	<when test="filter == '1month'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 1
+			 	</when>			 	
+			 	<when test="filter == '1week'">
+			 		and floor(sysdate - mail_create_date) <![CDATA[ <= ]]> 7
+			 	</when>
+			 	<otherwise>
+			 		 and mail_no > 0
+			 	</otherwise>			 	
+			 </choose>  		       
+		   order 
+		      by  
+		      <if test="orderEmail == 'orderDsec'">
+		      	mail_create_date desc
+		      </if>
+		      <if test="orderEmail == 'orderAsc'">
+		      	mail_create_date asc
+		      </if>		       
+	</select>
+	
+	<!-- <update id="deleteEmailGroup" parameterType="java.util.HashMap">
+		<foreach item="obj" collection="arr" index="index" open="DECLARE BEGIN" separator=";" close="; END;">		 	
+			update 
+				   tb_mail_status
+			   set mail_status = 'N'
+			 <where>
+			 		mail_no = #{obj.mailNo}
+			 	and	mail_email = #{obj.email}	 	
+			 </where>  		
+		 </foreach>
+	</update> -->
+	
+	<!-- 상세페이지 -->
+	<select id="selectMailDetail" resultMap="mailResult">
+		  select  
+		        mail_no,
+		        mail_title, 
+		        mail_content,
+		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        mail_important,
+		        mail_security,
+		        mail_file,
+		        mail_recipient,
+		        mail_cc,
+		        mail_sender,		       
+		        mail_sender_name  
+		   from tb_mail		  
+		   where 
+		        mail_no = #{no}			
+	</select>
+	
+	<!-- 상세페이지 클릭 시 읽음으로 전환  -->
+	<update id="mailReadUpdate">
+		update 
+			   tb_mail_status
+		   set mail_read = 'Y'
+		 where mail_email = #{mailEmail}
+		   and mail_no = #{mailNo}
+	</update>
+	
+	<!-- 상세페이지 > 파일  -->
+	<select id="selectFileDetail" resultMap="fileResult">
+		select  file_no
+              , file_origin_name
+              , file_change_name
+              , file_path                     
+         from tb_file
+         where file_ref_no = #{mailNo}
+         and file_category = 5
+	</select>
+	
+	<!-- 받은메일함 listCount -->
+	<select id="selectListReceiveCount" resultType="_int">
+		 select count(*)               
+		   from tb_mail
+		   join tb_mail_status using(mail_no)
+		   where 
+		        (
+			        (mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'R'
+			         ) 
+			        or 			       
+			        (
+			         mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'C'
+			        )	         
+		        )
+	        <if test="keyword != null">
+	        	<if test="searchCategory == 'mailSenderName'">
+				   and mail_sender_name
+				</if>
+				<if test="searchCategory == 'mailTitle'">
+				   and mail_title
+				</if>
+				<if test="searchCategory == 'mailContent'">
+				   and mail_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	        </if>
+	         <choose>
+			 	<when test="filter == '6months'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 6
+			 	</when>
+			 	<when test="filter == '1month'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 1
+			 	</when>			 	
+			 	<when test="filter == '1week'">
+			 		and floor(sysdate - mail_create_date) <![CDATA[ <= ]]> 7
+			 	</when>
+			 	<otherwise>
+			 		 and mail_no > 0
+			 	</otherwise>			 	
+			 </choose> 
+	</select>
+	
+	<!-- 받은메일함 조회  -->
+	<select id="selectListReceive" resultMap="mailResult">
+		 select  
+		        mail_no,
+		        mail_title, 
+		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        mail_important,
+		        mail_security,
+		        mail_file,		       
+		        mail_sender_name,		        
+		        mail_status,		      
+		        mail_read,
+		        mail_star,
+		        mail_email,
+		        mail_category        
+		   from tb_mail
+		   join tb_mail_status using(mail_no)
+		   where 
+		        (
+			        (mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'R'
+			         ) 
+			        or 			       
+			        (
+			         mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'C'
+			        )				         
+		        )
+		    <if test="keyword != null">
+	        	<if test="searchCategory == 'mailSenderName'">
+				   and mail_sender_name
+				</if>
+				<if test="searchCategory == 'mailTitle'">
+				   and mail_title
+				</if>
+				<if test="searchCategory == 'mailContent'">
+				   and mail_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	         </if>
+			 <choose>
+			 	<when test="filter == '6months'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 6
+			 	</when>
+			 	<when test="filter == '1month'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 1
+			 	</when>			 	
+			 	<when test="filter == '1week'">
+			 		and floor(sysdate - mail_create_date) <![CDATA[ <= ]]> 7
+			 	</when>
+			 	<otherwise>
+			 		 and mail_no > 0
+			 	</otherwise>			 	
+			 </choose>  		       
+		   order 
+		      by  
+		      <if test="orderEmail == 'orderDsec'">
+		      	mail_create_date desc
+		      </if>
+		      <if test="orderEmail == 'orderAsc'">
+		      	mail_create_date asc
+		      </if>		       
+	</select>
+	
+	<!-- 보낸메일함 listCount -->
+	<select id="selectListSendCount" resultType="_int">
+		 select count(*)               
+		   from tb_mail
+		   join tb_mail_status using(mail_no)
+		   where 
+		        (			        
+			        mail_sender = #{email}    
+			        and mail_category = 'S'     
+			        and mail_status = 'Y' 			     
+		        )
+	        <if test="keyword != null">
+	        	<if test="searchCategory == 'mailSenderName'">
+				   and mail_sender_name
+				</if>
+				<if test="searchCategory == 'mailTitle'">
+				   and mail_title
+				</if>
+				<if test="searchCategory == 'mailContent'">
+				   and mail_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	        </if>
+	         <choose>
+			 	<when test="filter == '6months'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 6
+			 	</when>
+			 	<when test="filter == '1month'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 1
+			 	</when>			 	
+			 	<when test="filter == '1week'">
+			 		and floor(sysdate - mail_create_date) <![CDATA[ <= ]]> 7
+			 	</when>
+			 	<otherwise>
+			 		 and mail_no > 0
+			 	</otherwise>			 	
+			 </choose> 
+	</select>
+	
+	<!-- 보낸메일함 조회  -->
+	<select id="selectListSend" resultMap="mailResult">
+		 select  
+		        mail_no,
+		        mail_title, 
+		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        mail_important,
+		        mail_security,
+		        mail_file,		       
+		        mail_sender_name,		        
+		        mail_status,		      
+		        mail_read,
+		        mail_star,
+		        mail_email,
+		        mail_category        
+		   from tb_mail
+		   join tb_mail_status using(mail_no)
+		   where 
+		         (			        
+			        mail_sender = #{email}    
+			        and mail_category = 'S'     
+			        and mail_status = 'Y' 			     
+		        )
+		    <if test="keyword != null">
+	        	<if test="searchCategory == 'mailSenderName'">
+				   and mail_sender_name
+				</if>
+				<if test="searchCategory == 'mailTitle'">
+				   and mail_title
+				</if>
+				<if test="searchCategory == 'mailContent'">
+				   and mail_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	         </if>
+			 <choose>
+			 	<when test="filter == '6months'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 6
+			 	</when>
+			 	<when test="filter == '1month'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 1
+			 	</when>			 	
+			 	<when test="filter == '1week'">
+			 		and floor(sysdate - mail_create_date) <![CDATA[ <= ]]> 7
+			 	</when>
+			 	<otherwise>
+			 		 and mail_no > 0
+			 	</otherwise>			 	
+			 </choose>  		       
+		   order 
+		      by  
+		      <if test="orderEmail == 'orderDsec'">
+		      	mail_create_date desc
+		      </if>
+		      <if test="orderEmail == 'orderAsc'">
+		      	mail_create_date asc
+		      </if>		       
+	</select>
+	
+	<!-- 휴지통 listCount -->
+	<select id="selectListBinCount" resultType="_int">
+		 select count(*)               
+		   from tb_mail
+		   join tb_mail_status using(mail_no)
+		   where 
+		        (
+			        (mail_email = #{email}
+			         and mail_status = 'N'
+			         and mail_category = 'R'
+			         ) 
+			        or 
+			        (mail_sender = #{email}    
+			        and mail_category = 'S'     
+			        and mail_status = 'N' )
+			        or
+			        (
+			         mail_email = #{email}
+			         and mail_status = 'N'
+			         and mail_category = 'C'
+			        )
+		        )
+	        <if test="keyword != null">
+	        	<if test="searchCategory == 'mailSenderName'">
+				   and mail_sender_name
+				</if>
+				<if test="searchCategory == 'mailTitle'">
+				   and mail_title
+				</if>
+				<if test="searchCategory == 'mailContent'">
+				   and mail_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	        </if>
+	         <choose>
+			 	<when test="filter == '6months'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 6
+			 	</when>
+			 	<when test="filter == '1month'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 1
+			 	</when>			 	
+			 	<when test="filter == '1week'">
+			 		and floor(sysdate - mail_create_date) <![CDATA[ <= ]]> 7
+			 	</when>
+			 	<otherwise>
+			 		 and mail_no > 0
+			 	</otherwise>			 	
+			 </choose> 
+	</select>
+	
+	<!-- 휴지통 조회  -->
+	<select id="selectListBin" resultMap="mailResult">
+		 select  
+		        mail_no,
+		        mail_title, 
+		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        mail_important,
+		        mail_security,
+		        mail_file,		       
+		        mail_sender_name,		        
+		        mail_status,		      
+		        mail_read,
+		        mail_star,
+		        mail_email,
+		        mail_category        
+		   from tb_mail
+		   join tb_mail_status using(mail_no)
+		   where 
+		        (
+			        (mail_email = #{email}
+			         and mail_status = 'N'
+			         and mail_category = 'R'
+			         ) 
+			        or 
+			        (mail_sender = #{email}    
+			        and mail_category = 'S'     
+			        and mail_status = 'N' )
+			        or
+			        (
+			         mail_email = #{email}
+			         and mail_status = 'N'
+			         and mail_category = 'C'
+			        )
+		        )
+		    <if test="keyword != null">
+	        	<if test="searchCategory == 'mailSenderName'">
+				   and mail_sender_name
+				</if>
+				<if test="searchCategory == 'mailTitle'">
+				   and mail_title
+				</if>
+				<if test="searchCategory == 'mailContent'">
+				   and mail_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	         </if>
+			 <choose>
+			 	<when test="filter == '6months'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 6
+			 	</when>
+			 	<when test="filter == '1month'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 1
+			 	</when>			 	
+			 	<when test="filter == '1week'">
+			 		and floor(sysdate - mail_create_date) <![CDATA[ <= ]]> 7
+			 	</when>
+			 	<otherwise>
+			 		 and mail_no > 0
+			 	</otherwise>			 	
+			 </choose>  		       
+		   order 
+		      by  
+		      <if test="orderEmail == 'orderDsec'">
+		      	mail_create_date desc
+		      </if>
+		      <if test="orderEmail == 'orderAsc'">
+		      	mail_create_date asc
+		      </if>		       
+	</select>
 	
 
 </mapper>

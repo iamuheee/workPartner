@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width= , initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            /* width: 600px;*/
+            height: 100vh; 
+            border: 1px solid black;
+            display: grid;
+            grid-gap:10px;
+            grid-template-areas: 'header header header'
+                                 'side-a menu side-b'
+                                 'side-c main side-d'
+                                 'footer footer footer';
+            /* 행열 비교 */
+            grid-template-columns: 100px 3fr 100px;
+            grid-template-rows: 50px 1fr 8fr 50px;
+                        
+        }
+        .container>div{
+            border: 1px solid black;
+            /* text-align: center; */           
+            padding: 20px;   
+            /* 수평, 수직 정렬 */
+            display: grid;
+            justify-items: center;
+            align-items: center;     
+        }
+
+        .container div:nth-child(3)>*{
+            /* 자식요소 수평정렬을 부모요소의 정렬에 관계없이 개별적으로 배치 */
+            /* justify-self: start | center | end | stretch */
+            justify-self: end;
+            /* align-self */
+            /* 
+                align-self:stretch; 자신의 셀안에서 양옆으로 가득채윰
+                align-self:stretch; 자신의 셀안에서 위아래로 가득채움
+            */
+        }
+
+        .header{
+            grid-area: header;
+        }
+
+        .side-a{
+            grid-area: side-a;
+        }
+
+        .menu{
+            grid-area: menu;
+        }
+        
+        .side-b{
+            grid-area: side-b;
+        }
+
+        .side-c{
+            grid-area: side-c;
+        }
+        .main{
+            grid-area: main;
+        }
+        .side-d{
+            grid-area: side-d;
+        }
+        .footer{
+            grid-area: footer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">header</div>
+        
+        <div class="side-a"></div>
+        <div class="menu">
+             <select name="" id="">
+                <option value="">정렬</option>
+             </select>
+        </div>
+        <div class="side-b"></div>
+
+        <div class="side-c"></div>
+        <div class="main"></div>
+        <div class="side-d"></div>
+
+        
+        <div class="footer"></div>
+        
+    </div>
+</body>
+</html>

@@ -1,8 +1,10 @@
 package com.wp.workpartner.mail.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.wp.workpartner.common.model.vo.File;
+import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.mail.model.vo.Mail;
 import com.wp.workpartner.mail.model.vo.Signature;
@@ -10,6 +12,7 @@ import com.wp.workpartner.mail.model.vo.Signature;
 public interface MailService {
 
 	// [ 메일 서명 ]
+	
 	// 1. 메일 서명 조회 => 뿌릴때 서명1 서명2 이거 rowNum	
 	ArrayList<Signature> selectSigList(String empNo);
 	
@@ -34,6 +37,7 @@ public interface MailService {
 	// 4-3 기본서명 설정 : 서명테이블 > sigBaic
 	int updateSigBasicManage(Signature s);
 	
+	
 	// [메일쓰기]
 	
 	// 1. tb_mail insert
@@ -50,8 +54,67 @@ public interface MailService {
 	// 3. 파일 등록 
 	int insertMailFile(File file);
 	
+	
+	// [전체메일함]
+	
+	// 1_1 전체 조회 listCount
+	int selectListTotalCount(HashMap<String, Object> map);
+
+	// 1_2 전체 리스트 조회 
+	ArrayList<Mail> selectListTotal(HashMap<String, Object> map, PageInfo pi);
+	
+	// 1_3 메일함 > 메일삭제 ****
+	int deleteEmailGroup(HashMap<String, Object> map);
+	// 1_4 메일함 > 읽음
+	// 1_5 메일함 > 별표
+	// 1_6 메일함 > 별표해제
+	
+	// [상세조회]
+	
+	// 1. 메일 읽음으로 바꾸기
+	int mailReadUpdate(HashMap<String, Object> map);
+	// 2. 상세조회
+	Mail selectMailDetail(String no);
+	// 3. 파일조회
+	ArrayList<File> selectFileDetail(String no);
+	
+	
+	// [받은메일함]
+	
+	// 1_1 받은 메일 조회 listCount
+	int selectListReceiveCount(HashMap<String, Object> map);
+
+	// 1_2 전체 리스트 조회 
+	ArrayList<Mail> selectListReceive(HashMap<String, Object> map, PageInfo pi);
+	
+	
+	// [보낸메일함]
+	// 1_1 받은 메일 조회 listCount
+	int selectListSendCount(HashMap<String, Object> map);
+
+	// 1_2 전체 리스트 조회 
+	ArrayList<Mail> selectListSend(HashMap<String, Object> map, PageInfo pi);
+	
+	// [휴지통]
+	// 1_1 휴지통 조회 listCount
+	int selectListBinCount(HashMap<String, Object> map);
+
+	// 1_2 휴지통 리스트 조회 
+	ArrayList<Mail> selectListBin(HashMap<String, Object> map, PageInfo pi);
+	
+	// 1_3 완전삭제
+	
+	// 1_4 복구
+	
+	
+	
+	
+	
+	
 	// 기본서명 조회
 	Signature selectSigBasic(String empNo);
+	
+	
 	
 	
 	// 메일 완전 삭제 => 지정된 파일도 완전 삭제

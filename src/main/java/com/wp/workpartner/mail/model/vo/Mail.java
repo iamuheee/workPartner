@@ -15,7 +15,7 @@ public class Mail {
 	 private String mailNo;
 	 private String mailTitle;
 	 private String mailContent;
-	 private Date   mailCreateDate;
+	 private String mailCreateDate;
 	 private String mailImportant; 
 	 private String mailSecurity;
 	 private String mailFile;
@@ -23,4 +23,10 @@ public class Mail {
 	 private String mailCC;
 	 private String mailSender;
 	 private String mailSenderName;
+	 
+	 private String mailEmail;
+	 private String mailStatus;
+	 private String mailCategory;
+	 private String mailRead;
+	 private String mailStar;
 }

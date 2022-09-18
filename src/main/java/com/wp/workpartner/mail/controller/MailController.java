@@ -9,13 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.wp.workpartner.address.model.service.AddressService;
 import com.wp.workpartner.common.model.vo.File;
+import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.common.template.FileUpload;
+import com.wp.workpartner.common.template.Pagination;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.mail.model.service.MailService;
 import com.wp.workpartner.mail.model.vo.Mail;
@@ -29,31 +33,7 @@ public class MailController {
 	
 	@Autowired
 	private AddressService adService;
-	
-	//전체이메일리스트 조회 
-	@RequestMapping("totalList.ma")
-	public String listTotalEmail() {
-		return "email/emailTotalListView";
-	}
-	
-	//이메일 상세내역 요청
-	@RequestMapping("detail.ma")
-	public String DetailEmail() {
-		return "email/emailDetailView";
-	}
-	
-	//답장하기
-	@RequestMapping("reply.ma")
-	public String replyEmail() {
-		return "email/emailReplyForm";
-	}
-	
-	//전달하기
-	@RequestMapping("forward.ma")
-	public String forwardEmail() {
-		return "email/emailForwardView";
-	}
-	
+			
 	//중요메일함
 	@RequestMapping("starList.ma")
 	public String starEmailList() {
@@ -299,6 +279,229 @@ public class MailController {
 			
 	}
 	
+
+	/** 전체메일함 이동
+	 * @return
+	 */
+	@RequestMapping("totalList.ma")
+	public String listTotalEmail() {
+		return "email/emailTotalListView";
+	}
+	
+	/** 전체메일함 조회
+	 * @param email 식별자로서의 이메일(로그인한 유저의 이메일)
+	 * @param currentPage 현재페이지
+	 * @param searchCategory 검색종류
+	 * @param keyword 검색어
+	 * @param filter 기간
+	 * @param orderEmail 순서
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectTotal.ma", produces="applicaton/json; charset=utf-8")
+	public String  ajaxSelectTotalList(String email, @RequestParam(value="cpage", defaultValue="1")int currentPage,
+				String searchCategory, String keyword, String filter, String orderEmail) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("email", email);
+		map.put("searchCategory", searchCategory);
+		map.put("keyword", keyword);
+		map.put("filter", filter);
+		map.put("orderEmail", orderEmail);
+		
+		int listCount = mService.selectListTotalCount(map);
+			
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 8);				
+		ArrayList<Mail> list = mService.selectListTotal(map, pi);		
+						
+		HashMap<String, Object> hm = new HashMap<>();
+		hm.put("list", list);
+		hm.put("pi", pi);
+		
+		return new Gson().toJson(hm);	
+		
+	}
+	
+	/** 전체메일함 다중선택 > 삭제 (휴지통)
+	 * @param arr
+	 */
+	@ResponseBody
+	@RequestMapping("deleteEmailGroup.ma")
+	public void ajaxDeleteEmailGroup(String[] arr) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("arr", arr);
+		//map.put("arrMailNo", arrMailNo); // 메일번호
+		//map.put("arrEmail", arrEmail);	// 받는사람 메일	
+	
+		//int result = mService.deleteEmailGroup(map);
+		
+		//return result > 0 ? "success" : "fail";	
+	}
+	
+	
+	/** 이메일 상세내역 요청 
+	 * @param no 메일번호
+	 * @param mailEmail tb_mail_status 식별할수 있는 받는사람 이메일
+	 * @param mv mail, file 정보
+	 * @return
+	 */
+	@RequestMapping("detail.ma")
+	public ModelAndView DetailEmail(String no, String mailEmail, ModelAndView mv) {
+		
+		//1. mail_status => mail_read ='Y'
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("mailNo", no);
+		map.put("mailEmail", mailEmail);
+		int result1 =  mService.mailReadUpdate(map);
+		
+		// 2. mail 조회
+		Mail m = mService.selectMailDetail(no);
+		
+		// 3. file 조회
+		ArrayList<File> list = mService.selectFileDetail(no);
+				
+		mv.addObject("m", m).addObject("list", list).setViewName("email/emailDetailView");
+		
+		return mv;
+	}
+			
+	/** 메일전달하기
+	 * @param mailNo 메일번호
+	 * @param mv
+	 * @return
+	 */
+	@RequestMapping("forward.ma")
+	public ModelAndView forwardEmail(String mailNo, ModelAndView mv) {
+		
+		// 1. mail 조회
+		Mail m = mService.selectMailDetail(mailNo);
+		
+		// 2. file 조회
+		ArrayList<File> list = mService.selectFileDetail(mailNo);
+				
+		mv.addObject("m", m).addObject("list", list).setViewName("email/emailForwardView");
+		
+		return mv;
+	}
+	
+	
+	/** 메일 답장하기
+	 * @param mailNo 메일번호
+	 * @param mv
+	 * @return
+	 */
+	@RequestMapping("reply.ma")
+	public ModelAndView replyEmail(String mailNo, ModelAndView mv) {
+		
+		// mail 조회
+		Mail m = mService.selectMailDetail(mailNo);
+		mv.addObject("m", m).setViewName("email/emailReplyForm");
+		return mv;
+	}
+	
+	
+	
+	/** 받은메일함 조회
+	 * @param email 식별자로서의 이메일(로그인한 유저의 이메일)
+	 * @param currentPage 현재페이지
+	 * @param searchCategory 검색종류
+	 * @param keyword 검색어
+	 * @param filter 기간
+	 * @param orderEmail 순서
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectReceive.ma", produces="applicaton/json; charset=utf-8")
+	public String  ajaxSelectReceiveList(String email, @RequestParam(value="cpage", defaultValue="1")int currentPage,
+				String searchCategory, String keyword, String filter, String orderEmail) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("email", email);
+		map.put("searchCategory", searchCategory);
+		map.put("keyword", keyword);
+		map.put("filter", filter);
+		map.put("orderEmail", orderEmail);
+		
+		int listCount = mService.selectListReceiveCount(map);
+			
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 8);				
+		ArrayList<Mail> list = mService.selectListReceive(map, pi);		
+						
+		HashMap<String, Object> hm = new HashMap<>();
+		hm.put("list", list);
+		hm.put("pi", pi);
+		
+		return new Gson().toJson(hm);	
+		
+	}
+	
+	/** 보낸메일함 조회
+	 * @param email 식별자로서의 이메일(로그인한 유저의 이메일)
+	 * @param currentPage 현재페이지
+	 * @param searchCategory 검색종류
+	 * @param keyword 검색어
+	 * @param filter 기간
+	 * @param orderEmail 순서
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectSend.ma", produces="applicaton/json; charset=utf-8")
+	public String  ajaxSelectSendList(String email, @RequestParam(value="cpage", defaultValue="1")int currentPage,
+				String searchCategory, String keyword, String filter, String orderEmail) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("email", email);
+		map.put("searchCategory", searchCategory);
+		map.put("keyword", keyword);
+		map.put("filter", filter);
+		map.put("orderEmail", orderEmail);
+		
+		int listCount = mService.selectListSendCount(map);
+			
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 8);				
+		ArrayList<Mail> list = mService.selectListSend(map, pi);		
+						
+		HashMap<String, Object> hm = new HashMap<>();
+		hm.put("list", list);
+		hm.put("pi", pi);
+		
+		return new Gson().toJson(hm);	
+		
+	}
+	
+	/** 휴지통 조회
+	 * @param email 식별자로서의 이메일(로그인한 유저의 이메일)
+	 * @param currentPage 현재페이지
+	 * @param searchCategory 검색종류
+	 * @param keyword 검색어
+	 * @param filter 기간
+	 * @param orderEmail 순서
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectBin.ma", produces="applicaton/json; charset=utf-8")
+	public String  ajaxSelectBinList(String email, @RequestParam(value="cpage", defaultValue="1")int currentPage,
+				String searchCategory, String keyword, String filter, String orderEmail) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("email", email);
+		map.put("searchCategory", searchCategory);
+		map.put("keyword", keyword);
+		map.put("filter", filter);
+		map.put("orderEmail", orderEmail);
+		
+		int listCount = mService.selectListBinCount(map);
+			
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 8);				
+		ArrayList<Mail> list = mService.selectListBin(map, pi);		
+						
+		HashMap<String, Object> hm = new HashMap<>();
+		hm.put("list", list);
+		hm.put("pi", pi);
+		
+		return new Gson().toJson(hm);	
+		
+	}
 	
 	
 	

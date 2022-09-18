@@ -1,12 +1,14 @@
 package com.wp.workpartner.mail.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wp.workpartner.common.model.vo.File;
+import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.mail.model.dao.MailDao;
 import com.wp.workpartner.mail.model.vo.Mail;
@@ -92,6 +94,78 @@ public class MailServiceImpl implements MailService {
 	@Override
 	public int insertMailFile(File file) {
 		return mDao.insertMailFile(sqlSession, file);
+	}
+	
+	// 전체메일 > listCount
+	@Override
+	public int selectListTotalCount(HashMap<String,Object> map) {	
+		return mDao.selectListTotalCount(sqlSession, map);
+	}
+	
+	// 전체메일 > list
+	@Override
+	public ArrayList<Mail> selectListTotal(HashMap<String,Object> map, PageInfo pi) {
+		return mDao.selectListTotal(sqlSession, map, pi);
+	}
+
+	// 메일함 > 메일삭제(휴지통)
+	@Override
+	public int deleteEmailGroup(HashMap<String,Object> map) {
+		return mDao.deleteEmailGroup(sqlSession, map);
+	}
+	
+	// 메일 상세보기 > 메일 내용
+	@Override
+	public Mail selectMailDetail(String no) {
+		return mDao.selectMailDetail(sqlSession, no);
+	}
+
+	// 메일 상세보기 > 읽음 상태로 바꾸기
+	@Override
+	public int mailReadUpdate(HashMap<String,Object> map) {
+		return mDao.mailReadUpdate(sqlSession, map);
+	}
+	
+	// 메일 상세보기 > 첨부파일 리스트
+	@Override
+	public ArrayList<File> selectFileDetail(String no) {
+		return mDao.selectFileDetail(sqlSession, no);
+	}
+	
+	// 받은 메일함 조회 갯수
+	@Override
+	public int selectListReceiveCount(HashMap<String,Object> map) {
+		return mDao.selectListReceiveCount(sqlSession, map);
+	}
+	
+	// 받은 메일함 조회
+	@Override
+	public ArrayList<Mail> selectListReceive(HashMap<String,Object> map, PageInfo pi) {
+		return mDao.selectListReceive(sqlSession, map, pi);
+	}
+	
+	// 보낸 메일함 갯수
+	@Override
+	public int selectListSendCount(HashMap<String,Object> map) {
+		return mDao.selectListSendCount(sqlSession, map);
+	}
+	
+	// 보낸 메일함 조회
+	@Override
+	public ArrayList<Mail> selectListSend(HashMap<String,Object> map, PageInfo pi) {
+		return mDao.selectListSend(sqlSession, map, pi);
+	}
+	
+	// 휴지통 갯수
+	@Override
+	public int selectListBinCount(HashMap<String,Object> map) {
+		return mDao.selectListBinCount(sqlSession, map);
+	}
+
+	// 휴지통 조회
+	@Override
+	public ArrayList<Mail> selectListBin(HashMap<String,Object> map, PageInfo pi) {
+		return mDao.selectListBin(sqlSession, map, pi);
 	}	
 	
 	

@@ -899,7 +899,7 @@
             				
                         			//console.log(value);
             				$("#tableArea").html(value);
-            				 $(".pasingAdd").html(pageValue); 
+            				$(".pasingAdd").html(pageValue); 
             				            				            				
             				$("#addTitle").html("<h4><b>내 연락처</b></h4>");      
             				$("#deleteFeat").attr("style", "visibility:visible");
@@ -1271,6 +1271,7 @@
                     			if(result == "success"){
                     				
                     				// 각각의 테이블 조회하는 ajax 호출
+                    				// 지금 테이블이 별표연락처라면 삭제 후 다시 별표연락처를 조회하도록
                     				if($("#tableArea>table").is("#dataStarAddTable")){                					
                     					selectStarAdd();
                     				}else{
@@ -1293,9 +1294,7 @@
                 }
                 
                 <!--==================================== 다중선택 전체선택 script ======================================= -->
-                $(document).ready(function() {
-                   
-                }); 
+        
             </script>
 		
 </body>
