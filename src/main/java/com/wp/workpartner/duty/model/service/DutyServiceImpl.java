@@ -50,13 +50,10 @@ public class DutyServiceImpl implements DutyService {
 			dc.setEmpICName(empICNames[i]);
 			dclist.add(dc);
 		}
-		
 		System.out.println(dclist);
-		
 		for(DutyCharge dc : dclist) {
 			result2 *= dDao.insertDutyCharge(sqlSession, dc);
 		}
-		
 		
 		int result3 = dDao.insertFile(sqlSession, f);
 		
@@ -72,9 +69,6 @@ public class DutyServiceImpl implements DutyService {
 		ArrayList<DutyCharge> dclist = new ArrayList<>();
 		String[] empICNos = d.getEmpICNo().split(",");
 		String[] empICNames = d.getEmpICName().split(",");
-		
-		System.out.println(empICNos);
-		System.out.println(empICNames);
 		
 		for(int i=0; i<empICNos.length; i++) {
 			DutyCharge dc = new DutyCharge();
@@ -137,20 +131,63 @@ public class DutyServiceImpl implements DutyService {
 	@Override
 	public Duty selectDuty(String dutyNo) {
 		Duty d = dDao.selectDuty(sqlSession, dutyNo);
+		System.out.println(d);
 		d.setEmpIC( dDao.selectDutyCharge(sqlSession, dutyNo) );
 		return d;
 	}
 
 	@Override
 	public int updateDuty(Duty d) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result1 = dDao.updateDuty(sqlSession, d);
+		
+		ArrayList<DutyCharge> dclist = new ArrayList<>();
+		String[] empICNos = d.getEmpICNo().split(",");
+		String[] empICNames = d.getEmpICName().split(",");
+		
+		for(int i=0; i<empICNos.length; i++) {
+			DutyCharge dc = new DutyCharge();
+			dc.setDutyNo(Integer.parseInt(d.getDutyNo()));
+			dc.setEmpICNo(empICNos[i]);
+			dc.setEmpICName(empICNames[i]);
+			dclist.add(dc);
+		}
+		
+		int result2 = 1;
+		result2 *= dDao.deleteDutyCharge(sqlSession, dclist.get(0));
+		for(DutyCharge dc : dclist) {
+			result2 *= dDao.updateDutyCharge(sqlSession, dc);
+		}
+		return result1 * result2;
 	}
+	
+	@Override
+	public int updateDutyFile(File f) {
+		return dDao.updateDutyFile(sqlSession, f);
+	}
+	
+	@Override
+	public int insertDutyFile(File f) {
+		return dDao.insertNewFile(sqlSession, f);
+	}
+
 
 	@Override
 	public int deleteDuty(String dutyNo) {
-		// TODO Auto-generated method stub
-		return 0;
+		// 해당 업무의 담당자 삭제
+		DutyCharge dc = new DutyCharge();
+		dc.setDutyNo(Integer.parseInt(dutyNo));
+		int result1 = 1 * dDao.deleteDutyCharge(sqlSession, dc);
+		
+		// 해당 업무의 댓글 삭제
+		int result2 = 1 * dDao.deleteDutyComment(sqlSession, dutyNo);
+		
+		// 해당 업무에 파일 있으면 삭제
+		int result3 = 1 * dDao.deleteDutyFile(sqlSession, dutyNo);
+		
+		// 해당 업무 삭제
+		int result4 = 1 * dDao.deleteDuty(sqlSession, dutyNo);
+		
+		return result1 * result2 * result3 * result4;
 	}
 
 

@@ -87,7 +87,6 @@ public class DutyDao {
 	
 	
 	
-	
 	/**
 	 * 완료 업무를 제외한 업무 리스트 조회에 필요한 listCount 조회
 	 * @param sqlSession
@@ -111,6 +110,8 @@ public class DutyDao {
 	
 	//==============================================
 	
+	
+	
 	/**
 	 * 업무 게시글 상세조회를 위한 업무 한 행 조회
 	 * @param sqlSession
@@ -118,11 +119,54 @@ public class DutyDao {
 	 * @return Duty
 	 */
 	public Duty selectDuty(SqlSessionTemplate sqlSession, String dutyNo) {
-		return sqlSession.selectOne("dutyMapper.selectDuty", dutyNo);
+		Duty d = sqlSession.selectOne("dutyMapper.selectDuty", dutyNo);
+		if(d.getFilePath() != null) {
+			d = sqlSession.selectOne("dutyMapper.selectDutyWithFile", d);
+		}
+		return d;
 	}
 	
 	public ArrayList<DutyCharge> selectDutyCharge(SqlSessionTemplate sqlSession, String dutyNo){
 		return (ArrayList)sqlSession.selectList("dutyMapper.selectDutyCharge", dutyNo);
 	}
+	
+	
+	
+	//==============================================
 
+	public int updateDuty(SqlSessionTemplate sqlSession, Duty d) {
+		return sqlSession.update("dutyMapper.updateDuty", d);
+	}
+
+	public int deleteDutyCharge(SqlSessionTemplate sqlSession, DutyCharge d) {
+		return sqlSession.delete("dutyMapper.deleteDutyCharge", d);
+	}
+	
+	public int updateDutyCharge(SqlSessionTemplate sqlSession, DutyCharge dc) {
+		return sqlSession.insert("dutyMapper.updateDutyCharge", dc);
+	}
+	
+	
+	public int updateDutyFile(SqlSessionTemplate sqlSession, File f) {
+		return sqlSession.update("dutyMapper.updateDutyFile", f);
+	}
+	
+	public int insertNewFile(SqlSessionTemplate sqlSession, File f) {
+		return sqlSession.insert("dutyMapper.insertNewFile", f);
+	}
+	
+	// ==================================================================
+	
+	public int deleteDutyComment(SqlSessionTemplate sqlSession, String dutyNo) {
+		return sqlSession.delete("dutyMapper.deleteDutyComment", dutyNo);
+	}
+	
+	public int deleteDutyFile(SqlSessionTemplate sqlSession, String dutyNo) {
+		return sqlSession.delete("dutyMapper.deleteDutyFile", dutyNo);
+	}
+	
+	public int deleteDuty(SqlSessionTemplate sqlSession, String dutyNo) {
+		return sqlSession.delete("dutyMapper.deleteDuty", dutyNo);
+	}
+	
 }

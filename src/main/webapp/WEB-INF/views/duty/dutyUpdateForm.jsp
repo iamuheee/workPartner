@@ -72,14 +72,15 @@
     <br><br><br>
     <div class="container">
         <div class="title-area">
-            <h1 style="font-weight:bolder;">개인 업무 등록</h1>
+            <h1 style="font-weight:bolder;">개인 업무 수정</h1>
             <hr>
         </div>
-        <form action="insert.du" method="post" enctype="multipart/form-data" class="inner-area">
-        	<input type="hidden" name="empNo" value="${ loginUser.empNo }">
-        	<input type="hidden" name="empName" value="${loginUser.empName}">            
+        <form action="update.du" method="post" enctype="multipart/form-data" class="inner-area">
+        	<input type="hidden" name="empNo" value="${loginUser.empNo}">
+        	<input type="hidden" name="empName" value="${loginUser.empName}">
+        	<input type="hidden" name="dutyNo" value="${d.dutyNo}">            
             <span class="title">업무 제목</span> <br><br>
-            <input type="text" name="title" class="form-control" required>
+            <input type="text" name="title" value="${d.title}"class="form-control" required>
             <br><br>
             
             <div class="setting-left">
@@ -102,15 +103,35 @@
 				</select>
             </div>
             
+            <script>
+            	$(function(){
+            		$("select[name=progress]>option").each(function(){
+	            		if( $(this).text() == ${d.progress} ){
+	            			$(this).attr("checked", true);
+	            		}
+            		})
+   		            $("select[name=importance]>option").each(function(){
+	            		if( $(this).text() == ${d.importance} ){
+	            			$(this).attr("checked", true);
+            			}
+   		         	})
+            	})
+            </script>
+            
             <br style="clear:both;"><br>
             
             <div class="setting-left" id="duty-incharge">
                 <span class="title">담당자</span><br>
                 <span style="padding: 10px;">담당자는 최대 3명까지 설정할 수 있습니다.</span>
                 <button type="button" class="btn btn-sm btn-primary" id="search-emp">담당자 검색</button> <!-- 주소록 띄우는 버튼 -->
-                
+				<div id="empIC">
+					<input type="hidden" name="empICNo" value="${d.empICNo}">
+					<input type="hidden" name="empICName" value="${d.empICName}">
+					<span>현재 담당자 : </span>
+					<span>${d.empICName}</span>
+                </div>
                 <script>
-	        		// 조직도 팝업 띄우는 함수
+	        		// 기존 값 지우고 -조직도 팝업 띄우는 함수
 	        		$("#search-emp").click(function(){
 	        			$("#empIC").remove();
 	        			window.name = "parentWindow"
@@ -122,8 +143,16 @@
                 	function sendMeData(data){
                 		console.log(data);
                 		$("#search-emp").after(data);
-                		$("#submit-btn").attr("disabled", false);
                 	}
+	        		
+	        		// 담당자가 비어있으면 form 안 넘어가도록 하는 함수
+	        		$(".submit-btn").click(function(){
+	        			if( $("input[name=empICNo]").val() == null){
+	        				alert("담당자를 선택해 주세요.");
+	        			}else{
+	        				$("form").submit();
+	        			}
+	        		})
                 	
                 </script>
                 
@@ -137,46 +166,59 @@
                 <label for="N">업무 일정을 캘린더에 등록 안함</label> 
             </div>
             
+            <script>
+           		if( "${d.calendarYN}" == 'Y' ){
+           			$("#Y").attr("checked", true);
+           		}else{
+           			$("#N").attr("checked", true);
+           		}
+            </script>
+            
             <br style="clear:both;"><br>
             
             <div class="content">
                 <span class="title">업무 내용</span><br><br>
-                <textarea name="content" id="summernote" required style="height:400px; width:100%; overflow:auto; resize:none;"></textarea>
+                <textarea name="content" id="summernote" required style="height:400px; width:100%; overflow:auto; resize:none;">${d.content}</textarea>
             </div>
             
             <br><br>
             
             <div class="setting-left">
                 <span class="title">시작일</span>
-                <input type="date" name="startDate" class="form-control" required><br>
+                <input type="date" name="startDate" value="${d.startDate}" class="form-control" required><br>
 
                 <span class="title">파일 첨부</span>
                 <input type="file" name="upfile" class="form-control">
+            	<c:if test="${not empty d.filePath}">
+            		<span>현재 업로드된 파일 : </span>
+	            	<a href="${d.filePath}">${d.fileOriginName}</a>
+	            	<input type="hidden" name="fileOriginName" value="${ d.originName }">
+	                <input type="hidden" name="filePath" value="${ d.filePath }">
+            	</c:if>
             </div>
             <div class="setting-right">
                 <span class="title">마감일</span>
-                <input type="date" name="endDate" class="form-control" required><br>
-                
+                <input type="date" name="endDate" value="${d.endDate}" class="form-control" required><br>
             </div>
             
             <br style="clear:both;"><br><hr>
             
             <div class="submit-area" align="right">
                 <input type="reset" class="btn btn-secondary" value="초기화" />
-                <button class="btn btn-primary" id="submit-btn" disabled>등록</button>
+                <button class="btn btn-primary" id="submit-btn">등록</button>
             </div>
-            
         </form>
     </div>
     
     
     <script>
-
     	// 시작일 날짜로 오늘 이전 날짜 불가능하도록 만들기
     	let year = new Date().getFullYear();
     	let month = ('0' + (new Date().getMonth() + 1)).slice(-2);
     	let date = ('0' + new Date().getDate()).slice(-2);
-   		$("input[name=startDate]").attr("min", year + '-' + month + '-' + date );
+   		$("input[name=startDate]").click(function(){
+   			$(this).attr("min", year + '-' + month + '-' + date );
+   		})
     	
    		
     	// 마감일 날짜로 시작일 이전 날짜 불가능하도록 만들기

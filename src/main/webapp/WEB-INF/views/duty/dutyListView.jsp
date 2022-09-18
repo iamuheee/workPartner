@@ -160,7 +160,7 @@
     
     <script>
 		// tbody의 tr 클릭하면 해당 업무번호의 detail.du?no=XX으로 이동
-		$(".each-duty").click(function(){
+		$(document).on("click",".each-duty",function(){
 			location.href = "detail.du?no=" + $(this).children(".dutyNo").text();
 		})
 

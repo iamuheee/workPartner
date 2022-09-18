@@ -94,7 +94,7 @@
                                         <h4 style="font-weight:bold;">${ d.title }</h4>
                                     </td>
                                     <td width="5%"><a href="list.du">목록</a></td>
-                                    <td width="5%"><a href="update.du?no=${d.dutyNo}">수정</a></td>
+                                    <td width="5%"><a href="uform.du?no=${d.dutyNo}">수정</a></td>
                                     <td width="5%"><a class="delete-board" onclick="deleteBoard();">삭제</a></td>
                                 </tr>
                             </table>
@@ -106,12 +106,7 @@
                         // AJAX 필요 없음 (목록으로 돌아가면 됨)
                         function deleteBoard(){
                             if( window.confirm("정말 삭제하시겠습니까?") ){
-                                $.post({
-                                    url:"delete.du",
-                                    data:{
-                                        boardNo:${d.dutyNo}
-                                    }
-                                })
+                                location.href="delete.du?dutyNo=" + ${d.dutyNo}
                             }
                         }
                     </script>
@@ -178,7 +173,10 @@
                         </p>
                     </div>
                     <div class="content-file" align="center">
-                        <a href="${ f.filePath }">${f.fileOriginName}</a>
+	                <c:if test="${not empty d.filePath}">
+	            		<span>다운로드 <i class="fa fa-download" aria-hidden="true"></i> &nbsp; </span>
+		            	<a href="${d.filePath}">${d.fileOriginName}</a>
+	            	</c:if>
                     </div>
                 </div>
                 <div class="card-comment">

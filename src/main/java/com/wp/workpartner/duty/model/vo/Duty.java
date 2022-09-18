@@ -3,6 +3,8 @@ package com.wp.workpartner.duty.model.vo;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.wp.workpartner.common.model.vo.File;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,9 +31,12 @@ public class Duty {
 	private String startDate;
 	private String endDate;
 	private String status;
+	private String filePath;
 	
 	private ArrayList<DutyCharge> empIC;
 	private String empICNo;
 	private String empICName;
 	private String value;
+	private String fileOriginName;
+	private File file;
 }
