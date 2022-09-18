@@ -15,4 +15,7 @@ public class UsingEquip {
 
 	private String rmNo;
 	private String eqNo;
+	private String eqStatus;
+	
+	private Equip equip;
 }

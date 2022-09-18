@@ -7,7 +7,9 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.wp.workpartner.common.model.vo.File;
+import com.wp.workpartner.room.model.vo.ClosedRoom;
 import com.wp.workpartner.room.model.vo.Room;
+import com.wp.workpartner.room.model.vo.UsingEquip;
 
 @Repository
 public class RoomDao {
@@ -38,12 +40,19 @@ public class RoomDao {
 	}
 	
 	public int insertUsingEquip(SqlSessionTemplate sqlSession, String[] equips) {
-//		for(int i=0; i<equips.length; i++) {
-//			System.out.println(equips[i]);
-//		}
-//		System.out.println(equips.toString());
-//		System.out.println(equips.));
-			
 		return sqlSession.insert("roomMapper.insertUsingEquip", equips);
+	}
+	
+	public ArrayList selectRoomList(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("roomMapper.selectRoomList");
+	}
+	
+	public ArrayList selectRoom(SqlSessionTemplate sqlSession, String rmNo) {
+		ArrayList<Room> r = (ArrayList)sqlSession.selectList("roomMapper.selectRoom", rmNo);
+		return r;
+	}
+	
+	public int deleteRoom(SqlSessionTemplate sqlSession, String rmNo) {
+		return sqlSession.update("roomMapper.deleteRoom", rmNo);
 	}
 }
