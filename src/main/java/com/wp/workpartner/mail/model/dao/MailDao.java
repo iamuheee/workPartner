@@ -151,4 +151,17 @@ public class MailDao {
 		
 		return (ArrayList)sqlSession.selectList("mailMapper.selectListBin", map, rowBounds);
 	}
+	
+	public int selectListStarCount(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {		
+		return sqlSession.selectOne("mailMapper.selectListStarCount", map);
+	}
+	
+	public ArrayList<Mail> selectListStar(SqlSessionTemplate sqlSession, HashMap<String, Object> map, PageInfo pi){
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("mailMapper.selectListStar", map, rowBounds);
+	}
 }

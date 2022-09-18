@@ -168,6 +168,18 @@ public class MailServiceImpl implements MailService {
 		return mDao.selectListBin(sqlSession, map, pi);
 	}	
 	
+	// 중요메일 갯수
+	@Override
+	public int selectListStarCount(HashMap<String,Object> map) {
+		return mDao.selectListStarCount(sqlSession, map);
+	}
+
+	// 중요메일 조회
+	@Override
+	public ArrayList<Mail> selectListStar(HashMap<String,Object> map, PageInfo pi) {
+		return mDao.selectListStar(sqlSession, map, pi);
+	}	
+
 	
 	
 }

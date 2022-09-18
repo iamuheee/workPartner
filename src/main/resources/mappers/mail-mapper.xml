@@ -815,5 +815,137 @@
 		      </if>		       
 	</select>
 	
+	<!-- 중요메일함 listCount -->
+	<select id="selectListStarCount" resultType="_int">
+		 select count(*)               
+		   from tb_mail
+		   join tb_mail_status using(mail_no)
+		   where 
+		        (
+			        (
+			         mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'R'
+			         and mail_star = 'Y'
+			         ) 
+			        or 
+			        (
+			        mail_sender = #{email}    
+			        and mail_category = 'S'     
+			        and mail_status = 'Y'
+			        and mail_star = 'Y'
+			         )
+			        or
+			        (
+			         mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'C'
+			         and mail_star = 'Y'
+			        )
+		        )
+	        <if test="keyword != null">
+	        	<if test="searchCategory == 'mailSenderName'">
+				   and mail_sender_name
+				</if>
+				<if test="searchCategory == 'mailTitle'">
+				   and mail_title
+				</if>
+				<if test="searchCategory == 'mailContent'">
+				   and mail_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	        </if>
+	         <choose>
+			 	<when test="filter == '6months'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 6
+			 	</when>
+			 	<when test="filter == '1month'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 1
+			 	</when>			 	
+			 	<when test="filter == '1week'">
+			 		and floor(sysdate - mail_create_date) <![CDATA[ <= ]]> 7
+			 	</when>
+			 	<otherwise>
+			 		 and mail_no > 0
+			 	</otherwise>			 	
+			 </choose> 
+	</select>
+	
+	<!-- 중요메일함 조회  -->
+	<select id="selectListStar" resultMap="mailResult">
+		 select  
+		        mail_no,
+		        mail_title, 
+		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        mail_important,
+		        mail_security,
+		        mail_file,		       
+		        mail_sender_name,		        
+		        mail_status,		      
+		        mail_read,
+		        mail_star,
+		        mail_email,
+		        mail_category        
+		   from tb_mail
+		   join tb_mail_status using(mail_no)
+		   where 
+		        (
+			        (
+			         mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'R'
+			         and mail_star = 'Y'
+			         ) 
+			        or 
+			        (
+			        mail_sender = #{email}    
+			        and mail_category = 'S'     
+			        and mail_status = 'Y'
+			        and mail_star = 'Y'
+			         )
+			        or
+			        (
+			         mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'C'
+			         and mail_star = 'Y'
+			        )
+		        )
+		    <if test="keyword != null">
+	        	<if test="searchCategory == 'mailSenderName'">
+				   and mail_sender_name
+				</if>
+				<if test="searchCategory == 'mailTitle'">
+				   and mail_title
+				</if>
+				<if test="searchCategory == 'mailContent'">
+				   and mail_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	         </if>
+			 <choose>
+			 	<when test="filter == '6months'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 6
+			 	</when>
+			 	<when test="filter == '1month'">
+			 		and months_between(sysdate, mail_create_date) <![CDATA[ <= ]]> 1
+			 	</when>			 	
+			 	<when test="filter == '1week'">
+			 		and floor(sysdate - mail_create_date) <![CDATA[ <= ]]> 7
+			 	</when>
+			 	<otherwise>
+			 		 and mail_no > 0
+			 	</otherwise>			 	
+			 </choose>  		       
+		   order 
+		      by  
+		      <if test="orderEmail == 'orderDsec'">
+		      	mail_create_date desc
+		      </if>
+		      <if test="orderEmail == 'orderAsc'">
+		      	mail_create_date asc
+		      </if>		       
+	</select>
+	
 
 </mapper>

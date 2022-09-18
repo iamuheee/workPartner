@@ -21,7 +21,7 @@
         <div class="ntContainer">
            
             <div class="ntMenu1">            
-                <span style="font-size: 18px;"><b>전체메일함</b></span>
+                <span style="font-size: 18px;"><b>휴지통</b></span>
             </div>
                 
             <!-- 검색 및 필터링-->

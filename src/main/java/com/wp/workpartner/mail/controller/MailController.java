@@ -503,6 +503,40 @@ public class MailController {
 		
 	}
 	
+	/** 중요메일함 조회
+	 * @param email 식별자로서의 이메일(로그인한 유저의 이메일)
+	 * @param currentPage 현재페이지
+	 * @param searchCategory 검색종류
+	 * @param keyword 검색어
+	 * @param filter 기간
+	 * @param orderEmail 순서
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectStar.ma", produces="applicaton/json; charset=utf-8")
+	public String  ajaxSelectStarList(String email, @RequestParam(value="cpage", defaultValue="1")int currentPage,
+				String searchCategory, String keyword, String filter, String orderEmail) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("email", email);
+		map.put("searchCategory", searchCategory);
+		map.put("keyword", keyword);
+		map.put("filter", filter);
+		map.put("orderEmail", orderEmail);
+		
+		int listCount = mService.selectListStarCount(map);
+			
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 8);				
+		ArrayList<Mail> list = mService.selectListStar(map, pi);		
+						
+		HashMap<String, Object> hm = new HashMap<>();
+		hm.put("list", list);
+		hm.put("pi", pi);
+		
+		return new Gson().toJson(hm);	
+		
+	}
+	
 	
 	
 	

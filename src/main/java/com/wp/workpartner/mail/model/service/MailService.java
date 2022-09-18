@@ -106,7 +106,13 @@ public interface MailService {
 	
 	// 1_4 복구
 	
-	
+	// [중요메일함]
+	// 1_1 중요메일함 조회 listCount
+	int selectListStarCount(HashMap<String, Object> map);
+
+	// 1_2 중요메일함 리스트 조회 
+	ArrayList<Mail> selectListStar(HashMap<String, Object> map, PageInfo pi);
+
 	
 	
 	
