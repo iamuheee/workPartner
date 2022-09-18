@@ -43,6 +43,7 @@
 		
 		<typeAlias type="com.wp.workpartner.room.model.vo.Room" alias="Room"/>
 		<typeAlias type="com.wp.workpartner.room.model.vo.Equip" alias="Equip"/>
+		<typeAlias type="com.wp.workpartner.room.model.vo.UsingEquip" alias="UsingEquip"/>
 	</typeAliases>
 	
 	<!-- <유의사항> -->

@@ -30,6 +30,11 @@
 		<result column="file_status" property="fileStatus" />
 	</resultMap>
 	
+	<resultMap id="usingEquipResult" type="UsingEquip">
+		<result column="rm_no" property="rmNo" />
+		<result column="eq_no" property="eqNo" />
+	</resultMap>
+	
 	<!-- 회의 장비 추가 -->
 	<!-- 작성자 : 박태은 -->
 	<insert id="insertEquip">
@@ -41,7 +46,7 @@
 		  )
 		  values
 		  (
-		    seq_eqno.nextval
+		    seq_eqno.currval
 		  , #{eqName}
 		  )
 	</insert>
@@ -93,17 +98,39 @@
 		  	file_no
 		  , file_ref_no
 		  , file_category
+		  , file_origin_name
+		  , file_change_name
 		  , file_path
 		  , file_level
 		  )
 		  values
 		  (
 		    seq_fileno.nextval
-		  , #{rmNo}
+		  , seq_rmno.currval
 		  , 7
-		  , #{saveFilePath}
-		  , #{fileLevel}
+		  , #{file.fileOriginName}
+		  , #{file.fileChangeName}
+		  , #{file.filePath}
+		  , #{fileLevel}		 
 		  )
 	</insert>
+	
+	<!-- 사용 중인 장비 등록 -->
+	<!--  작성자 : 박태은 -->
+	<!-- update지만 실제로는 insert문임 -->
+	<update id="insertUsingEquip">
+  	<foreach collection="array" item="item" index="index" open="insert all" close="select * from dual">
+		  into tb_usingequip
+		  (
+		    rm_no
+		  , eq_no
+		  )
+		  values
+		  (
+		    seq_rmno.currval
+		  , #{item}
+		  )
+	</foreach>
+	</update>
 
 </mapper>
