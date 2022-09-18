@@ -316,16 +316,16 @@ input[type=text] {
 	</section>
 	<script>
 		function saveCheck() {
-			if (confirm("임시 저장하시겠습니까?") == true) { //확인
+			if (confirm("임시저장하시겠습니까?") == true) { //확인
 				
 				if('${paperName}' == '연차'){
-					document.saveForm.action = "insertV.si";
+					document.insertForm.action = "saveVa.si";
 				}else if('${paperName}' == '외근'){
-					document.saveForm.action = "insertOw.si";
+					document.insertForm.action = "saveOw.si";
 				}else if('${paperName}' == '업무협조'){
-					document.saveForm.action = "insertCo.si";
+					document.insertForm.action = "saveCo.si";
 				}else {
-					document.saveForm.action = "insertRe.si";
+					document.insertForm.action = "saveRe.si";
 				}
 				document.saveForm.submit();
 			} else { //취소

@@ -67,7 +67,7 @@ public class SignController {
 		ArrayList<Sign> signList = d.getSignList();
 //		System.out.println(signList);
 		//signList.add(d.setSignList((d.getSignList).length);
-		int result1 = sService.insertVaDtpaper(d);
+		int result1 = sService.insertDtpaper(d);
 		
 		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
 			int result2 = sService.insertVacation(v);
@@ -77,7 +77,7 @@ public class SignController {
 						session.setAttribute("alertMsg", "결재 신청 되었습니다.");
 					}
 				}
-				return "redirect:sign/selectVacation";
+				return "redirect:selectVa.si";
 		}else { // 실패 => 에러문구, 에러페이지
 			model.addAttribute("errorMsg", "결재 신청 실패.");
 			return "common/errorPage";
@@ -101,7 +101,7 @@ public class SignController {
 		ArrayList<Sign> signList = d.getSignList();
 //		System.out.println(signList);
 		//signList.add(d.setSignList((d.getSignList).length);
-		int result1 = sService.insertOwDtpaper(d);
+		int result1 = sService.insertDtpaper(d);
 		
 		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
 			int result2 = sService.insertOtwork(o);
@@ -135,7 +135,7 @@ public class SignController {
 		ArrayList<Sign> signList = d.getSignList();
 //		System.out.println(signList);
 		//signList.add(d.setSignList((d.getSignList).length);
-		int result1 = sService.insertReDtpaper(d);
+		int result1 = sService.insertDtpaper(d);
 		
 		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
 			int result2 = sService.insertReSignEmp(r);
@@ -169,7 +169,7 @@ public class SignController {
 		ArrayList<Sign> signList = d.getSignList();
 //		System.out.println(signList);
 		//signList.add(d.setSignList((d.getSignList).length);
-		int result1 = sService.insertCoDtpaper(d);
+		int result1 = sService.insertDtpaper(d);
 		
 		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
 			int result2 = sService.insertCooperation(c);
@@ -235,5 +235,9 @@ public class SignController {
 	public String addressAdminNotice() {
 		return "sign/signAddressAdmin";
 	}
+//	기안서 상세보기
+//	@RequestMapping("selectVa.si")
+//	public ModelAndView selectVacation()
+
 }
 	

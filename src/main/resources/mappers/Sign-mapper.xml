@@ -21,7 +21,7 @@
 		<result column="va_useday" property="vaUseday"/>
 	</resultMap>
 	 <!-- 연차 기안서 -->
-	<insert id="insertVaDtpaper">
+	<insert id="insertDtpaper">
 		
 		insert
 		 
@@ -36,7 +36,20 @@
 		  	  )
 		values
 			  (
-			  	10||seq_vac.nextval
+			  <choose>
+				  <when test="dpCategory.equals('연차')">
+				  	10||seq_vac.nextval
+				  </when>
+			  	  <when test="dpCategory.equals('외근')">
+				  	20||seq_otw.nextval
+				  </when>
+				  <when test="dpCategory.equals('퇴직원')">
+				  	30||seq_res.nextval
+				  </when>
+			  	  <otherwise>
+				  	40||seq_coop.nextval
+				  </otherwise>
+			  </choose>
 			  , #{ empNo }
 			  , #{ dpTitle }
 			  , #{ dpCategory }
@@ -72,43 +85,26 @@
 		     , signemp_no
 		     , si_seq
 		     , si_asign
+		     <if test="siSeq == 1">
+			 , si_status
+			 </if>
 		     ) 
 		 values
 		 (
-			10||seq_vac.currval
+	  		10||seq_vac.currval
 		  , #{ signEmpNo }
 		  , #{ siSeq }
 		  , #{ siAsign }
+		  <if test="siSeq == 1">
+		  , 'C'
+		  </if>
 		 )
 	</insert>
 	
 	
 	
 	<!-- 외근 기안서 -->
-	<insert id="insertOwDtpaper">
-		
-		insert
-		 
-		  into tb_dtpaper
-		  	  (
-		  	  	dp_no
-		  	  ,	emp_no
-		  	  , dp_title
-		  	  , dp_category
-		  	  , dp_origin
-		  	  , dp_change
-		  	  )
-		values
-			  (
-			
-			  	20||seq_otw.nextval
-			  , #{ empNo }
-			  , #{ dpTitle }
-			  , #{ dpCategory }
-			  , #{ dpOrigin }
-			  , #{ dpChange }
-			  ) 
-	</insert>
+	
 	<insert id="insertOtwork">
 		insert
 		  into tb_otwork
@@ -146,6 +142,9 @@
 		     , signemp_no
 		     , si_seq
 		     , si_asign
+	       	 <if test="siSeq == 1">
+			 , si_status
+			 </if>
 		     ) 
 		 values
 		 (
@@ -153,11 +152,15 @@
 		  , #{ signEmpNo }
 		  , #{ siSeq }
 		  , #{ siAsign }
+	      <if test="siSeq == 1">
+		  , 'C'
+		  </if>
 		 )
 	</insert>
 	
 	<!-- 퇴직원 신청서 -->
-	<insert id="insertReDtpaper">
+	
+	<insert id="saveReDtpaper">
 		
 		insert
 		 
@@ -180,6 +183,7 @@
 			  , #{ dpChange }
 			  ) 
 	</insert>
+	
 	<insert id="insertReSignEmp">
 		insert
 		   into tb_resign
@@ -218,6 +222,9 @@
 		     , signemp_no
 		     , si_seq
 		     , si_asign
+	         <if test="siSeq == 1">
+			 , si_status
+			 </if>
 		     ) 
 		 values
 		 (
@@ -225,35 +232,16 @@
 		  , #{ signEmpNo }
 		  , #{ siSeq }
 		  , #{ siAsign }
+		   <if test="siSeq == 1">
+		  , 'C'
+		  </if>
 		 )
 	</insert>
 	
 	
 	
 	<!-- 업무협조 기안서 -->
-	<insert id="insertCoDtpaper">
-		
-		insert
-		 
-		  into tb_dtpaper
-		  	  (
-		  	  	dp_no
-		  	  ,	emp_no
-		  	  , dp_title
-		  	  , dp_category
-		  	  , dp_origin
-		  	  , dp_change
-		  	  )
-		values
-			  (
-			  	40||seq_coop.nextval
-			  , #{ empNo }
-			  , #{ dpTitle }
-			  , #{ dpCategory }
-			  , #{ dpOrigin }
-			  , #{ dpChange }
-			  ) 
-	</insert>
+	
 	
 	<insert id="insertCooperation">
 		insert
@@ -284,6 +272,9 @@
 		     , signemp_no
 		     , si_seq
 		     , si_asign
+	         <if test="siSeq == 1">
+			 , si_status
+			 </if>
 		     ) 
 		 values
 		 (
@@ -291,6 +282,9 @@
 		  , #{ signEmpNo }
 		  , #{ siSeq }
 		  , #{ siAsign }
+		  <if test="siSeq == 1">
+		  , 'C'
+		  </if>
 		 )
 	</insert>
 	
