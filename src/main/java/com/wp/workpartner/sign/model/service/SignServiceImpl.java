@@ -28,31 +28,63 @@ public class SignServiceImpl implements SignService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
+//	결재선
 	@Override
-	public int insertDtpaper(Dtpaper d) {
-		return sDao.insertDtpaper(sqlSession, d);
+	public int insertVaSign(ArrayList<Sign> signList) {
+		return sDao.insertVaSign(sqlSession, signList);
+	}
+	@Override
+	public int insertOwSign(ArrayList<Sign> signList) {
+		return sDao.insertOwSign(sqlSession, signList);
+	}
+	@Override
+	public int insertReSign(ArrayList<Sign> signList) {
+		return sDao.insertReSign(sqlSession, signList);
+	}
+	@Override
+	public int insertCoSign(ArrayList<Sign> signList) {
+		return sDao.insertCoSign(sqlSession, signList);
+	}
+//  기안서 바디
+	@Override
+	public int insertVaDtpaper(Dtpaper d) {
+		return sDao.insertVaDtpaper(sqlSession, d);
+	}
+	@Override
+	public int insertOwDtpaper(Dtpaper d) {
+		return sDao.insertOwDtpaper(sqlSession, d);
 	}
 
 	@Override
-	public int insertCooperation(Cooperation c) {
-		return 0;
+	public int insertReDtpaper(Dtpaper d) {
+		return sDao.insertReDtpaper(sqlSession, d);
 	}
 
+	@Override
+	public int insertCoDtpaper(Dtpaper d) {
+		return sDao.insertCoDtpaper(sqlSession, d);
+	}
+//  기안서 푸터
 	@Override
 	public int insertVacation(Vacation v) {
 		return sDao.insertVacation(sqlSession, v);
 	}
-
+	
 	@Override
 	public int insertOtwork(Otwork o) {
 		return sDao.insertOtwork(sqlSession, o);
 	}
-
+	
 	@Override
 	public int insertReSignEmp(ReSign r) {
-		return 0;
+		return sDao.insertReSignEmp(sqlSession, r);
+	}
+	@Override
+	public int insertCooperation(Cooperation c) {
+		return sDao.insertCooperation(sqlSession, c);
 	}
 
+//  기안서목록
 	@Override
 	public int selectProgressListCount() {
 		return 0;
@@ -184,10 +216,9 @@ public class SignServiceImpl implements SignService {
 		return null;
 	}
 
-	@Override
-	public int insertSign(ArrayList<Sign> signList) {
-		return sDao.insertSign(sqlSession, signList);
-	}
+	
+
+	
 	
 	
 

@@ -160,13 +160,13 @@ input, select, textarea {
 	});
 </script>
 </head>
-<body style="width: 800px;">
+<body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
 	<jsp:include page="../sign/insertTitle.jsp"/>
 	
 	 <br>
     <section>
-        <div style="border:0.5px solid rgba(143, 143, 143, 0.547); margin:auto; margin-top: 10px; width: 764px;" id="dpaperOuter">
-            <table style="margin-left:10px; border:0; border-spacing: 10px;">
+        <div style="margin:auto; margin-top: 10px; width: 800px;" >
+            <table style="margin-left:30px; border:0; border-spacing: 10px;" align="center">
                 <tr align="left">
                     <th width="70" style="border:0">
                         근태명
@@ -204,7 +204,7 @@ input, select, textarea {
                     </th>
                     <td style="border:0">
                         <textarea name="vaContent" cols="30" rows="10"
-                            style=" border-radius: 4px; width: 95%; resize: none;"></textarea>
+                            style=" border-radius: 4px; width: 650px; resize: none;"></textarea>
                     </td>
                 </tr>
             </table>
@@ -216,7 +216,6 @@ input, select, textarea {
         document.getElementById('currentDate2').value = new Date().toISOString().substring(0, 10);;
     </script>
 	</section>
-	</form>
 	</form>
 
 

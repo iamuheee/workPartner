@@ -279,38 +279,35 @@ input[type=text] {
 	background-color: #ffffff48;
 	padding: auto;
 }
-.dtPaper{
-	margin-left:20px;
-}
+
 </style>
 
 
 
 </head>
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-		 <c:choose>
-			<c:when test="${ paperName == '연차' }">
-				<form action="insertV.si" method="post" name="insertForm" id="insertForm" style="float: left"
+				<form action="" method="post" name="insertForm" id="insertForm" style="float: left"
 					enctype="multipart/form-data"> 
 					<input type="hidden" name="dpCategory" value="${ paperName }">
-			</c:when>
-			<c:when test="${ paperName == '외근' }">
-				<form action="insertD.bo" id="insertForm" style="float: left"
+		<%-- <c:choose>
+			<c:when test="${ paperName == '연차' }"> 
+			 </c:when> 
+			 <c:when test="${ paperName == '외근' }">
+				<form action="insertOw.si" method="post"   id="insertForm" style="float: left"
 					enctype="multipart/form-data">
 					<input type="hidden" name="dpCategory" value="${ paperName }">
 			</c:when>
 			<c:when test="${ paperName == '퇴직원' }">
-				<form action="insertD.bo" id="insertForm" style="float: left"
+				<form action="insertRe.si" method="post"  id="insertForm" style="float: left"
 					enctype="multipart/form-data">
 					<input type="hidden" name="dpCategory" value="${ paperName }">
 			</c:when>
 			<c:otherwise>
-				<form action="insertD.bo" id="insertForm" style="float: left"
+				<form action="insertCo.si" method="post"  id="insertForm" style="float: left"
 					enctype="multipart/form-data">
 					<input type="hidden" name="dpCategory" value="${ paperName }">
-			</c:otherwise>
-		</c:choose> 
- <section class="dtPaper">
+			</c:otherwise> 
+		 </c:choose>  --%> 
 	<section class="mainTitle">
 			<a class="insertBtn" onclick="insertCheck();">기안하기</a>
 			<a class="insertBtn" onclick="saveCheck()">임시저장</a>
@@ -350,7 +347,7 @@ input[type=text] {
 					document.insertForm.action = "insertRe.si";
 				}
 				document.insertForm.submit();
-				
+
 			} else { //취소
 				return false;
 			}

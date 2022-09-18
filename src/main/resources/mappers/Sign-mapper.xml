@@ -20,8 +20,8 @@
 		<result column="va_content" property="vaContent"/>
 		<result column="va_useday" property="vaUseday"/>
 	</resultMap>
-	 
-	<insert id="insertDtpaper">
+	 <!-- 연차 기안서 -->
+	<insert id="insertVaDtpaper">
 		
 		insert
 		 
@@ -64,7 +64,7 @@
 				  , #{ vaContent }
 				  )
 	</insert>
-	<insert id="insertSign">
+	<insert id="insertVaSign">
 		insert
 		  into tb_sign
 		     (
@@ -81,12 +81,221 @@
 		  , #{ siAsign }
 		 )
 	</insert>
+	
+	
+	
+	<!-- 외근 기안서 -->
+	<insert id="insertOwDtpaper">
+		
+		insert
+		 
+		  into tb_dtpaper
+		  	  (
+		  	  	dp_no
+		  	  ,	emp_no
+		  	  , dp_title
+		  	  , dp_category
+		  	  , dp_origin
+		  	  , dp_change
+		  	  )
+		values
+			  (
+			
+			  	20||seq_otw.nextval
+			  , #{ empNo }
+			  , #{ dpTitle }
+			  , #{ dpCategory }
+			  , #{ dpOrigin }
+			  , #{ dpChange }
+			  ) 
+	</insert>
 	<insert id="insertOtwork">
 		insert
 		  into tb_otwork
 		  (
-		  
+		  	dp_no
+		  , ot_startdate
+		  , ot_enddate
+		  , ot_customer
+		  , ot_content
+		  , ot_trans
+		  , ot_note
+		  , ot_place
+		  , ot_supervisor
+		  ,	ot_call
 		  )
+		values
+		(
+		  20||seq_otw.currval
+		, #{otStartdate} 
+		, #{otEnddate} 
+		, #{otCustomer} 
+		, #{otContent} 
+		, #{otTrans} 
+		, #{otNote} 
+		, #{otPlace} 
+		, #{otSupervisor} 
+		, #{otCall} 
+		)
+	</insert>
+	<insert id="insertOwSign">
+		insert
+		  into tb_sign
+		     (
+		       dp_no
+		     , signemp_no
+		     , si_seq
+		     , si_asign
+		     ) 
+		 values
+		 (
+			20||seq_otw.currval
+		  , #{ signEmpNo }
+		  , #{ siSeq }
+		  , #{ siAsign }
+		 )
+	</insert>
+	
+	<!-- 퇴직원 신청서 -->
+	<insert id="insertReDtpaper">
+		
+		insert
+		 
+		  into tb_dtpaper
+		  	  (
+		  	  	dp_no
+		  	  ,	emp_no
+		  	  , dp_title
+		  	  , dp_category
+		  	  , dp_origin
+		  	  , dp_change
+		  	  )
+		values
+			  (
+			  	30||seq_res.nextval
+			  , #{ empNo }
+			  , #{ dpTitle }
+			  , #{ dpCategory }
+			  , #{ dpOrigin }
+			  , #{ dpChange }
+			  ) 
+	</insert>
+	<insert id="insertReSignEmp">
+		insert
+		   into tb_resign
+		   (
+		   	  dp_no
+		   	, res_redate
+		   	, res_account
+		   	, res_bank
+		   	, res_content
+		   	, res_mem
+		   	, res_dept
+		   	, res_email
+		   	, res_nextmem
+		   	, res_tamem
+		   )
+		 values
+		 (
+		    30||seq_res.currval
+		  , #{ resRedate }
+		  , #{ resAccount }
+		  , #{ resBank }
+		  , #{ resContent }
+		  , #{ resMem }
+		  , #{ resDept }
+		  , #{ resEmail }
+		  , #{ resNextMem }
+		  , #{ resTaMem }
+		 )
 	
 	</insert>
+	<insert id="insertReSign">
+		insert
+		  into tb_sign
+		     (
+		       dp_no
+		     , signemp_no
+		     , si_seq
+		     , si_asign
+		     ) 
+		 values
+		 (
+			30||seq_res.currval
+		  , #{ signEmpNo }
+		  , #{ siSeq }
+		  , #{ siAsign }
+		 )
+	</insert>
+	
+	
+	
+	<!-- 업무협조 기안서 -->
+	<insert id="insertCoDtpaper">
+		
+		insert
+		 
+		  into tb_dtpaper
+		  	  (
+		  	  	dp_no
+		  	  ,	emp_no
+		  	  , dp_title
+		  	  , dp_category
+		  	  , dp_origin
+		  	  , dp_change
+		  	  )
+		values
+			  (
+			  	40||seq_coop.nextval
+			  , #{ empNo }
+			  , #{ dpTitle }
+			  , #{ dpCategory }
+			  , #{ dpOrigin }
+			  , #{ dpChange }
+			  ) 
+	</insert>
+	
+	<insert id="insertCooperation">
+		insert
+		  into tb_coop
+			(
+			   dp_no
+			 , cp_requestor
+			 , cp_requestday
+			 , cp_content	
+			 , cp_dept
+			
+			)
+	    values
+	      (
+	        40||seq_coop.currval
+	      , #{cpRequestor}
+	      , #{cpRequestday}
+	      , #{cpContent} 
+	      , #{cpDept}
+	      )
+			
+	</insert>
+	<insert id="insertCoSign">
+		insert
+		  into tb_sign
+		     (
+		       dp_no
+		     , signemp_no
+		     , si_seq
+		     , si_asign
+		     ) 
+		 values
+		 (
+			40||seq_coop.currval
+		  , #{ signEmpNo }
+		  , #{ siSeq }
+		  , #{ siAsign }
+		 )
+	</insert>
+	
+	
+	
+	
+	
 </mapper>

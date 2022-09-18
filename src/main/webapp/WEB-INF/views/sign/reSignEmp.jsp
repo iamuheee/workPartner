@@ -175,43 +175,43 @@
 </head>
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;" >
 	<jsp:include page="../sign/insertTitle.jsp"/>
+	
 	 <br>
     <section>
         <div style="margin: auto; margin-top: 10px; width: 800px;">
             <table class="otworkPaper" style="border:1px solid rgba(143, 143, 143, 0.547)" align="center">
                 <tr>
                     <td class="tableTitle" width="100">퇴직자</td>
-                    <td width="280" align="right"><input type="text" readonly value="김범진"></td>
+                    <td width="280" align="right"><input type="text" name="resMem" value="${ loginUser.empName }" readonly></td>
                     <td class="tableTitle" width="100">부서</td>
                     <td width="280" align="right" style="border-right:0;">
-                        <input type="text" value="내부서" readonly>
+                        <input type="text" value="${ loginUser.depCd }" readonly name="resDept">
                     </td>
                 </tr>
                 <tr>
                     <td class="tableTitle">퇴직예정일자</td>
-                    <td align="left"><input style="margin-left:10px;" type="date" ></td>
+                    <td align="left"><input style="margin-left:10px;" type="date" name="resRedate"></td>
                     <td class="tableTitle">업무인수자</td>
-                    <td align="right" style="border-right:0;"><input type="text"></td>
+                    <td align="right" style="border-right:0;"><input type="text" name="resNextMem"></td>
                 </tr>
                 <tr>
                     <td class="tableTitle">외부메일주소</td>
                     <td align="right" >
-                        <input type="text">
+                        <input type="text" name="resEmail">
                     </td>
                     <td class="tableTitle">면담자</td>
-                    <td style="border-right:0;" align="right"><input type="text"></td>
+                    <td style="border-right:0;" align="right"><input type="text" name="resTaMem"></td>
                 </tr>
                 <tr>
                     <td class="tableTitle">은행명</td>
-                    <td align="right"><input type="text"></td>
+                    <td align="right"><input type="text" name="resBank"></td>
                     <td class="tableTitle">계좌번호</td>
-                    <td style="border-right:0;" align="right"><input type="text"></td>
+                    <td style="border-right:0;" align="right"><input type="text" name="resAccount"></td>
                 </tr>
                 <tr>
                     <td class="tableTitle" style="border-bottom: 0;">퇴직사유</td>
                     <td colspan="3" style="border-bottom: 0; border-right:0;">
-                        <textarea name="" id="" cols="53" rows="10"
-                            style="resize: none; height:95%; width: 96%; margin-top: 3px; border: 0; font-size: 16px;"></textarea>
+                        <textarea name="resContent" cols="53" rows="10" style="resize: none; height:95%; width: 96%; margin-top: 3px; border: 0; font-size: 16px;"></textarea>
                     </td>
                 </tr>
             </table>
@@ -222,8 +222,6 @@
         document.getElementById('currentDate').value = new Date().toISOString().substring(0, 10);
         document.getElementById('currentDate2').value = new Date().toISOString().substring(0, 10);;
     </script>
-    	</section>
-	</form>
 	</form>
 	
 </body>

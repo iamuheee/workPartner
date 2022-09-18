@@ -16,8 +16,14 @@ import com.wp.workpartner.sign.model.vo.Vacation;
 
 public interface SignService {
 //	기안서 작성
-	int insertSign(ArrayList<Sign> signList);
-	int insertDtpaper(Dtpaper d);
+	int insertVaSign(ArrayList<Sign> signList);
+	int insertOwSign(ArrayList<Sign> signList);
+	int insertReSign(ArrayList<Sign> signList);
+	int insertCoSign(ArrayList<Sign> signList);
+	int insertVaDtpaper(Dtpaper d);
+	int insertOwDtpaper(Dtpaper d);
+	int insertReDtpaper(Dtpaper d);
+	int insertCoDtpaper(Dtpaper d);
 	int insertCooperation(Cooperation c);
 	int insertVacation(Vacation v);
 	int insertOtwork(Otwork o);

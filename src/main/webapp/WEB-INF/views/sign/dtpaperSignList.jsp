@@ -154,7 +154,7 @@
        
        function showPopup(){
         
-        vacation = window.open("vaEnroll.si", "btn", "width=825, height=800");
+        vacation = window.open("vaEnroll.si", "btn", "width=805, height=800");
         vacation.moveTo(560,120);
         vacation.focus();
         };
@@ -163,7 +163,7 @@
        
        function showPopup2(){
         
-        vacation = window.open("owEnroll.si", "btn", "width=825, height=800");
+        vacation = window.open("owEnroll.si", "btn", "width=805, height=800");
         vacation.moveTo(560,120);
         vacation.focus();
         };
@@ -172,7 +172,7 @@
        
         function showPopup3() {
 
-        	 vacation = window.open("reEnroll.si", "btn", "width=825, height=800");
+        	 vacation = window.open("reEnroll.si", "btn", "width=805, height=800");
              vacation.moveTo(560,120);
              vacation.focus();
 
@@ -181,7 +181,7 @@
     <script>
        
         function showPopup4() {
-        	 vacation = window.open("coopEnroll.si", "btn", "width=825, height=800");
+        	 vacation = window.open("coEnroll.si", "btn", "width=805, height=800");
              vacation.moveTo(560,120);
              vacation.focus();
             }
