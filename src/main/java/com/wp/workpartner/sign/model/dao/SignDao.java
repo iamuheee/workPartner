@@ -75,15 +75,36 @@ public class SignDao {
 		return sqlSession.insert("signMapper.insertCooperation", c);
 	}
 	
-//	기안서 임시저장 리스트
-	public int selectSaveListCount(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectOne("signMapper.selectSaveListCount");
+//	기안서 임시저장 반려됨 리스트
+	public int selectListCount(SqlSessionTemplate sqlSession, String fn, String empNo) {
+		HashMap<String, String> map = new HashMap();
+		map.put("empNo", empNo);
+		map.put("fn", fn);
+		return sqlSession.selectOne("signMapper.selectListCount", map);
 	}
-	public ArrayList<Dtpaper> selectSaveList(SqlSessionTemplate sqlSession,PageInfo pi,String empNo){
+	public ArrayList<Dtpaper> selectList(SqlSessionTemplate sqlSession,PageInfo pi,String empNo, String fn){
 		int limit = pi.getBoardLimit();
 		int offset = (pi.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		
-		return (ArrayList)sqlSession.selectList("signMapper.selectSaveList", empNo, rowBounds);
+		HashMap<String, String> map = new HashMap();
+		map.put("empNo", empNo);
+		map.put("fn", fn);
+		return (ArrayList)sqlSession.selectList("signMapper.selectList", map, rowBounds);
+	}
+//  기안서 진행중, 대기 리스트
+	public int selectProgressListCount(SqlSessionTemplate sqlSession, String fn, String empNo) {
+		HashMap<String, String> map = new HashMap();
+		map.put("empNo", empNo);
+		map.put("fn", fn);
+		return sqlSession.selectOne("signMapper.selectProgressListCount", map);
+	}
+	public ArrayList<Dtpaper> selectProgressList(SqlSessionTemplate sqlSession,PageInfo pi,String empNo, String fn){
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		HashMap<String, String> map = new HashMap();
+		map.put("empNo", empNo);
+		map.put("fn", fn);
+		return (ArrayList)sqlSession.selectList("signMapper.selectProgressList", map, rowBounds);
 	}
 }

@@ -11,7 +11,6 @@
 		<result column="dp_status" property="dpStatus"/>
 		<result column="dp_final" property="dpFinal"/>
 		<result column="dp_category" property="dpCategory"/>
-		<result column="dp_temp" property="dpTemp"/>
 		<result column="dp_origin" property="dpOrigin"/>
 		<result column="dp_change" property="dpChange"/>
 		<result column="va_start" property="vaStart"/>
@@ -21,7 +20,7 @@
 		<result column="va_useday" property="vaUseday"/>
 	</resultMap>
 	
-	<resultMap id="SelectSaveListResult" type="Dtpaper">
+	<resultMap id="SelectListResult" type="Dtpaper">
 		<result column="dp_no" property="dpNo"/>
 		<result column="emp_no" property="empNo"/>
 		<result column="dp_title" property="dpTitle"/>
@@ -30,9 +29,30 @@
 		<result column="dp_status" property="dpStatus"/>
 		<result column="dp_final" property="dpFinal"/>
 		<result column="dp_category" property="dpCategory"/>
-		<result column="dp_temp" property="dpTemp"/>
 		<result column="dp_origin" property="dpOrigin"/>
 		<result column="dp_change" property="dpChange"/>
+	</resultMap>
+	<resultMap id="SelectProgressListResult" type="Dtpaper">
+		<result column="dp_no" property="dpNo"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="dp_title" property="dpTitle"/>
+		<result column="dp_create" property="dpCreate"/>
+		<result column="dp_modify" property="dpModify"/>
+		<result column="dp_status" property="dpStatus"/>
+		<result column="dp_final" property="dpFinal"/>
+		<result column="dp_category" property="dpCategory"/>
+		<result column="dp_origin" property="dpOrigin"/>
+		<result column="dp_change" property="dpChange"/>
+		<collection property="signList" resultMap="SelectSignListResult"/>
+	</resultMap>
+	<resultMap id="SelectSignListResult" type="Sign">
+		<result column="dp_no" property="dpNo"/>
+		<result column="signemp_no" property="signEmpNo"/>
+		<result column="si_seq" property="siSeq"/>
+		<result column="si_appdate" property="siAppdate"/>
+		<result column="si_status" property="siStatus"/>
+		<result column="si_asign" property="siAsign"/>
+		<result column="si_rep" property="siRep"/>
 	</resultMap>
 	 <!-- 연차 기안서 -->
 	<insert id="insertDtpaper">
@@ -80,8 +100,8 @@
 		  	  	dp_no
 		  	  ,	emp_no
 		  	  , dp_title
+		  	  , dp_final
 		  	  , dp_category
-		  	  , dp_temp
 		  	  , dp_origin
 		  	  , dp_change
 		  	  
@@ -104,8 +124,8 @@
 			  </choose>
 			  , #{ empNo }
 			  , #{ dpTitle }
+			  , '임시저장'
 			  , #{ dpCategory }
-			  , 'Y'
 			  , #{ dpOrigin }
 			  , #{ dpChange }
 			  ) 
@@ -153,8 +173,6 @@
 		  </if>
 		 )
 	</insert>
-	
-	
 	
 	<!-- 외근 기안서 -->
 	
@@ -212,7 +230,6 @@
 	</insert>
 	
 	<!-- 퇴직원 신청서 -->
-	
 	<insert id="insertReSignEmp">
 		insert
 		   into tb_resign
@@ -317,15 +334,32 @@
 		 )
 	</insert>
 	
-	<!-- 임시저장 리스트 -->
-	<select id="selectSaveListCount" resultType="_int">
+	<!-- 리스트 카운트 -->
+	<select id="selectListCount" resultType="_int">
 		select
 		       count(*)	
 		  from tb_dtpaper
-		 where dp_temp = 'Y'
+		 where dp_final = <choose>
+		 					<when test="fn.equals('임시저장')">
+		 						'임시저장'
+		 					</when>
+		 					<when test="fn.equals('진행중')">
+		 						'진행중'
+		 					</when>
+		 					<when test="fn.equals('반려됨')">
+		 						'반려됨'
+		 					</when>
+		 					<when test="fn.equals('결재완료')">
+		 						'결재완료'
+		 					</when>
+		 					<otherwise>
+		 						'대기'
+		 					</otherwise>
+		 				  </choose>
 		   and dp_status = 'N'  
+		   and emp_no = ${ empNo }
 	</select>
-	<select id="selectSaveList" resultMap="SelectSaveListResult">
+	<select id="selectList" resultMap="SelectListResult">
 		select
 		       dp_no
 		      ,emp_no
@@ -335,16 +369,93 @@
 		      ,dp_status
 		      ,dp_final
 		      ,dp_category
-		      ,dp_temp
 		      ,dp_origin
 		      ,dp_change
 		  from tb_dtpaper
-		 where dp_temp = 'Y'
+		 where dp_final = <choose>
+		 					<when test="fn.equals('임시저장')">
+		 						'임시저장'
+		 					</when>
+		 					<when test="fn.equals('진행중')">
+		 						'진행중'
+		 					</when>
+		 					<when test="fn.equals('반려됨')">
+		 						'반려됨'
+		 					</when>
+		 					<when test="fn.equals('결재완료')">
+		 						'결재완료'
+		 					</when>
+		 					<otherwise>
+		 						'대기'
+		 					</otherwise>
+		 				  </choose>
 		   and dp_status = 'N'
 		   and emp_no = #{ empNo }
 		 order
 		    by dp_create desc
 	</select>
+	<select id="selectProgressList" resultMap="SelectListResult">
+		select
+		       dp_no
+		      ,d.emp_no
+		      ,dp_title
+		      ,to_char(dp_create, 'YYYY-MM-DD') AS "dp_create"
+		      ,dp_modify
+		      ,dp_status
+		      ,dp_final
+		      ,dp_category
+		      ,dp_origin
+		      ,dp_change
+		      ,s.emp_name
+		  from tb_dtpaper d
+		  join tb_sign s using (dp_no)
+		  join tb_employee e on (s.signemp_no = e.emp_no)
+		 where dp_final = <choose>
+		 					<when test="fn.equals('임시저장')">
+		 						'임시저장'
+		 					</when>
+		 					<when test="fn.equals('진행중')">
+		 						'진행중'
+		 					</when>
+		 					<when test="fn.equals('반려됨')">
+		 						'반려됨'
+		 					</when>
+		 					<when test="fn.equals('결재완료')">
+		 						'결재완료'
+		 					</when>
+		 					<otherwise>
+		 						'대기'
+		 					</otherwise>
+		 				  </choose>
+		   and dp_status = 'N'
+		   and emp_no = #{ empNo }
+		   and si_status = 'C' or si_status = 'N'
+		 order
+		    by dp_create desc
+	</select>
+	<select id="selectProgressListCount" resultType="_int">
+		select
+		       count(*)	
+		  from tb_dtpaper
+		 where dp_final = <choose>
+		 					<when test="fn.equals('임시저장')">
+		 						'임시저장'
+		 					</when>
+		 					<when test="fn.equals('진행중')">
+		 						'진행중' or dp_final = '대기'
+		 					</when>
+		 					<when test="fn.equals('반려됨')">
+		 						'반려됨'
+		 					</when>
+		 					<when test="fn.equals('결재완료')">
+		 						'결재완료'
+		 					</when>
+		 					<otherwise>
+		 						'대기'
+		 					</otherwise>
+		 				  </choose>
+		   and dp_status = 'N' 
+		   and emp_no = ${ empNo }
 	
-	
+	</select>
 </mapper>

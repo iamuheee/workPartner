@@ -311,32 +311,45 @@ public class SignController {
 	}
 	
 // 기안서 리스트 조회
+	// 임시저장
 	@RequestMapping("saveSi.si")
-	public ModelAndView selectSaveList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo) {
+	public ModelAndView selectSaveList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn) {
 		model.addAttribute("flag", "save");
-		int saveListCount = sService.selectSaveListCount();
+		int saveListCount = sService.selectListCount(fn, empNo);
 		PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 15, 5);
-		ArrayList<Dtpaper> saveList = sService.selectSaveList(pi, empNo);
+		ArrayList<Dtpaper> saveList = sService.selectList(pi, empNo, fn);
 		mv.addObject("pi",pi)
 		.addObject("saveList",saveList)
 		.setViewName("sign/dpaperSaveResign");
 		return mv;
 	}
-	@RequestMapping("contSi.si")
-	public String selectContSignList(Model model) {
-		model.addAttribute("flag", "continue");
-		return "sign/dpaperContEnd";
-	}
+	// 반려됨
 	@RequestMapping("reSi.si")
-	public String selectReSignList(Model model) {
-		model.addAttribute("flag", "reSign");
-		return "sign/dpaperSaveResign";
+	public ModelAndView selectReSignList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn) {
+		model.addAttribute("flag", "ReSign");
+		int saveListCount = sService.selectListCount(fn, empNo);
+		PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 15, 5);
+		ArrayList<Dtpaper> reSignList = sService.selectList(pi, empNo, fn);
+		mv.addObject("pi",pi)
+		.addObject("reSignList",reSignList)
+		.setViewName("sign/dpaperSaveResign");
+		return mv;
 	}
-	@RequestMapping("endSi.si")
-	public String selectEndSignList(Model model) {
-		model.addAttribute("flag", "end");
-		return "sign/dpaperContEnd";
-	}
+	// 진행중
+	// 반려됨
+		@RequestMapping("contSi.si")
+		public ModelAndView selectProgressList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn) {
+			model.addAttribute("flag", "continue");
+			int saveListCount = sService.selectProgressListCount(fn, empNo);
+			PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 15, 5);
+			ArrayList<Dtpaper> progressList = sService.selectProgressList(pi, empNo, fn);
+			mv.addObject("pi",pi)
+			.addObject("progressList", progressList)
+			.setViewName("sign/dpaperContEnd");
+			return mv;
+		}
+	// 결재완료
+	
 	
 //	타부서 결재함
 	@RequestMapping("othSi.si")

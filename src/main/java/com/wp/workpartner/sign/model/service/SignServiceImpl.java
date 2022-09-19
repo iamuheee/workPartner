@@ -75,47 +75,29 @@ public class SignServiceImpl implements SignService {
 	public int saveDtpaper(Dtpaper d) {
 		return sDao.saveDtpaper(sqlSession, d);
 	}
-//  기안서목록
+//  임시저장, 반려됨 리스트조회
 	@Override
-	public int selectSaveListCount() {
-		return sDao.selectSaveListCount(sqlSession);
+	public int selectListCount(String fn, String empNo) {
+		return sDao.selectListCount(sqlSession, fn, empNo);
+	}
+	@Override
+	public ArrayList<Dtpaper> selectList(PageInfo pi, String empNo, String fn) {
+		return sDao.selectList(sqlSession, pi, empNo, fn);
 	}
 	
+	
+//  진행중, 대기 리스트
 	@Override
-	public ArrayList<Dtpaper> selectSaveList(PageInfo pi, String empNo) {
-		return sDao.selectSaveList(sqlSession, pi, empNo);
+	public int selectProgressListCount(String fn, String empNo) {
+		return sDao.selectProgressListCount(sqlSession, fn, empNo);
 	}
 	@Override
-	public int selectProgressListCount() {
-		return 0;
+	public ArrayList<Dtpaper> selectProgressList(PageInfo pi, String empNo, String fn) {
+		return sDao.selectProgressList(sqlSession, pi, empNo, fn);
 	}
-
-	@Override
-	public ArrayList<Dtpaper> selectProgressList(PageInfo pi) {
-		return null;
-	}
-
-
-	@Override
-	public int selectReSignListCount() {
-		return 0;
-	}
-
-	@Override
-	public ArrayList<Dtpaper> selectReSignList(PageInfo pi) {
-		return null;
-	}
-
-	@Override
-	public int selectCompletListCount() {
-		return 0;
-	}
-
-	@Override
-	public ArrayList<Dtpaper> selectCompletList(PageInfo pi) {
-		return null;
-	}
-
+	
+	
+	
 	@Override
 	public int selectSignListCount() {
 		return 0;
@@ -206,6 +188,7 @@ public class SignServiceImpl implements SignService {
 	public SelectOtwork selectOtwork(int dpNo) {
 		return null;
 	}
+	
 	
 	
 

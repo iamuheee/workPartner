@@ -27,17 +27,11 @@ public interface SignService {
 	int insertOtwork(Otwork o);
 	int insertReSignEmp(ReSign r);
 //	진행중 리스트
-	int selectProgressListCount();
-	ArrayList<Dtpaper> selectProgressList(PageInfo pi);
 //	임시저장 리스트
-	int selectSaveListCount();
-	ArrayList<Dtpaper> selectSaveList(PageInfo pi, String empName);
-//	반려중 리스트
-	int selectReSignListCount();
-	ArrayList<Dtpaper> selectReSignList(PageInfo pi);
-//	결재완료 리스트
-	int selectCompletListCount();
-	ArrayList<Dtpaper> selectCompletList(PageInfo pi);
+	int selectListCount(String fn, String empNo);
+	ArrayList<Dtpaper> selectList(PageInfo pi, String empNo, String fn);
+	int selectProgressListCount(String fn, String empNo);
+	ArrayList<Dtpaper> selectProgressList(PageInfo pi, String empNo, String fn);
 //  결재 할 리스트
 	int selectSignListCount();
 	ArrayList<Dtpaper> selectSignList(PageInfo pi);

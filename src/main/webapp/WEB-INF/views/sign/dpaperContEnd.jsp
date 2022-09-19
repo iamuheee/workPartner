@@ -44,9 +44,9 @@ table {
 #layoutSidenav_content {
 	font-family: 'Noto Sans KR', sans-serif;
 }
-.mainOuter{
+/* .mainOuter{
 	margin-top:0 !important;
-}
+} */
 </style>
 
 </head>
@@ -89,11 +89,59 @@ table {
 							<th width="5%">번호</th>
 							<th class="endNum" width="10%">서식</th>
 							<th class="endTitle" width="30%">제목</th>
+							<th class="endCreate" width="10%">첨부파일</th>
 							<th class="endCreate" width="10%">진행상태</th>
 							<th width="10%">기안일</th>
 							<th width="10%">최종결재자</th>
 						</tr>
-
+						<c:choose>
+	                		<c:when test="${empty progressList }">
+	                			<tr>
+	                				<td colspan="6" align="center">현재 게시글이 없습니다.</td>
+	                			</tr>
+	                		</c:when>
+	                		<c:otherwise>
+	                			<c:forEach var="p" items="${ progressList }">
+				                    <tr align="center">
+				                   	    <td>${ p.dpNo }</td>
+				                        <td>${ p.dpCategory }</td>
+				                        <c:choose>
+					                        <c:when test="${empty s.dpTitle }">
+					                        	<td><a href="" class="dpTitle">제목없음</a></td>
+					                        </c:when>
+					                        <c:otherwise>
+					                        	<td><a href="" class="dpTitle">${ s.dpTitle }</a></td>
+					                        </c:otherwise>
+				                        </c:choose>
+				                        <td>${ s.dpCreate }</td>
+				                        <td>
+					                        <c:if test="${ not empty s.dpOrigin }">
+					                       		<span class="material-icons" style="vertical-align:middle; font-size:17px; color:#878787;">
+												attachment
+												</span>
+					                        </c:if>
+				                        </td>
+				                        <td></td>
+                          				<td><a href="" class="dpTitle">작성하기</a></td>
+				                    </tr>
+				                    <script>
+										$(document).ready(function(){
+											$(".dpTitle").click(function(){
+					                    		if('${s.dpCategory}' == '연차'){
+													$(".dpTitle").attr("href", "detailVa.si");
+												}else if('${s.dpCategory}' == '외근'){
+													$(".dpTitle").attr("href", "detailOtw.si");
+												}else if('${s.dpCategory}' == '퇴직원'){
+													$(".dpTitle").attr("href", "detailRes.si");
+												}else{
+													$(".dpTitle").attr("href", "detailCo.si");
+												}
+											})
+										})
+									</script>
+			                    </c:forEach>
+	                		</c:otherwise>
+	                   </c:choose>
 						<tr align="center">
 							<td>1</td>
 							<td>업무협조</td>

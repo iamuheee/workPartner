@@ -45,9 +45,9 @@
        /*  #layoutSidenav_content{
             font-family: 'Noto Sans KR', sans-serif;
         } */
-        .mainOuter{
+       /*  .mainOuter{
 			margin-top:0 !important;
-		}
+		} */
 		.dpTitle{
 			text-decoration-line: none;
 			color: #212529;
@@ -112,7 +112,7 @@
 									<c:choose>
 				                		<c:when test="${empty saveList }">
 				                			<tr>
-				                				<td colspan="6">현재 게시글이 없습니다.</td>
+				                				<td colspan="6" align="center">현재 게시글이 없습니다.</td>
 				                			</tr>
 				                		</c:when>
 				                		<c:otherwise>
@@ -158,6 +158,7 @@
 				                   </c:choose>
                                 </table>
 
+                                <c:if test="${not empty saveList }">
                                 <div id="pagingArea">
                                 <button style="float:left; margin-left:33px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
 					                <ul class="pagination">
@@ -166,7 +167,7 @@
 					                    		<li class="page-item disabled"><a class="page-link">이전</a></li>
 					                    	</c:when>
 					                    	<c:otherwise>
-					                    		<li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ pi.currentPage-1 }">Previous</a></li>
+					                    		<li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ pi.currentPage-1 }">이전</a></li>
 					                    	</c:otherwise>
 					                    </c:choose>
 					                    
@@ -184,6 +185,7 @@
 					                    </c:choose>
 					                </ul>
 					            </div>
+				                </c:if>
                             </div>
                         </div>
                     </c:when>
@@ -231,20 +233,59 @@
                                         <th class="endNum" width="10%">서식</th>
                                         <th class="endTitle" width="30%">제목</th>
                                         <th class="endCreate" width="10%">기안일</th>
-                                        <th width="10%">반려결재자</th>
+                                        <th width="10%">첨부파일</th>
                                         <th width="10%">재작성</th>
                                     </tr>
-
-                                    <tr align="center">
-                                        <td><input type="checkbox" style="scale: 1.3;"></td>
-                                        <td>업무협조</td>
-                                        <td>여기는 제목이 나타나는 곳</td>
-                                        <td>2022-09-01</td>
-                                        <td>김범진 <span style="color: red;">반려됨</span></td>
-                                        <td><a href="">작성하기</a></td>
-                                    </tr>
+										<c:choose>
+				                		<c:when test="${empty reSignList }">
+				                			<tr>
+				                				<td colspan="6" align="center">현재 게시글이 없습니다.</td>
+				                			</tr>
+				                		</c:when>
+				                		<c:otherwise>
+				                			<c:forEach var="r" items="${ reSignList }">
+							                    <tr align="center">
+							                   	    <td><input type="checkbox" style="scale: 1.3;"></td>
+							                        <td>${ r.dpCategory }</td>
+							                        <c:choose>
+								                        <c:when test="${empty r.dpTitle }">
+								                        	<td><a href="" class="dpTitle">제목없음</a></td>
+								                        </c:when>
+								                        <c:otherwise>
+								                        	<td><a href="" class="dpTitle">${ r.dpTitle }</a></td>
+								                        </c:otherwise>
+							                        </c:choose>
+							                        <td>${ r.dpCreate }</td>
+							                        <td>
+								                        <c:if test="${ not empty r.dpOrigin }">
+								                       		<span class="material-icons" style="vertical-align:middle; font-size:17px; color:#878787;">
+															attachment
+															</span>
+								                        </c:if>
+							                        </td>
+                                       				<td><a href="" class="dpTitle">작성하기</a></td>
+							                    </tr>
+							                    <script>
+													$(document).ready(function(){
+														$(".dpTitle").click(function(){
+								                    		if('${r.dpCategory}' == '연차'){
+																$(".dpTitle").attr("href", "detailVa.si");
+															}else if('${r.dpCategory}' == '외근'){
+																$(".dpTitle").attr("href", "detailOtw.si");
+															}else if('${r.dpCategory}' == '퇴직원'){
+																$(".dpTitle").attr("href", "detailRes.si");
+															}else{
+																$(".dpTitle").attr("href", "detailCo.si");
+															}
+														})
+													})
+												</script>
+						                    </c:forEach>
+				                		</c:otherwise>
+				                   </c:choose>
                                 </table>
 
+                               	<c:if test="${ not empty reSignList }">
                                 <div id="pagingArea">
                                 <button style="float:left; margin-left:33px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
 					                <ul class="pagination">
@@ -253,12 +294,12 @@
 					                    		<li class="page-item disabled"><a class="page-link">이전</a></li>
 					                    	</c:when>
 					                    	<c:otherwise>
-					                    		<li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ pi.currentPage-1 }">Previous</a></li>
+					                    		<li class="page-item"><a class="page-link" href="reSi.si?cpage=${ pi.currentPage-1 }">이전</a></li>
 					                    	</c:otherwise>
 					                    </c:choose>
 					                    
 					                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-					                  	  <li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ p }">${ p }</a></li>
+					                  	  <li class="page-item"><a class="page-link" href="reSi.si?cpage=${ p }">${ p }</a></li>
 					                    </c:forEach>
 					                    
 					                    <c:choose>
@@ -266,11 +307,12 @@
 						                	    <li class="page-item disabled"><a class="page-link">다음</a></li>
 						                	</c:when>
 						                	<c:otherwise>
-						                    	<li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ pi.currentPage+1 }">다음</a></li>
+						                    	<li class="page-item"><a class="page-link" href="reSi.si?cpage=${ pi.currentPage+1 }">다음</a></li>
 						                	</c:otherwise>    
 					                    </c:choose>
 					                </ul>
 					            </div>
+				                </c:if>
                             </div>
                         </div>
                     </c:otherwise>

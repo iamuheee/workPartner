@@ -139,21 +139,55 @@ input, select, textarea {
 		$("#selectVacation").change(function() {
 
 			if ($("#selectVacation").val() == "연차") {
-				$("#currentDate").show();
-				$("#currentDate2").show();
+				$("#halfVa").attr("hidden", true);
 				$("#startTime").hide();
 				$("#endTime").hide();
-				$("#currentDate").attr("hidden", false);
-				$("#currentDate2").attr("hidden", false);
+				$("#halfVa").hide();
+				$("#startTime").attr("disabled", true);
+				$("#endTime").attr("disabled", true);
+				$("#startTime2").attr("disabled", true);
+				$("#endTime2").attr("disabled", true);
+				
 			} else {
-				$("#currentDate").hide();
-				$("#currentDate2").hide();
+				$("#halfVa").attr("hidden", false);
 				$("#startTime").show();
 				$("#endTime").show();
+				$("#halfVa").show();
 				$("#startTime").attr("hidden", false);
 				$("#endTime").attr("hidden", false);
-				$("#currentDate").attr("hidden", true);
-				$("#currentDate2").attr("hidden", true);
+				$("#startTime").attr("disabled", false);
+				$("#endTime").attr("disabled", false);
+				$("#startTime2").attr("disabled", true);
+				$("#endTime2").attr("disabled", true);
+			}
+
+		});
+		$("#halfVa").change(function() {
+
+			if ($("#selectVacation").val() == "오전") {
+				$("#startTime2").hide();
+				$("#endTime2").hide();
+				$("#startTime2").attr("hidden", true);
+				$("#endTime2").attr("hidden", true);
+				$("#startTime").show();
+				$("#endTime").show();
+				$("#startTime").attr("dsiabled", false);
+				$("#endTime").attr("disabled", false);
+				$("#startTime2").attr("disabled", true);
+				$("#endTime2").attr("disabled", true);
+			} else {
+				$("#startTime2").attr("disabled", false);
+				$("#endTime2").attr("disabled", false);
+				$("#startTime2").attr("hidden", false);
+				$("#endTime2").attr("hidden", false);
+				$("#startTime2").show();
+				$("#endTime2").show();
+				$("#startTime").hide();
+				$("#endTime").hide();
+				$("#startTime").attr("hidden", true);
+				$("#endTime").attr("hidden", true);
+				$("#startTime").attr("disabled", true);
+				$("#endTime").attr("disabled", true);
 			}
 
 		});
@@ -176,6 +210,10 @@ input, select, textarea {
                             <option value="연차">연차</option>
                             <option value="반차">반차</option>
                         </select>
+                        <select name="halfVa" id="halfVa" style="height:30px; border-radius: 4px;" hidden>
+                            <option value="오전">오전</option>
+                            <option value="오후">오후</option>
+                        </select>
                     </td>
                 </tr>
                 <tr align="left">
@@ -183,9 +221,10 @@ input, select, textarea {
                         시작일시
                     </th>
                     <td style="border:0">
-                        <input type="date" id="currentDate" name="vaStart"
-                            style="height:30px; border-radius: 4px; text-align: center;">
-                        <input type="datetime-local" name="vaStart" style="height:30px; border-radius: 4px; text-align: center;" id="startTime" hidden>
+                        	<input type="date" id="currentDate" name="vaStart"
+                         	   style="height:30px; border-radius: 4px; text-align: center;">
+                        <input type="time" name="vaStart" style="height:30px; border-radius: 4px; text-align: center;" id="startTime" value="09:00" disabled hidden readonly>
+                        <input type="time" name="vaStart" style="height:30px; border-radius: 4px; text-align: center;" id="startTime2" value="13:00" disabled hidden readonly>
                     </td>
                 </tr>
                 <tr align="left">
@@ -195,7 +234,9 @@ input, select, textarea {
                     <td style="border:0">
                         <input type="date" id="currentDate2" name="vaEnd"
                             style="height:30px; border-radius: 4px; text-align: center;" enabled>
-                        <input type="datetime-local" name="vaEnd" style="height:30px; border-radius: 4px; text-align: center;" id="endTime" hidden>
+                        <input type="time" name="vaEnd" style="height:30px; border-radius: 4px; text-align: center;" id="endTime" value="13:00" disabled hidden readonly>
+                        <input type="time" name="vaEnd" style="height:30px; border-radius: 4px; text-align: center;" id="endTime2" value="18:00" step="1800" min="00:00" max="23:59" disabled hidden readonly>
+                        
                     </td>
                 </tr>
                 <tr align="left">
