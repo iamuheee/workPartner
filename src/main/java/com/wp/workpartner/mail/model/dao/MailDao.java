@@ -164,4 +164,8 @@ public class MailDao {
 		
 		return (ArrayList)sqlSession.selectList("mailMapper.selectListStar", map, rowBounds);
 	}
+	
+	public int insertForwordFile(SqlSessionTemplate sqlSession, File file) {
+		return sqlSession.insert("mailMapper.insertMailFile", file);
+	}
 }

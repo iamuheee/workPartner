@@ -178,6 +178,12 @@ public class MailServiceImpl implements MailService {
 	@Override
 	public ArrayList<Mail> selectListStar(HashMap<String,Object> map, PageInfo pi) {
 		return mDao.selectListStar(sqlSession, map, pi);
+	}
+	
+	// 메일 전달하기
+	@Override
+	public int insertForwordFile(File file) {
+		return mDao.insertForwordFile(sqlSession,file);
 	}	
 
 	

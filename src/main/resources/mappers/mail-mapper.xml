@@ -434,24 +434,31 @@
 		      </if>		       
 	</select>
 	
-	<!-- <update id="deleteEmailGroup" parameterType="java.util.HashMap">
-		<foreach item="obj" collection="arr" index="index" open="DECLARE BEGIN" separator=";" close="; END;">		 	
+	<update id="deleteEmailGroup" parameterType="java.util.HashMap">
+		<foreach item="m" collection="list" index="index" open="DECLARE BEGIN" separator=";" close="; END;">		 	
 			update 
 				   tb_mail_status
 			   set mail_status = 'N'
-			 <where>
-			 		mail_no = #{obj.mailNo}
-			 	and	mail_email = #{obj.email}	 	
-			 </where>  		
+			 where
+			 		mail_no = #{m.mailNo}
+			 	<choose>
+			 		<when test="m.mailEmail != 'undefined'">
+					 	and	mail_email = #{m.mailEmail}	
+			 		</when>
+			 		<otherwise>
+			 			and mail_email IS NULL
+			 		</otherwise>
+			 	</choose>
+			 	and mail_category = #{m.mailCategory}						
 		 </foreach>
-	</update> -->
+	</update> 
 	
 	<!-- 상세페이지 -->
 	<select id="selectMailDetail" resultMap="mailResult">
 		  select  
 		        mail_no,
 		        mail_title, 
-		        mail_content,
+		        NVL(mail_content,' ') as "mail_content",
 		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
 		        mail_important,
 		        mail_security,
@@ -946,6 +953,8 @@
 		      	mail_create_date asc
 		      </if>		       
 	</select>
+	
+	
 	
 
 </mapper>

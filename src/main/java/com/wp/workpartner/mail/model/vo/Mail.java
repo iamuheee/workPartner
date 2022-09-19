@@ -1,6 +1,8 @@
 package com.wp.workpartner.mail.model.vo;
 
-import java.sql.Date;
+import java.util.ArrayList;
+
+import com.wp.workpartner.common.model.vo.File;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,4 +31,7 @@ public class Mail {
 	 private String mailCategory;
 	 private String mailRead;
 	 private String mailStar;
+	 
+	 // 메일에 여러개의 파일을 담아서 보내기 위한 필드 추가 (메일 전달하기)
+	 private ArrayList<File> fileList;
 }

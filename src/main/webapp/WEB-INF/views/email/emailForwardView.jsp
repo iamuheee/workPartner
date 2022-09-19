@@ -18,7 +18,7 @@
     <div class="ntOuter">
         <br>       
         
-        <form onsubmit="return submitCheck();" action="insertWrite.ma" enctype="multipart/form-data" method="post">
+        <form onsubmit="return submitCheck();" action="insertForward.ma" enctype="multipart/form-data" method="post">
 
             <button type="submit" class="btn btn-sm btn-primary">보내기</button>
             <button type="button" class="btn btn-sm btn-secondary" onclick="history.back();">이전</button>         
@@ -235,58 +235,168 @@
 	                    첨부파일  -- 전달하기할때는 첨부파일도 같이 전해져서 와야함!!
 	
 	                 -->
-	                <tr>
+	                 <tr>
 	                    <td colspan="2" width="90px">
-	                        <button id="btn-upload" type="button" class="btn btn-sm btn-secondary" onclick="inputFileCount();">파일 추가</button>                        
+	                        <button id="btn-upload" type="button" class="btn btn-sm btn-secondary">파일 추가</button>
+	                        <input id="upfile" name="upfile"  multiple="multiple" type="file" style="display:none;">
 	                    </td>
-	                    <td colspan="2" align="end"> <span style="font-size:10px; color: gray;">※첨부파일은 최대 3개까지 등록이 가능합니다.</span></td>
+	                    <td colspan="2"><span style="font-size:10px; color: gray;">※첨부파일은 최대 3개까지 등록이 가능합니다.</span></td>
 	                </tr>
 	                <tr>
 	                    <td colspan="4">
-	                        <div style="border: 1px solid  #e0e3e6; height: 100px;">      
-	                        	
-	                        	<!-- 첨부파일 input이 올 자리 -->                      
-	                            <table id="dataFileDiv">    
-	                            	<c:if test="${ not empty list }">
-	                            		<c:forEach var="f" items="${ list }">
-	                            			<tr>                                
-			                                   <td><input type="file" id="upfile" name="upfile"></td>
-			                                   <td><button type="button"  class="btn btn-sm btn-secondary deleteFile">X</button></td>
-			                                </tr>	
-	                            		</c:forEach>	                            	
-	                            	</c:if>                          
-	                                
-	                            </table> 
+	                    
+	                    	<!-- 파일목록이 올 자리  -->
+	                        <div  style="border: 1px solid  #e0e3e6; height: 100px;">    
+	                            <!-- 
+	                            
+	                            	전달된 파일들 
+	                            	=> 이미 db에 저장된 애들이므로 따로 또 해당  파일을 저장할 필요없고
+	                            	  Tb_file에 필요한 정보들만 보내서 지금 보내는 mailNo는 메일 전송시 생기는 currval로, 그 외 파일경로등은 이미 전달받은 정보를 insert해주면 됨!
+	                            	  
+	                            	=> 1개의 메일에 여러개의 file객체를 전송하는 방법
+	                            	 (1) Mail vo객체에 private ArrayList<File> fileList 로 컬럼을 만들어준다
+	                            	 (2) name에 인덱스를 이유해서 name= fileList[0].fileOrigiName 이런식으로 배열[인덱스].필드명     
+	                            	 (3) form submit하면 Controller에는 그냥 파라미터로 Mail m 으로 세팅해주면 됨 => Mail객체에 fileList에 File객체가 차곡차곡 쌓여있음
+	                            	 
+	                            	=> 향상된 for문 varStatus="status"  => status.index / status.count 속성 이용 
+	                            -->
+	                            <c:if test="${ not empty list }">
+	                            	
+                            		<c:forEach var="f" items="${ list }" varStatus="status">
+	                            		 <!--  
+	                            		 	향상된 for문 순차적으로 접근하는 요소의 상태값을 보관하는 요소 => count속성, index속성이 있음 
+	                            		 	class=filebox는 document.querySelectorAll('.filebox').length; => 현재 사용자가 보여질 선택한 첨부파일 갯수
+	                            		 	똑같이 filebox로 class를 줌으로서 첨부파일 갯수가 3개 초과 안하도록
+	                            		 	=> 2개가 전달되었다면
+	                            		 	=> 다만 실제 input name="upfile"  multiple="multiple" type="file" 로 담긴 file은 [0]이다. 전달된얘들은 input type="hidden"일뿐 실제 파일받는거X => 기존에 저장된 파일을 보여줄뿐
+	                            		  -->
+	                            		 <div id="forwordFile${status.index}" class="filebox forword">
+				                           	<span class="name">${ f.fileOriginName }</span>
+				                           	<a class="delete" onclick="deleteFile2('${status.index}');"><i class="far fa-minus-square"></i></a>
+				                           	<input type="hidden" name="fileList[${status.index}].fileOriginName" value="${ f.fileOriginName }">                                   
+				                           	<input type="hidden" name="fileList[${status.index}].fileChangeName" value="${ f.fileChangeName }">                                   
+				                           	<input type="hidden" name="fileList[${status.index}].filePath" value="${ f.filePath}">                                   
+				                         </div>           			
+                            		</c:forEach>	                            	
+                            	 </c:if>  
+                            	 
+                            	 <div class="file-list" id="file-list">
+                            	  <!-- 새로 추가한 파일이 올 자리  -->
+                            	 
+                            	 </div>
+	                            
+	                            
+	                            
 	                        </div>
 	                    </td>    
-	                </tr>    
+	                </tr>  	               
+	                
 	                <script>
-						
-	                	// 첨부파일의 X클릭시 삭제 
-	                    $(function(){                       
-	                       $(document).on("click", ".deleteFile", function(){
-	                            $(this).parent().parent().remove();
-	                       })
-	                    });    
-	                    // 첨부파일 갯수 제한                            
-	                    function inputFileCount(){
-	                        let countFile = $("#dataFileDiv input").length;
-	
-	                        if(countFile < 3){
-	                            inputFile();
-	                        }else{
-	                            alert("첨부파일은 3개 이하만 가능합니다.");
-	                        }
+						                    
+	                    
+	                 	// ---------------- 첨부 파일 ---------------------
+	                 	$(document).ready(function(){
+		                    // input file 파일 첨부시 addFile 함수 실행
+		                        $("#upfile").on("change", addFile);
+		                  }); 
+		            
+			            /**
+			             * 첨부파일로직 : button클릭시 upfile클릭			             
+			             */
+			            $(function () {
+			                $('#btn-upload').click(function (e) {
+			                    e.preventDefault();
+			                    $('#upfile').click();
+			                });
+			            });
+
+	                    var fileNo = 0; // 첨부파일 번호
+	                    var filesArr = new Array(); // 다중 첨부파일 들어갈 파일 배열
+
+	                    /* 첨부파일 추가 */
+	                    function addFile() {
+	                       
+	                       // 안내문 삭제
+	                       //$(".fileMsg").remove();
+	                       
+	                       var maxFileCnt = 3; // 첨부파일 최대 개수
+	                       var attFileCnt = document.querySelectorAll('.filebox').length; // 기존 추가된 첨부파일 개수
+	                       var remainFileCnt = maxFileCnt - attFileCnt; // 추가로 첨부가능한 개수
+	                       var files = $('#upfile')[0].files; // 현재 선택된 첨부파일 리스트 FileList
+
+	                       // 첨부파일 개수 확인
+	                       if (files.length > remainFileCnt) {
+	                          alert("첨부파일은 최대 " + maxFileCnt + "개 까지 첨부 가능합니다.");
+	                          
+	                          fileDataTransfer();
+	                       }else{
+	                          // 파일 배열에 담기
+	                          let currFileArr = Array.from(files); // FileList => Array로 변환
+	                          filesArr = filesArr.concat(currFileArr); // 추가한 fileList에 또 추가할 수 있도록 설정
+	                          
+	                          fileDataTransfer();
+	                           
+	                       }
+	                       //console.log(filesArr);
+	                       renderingFileDiv(); // 추가 및 삭제할 때 마다 호출해서 index번호 초기화 => 지금 file-list에 담긴 파일들을 배열로 돌려가면서 i를 재정비하는거
+	                       
 	                    }
-						// input파일 추가
-	                    function inputFile(){
-	                        let elFile = '<tr>'                                 
-	                                   +    '<td><input type="file" id="upfile" name="upfile"></td>'
-	                                   +    '<td><button type="button"  class="btn btn-sm btn-secondary deleteFile">X</button></td>'
-	                                   + '</tr>';
-	
-	                        $("#dataFileDiv").append(elFile);                           
+	                    
+	                    /* 첨부파일 목록 html */
+	                    function renderingFileDiv(){
+	                       
+	                       let htmlData = '';
+	                       for(let i=0; i<filesArr.length; i++){
+	                          // i => 삭제할 파일 인덱스 번호가 될것 (deleteFile호출시 )
+	                          
+	                          // 목록 추가
+	                          htmlData += '<div id="file' + i + '" class="filebox">';
+	                          htmlData += '   <span class="name">'+ filesArr[i].name + '</span>';
+	                          htmlData += '   <a class="delete" onclick="deleteFile('+ i + 
+	                                   ');"><i class="far fa-minus-square"></i></a>';
+	                          htmlData += '</div>';
+	                       }
+	                       
+	                       $(".file-list").html(htmlData); // change가 발생할 때마다 목록 초기화한 뒤 넣어짐
+
 	                    }
+
+	                    /* 첨부파일 삭제 */
+	                    function deleteFile(fileNo) { // 매개변수 : 첨부된 파일 번호(fileNo, i)
+	                    
+	                       //console.log(fileNo);
+	                       
+	                       // class="fileMsg"에 있는 문구 삭제
+	                       document.querySelector("#file" + fileNo).remove();
+	                       
+	                        filesArr.splice(fileNo, 1);   // 해당되는 index의 파일을 배열에서 제거(1 : 한개만 삭제하겠다 라는 의미)
+	                       	
+	                        // fileArr에 있는 파일배열을 dataTransfer을 통해 input multifile형식에 맞게 담아준다.
+	                        fileDataTransfer();
+
+	                        // 파일 index 번호 초기화
+	                        renderingFileDiv();
+	                    }
+	                    
+	                    
+	                    /* 첨부파일 담는 배열 */
+	                    function fileDataTransfer(){
+	                       
+	                       const dataTransfer = new DataTransfer();
+
+	                        filesArr.forEach(function(file){ 
+	                        //남은 배열을 dataTransfer로 처리(Array -> FileList)
+	                           dataTransfer.items.add(file); 
+	                        });
+	                        
+	                        $('#upfile')[0].files = dataTransfer.files;   //제거 처리된 FileList를 돌려줌
+	                    }
+	                   
+	                    /* 전달된 첨부파일 삭제  */
+	                    function deleteFile2(fileNo){	                    	
+	                    	document.querySelector("#forwordFile" + fileNo).remove();
+	                    }
+	                    
 	                   
 	
 	                </script>
@@ -469,9 +579,7 @@
 				                             +  	 'CC: ${m.mailCC}  <br>'
 				                             +  	 'Subject:${ m.mailTitle } <br>'
 				                             +  	 '<br>'
-					                         +  	 '<small>'
-					                         +  	 	'${ m.mailContent }'
-					                         +  	 '</small>'		                            
+					                         +  	 '<small>${ m.mailContent }</small>'		                            
 				                             +	'</div>'; 
             				
                 			// select-option	

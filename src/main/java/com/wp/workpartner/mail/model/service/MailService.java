@@ -54,6 +54,9 @@ public interface MailService {
 	// 3. 파일 등록 
 	int insertMailFile(File file);
 	
+	//[메일전달]
+	// + 나머지는 insertMail이랑 똑같음 + 전달받은 첨부파일정보 등록하기
+	int insertForwordFile(File file);
 	
 	// [전체메일함]
 	

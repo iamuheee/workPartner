@@ -209,7 +209,7 @@ public class MailController {
 	 * @param upfile 첨부파일
 	 * @param session 
 	 * @param model
-	 * @return 다시 메일쓰기 폼으로 이동
+	 * @return 전체메일함 목록으로 이동
 	 */
 	@RequestMapping("insertWrite.ma")
 	public String insertMail(Mail mail, MultipartFile[] upfile, HttpSession session, Model model) {
@@ -327,15 +327,42 @@ public class MailController {
 	 */
 	@ResponseBody
 	@RequestMapping("deleteEmailGroup.ma")
-	public void ajaxDeleteEmailGroup(String[] arr) {
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("arr", arr);
-		//map.put("arrMailNo", arrMailNo); // 메일번호
-		//map.put("arrEmail", arrEmail);	// 받는사람 메일	
-	
-		//int result = mService.deleteEmailGroup(map);
+	public String ajaxDeleteEmailGroup(String[] arr) {
 		
-		//return result > 0 ? "success" : "fail";	
+		// ["66/xxxx@gmail.com/S", "", "", ...]
+		
+		// 첨에 // ["66,xxxx@gmail.com,S", "", "", ...]
+		// ,콤마로 여몄는데 하나만 선택시 66만 나옴 => ,로 1차로 쪼개고  ,로 2차로 쪼개니까  66을 하나를 arr로 보고 그랬던거 같음
+		//=> 그래서 회사에선 db에 여러개의 값 넣을때 |또는 / 를 쓰기도 함 (,는 대중적으로 많이 쓰여서 이런경우가 생기니까)
+		
+		ArrayList<Mail> list = new ArrayList<>();
+					
+		for(String s : arr) {
+			
+			String[] mArr = s.split("/"); // ["66", "xxxx@gmail.com", "S"]; => 얘를 쪼개기
+			
+			System.out.println(mArr[0]);
+			System.out.println(mArr[1]);
+			System.out.println(mArr[2]);
+			// 각각을 mail객체에 담기
+			Mail m = new Mail();
+			m.setMailNo(mArr[0]);
+			m.setMailEmail( mArr[1] ); // => 받은사람일 경우 null이여야하는데 undefined로 문자열임 => sql에서 조건처리 
+			m.setMailCategory(mArr[2]);
+			
+			list.add(m);
+			
+		}
+		
+				
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("list", list);		
+		int result = mService.deleteEmailGroup(map);
+		
+		// pl로 한 sql문은 처리된 행수를 반환하지않는다 => 그러므로 -1나옴 => jsp에서 if(result>0)인경우 라는 조건을 없앰
+		return result > 0 ? "success" : "fail";	
+		
 	}
 	
 	
@@ -362,6 +389,8 @@ public class MailController {
 				
 		mv.addObject("m", m).addObject("list", list).setViewName("email/emailDetailView");
 		
+		//System.out.println(m);
+		
 		return mv;
 	}
 			
@@ -380,7 +409,7 @@ public class MailController {
 		ArrayList<File> list = mService.selectFileDetail(mailNo);
 				
 		mv.addObject("m", m).addObject("list", list).setViewName("email/emailForwardView");
-		
+		System.out.println(m);		
 		return mv;
 	}
 	
@@ -535,6 +564,117 @@ public class MailController {
 		
 		return new Gson().toJson(hm);	
 		
+	}
+	
+	/** 전달용메일쓰기
+	 * @param mail 메일내용
+	 * @param upfile 첨부파일
+	 * @param session 
+	 * @param model
+	 * @return 전체메일함 목록으로 이동
+	 */
+	@RequestMapping("insertForward.ma")
+	public String insertForward(Mail mail, MultipartFile[] upfile, HttpSession session, Model model) {
+		
+		//System.out.println(mail);// => 받은 사람 이메일name => 여러개의 input으로 넘어왔을때 , 콤마로 여며진걸 확인 할 수 있었음
+		
+		// 1. 순서상 실제로 넘어온 upfile 들 중에 실제 첨부파일이 담긴게 있는지 => 있다면 setMailFile에 Y를 담고 => 우선 mail먼저 insert(file테이블에는 mail_no필요)
+		
+		for(int i=0; i<upfile.length; i++) {					
+			if(!upfile[i].getOriginalFilename().equals("")) {								
+				mail.setMailFile("Y");									
+			 }
+		};
+		
+		if(mail.getFileList() != null) {
+			ArrayList<File> fileList = mail.getFileList();
+			for(File file : fileList) {
+				System.out.println(file);				
+				// 기존의 file을 삭제하게되면 ArrayList에서 지워지지않고 file의 fileOriginName, 등등이 그대로 넘어와 null예외됨 
+				if(file.getFileOriginName() != null) {
+					mail.setMailFile("Y");	
+				}
+			}
+		}
+		
+		
+		
+		int result = mService.insertMail(mail);
+		
+		
+		
+		// 2. tb_mail_status
+					
+		// 2-1 받는사람입장
+		String[] mailRecipients = mail.getMailRecipient().split(",");
+		int result1 = mService.insertMailStatusRev(mailRecipients);
+		
+		int result2 =1;
+		// 2-2 cc입장
+		if(mail.getMailCC() != null) {
+			String[] mailCCs = mail.getMailCC().split(",");
+			result2 = mService.insertMailStatusCC(mailCCs);			
+		}
+		// 2-3 보낸사람입장
+		int result3 = mService.insertMailStatusSen();
+			
+		// 전달받은 파일
+		int result5 =1;
+		System.out.println(mail.getFileList());
+		if(mail.getFileList() != null) {
+			ArrayList<File> fileList = mail.getFileList();
+			for(File file : fileList) {
+				System.out.println(file);
+				
+				// 기존의 file을 삭제하게되면 ArrayList에서 지워지지않고 file의 fileOriginName, 등등이 그대로 넘어와 null예외됨 
+				if(file.getFileOriginName() != null) {
+					mService.insertForwordFile(file);
+				}
+			}
+		}
+		
+		System.out.println(result5);
+		
+		//파일 등록 => 새로 추가한 파일 
+		int result4 = 1;
+		/*
+		 * ** 만일 다중파일 업로드시에는?
+		 *    여러개의 input type="file"요소에 다 동일한 키값으로 부여(name ="upfile")
+		 *    MultipartFile[] upfile 로(배열로) 받으면 됨.(0번 인덱스부터 차곡차곡 첨부파일 객체 담겨있음)
+		 *    반복문 돌려가면서 FileUpload.saveFile 메소드 호출시 해당 MultipartFile하나씩 넘기기
+		 */
+		
+		for(int i=0; i<upfile.length; i++) {
+			
+			// MultipartFile=> root-context.xml에서 관련 라이브러리 dependency 해주면
+			// 라이브러리 등록 후엔 파일 넘어온게 있든 없든 MultipartFile객체를 주입시켜줌
+			// => 전달된 파일 있는지 => null로하면 안됨!!!(객체가 있으니까) 
+			// => *** 빈 문자열과 비교
+			if(!upfile[i].getOriginalFilename().equals("")) {
+				
+				// FileUpload 클래스의 saveFile은 static 메소드로 만들었기때문에 서버시작시 바로 메모리에 있음. 생성없이 바로 호출
+				// saveFilePath = 파일명수정 + 저장경로까지
+				String saveFilePath = FileUpload.saveFile(upfile[i], session, "resources/uploadFiles/");
+				// file 객체에 전달 => file 객체에 originName, changeName, filePath가 담겨옴
+				File file = File.uploadFile(upfile[i], saveFilePath);
+				
+				result4 = mService.insertMailFile(file);
+			 }
+		}
+		
+		//System.out.println(result1 + " " +result2 + " " +result3 + " " +result4);
+		
+		if(result1 * result2 * result3 * result4 * result5 > 0) {
+			session.setAttribute("alertMsg", "메일보내기 성공!");
+			return "redirect:totalList.ma";
+		}else {
+			model.addAttribute("errorMsg", "메일보내기 실패");
+			return "common/error";
+		}
+		
+		
+		
+			
 	}
 	
 	
