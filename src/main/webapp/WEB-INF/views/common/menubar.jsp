@@ -486,8 +486,8 @@
 	                           </a>
 	                           <div class="collapse" id="collapseReservation" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 	                           	   <nav class="sb-sidenav-menu-nested nav">
-												<a class="btn btn-sm btn-primary btn-size" href="enroll.bk" style="margin:10px;">+ 회의실 예약</a>
-												<a class="nav-link nav-choice" href="">내 예약 현황</a>
+												<a class="btn btn-sm btn-primary btn-size" href="enrollForm.bk" style="margin:10px;">+ 회의실 예약</a>
+												<a class="nav-link nav-choice" href="list.bk">내 예약 현황</a>
                                    </nav>
                                    <!-- 인사부 직원에게만 보여지는 메뉴 -->
 	                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages1">
