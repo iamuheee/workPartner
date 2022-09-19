@@ -272,22 +272,20 @@
    	 		
    	 		if(confirm( arr.length + "개의 메일을 삭제하시겠습니까? ")){
    	 			
-   	 			//메일 구분을 위해서는 1.메일번호 2.받은사람 이메일 3.메일종류 
+   	 			//메일 구분을 위해서는 1.메일번호 2.받은사람 이메일 3.메일종류(받은메일,보낸메일,참조메일) 
    	 		
    	 			let arr = new Array();
    	 			
 	   	 		$("input[name='chk']:checked").each(function(){			
 	   	 		// {속성명:값} 객체에 담기
-		   	 		const obj = {
-		   	 			mailNo: $(this).val(),
-		   	 			email:$(this).next().val(),
-		   	 			mailCategory:$(this).next().next().val()
-		   	 		};
+	   	 		// ==> 최종 : , 문자열로 여며서 담기 ["66,xxxx@gmail.com,S", "", "", ...]
+		   	 		const obj = $(this).val() + "/" + 
+		   	 					$(this).next().val() + "/" + 
+		   	 					$(this).next().next().val();
    	 				arr.push(obj);  	 				
    	 				
-   	 			console.log(arr);
 	   	 		}); 
-	   	 		
+   	 				   	 		
    	 			$.ajax({
    	 				url:"deleteEmailGroup.ma",
    	 				type:"post",
@@ -297,14 +295,17 @@
    	 					//arrMailNo:arrMailNo,
    	 					//arrEmail:arrEmail
    	 					  
-   	 					// 생각2. [{메일번호,받는사람이메일},{},{},..] 로 담아서 넘기기
+   	 					// 생각2. [{메일번호,받는사람이메일,메일종류},{},{},..] 로 담아서 넘기기
+   	 					
+   	 					// 쌤 => ["66,xxxx@gmail.com,S", "", "", ...]
    	 					arr:arr
    	 				},
    	 				success:function(result){
-   	 					if(result == "success"){
-   	 						// 전체조회
-   	 						selectTotalList();
-   	 					}
+   	 					
+ 						alert("메일이 삭제되었습니다.");
+ 						// 전체조회
+ 						selectTotalList();
+   	 					
    	 				},
    	 				error:function(){
    	 					console.log("전체메일함 삭제용 ajax 실패");
