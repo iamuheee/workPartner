@@ -168,4 +168,24 @@ public class MailDao {
 	public int insertForwordFile(SqlSessionTemplate sqlSession, File file) {
 		return sqlSession.insert("mailMapper.insertMailFile", file);
 	}
+	
+	public int readEmailGroup(SqlSessionTemplate sqlSession, HashMap<String,Object> map) {
+		return sqlSession.update("mailMapper.readEmailGroup", map);
+	}
+	
+	public int starOnEmailGroup(SqlSessionTemplate sqlSession, HashMap<String,Object> map) {
+		return sqlSession.update("mailMapper.starOnEmailGroup", map);
+	}
+	
+	public int starOffEmailGroup(SqlSessionTemplate sqlSession, HashMap<String,Object> map) {
+		return sqlSession.update("mailMapper.starOffEmailGroup", map);
+	}
+	
+	public int deleteFix(SqlSessionTemplate sqlSession, HashMap<String,Object> map) {
+		return sqlSession.delete("mailMapper.deleteFix", map);
+	}
+	
+	public int updateMailY(SqlSessionTemplate sqlSession, HashMap<String,Object> map) {
+		return sqlSession.update("mailMapper.updateMailY", map);
+	}
 }

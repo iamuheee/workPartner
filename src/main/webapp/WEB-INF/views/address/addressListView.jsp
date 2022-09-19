@@ -501,7 +501,7 @@
             			updateStarAdd($(this).next().next().val(), addStar, $(this).attr("groupno"));            		
             		})
             		
-            		// 그룹 수정시 필요한 groupNo, groupName 전달
+            		// Modal < 그룹 수정시 필요한 groupNo, groupName 전달
             		$(document).on("click", "#subAddMenu .editGpOpen", function(){
             			//console.log($(this).parent().siblings("#groupValues").children().eq(0).text());
             			//console.log($(this).parent().siblings("#groupValues").children().eq(1).val())
@@ -1005,6 +1005,8 @@
 	             			$(".openAddEdit").click(function(){	   
 	             				const el = $("#addressEdit table");
 	             				el.find("#addressNo").val(addressNo);
+	             				//console.log(addressNo);  // 얘는 왜 result.addressNo가 아닐까 => 이 함수를 호출할때 매개변수로 받았음
+	             				//console.log(result.addressNo);
 	             				el.find("#addressName").val(result.addressName);
 	             				el.find("#addressNickName").val(result.addressNickName);
 	             				el.find("#addressCompany").val(result.addressCompany);
@@ -1161,50 +1163,60 @@
             	function ajaxEditGp(){
             		let groupNo =  $("#editGp #updateGpModalBd").find("#groupNo").val();
             		let groupName = $("#editGp table").find("#groupName").val();
+            		if(groupName.trim() != 0 ){
+            			$.ajax({
+                			url: "updateGp.ad",
+                			data:{
+                				groupNo:groupNo,
+                				groupName:groupName
+                			},
+                			success:function(result){
+                				if(result == 'success'){
+                					// 처리 후 모달창 닫기
+                					$('#editGp').modal('hide');
+                					// 연락처 목록 조회
+                					selectGpList(); 
+                				}
+                			},
+                			error:function(){
+                				console.log("그룹수정용 ajax실패");
+                			}
+                		})
+            		}else{
+            			alert("그룹이름을 입력해주세요.");
+            			//$("#groupName").focus();            			 
+            		}
             		
-            		$.ajax({
-            			url: "updateGp.ad",
-            			data:{
-            				groupNo:groupNo,
-            				groupName:groupName
-            			},
-            			success:function(result){
-            				if(result == 'success'){
-            					// 처리 후 모달창 닫기
-            					$('#editGp').modal('hide');
-            					// 연락처 목록 조회
-            					selectGpList(); 
-            				}
-            			},
-            			error:function(){
-            				console.log("그룹수정용 ajax실패");
-            			}
-            		})
             	}
             	
             	// 그룹등록용 ajax
             	function ajaxAddGp(){
             		let employeeNo = $("#addGpTb").find("#employeeNo").val();
             		let groupName = $("#addGpTb").find("#groupName").val();
-            		$.ajax({
-            			url:"insertGp.ad",
-            			data:{
-            				employeeNo:employeeNo,
-            				groupName:groupName
-            			},
-            			success:function(result){
-            				if(result == "success"){
-            					// 처리 후 모달창 닫기 + 비워주기
-            					$("#addGpTb").find("#groupName").val("");
-            					$('#addGp').modal('hide');
-            					// 연락처 목록 조회
-            					selectGpList(); 
-            				}
-            			},
-            			error:function(){
-            				console.log("그룹등록용 ajax 실패");
-            			}
-            		})
+            		if(groupName.trim() != 0 ){
+            			$.ajax({
+                			url:"insertGp.ad",
+                			data:{
+                				employeeNo:employeeNo,
+                				groupName:groupName
+                			},
+                			success:function(result){
+                				if(result == "success"){
+                					// 처리 후 모달창 닫기 + 비워주기
+                					$("#addGpTb").find("#groupName").val("");
+                					$('#addGp').modal('hide');
+                					// 연락처 목록 조회
+                					selectGpList(); 
+                				}
+                			},
+                			error:function(){
+                				console.log("그룹등록용 ajax 실패");
+                			}
+                		})
+            		}else{
+            			alert("그룹이름을 입력해주세요");
+            		}
+            		
             	}
             	
             	<!--==================================== 삭제용 script ======================================= -->

@@ -148,6 +148,20 @@
 		   AND STATUS = 'Y'
 		   AND MEM_STATUS = '참여'
 	</select>
+	
+	<insert id="insertMember">
+		INSERT
+		  INTO TB_PROJECT_MEM
+		VALUES
+		     (
+		       #{projNo}
+		     , #{memNo}
+		     , #{memName}
+		     , #{memRole}
+		     , '대기'
+		     , 'Y'
+		     )
+	</insert>
 
 
 </mapper>

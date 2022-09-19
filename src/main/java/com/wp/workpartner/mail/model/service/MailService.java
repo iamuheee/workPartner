@@ -11,8 +11,7 @@ import com.wp.workpartner.mail.model.vo.Signature;
 
 public interface MailService {
 
-	// [ 메일 서명 ]
-	
+	// [ 메일 서명 ]	
 	// 1. 메일 서명 조회 => 뿌릴때 서명1 서명2 이거 rowNum	
 	ArrayList<Signature> selectSigList(String empNo);
 	
@@ -38,8 +37,7 @@ public interface MailService {
 	int updateSigBasicManage(Signature s);
 	
 	
-	// [메일쓰기]
-	
+	// [메일쓰기]	
 	// 1. tb_mail insert
 	int insertMail(Mail mail);
 	
@@ -54,12 +52,13 @@ public interface MailService {
 	// 3. 파일 등록 
 	int insertMailFile(File file);
 	
+	
 	//[메일전달]
 	// + 나머지는 insertMail이랑 똑같음 + 전달받은 첨부파일정보 등록하기
 	int insertForwordFile(File file);
 	
-	// [전체메일함]
 	
+	// [전체메일함]	
 	// 1_1 전체 조회 listCount
 	int selectListTotalCount(HashMap<String, Object> map);
 
@@ -68,12 +67,18 @@ public interface MailService {
 	
 	// 1_3 메일함 > 메일삭제 ****
 	int deleteEmailGroup(HashMap<String, Object> map);
+	
 	// 1_4 메일함 > 읽음
+	int readEmailGroup(HashMap<String, Object> map);
+	
 	// 1_5 메일함 > 별표
+	int starOnEmailGroup(HashMap<String, Object> map);
+	
 	// 1_6 메일함 > 별표해제
+	int starOffEmailGroup(HashMap<String, Object> map);
 	
-	// [상세조회]
 	
+	// [상세조회]	
 	// 1. 메일 읽음으로 바꾸기
 	int mailReadUpdate(HashMap<String, Object> map);
 	// 2. 상세조회
@@ -82,8 +87,7 @@ public interface MailService {
 	ArrayList<File> selectFileDetail(String no);
 	
 	
-	// [받은메일함]
-	
+	// [받은메일함]	
 	// 1_1 받은 메일 조회 listCount
 	int selectListReceiveCount(HashMap<String, Object> map);
 
@@ -98,6 +102,7 @@ public interface MailService {
 	// 1_2 전체 리스트 조회 
 	ArrayList<Mail> selectListSend(HashMap<String, Object> map, PageInfo pi);
 	
+	
 	// [휴지통]
 	// 1_1 휴지통 조회 listCount
 	int selectListBinCount(HashMap<String, Object> map);
@@ -106,8 +111,11 @@ public interface MailService {
 	ArrayList<Mail> selectListBin(HashMap<String, Object> map, PageInfo pi);
 	
 	// 1_3 완전삭제
+	int deleteFix(HashMap<String,Object> map);
 	
 	// 1_4 복구
+	int updateMailY(HashMap<String,Object> map);
+	
 	
 	// [중요메일함]
 	// 1_1 중요메일함 조회 listCount
@@ -115,18 +123,11 @@ public interface MailService {
 
 	// 1_2 중요메일함 리스트 조회 
 	ArrayList<Mail> selectListStar(HashMap<String, Object> map, PageInfo pi);
-
 	
-	
-	
-	
-	// 기본서명 조회
+	// 기본서명 조회 ==> 안씀
 	Signature selectSigBasic(String empNo);
 	
 	
-	
-	
-	// 메일 완전 삭제 => 지정된 파일도 완전 삭제
 	
 	
 	

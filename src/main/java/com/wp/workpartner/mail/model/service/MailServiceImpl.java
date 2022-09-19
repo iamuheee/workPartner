@@ -184,6 +184,36 @@ public class MailServiceImpl implements MailService {
 	@Override
 	public int insertForwordFile(File file) {
 		return mDao.insertForwordFile(sqlSession,file);
+	}
+	
+	// 메일 읽음표시로 바꾸기
+	@Override
+	public int readEmailGroup(HashMap<String, Object> map) {
+		return mDao.readEmailGroup(sqlSession, map);
+	}
+	
+	// 중요메일로 등록
+	@Override
+	public int starOnEmailGroup(HashMap<String, Object> map) {
+		return mDao.starOnEmailGroup(sqlSession, map);
+	}
+	
+	// 중요메일 해제
+	@Override
+	public int starOffEmailGroup(HashMap<String, Object> map) {
+		return mDao.starOffEmailGroup(sqlSession, map);
+	}
+
+	// 휴지통 > 완전 삭제
+	@Override
+	public int deleteFix(HashMap<String, Object> map) {
+		return mDao.deleteFix(sqlSession, map);
+	}
+	
+	// 휴지통 > 복구
+	@Override
+	public int updateMailY(HashMap<String, Object> map) {
+		return mDao.updateMailY(sqlSession, map);
 	}	
 
 	

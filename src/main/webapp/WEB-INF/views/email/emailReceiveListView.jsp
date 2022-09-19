@@ -70,13 +70,13 @@
                
                 <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmailGroup();">삭제</button>                
 
-                <button type="button" class="btn btn-sm btn-primary" onclick="readEmail();">읽음</button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="readEmailGroup();">읽음</button>
 
-                <button type="button" class="btn btn-sm btn-warning" onclick="starOnEmail();">
+                <button type="button" class="btn btn-sm btn-warning" onclick="starOnEmailGroup();">
                    <span style="color:white"> ★</span>
                 </button>
 
-                <button type="button" class="btn btn-sm btn-light" onclick="starOffEmail();">
+                <button type="button" class="btn btn-sm btn-light" onclick="starOffEmailGroup();">
                     <span> ★</span>
                 </button>
 
@@ -185,6 +185,7 @@
 	   				               +     '<td>'
 	   	   	 					   +		'<input type="checkbox" class="chk" name="chk" value="'+ list[i].mailNo +'">'
 	   	   	 					   +		'<input type="hidden" class="mailEmail" name="mailEmail" value="'+ list[i].mailEmail +'">'
+	   	   	 					   +		'<input type="hidden" class="mailCategory" name="mailCategory" value="'+ list[i].mailCategory +'">'	  
 	   	   	 					   +	'</td>'                
 	   				               +     '<td>'
 	   				               +         '<span class="material-symbols-outlined"';
@@ -246,13 +247,13 @@
 	    		         $(".ntPasing").html(pageValue);   	 				
    	 			},
    	 			error:function(){
-   	 				console.log("전체메일함 조회용 ajax실패");
+   	 				console.log("받은메일함 조회용 ajax실패");
    	 			}
    	 		})
    	 	}
    	 	
-   	 	// 1-1 다중선택 => 휴지통
-   	 	// check된 항목들의 메일번호담고(loginUser.empEmail), 만약 체크안한상태로 클릭시 안넘어가도록 조건처리
+   	// 1-1 다중선택 => 휴지통
+   	 	// 만약 체크안한상태로 클릭시 안넘어가도록 조건처리
    	 	function deleteEmailGroup(){
    	 		var arr = new Array();
 	   	 	$("input[name='chk']:checked").each(function(){
@@ -271,24 +272,20 @@
    	 		
    	 		if(confirm( arr.length + "개의 메일을 삭제하시겠습니까? ")){
    	 			
-   	 			// 배열선언
-   	 			//let arrMailNo = new Array();
-   	 			//let arrEmail = new Array();
+   	 			//메일 구분을 위해서는 1.메일번호 2.받은사람 이메일 3.메일종류(받은메일,보낸메일,참조메일) 
+   	 		
    	 			let arr = new Array();
    	 			
 	   	 		$("input[name='chk']:checked").each(function(){			
 	   	 		// {속성명:값} 객체에 담기
-		   	 		const obj = {
-		   	 			mailNo: $(this).val(),
-		   	 			email:$(this).next().val()	 
-		   	 		};
+	   	 		// ==> 최종 : , 문자열로 여며서 담기 ["66,xxxx@gmail.com,S", "", "", ...]
+		   	 		const obj = $(this).val() + "/" + 
+		   	 					$(this).next().val() + "/" + 
+		   	 					$(this).next().next().val();
    	 				arr.push(obj);  	 				
-   	 				//arrMailNo.push($(this).val());
-   	 				//arrEmail.push($(this).next().val());
-   	 			//console.log(email);
-   	 			console.log(arr);
+   	 				
 	   	 		}); 
-	   	 		
+   	 				   	 		
    	 			$.ajax({
    	 				url:"deleteEmailGroup.ma",
    	 				type:"post",
@@ -298,20 +295,175 @@
    	 					//arrMailNo:arrMailNo,
    	 					//arrEmail:arrEmail
    	 					  
-   	 					// 생각2. [{메일번호,받는사람이메일},{},{},..] 로 담아서 넘기기
+   	 					// 생각2. [{메일번호,받는사람이메일,메일종류},{},{},..] 로 담아서 넘기기
+   	 					
+   	 					// 쌤 => ["66,xxxx@gmail.com,S", "", "", ...]
    	 					arr:arr
    	 				},
    	 				success:function(result){
-   	 					if(result == "success"){
-   	 						// 전체조회
-   	 						selectTotalList();
-   	 					}
+   	 					
+ 						alert("메일이 삭제되었습니다.");
+ 						
+ 						// 전체조회
+ 						selectTotalList();
+ 						
+ 						// 혹시 전체체크됐을때 기능 후 체크가 사라지도록
+				        $("#cbx_chkAll").prop("checked", false);
+   	 					
    	 				},
    	 				error:function(){
-   	 					console.log("전체메일함 삭제용 ajax 실패");
+   	 					console.log("메일함 메일삭제용 ajax 실패");
    	 				}
    	 			})  
    	 		}
+   	 	}
+   	 	
+   		// 2-1 다중선택 => 읽음처리
+   	 	// 만약 체크안한상태로 클릭시 안넘어가도록 조건처리
+   	 	function readEmailGroup(){
+   	 		var arr = new Array();
+	   	 	$("input[name='chk']:checked").each(function(){
+	    		arr.push(($(this).val()));                		
+	    	});
+	   	 	
+		   	 if(arr.length > 0){
+	     		ajaxReadEmailGroup(arr);
+		     }else{
+		     		alert("메일을 선택해주세요");
+		     }
+   	 	}
+   	 	
+   	 	// 2-2 읽음처리하는 ajax
+   	 	function ajaxReadEmailGroup(arr){
+   	 		
+   	 		if(confirm( arr.length + "개의 메일을 읽음처리하시겠습니까? ")){
+   	 			
+   	 			//메일 구분을 위해서는 1.메일번호 2.받은사람 이메일 3.메일종류(받은메일,보낸메일,참조메일) 
+   	 		
+   	 			let arr = new Array();
+   	 			
+	   	 		$("input[name='chk']:checked").each(function(){				   	 		
+		   	 		const obj = $(this).val() + "/" + 
+		   	 					$(this).next().val() + "/" + 
+		   	 					$(this).next().next().val();
+   	 				arr.push(obj);  
+	   	 		}); 
+   	 				   	 		
+   	 			$.ajax({
+   	 				url:"readEmailGroup.ma",
+   	 				type:"post",
+   	 				traditional:true,
+   	 				data: {   	 					
+   	 					arr:arr
+   	 				},
+   	 				success:function(result){
+   	 					 						
+ 						// 전체조회
+ 						selectTotalList();
+ 						
+ 						// 혹시 전체체크됐을때 기능 후 체크가 사라지도록
+				        $("#cbx_chkAll").prop("checked", false);
+   	 					
+   	 				},
+   	 				error:function(){
+   	 					console.log("읽음처리용 ajax 실패");
+   	 				}
+   	 			})  
+   	 		}
+   	 	}
+   	 	
+   		// 3-1 다중선택 => 중요메일함IN
+   	 	// 만약 체크안한상태로 클릭시 안넘어가도록 조건처리
+   	 	function starOnEmailGroup(){
+   	 		var arr = new Array();
+	   	 	$("input[name='chk']:checked").each(function(){
+	    		arr.push(($(this).val()));  // checkbox의 value를 메일no를 담았음              		
+	    	});
+	   	 	
+		   	 if(arr.length > 0){ // 만약 그 체크된 value가 담긴 arr의 길이가 0이상이라면 체크된거!
+		   		ajaxStarOnEmailGroup(arr); // 위에 확인용으로 담은것뿐 data로 쓰지 않는다 
+		     }else{
+		     		alert("메일을 선택해주세요");
+		     }
+   	 	}
+   	 	
+   	 	// 3-2 중요메일함IN ajax
+   	 	function ajaxStarOnEmailGroup(arr){
+   	 		
+ 			//메일 구분을 위해서는 1.메일번호 2.받은사람 이메일 3.메일종류(받은메일,보낸메일,참조메일)    	 		
+ 			let arrOn = new Array();
+  	 			
+   	 		$("input[name='chk']:checked").each(function(){				   	 		
+	   	 		const obj = $(this).val() + "/" + 
+	   	 					$(this).next().val() + "/" + 
+	   	 					$(this).next().next().val();
+	   	 		arrOn.push(obj);  
+   	 		}); 
+  	 				   	 		
+ 			$.ajax({
+ 				url:"starOnEmailGroup.ma",
+ 				type:"post",
+ 				traditional:true,
+ 				data: {   	 					
+ 					arr:arrOn
+ 				},
+ 				success:function(result){   	 					 						
+				// 전체조회
+				selectTotalList();   	
+				// 혹시 전체체크됐을때 기능 후 체크가 사라지도록
+		        $("#cbx_chkAll").prop("checked", false);
+ 				},
+ 				error:function(){
+ 					console.log("중요메일함In용 ajax 실패");
+ 				}
+ 			})     	 		
+   	 	}
+   	 	
+   		// 4-1 다중선택 => 중요메일함OUT
+   	 	// 만약 체크안한상태로 클릭시 안넘어가도록 조건처리
+   	 	function starOffEmailGroup(){
+   	 		var arr = new Array();
+	   	 	$("input[name='chk']:checked").each(function(){
+	    		arr.push(($(this).val()));                		
+	    	});
+	   	 	
+		   	 if(arr.length > 0){
+		   		ajaxStarOffEmailGroup(arr);
+		     }else{
+		     		alert("메일을 선택해주세요");
+		     }
+   	 	}
+   	 	
+   	 	// 4-2 중요일함OUT ajax
+   	 	function ajaxStarOffEmailGroup(arr){
+   	 		
+ 			//메일 구분을 위해서는 1.메일번호 2.받은사람 이메일 3.메일종류(받은메일,보낸메일,참조메일)    	 		
+ 			let arrOff = new Array();
+  	 			
+   	 		$("input[name='chk']:checked").each(function(){				   	 		
+	   	 		const obj = $(this).val() + "/" + 
+	   	 					$(this).next().val() + "/" + 
+	   	 					$(this).next().next().val();
+	   	 		arrOff.push(obj);  
+   	 		}); 
+  	 				   	 		
+ 			$.ajax({
+ 				url:"starOffEmailGroup.ma",
+ 				type:"post",
+ 				traditional:true,
+ 				data: {   	 					
+ 					arr:arrOff
+ 				},
+ 				success:function(result){   	 					 						
+				// 전체조회
+				selectTotalList();   
+				// 혹시 전체체크됐을때 기능 후 체크가 사라지도록
+		        $("#cbx_chkAll").prop("checked", false);
+ 				},
+ 				error:function(){
+ 					console.log("중요메일함Out용 ajax 실패");
+ 				}
+ 			})     	 		
    	 	}
    	 	
    	 	

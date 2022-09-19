@@ -96,6 +96,26 @@ public class ProjectServiceImpl implements ProjectService{
 	public int deleteMember(ProjectMember m) {
 		return pDao.deleteMember(sqlSession, m);
 	}
+
+
+	@Override
+	public int insertMember(ProjectMember m) {
+		ArrayList<ProjectMember> mlist;
+		String[] memNos = m.getMemNo().split(",");
+		String[] memNames = m.getMemName().split(",");
+		
+		int result = 1;
+		for(int i=0; i<memNos.length; i++) {
+			ProjectMember pm = new ProjectMember();
+			pm.setProjNo(m.getProjNo());
+			pm.setMemNo(memNos[i]);
+			pm.setMemName(memNames[i]);
+			pm.setMemRole(m.getMemRole());
+			
+			result *= pDao.insertMember(sqlSession, pm);
+		}
+		return result;
+	}
 	
 	
 	
