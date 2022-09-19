@@ -62,7 +62,7 @@
 		<br><br><br>
 		
 		<div style="width:80%">
-			<form action="" style="float:right">
+			<form action="adminAttlist.att" method="post" id="myForm" style="float:right">
 	
 				<input type="date" name="date1">
 		        &nbsp~&nbsp	
@@ -70,11 +70,11 @@
 		        
 				&nbsp	
 	
-				<select name="">
-					<option value="">인사부</option>
-					<option value="">회계부</option>
-					<option value="">영업부</option>
-					<option value="">개발부</option>
+				<select name="condition" form="myForm">
+					<option value="1">인사부</option>
+					<option value="2">회계부</option>
+					<option value="3">영업부</option>
+					<option value="4">개발부</option>
 				</select>
 	
 				&nbsp	

@@ -38,6 +38,8 @@
 		<typeAlias type="com.wp.workpartner.sign.model.vo.SelectVacation" alias="SelectVacation"/>
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Sign" alias="Sign"/>
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Vacation" alias="Vacation"/>	
+		
+		<typeAlias type="com.wp.workpartner.attendance.model.vo.Attendance" alias="Attendance"/>
 	</typeAliases>
 	
 	<!-- <유의사항> -->
@@ -50,6 +52,7 @@
 		<mapper resource="/mappers/mail-mapper.xml" />
 		<mapper resource="/mappers/notice-mapper.xml" />
 		<mapper resource="/mappers/Sign-mapper.xml"/>
+		<mapper resource="/mappers/attendance-mapper.xml"/>
 	</mappers>
 	
 </configuration>

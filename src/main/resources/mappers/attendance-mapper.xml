@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="attendanceMapper">
+	
+
+	
+	<select id="selectSearchCount" resultType="_int">
+		select 
+		       count(*)
+		  from tb_attendance a
+		  join tb_employee e
+            on (a.emp_no = e.emp_no)
+		 where e.emp_status='Y'
+		   <if test="condition == '1'"> 
+		   	and dep_cd = '1'
+		   </if>
+		   <if test="condition == '2'">
+		   	and dep_cd = '2'
+		   </if>
+		   <if test="condition == '3'"> 
+		   	and dep_cd = '3'
+		   </if>
+			<if test="keyword != ''">
+		    and e.emp_name like '%' || #{keyword} || '%'
+		   	</if>
+		   	<if test="date1 != '' and date2!= ''">
+		    and (a.att_date between to_date(#{date1}, 'YYYY-MM-DD') and to_date(#{date2},'YYYY-MM-DD'))
+		    </if>
+	</select>
+	
+	
+	
+</mapper>
