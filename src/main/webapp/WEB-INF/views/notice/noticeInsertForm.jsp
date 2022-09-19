@@ -181,8 +181,9 @@
                 });
                 console.log(content_files);
                 //초기화 한다.
-                $("#input_file").val("");
-                }
+                //$("#input_file").val("");
+                fileDataTransfer();
+            }
             
             // 파일 부분 삭제 함수
             function fileDelete(fileNum){
@@ -191,7 +192,22 @@
                 $('#' + fileNum).remove();
                 fileCount --;
                 console.log(content_files);
+                
+                fileDataTransfer();
             }
+            
+            
+            function fileDataTransfer(){
+                
+                const dataTransfer = new DataTransfer();
+
+                content_files.forEach(function(file){ 
+                 //남은 배열을 dataTransfer로 처리(Array -> FileList)
+                    dataTransfer.items.add(file); 
+                 });
+                 
+                 $('#input_file')[0].files = dataTransfer.files;   //제거 처리된 FileList를 돌려줌
+             }
             
             /*
             * 폼 submit 로직

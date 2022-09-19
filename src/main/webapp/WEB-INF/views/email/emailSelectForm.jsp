@@ -245,50 +245,119 @@
 	                 -->
 	                <tr>
 	                    <td colspan="2" width="90px">
-	                        <button id="btn-upload" type="button" class="btn btn-sm btn-secondary" onclick="inputFileCount();">파일 추가</button>                        
+	                        <button id="btn-upload" type="button" class="btn btn-sm btn-secondary">파일 추가</button>
+	                        <input id="upfile" name="upfile"  multiple="multiple" type="file" style="display:none;">
 	                    </td>
-	                    <td colspan="2" align="end"> <span style="font-size:10px; color: gray;">※첨부파일은 최대 3개까지 등록이 가능합니다.</span></td>
+	                    <td colspan="2"><span style="font-size:10px; color: gray;">※첨부파일은 최대 3개까지 등록이 가능합니다.</span></td>
 	                </tr>
 	                <tr>
 	                    <td colspan="4">
-	                        <div style="border: 1px solid  #e0e3e6; height: 100px;">      
-	                        	
-	                        	<!-- 첨부파일 input이 올 자리 -->                      
-	                            <table id="dataFileDiv">                                
-	                                <tr>                                
-	                                   <td><input type="file" id="upfile" name="upfile"></td>
-	                                   <td><button type="button"  class="btn btn-sm btn-secondary deleteFile">X</button></td>
-	                                </tr>
-	                            </table> 
+	                    	<!-- 파일목록이 올 자리  -->
+	                        <div class="file-list" id="file-list" style="border: 1px solid  #e0e3e6; height: 100px;">                            
+	                            
 	                        </div>
 	                    </td>    
-	                </tr>    
+	                </tr>  	               
+	                
 	                <script>
-						
-	                	// 첨부파일의 X클릭시 삭제 
-	                    $(function(){                       
-	                       $(document).on("click", ".deleteFile", function(){
-	                            $(this).parent().parent().remove();
-	                       })
-	                    });    
-	                    // 첨부파일 갯수 제한                            
-	                    function inputFileCount(){
-	                        let countFile = $("#dataFileDiv input").length;
-	
-	                        if(countFile < 3){
-	                            inputFile();
-	                        }else{
-	                            alert("첨부파일은 3개 이하만 가능합니다.");
-	                        }
+						                    
+	                    
+	                 	// ---------------- 첨부 파일 ---------------------
+	                 	$(document).ready(function(){
+		                    // input file 파일 첨부시 addFile 함수 실행
+		                        $("#upfile").on("change", addFile);
+		                  }); 
+		            
+			            /**
+			             * 첨부파일로직 : button클릭시 upfile클릭			             
+			             */
+			            $(function () {
+			                $('#btn-upload').click(function (e) {
+			                    e.preventDefault();
+			                    $('#upfile').click();
+			                });
+			            });
+
+	                    var fileNo = 0; // 첨부파일 번호
+	                    var filesArr = new Array(); // 다중 첨부파일 들어갈 파일 배열
+
+	                    /* 첨부파일 추가 */
+	                    function addFile() {
+	                       
+	                       // 안내문 삭제
+	                       //$(".fileMsg").remove();
+	                       
+	                       var maxFileCnt = 3; // 첨부파일 최대 개수
+	                       var attFileCnt = document.querySelectorAll('.filebox').length; // 기존 추가된 첨부파일 개수
+	                       var remainFileCnt = maxFileCnt - attFileCnt; // 추가로 첨부가능한 개수
+	                       var files = $('#upfile')[0].files; // 현재 선택된 첨부파일 리스트 FileList
+
+	                       // 첨부파일 개수 확인
+	                       if (files.length > remainFileCnt) {
+	                          alert("첨부파일은 최대 " + maxFileCnt + "개 까지 첨부 가능합니다.");
+	                          
+	                          fileDataTransfer();
+	                       }else{
+	                          // 파일 배열에 담기
+	                          let currFileArr = Array.from(files); // FileList => Array로 변환
+	                          filesArr = filesArr.concat(currFileArr); // 추가한 fileList에 또 추가할 수 있도록 설정
+	                          
+	                          fileDataTransfer();
+	                           
+	                       }
+	                       console.log(filesArr);
+	                       renderingFileDiv(); // 추가 및 삭제할 때 마다 호출해서 index번호 초기화
+	                       
 	                    }
-						// input파일 추가
-	                    function inputFile(){
-	                        let elFile = '<tr>'                                 
-	                                   +    '<td><input type="file" id="upfile" name="upfile"></td>'
-	                                   +    '<td><button type="button"  class="btn btn-sm btn-secondary deleteFile">X</button></td>'
-	                                   + '</tr>';
-	
-	                        $("#dataFileDiv").append(elFile);                           
+	                    
+	                    /* 첨부파일 목록 html */
+	                    function renderingFileDiv(){
+	                       
+	                       let htmlData = '';
+	                       for(let i=0; i<filesArr.length; i++){
+	                          // i => 삭제할 파일 인덱스 번호가 될것 (deleteFile호출시 )
+	                          
+	                          // 목록 추가
+	                          htmlData += '<div id="file' + i + '" class="filebox">';
+	                          htmlData += '   <span class="name">'+ filesArr[i].name + '</span>';
+	                          htmlData += '   <a class="delete" onclick="deleteFile('+ i + 
+	                                   ');"><i class="far fa-minus-square"></i></a>';
+	                          htmlData += '</div>';
+	                       }
+	                       
+	                       $(".file-list").html(htmlData); // change가 발생할 때마다 목록 초기화한 뒤 넣어짐
+
+	                    }
+
+	                    /* 첨부파일 삭제 */
+	                    function deleteFile(fileNo) { // 매개변수 : 첨부된 파일 번호(fileNo, i)
+	                    
+	                       console.log(fileNo);
+	                       
+	                       // class="fileMsg"에 있는 문구 삭제
+	                       document.querySelector("#file" + fileNo).remove();
+	                       
+	                        filesArr.splice(fileNo, 1);   // 해당되는 index의 파일을 배열에서 제거(1 : 한개만 삭제하겠다 라는 의미)
+	                       	
+	                        // fileArr에 있는 파일배열을 dataTransfer을 통해 input multifile형식에 맞게 담아준다.
+	                        fileDataTransfer();
+
+	                        // 파일 index 번호 초기화
+	                        renderingFileDiv();
+	                    }
+	                    
+	                    
+	                    /* 첨부파일 담는 배열 */
+	                    function fileDataTransfer(){
+	                       
+	                       const dataTransfer = new DataTransfer();
+
+	                        filesArr.forEach(function(file){ 
+	                        //남은 배열을 dataTransfer로 처리(Array -> FileList)
+	                           dataTransfer.items.add(file); 
+	                        });
+	                        
+	                        $('#upfile')[0].files = dataTransfer.files;   //제거 처리된 FileList를 돌려줌
 	                    }
 	                   
 	
