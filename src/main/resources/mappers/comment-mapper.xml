@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="commentMapper">
+
+	<resultMap id="commentResult" type="Comment">
+		<result column="COM_NO" property="comNo" />
+		<result column="COM_TYPE" property="comType" />
+		<result column="COM_REF_BNO" property="comRefBno" />
+		<result column="EMP_NO" property="empNo" />
+		<result column="EMP_ID" property="empId" />
+		<result column="EMP_NAME" property="empName" />
+		<result column="COM_CONTENT" property="comContent" />
+		<result column="COM_CREATE_DATE" property="comCreateDate" />
+		<result column="COM_MODIFY_DATE" property="comModifyDate" />
+		<result column="COM_STATUS" property="comStatus" />
+	</resultMap>
+	
+	<resultMap id="fileResult" type="File">
+		<result column="FILE_NO" property="fileNo"/>
+		<result column="FILE_REF_NO" property="refNo"/>
+		<result column="FILE_CATEGPRY" property="fileCategory"/>
+		<result column="FILE_ORIGIN_NAME" property="fileOriginName"/>
+		<result column="FILE_CHANGE_NAME" property="fileChangeName"/>
+		<result column="FILE_PATH" property="filePath"/>
+		<result column="FILE_UPLOAD_DATE" property="fileUploadDate"/>
+		<result column="FILE_LEVEL" property="fileLevel"/>
+		<result column="FILE_STATUS" property="fileStatus"/>
+	</resultMap>
+	
+
+	<select id="selectCommentList" resultMap="commentResult">
+		SELECT 
+			   COM_NO
+			 , EMP_NO
+		  	 , COM_TYPE
+		  	 , COM_REF_BNO
+			 , EMP_NAME
+			 , COM_CONTENT
+			 , to_char(COM_CREATE_DATE, 'YYYYMMDD') AS "COM_CREATE_DATE"
+		  FROM TB_COMMENT
+		 WHERE COM_STATUS = 'Y'
+		   AND COM_TYPE = #{comType}
+		   AND COM_REF_BNO = #{comRefBno}
+		 ORDER
+		 	BY COM_NO ASC
+	</select>
+	
+	<select id="selectCommentFile" resultMap="fileResult">
+		SELECT 
+			   FILE_NO
+			 , FILE_ORIGIN_NAME
+			 , FILE_PATH
+		  FROM TB_FILE
+		 WHERE FILE_STATUS = 'Y'
+		   AND FILE_CATEGORY = '8'
+		   AND FILE_REF_NO = #{comNo}
+	</select>
+	
+	<select id="selectComment" resultMap="commentResult">
+			SELECT 
+			   COM_NO
+			 , EMP_NO
+		  	 , COM_TYPE
+		  	 , COM_REF_BNO
+			 , EMP_NAME
+			 , COM_CONTENT
+			 , to_char(COM_CREATE_DATE, 'YYYYMMDD') AS "COM_CREATE_DATE"
+		  FROM TB_COMMENT
+		 WHERE COM_NO = #{comNo}
+	</select>
+	
+	<insert id="insertComment">
+		INSERT
+		  INTO TB_COMMENT
+		VALUES
+			 (
+			   SEQ_CNO.NEXTVAL
+			 , #{comType}
+			 , #{comRefBno}
+			 , #{empNo}
+			 , DEFAULT
+			 , #{empName}
+			 , #{comContent}
+			 , DEFAULT
+			 , DEFAULT
+			 , DEFAULT
+			 )
+	</insert>
+	
+	<insert id="insertCommentFile">
+		INSERT
+		  INTO TB_FILE
+		VALUES
+			 (
+			   SEQ_FILENO.NEXTVAL
+			 , SEQ_CNO.CURRVAL
+			 , '8'
+			 , #{file.fileOriginName}
+			 , #{file.fileChangeName}
+			 , #{file.filePath}
+			 , DEFAULT
+			 , DEFAULT
+			 , DEFAULT
+			 )
+	</insert>
+	
+	<update id="deleteComment">
+		UPDATE TB_COMMENT
+		   SET COM_STATUS = 'N'
+		 WHERE COM_NO = #{comNo}
+		  
+	</update>
+	
+	<update id="deleteCommentFile">
+		UPDATE TB_FILE
+		   SET FILE_STATUS = 'N'
+		 WHERE FILE_CATEGORY = '8'
+		   AND FILE_REF_NO = #{comNo}	
+	</update>
+
+</mapper>
+	

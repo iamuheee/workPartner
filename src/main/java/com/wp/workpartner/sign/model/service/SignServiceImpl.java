@@ -28,31 +28,63 @@ public class SignServiceImpl implements SignService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
+//	결재선
 	@Override
-	public int insertDtpaper(Dtpaper d) {
-		return sDao.insertDtpaper(sqlSession, d);
+	public int insertVaSign(ArrayList<Sign> signList) {
+		return sDao.insertVaSign(sqlSession, signList);
+	}
+	@Override
+	public int insertOwSign(ArrayList<Sign> signList) {
+		return sDao.insertOwSign(sqlSession, signList);
+	}
+	@Override
+	public int insertReSign(ArrayList<Sign> signList) {
+		return sDao.insertReSign(sqlSession, signList);
+	}
+	@Override
+	public int insertCoSign(ArrayList<Sign> signList) {
+		return sDao.insertCoSign(sqlSession, signList);
 	}
 
-	@Override
-	public int insertCooperation(Cooperation c) {
-		return 0;
-	}
-
+//  기안서 푸터
 	@Override
 	public int insertVacation(Vacation v) {
 		return sDao.insertVacation(sqlSession, v);
 	}
-
+	
 	@Override
 	public int insertOtwork(Otwork o) {
 		return sDao.insertOtwork(sqlSession, o);
 	}
-
+	
 	@Override
 	public int insertReSignEmp(ReSign r) {
-		return 0;
+		return sDao.insertReSignEmp(sqlSession, r);
 	}
-
+	@Override
+	public int insertCooperation(Cooperation c) {
+		return sDao.insertCooperation(sqlSession, c);
+	}
+	
+//  기안서 통합 서식
+	@Override
+	public int insertDtpaper(Dtpaper d) {
+		return sDao.insertDtpaper(sqlSession, d);
+	}
+	@Override
+	public int saveDtpaper(Dtpaper d) {
+		return sDao.saveDtpaper(sqlSession, d);
+	}
+//  기안서목록
+	@Override
+	public int selectSaveListCount() {
+		return sDao.selectSaveListCount(sqlSession);
+	}
+	
+	@Override
+	public ArrayList<Dtpaper> selectSaveList(PageInfo pi, String empNo) {
+		return sDao.selectSaveList(sqlSession, pi, empNo);
+	}
 	@Override
 	public int selectProgressListCount() {
 		return 0;
@@ -63,15 +95,6 @@ public class SignServiceImpl implements SignService {
 		return null;
 	}
 
-	@Override
-	public int selectSaveListCount() {
-		return 0;
-	}
-
-	@Override
-	public ArrayList<Dtpaper> selectSaveList(PageInfo pi) {
-		return null;
-	}
 
 	@Override
 	public int selectReSignListCount() {
@@ -183,11 +206,12 @@ public class SignServiceImpl implements SignService {
 	public SelectOtwork selectOtwork(int dpNo) {
 		return null;
 	}
+	
+	
 
-	@Override
-	public int insertSign(ArrayList<Sign> signList) {
-		return sDao.insertSign(sqlSession, signList);
-	}
+	
+
+	
 	
 	
 

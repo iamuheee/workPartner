@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="roomMapper">
+
+	<resultMap id="equipResult" type="Equip">
+		<result column="eq_no" property="eqNo" />
+		<result column="eq_name" property="eqName" />
+		<result column="eq_status" property="eqStatus" />
+	</resultMap>
+	
+	<resultMap id="roomResult" type="Room">
+		<result column="rm_no" property="rmNo" />
+		<result column="eq_no" property="eqNo" />
+		<result column="rm_name" property="rmName" />
+		<result column="rm_status" property="rmStatus" />
+		<result column="rm_enroll" property="rmEnroll" />
+		<result column="rm_modify" property="rmModify" />
+		<result column="rm_person" property="rmPerson" />
+		<collection property="file" resultMap="fileResult" />
+		<collection property="closedRoom" resultMap="closedRoomResult" />
+		<collection property="usingEquip" resultMap="usingEquipResult" />
+	</resultMap>
+	
+	<resultMap id="fileResult" type="File">
+		<result column="file_no" property="fileNo" />
+		<result column="file_ref_no" property="refNo" />
+		<result column="file_category" property="fileCategory" />
+		<result column="file_origin_name" property="fileOriginName" />
+		<result column="file_change_name" property="fileChangeName" />
+		<result column="file_path" property="filePath" />
+		<result column="file_upload_date" property="fileUploadDate" />
+		<result column="file_level" property="fileLevel" />
+		<result column="file_status" property="fileStatus" />
+	</resultMap>
+	
+	<resultMap id="usingEquipResult" type="UsingEquip">
+		<!-- <result column="rm_no" property="rmNo" /> -->
+		<result column="eq_no" property="eqNo" />
+		<result column="eq_status" property="eqStatus" />
+		<collection property="equip" resultMap="equipResult"/>
+	</resultMap>
+	
+	<resultMap id="closedRoomResult" type="ClosedRoom">
+		<result column="cr_no" property="crNo" />
+		<!-- <result column="rm_no" property="rmNo" /> -->
+		<result column="cr_start" property="crStart" />
+		<result column="cr_end" property="crEnd" />
+		<result column="cr_reason" property="crReason" />
+	</resultMap>
+	
+	<resultMap id="selectRoomDetail" type="Room">
+		<id column="rm_no" property="rmNo" />
+		<result column="rm_name" property="rmName" />
+		<result column="rm_status" property="rmStatus" />
+		<result column="rm_person" property="rmPerson" />
+		<collection property="files" resultMap="fileResult" />
+		<collection property="closedRooms" resultMap="closedRoomResult" />
+		<!-- <collection property="usingEquips" resultMap="usingEquipResult" /> -->
+		<collection property="equips" resultMap="equipResult"/>
+	</resultMap>
+	
+	<!-- 회의 장비 추가 -->
+	<!-- 작성자 : 박태은 -->
+	<insert id="insertEquip">
+		insert 
+		  into tb_equip
+		  (
+		    eq_no
+		  , eq_name     
+		  )
+		  values
+		  (
+		    seq_eqno.currval
+		  , #{eqName}
+		  )
+	</insert>
+	
+	<!-- 회의 장비 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectEquipList" resultMap="equipResult">
+		select
+		       eq_no
+		     , eq_name
+		  from tb_equip
+		 where eq_status = 'Y'
+	</select>
+	
+	<!-- 회의실 등록 -->
+	<!-- 작성자 : 박태은 -->
+	<insert id="insertRoom">
+		insert
+		  into tb_room
+		  (
+		    rm_no
+		  , eq_no
+		  , rm_name
+		  , rm_person
+		  )
+		  values
+		  (
+		    seq_rmno.nextval
+		  , #{eqNo}
+		  , #{rmName}
+		  , #{rmPerson}
+		  )
+	</insert>
+	
+	<!-- 회의실 번호 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectRmNo" resultType="_int">
+		select
+		       rm_no
+		  from tb_room
+		 where rm_name = #{rmName}
+	</select>
+	
+	<!-- 회의실 사진 첨부파일 등록 -->
+	<insert id="insertRoomImg">
+		insert
+		  into tb_file
+		  (
+		  	file_no
+		  , file_ref_no
+		  , file_category
+		  , file_origin_name
+		  , file_change_name
+		  , file_path
+		  , file_level
+		  )
+		  values
+		  (
+		    seq_fileno.nextval
+		  , seq_rmno.currval
+		  , 7
+		  , #{file.fileOriginName}
+		  , #{file.fileChangeName}
+		  , #{file.filePath}
+		  , #{fileLevel}		 
+		  )
+	</insert>
+	
+	<!-- 사용 중인 장비 등록 -->
+	<!--  작성자 : 박태은 -->
+	<!-- update지만 실제로는 insert문임 -->
+	<update id="insertUsingEquip">
+  	<foreach collection="array" item="item" index="index" open="insert all" close="select * from dual">
+		  into tb_usingequip
+		  (
+		    rm_no
+		  , eq_no
+		  )
+		  values
+		  (
+		    seq_rmno.currval
+		  , #{item}
+		  )
+	</foreach>
+	</update>
+	
+	<!-- 회의실 목록 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectRoomList" resultMap="roomResult">
+		select
+		       rm_no
+		     , rm_name
+		     , file_path
+		  from tb_room
+		  join tb_file on(rm_no = file_ref_no)
+		 where file_ref_no = rm_no
+		   and file_level = 1
+		   and rm_status = 'Y'
+		 order
+		    by rm_name asc
+	</select>
+    
+    <!-- 회의실 정보 조회 -->
+    <!-- 작성자 : 박태은 -->
+    <select id="selectRoom" resultMap="selectRoomDetail">
+	    select 
+	    	   rm_no
+	         , r.rm_name
+	         , r.rm_status
+	         , r.rm_person
+	         , f.file_no
+	         , f.file_path
+	         , f.file_level
+	         , c.cr_no
+	         , c.cr_start
+	         , c.cr_end
+	         , c.cr_reason
+		     , e.eq_name
+		from tb_room r
+		left join tb_file f on(rm_no = file_ref_no)
+		left join tb_closedroom c on(r.rm_no = c.rm_no)
+		left join tb_usingequip u on(r.rm_no = u.rm_no)
+		left join tb_equip e on(u.eq_no = e.eq_no)
+	   where rm_no = #{rmNo}
+		 and u.eq_status = 'Y'
+		 and e.eq_status = 'Y'
+	   order by f.file_level asc
+    </select>
+    
+    <!-- 회의실 삭제 -->
+    <!-- 작성자 : 박태은 -->
+    <update id="deleteRoom">
+    	update
+    	       tb_room
+    	   set rm_status = 'N'
+    	 where rm_no = #{rmNo}
+    </update>
+		 
+</mapper>

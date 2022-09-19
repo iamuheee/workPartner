@@ -15,10 +15,14 @@ import lombok.ToString;
 @ToString
 public class ReSign {
 	private int dpNo;
-	private String resMem;
 	private String resRedate;
 	private String resAccount;
 	private String resBank;
 	private String resContent;
+	private String resMem;
+	private String resDept;
+	private String resEmail;
+	private String resNextMem;
+	private String resTaMem;
 	
 }

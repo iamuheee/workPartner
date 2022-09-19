@@ -21,4 +21,5 @@ public class Otwork {
 	private String otContent;
 	private String otTrans;
 	private String otNote;
+	private String otPlace;
 }

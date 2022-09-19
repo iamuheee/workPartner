@@ -99,7 +99,7 @@ email Detail 관련 css
     box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);;
     border-radius: 10px;
     width: 80%; 
-    height: 95%;
+    height: 100%;
     background-color:  rgb(248, 248, 248);   
 }
 
@@ -169,3 +169,13 @@ email Detail 관련 css
 .emailDetailTable{width:100%;}
 
 .aStyle1{text-decoration: none; color:  rgb(43, 42, 42);}
+
+
+.starYellow{                
+    font-size: 1.0em;
+    color:rgba(250, 208, 0, 0.99);        
+}
+.starWhite{       
+    font-size: 1.0em;     
+    color: rgb(197, 197, 194);
+}

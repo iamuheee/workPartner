@@ -16,8 +16,12 @@ import com.wp.workpartner.sign.model.vo.Vacation;
 
 public interface SignService {
 //	기안서 작성
-	int insertSign(ArrayList<Sign> signList);
+	int insertVaSign(ArrayList<Sign> signList);
+	int insertOwSign(ArrayList<Sign> signList);
+	int insertReSign(ArrayList<Sign> signList);
+	int insertCoSign(ArrayList<Sign> signList);
 	int insertDtpaper(Dtpaper d);
+	int saveDtpaper(Dtpaper d);
 	int insertCooperation(Cooperation c);
 	int insertVacation(Vacation v);
 	int insertOtwork(Otwork o);
@@ -27,7 +31,7 @@ public interface SignService {
 	ArrayList<Dtpaper> selectProgressList(PageInfo pi);
 //	임시저장 리스트
 	int selectSaveListCount();
-	ArrayList<Dtpaper> selectSaveList(PageInfo pi);
+	ArrayList<Dtpaper> selectSaveList(PageInfo pi, String empName);
 //	반려중 리스트
 	int selectReSignListCount();
 	ArrayList<Dtpaper> selectReSignList(PageInfo pi);

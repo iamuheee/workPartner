@@ -1,5 +1,6 @@
 package com.wp.workpartner.duty.controller;
 
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import com.wp.workpartner.common.template.FileUpload;
 import com.wp.workpartner.common.template.Pagination;
 import com.wp.workpartner.duty.model.service.DutyServiceImpl;
 import com.wp.workpartner.duty.model.vo.Duty;
+import com.wp.workpartner.duty.model.vo.DutyCharge;
 import com.wp.workpartner.employee.model.vo.Employee;
 
 @Controller
@@ -52,25 +54,26 @@ public class DutyController {
 		
 		// 첨부파일 있는 경우, TB_FILE에 대한 INSERT문 : File f 필요 ( == File.uploadFile)
 		
-		// 날짜형식 yyyy.MM.dd 로 저장하기 위해 먼저 처리하기
-		d.setStartDate( d.getStartDate().replace('-', '.') );
-		d.setEndDate( d.getEndDate().replace('-', '.') );
 		
+		// empICNo : empNo,empNo,empNo 의 형태
+		// => tb_employee에서 employee 객체의 ArrayList 조회, 각각을 TB_DUTY_CHARGE에 담기
 
 		int result = 0; 
 		
-		if(upfile != null) {
-			result = dService.insertDutyWithFile(d, File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/")) );
+		if(upfile.getOriginalFilename().length() > 0) {
+			File f = File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/"));
+			d.setFilePath( f.getFilePath() );
+			result = dService.insertDutyWithFile(d, f);
 		}else {
 			result = dService.insertDutyWithoutFile(d);
 		}
 		
 		if(result > 0) {
 			session.setAttribute("alertMsg", "업무 등록에 성공했습니다.");
-			return "list.du";
+			return "redirect:list.du";
 		}else {
 			m.addAttribute("errorMsg", "업무 등록에 실패했습니다.");
-			return "common/errorPage";
+			return "common/error";
 		}
 	}
 	
@@ -107,10 +110,96 @@ public class DutyController {
 		if(d != null) {
 			mv.addObject("d", d).setViewName("duty/dutyDetailView");
 		}else {
-			mv.addObject("errorMsg", "요청하신 번호의 업무를 찾을 수 없습니다.").setViewName("common/errorPage");
+			mv.addObject("errorMsg", "요청하신 번호의 업무를 찾을 수 없습니다.").setViewName("common/error");
 		}
 		
 		return mv;
+	}
+	
+	
+	/**
+	 * 업무 수정 페이지로 이동
+	 * @param mv
+	 * @param dutyNo
+	 * @return
+	 */
+	@RequestMapping("uform.du")
+	public ModelAndView updateDutyForm(ModelAndView mv, @RequestParam("no")String dutyNo) {
+		// 1. 수정하려는 dutyNo에 해당하는 Duty 객체 조회
+		// 2. Duty객체를 수정 페이지에 보냄
+		Duty d = dService.selectDuty(dutyNo);
+		
+		if(d != null) {
+			String empICNo = "", empICName = "";
+			for( DutyCharge dc : d.getEmpIC() ) {
+				empICNo += dc.getEmpICNo() + ",";
+				empICName += dc.getEmpICName() + ",";
+			}
+			d.setEmpICNo(empICNo.substring(0, empICNo.length() - 1));
+			d.setEmpICName(empICName.substring(0, empICName.length() - 1));
+			System.out.println(d);
+			mv.addObject("d", d).setViewName("duty/dutyUpdateForm");
+		}else {
+			mv.addObject("errorMsg","업무 수정 페이지 이동에 실패했습니다.").setViewName("common/error");
+		}
+		return mv;
+	}
+	
+	
+	/**
+	 * 업무 수정(UPDATE) 요청처리
+	 * @param upfile
+	 * @param d
+	 * @param session
+	 * @param m
+	 * @return
+	 */
+	@RequestMapping("update.du")
+	public String updateDuty(MultipartFile upfile, Duty d, HttpSession session, Model m) {
+		int result1 = 0, result2 = 1; 
+		
+
+		if(upfile.getOriginalFilename().length() > 0) {
+			// 새로 업로드된 파일이 있는 경우
+			File file = File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/"));
+			file.setRefNo(Integer.parseInt(d.getDutyNo()));
+			d.setFilePath(file.getFilePath());
+			
+			result1 = dService.updateDuty(d);
+
+			if(d.getFilePath() == null) {
+				// 기존 파일이 없는 경우
+				result2 = dService.insertDutyFile(file);
+			}else {
+				// 기존 파일이 있는 경우
+				result2 = dService.updateDutyFile(file);
+			}
+			
+		}else {
+			// 새로 업로드된 파일이 없는 경우
+			result1 = dService.updateDuty(d);
+			
+		}
+		
+		if(result1 * result2 > 0) {
+			session.setAttribute("alertMsg", "업무 수정에 성공했습니다.");
+			return "redirect:detail.du?no=" + d.getDutyNo();
+		}else {
+			m.addAttribute("errorMsg", "업무 수정에 실패했습니다.");
+			return "common/error";
+		}
+	}
+	
+	@RequestMapping("delete.du")
+	public String deleteDuty(String dutyNo, HttpSession session, Model m) {
+		int result = dService.deleteDuty(dutyNo);
+		if(result > 0) {
+			session.setAttribute("alertMsg", "업무 삭제에 성공했습니다.");
+			return "redirect:list.du";
+		}else {
+			m.addAttribute("errorMsg", "업무 삭제에 실패했습니다.");
+			return "common/error";
+		}
 	}
 	
 	

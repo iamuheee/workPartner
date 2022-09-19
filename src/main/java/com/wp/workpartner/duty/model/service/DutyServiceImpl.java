@@ -6,12 +6,12 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.duty.model.dao.DutyDao;
 import com.wp.workpartner.duty.model.vo.Duty;
 import com.wp.workpartner.duty.model.vo.DutyCharge;
+import com.wp.workpartner.employee.model.vo.Employee;
 
 @Service
 public class DutyServiceImpl implements DutyService {
@@ -40,7 +40,18 @@ public class DutyServiceImpl implements DutyService {
 		int result1 = dDao.insertDuty(sqlSession, d);
 		
 		int result2 = 1;
-		for(DutyCharge dc : d.getEmpIC()) {
+		ArrayList<DutyCharge> dclist = new ArrayList<>();
+		String[] empICNos = d.getEmpICNo().split(",");
+		String[] empICNames = d.getEmpICName().split(",");
+		
+		for(int i=0; i<empICNos.length; i++) {
+			DutyCharge dc = new DutyCharge();
+			dc.setEmpICNo(empICNos[i]);
+			dc.setEmpICName(empICNames[i]);
+			dclist.add(dc);
+		}
+		System.out.println(dclist);
+		for(DutyCharge dc : dclist) {
 			result2 *= dDao.insertDutyCharge(sqlSession, dc);
 		}
 		
@@ -54,10 +65,25 @@ public class DutyServiceImpl implements DutyService {
 	public int insertDutyWithoutFile(Duty d) {
 		int result1 = dDao.insertDuty(sqlSession, d);
 		
-		int result2 = 0;
-		for(DutyCharge dc : d.getEmpIC()) {
+		int result2 = 1;
+		ArrayList<DutyCharge> dclist = new ArrayList<>();
+		String[] empICNos = d.getEmpICNo().split(",");
+		String[] empICNames = d.getEmpICName().split(",");
+		
+		for(int i=0; i<empICNos.length; i++) {
+			DutyCharge dc = new DutyCharge();
+			dc.setEmpICNo(empICNos[i]);
+			dc.setEmpICName(empICNames[i]);
+			dclist.add(dc);
+		}
+		
+		System.out.println(dclist);
+		
+		for(DutyCharge dc : dclist) {
 			result2 *= dDao.insertDutyCharge(sqlSession, dc);
 		}
+		
+		
 		return result1 * result2;
 	}
 	
@@ -105,39 +131,61 @@ public class DutyServiceImpl implements DutyService {
 	@Override
 	public Duty selectDuty(String dutyNo) {
 		Duty d = dDao.selectDuty(sqlSession, dutyNo);
+		System.out.println(d);
 		d.setEmpIC( dDao.selectDutyCharge(sqlSession, dutyNo) );
 		return d;
 	}
 
 	@Override
 	public int updateDuty(Duty d) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result1 = dDao.updateDuty(sqlSession, d);
+		
+		ArrayList<DutyCharge> dclist = new ArrayList<>();
+		String[] empICNos = d.getEmpICNo().split(",");
+		String[] empICNames = d.getEmpICName().split(",");
+		
+		for(int i=0; i<empICNos.length; i++) {
+			DutyCharge dc = new DutyCharge();
+			dc.setDutyNo(Integer.parseInt(d.getDutyNo()));
+			dc.setEmpICNo(empICNos[i]);
+			dc.setEmpICName(empICNames[i]);
+			dclist.add(dc);
+		}
+		
+		int result2 = 1;
+		result2 *= dDao.deleteDutyCharge(sqlSession, dclist.get(0));
+		for(DutyCharge dc : dclist) {
+			result2 *= dDao.updateDutyCharge(sqlSession, dc);
+		}
+		return result1 * result2;
 	}
+	
+	@Override
+	public int updateDutyFile(File f) {
+		return dDao.updateDutyFile(sqlSession, f);
+	}
+	
+	@Override
+	public int insertDutyFile(File f) {
+		return dDao.insertDutyFile(sqlSession, f);
+	}
+
 
 	@Override
 	public int deleteDuty(String dutyNo) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		// 해당 업무의 댓글 삭제
+		int result1 = dDao.deleteDutyComment(sqlSession, dutyNo);
+		
+		// 해당 업무에 파일 있으면 status를 NULL으로
+		int result2 = dDao.deleteDutyFile(sqlSession, dutyNo);
+		
+		// 해당 업무 status를 NULL으로
+		int result3 = dDao.deleteDuty(sqlSession, dutyNo);
+		
+		return result1 + result2 + result3; // 성공이라면 최소 1은 되어야 함
 	}
 
-	@Override
-	public int insertDutyComment(Comment c) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int updateDutyComment(Comment c) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int deleteDutyComment(int comNo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 
 }

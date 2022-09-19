@@ -4,7 +4,7 @@
 
 	<resultMap id="SelectVacationResult" type="SelectVacation">
 		<result column="dp_no" property="dpNo"/>
-		<result column="emp_no" property="emp_no"/>
+		<result column="emp_no" property="empNo"/>
 		<result column="dp_title" property="dpTitle"/>
 		<result column="dp_create" property="dpCreate"/>
 		<result column="dp_modify" property="dpModify"/>
@@ -20,7 +20,21 @@
 		<result column="va_content" property="vaContent"/>
 		<result column="va_useday" property="vaUseday"/>
 	</resultMap>
-	 
+	
+	<resultMap id="SelectSaveListResult" type="Dtpaper">
+		<result column="dp_no" property="dpNo"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="dp_title" property="dpTitle"/>
+		<result column="dp_create" property="dpCreate"/>
+		<result column="dp_modify" property="dpModify"/>
+		<result column="dp_status" property="dpStatus"/>
+		<result column="dp_final" property="dpFinal"/>
+		<result column="dp_category" property="dpCategory"/>
+		<result column="dp_temp" property="dpTemp"/>
+		<result column="dp_origin" property="dpOrigin"/>
+		<result column="dp_change" property="dpChange"/>
+	</resultMap>
+	 <!-- 연차 기안서 -->
 	<insert id="insertDtpaper">
 		
 		insert
@@ -36,10 +50,62 @@
 		  	  )
 		values
 			  (
-			  	10||seq_vac.nextval
+			  <choose>
+				  <when test="dpCategory.equals('연차')">
+				  	10||seq_vac.nextval
+				  </when>
+			  	  <when test="dpCategory.equals('외근')">
+				  	20||seq_otw.nextval
+				  </when>
+				  <when test="dpCategory.equals('퇴직원')">
+				  	30||seq_res.nextval
+				  </when>
+			  	  <otherwise>
+				  	40||seq_coop.nextval
+				  </otherwise>
+			  </choose>
 			  , #{ empNo }
 			  , #{ dpTitle }
 			  , #{ dpCategory }
+			  , #{ dpOrigin }
+			  , #{ dpChange }
+			  ) 
+	</insert>
+	<insert id="saveDtpaper">
+		
+		insert
+		 
+		  into tb_dtpaper
+		  	  (
+		  	  	dp_no
+		  	  ,	emp_no
+		  	  , dp_title
+		  	  , dp_category
+		  	  , dp_temp
+		  	  , dp_origin
+		  	  , dp_change
+		  	  
+		  	  )
+		values
+			  (
+			  <choose>
+				  <when test="dpCategory.equals('연차')">
+				  	10||seq_vac.nextval
+				  </when>
+			  	  <when test="dpCategory.equals('외근')">
+				  	20||seq_otw.nextval
+				  </when>
+				  <when test="dpCategory.equals('퇴직원')">
+				  	30||seq_res.nextval
+				  </when>
+			  	  <otherwise>
+				  	40||seq_coop.nextval
+				  </otherwise>
+			  </choose>
+			  , #{ empNo }
+			  , #{ dpTitle }
+			  , #{ dpCategory }
+			  , 'Y'
 			  , #{ dpOrigin }
 			  , #{ dpChange }
 			  ) 
@@ -64,7 +130,7 @@
 				  , #{ vaContent }
 				  )
 	</insert>
-	<insert id="insertSign">
+	<insert id="insertVaSign">
 		insert
 		  into tb_sign
 		     (
@@ -72,21 +138,213 @@
 		     , signemp_no
 		     , si_seq
 		     , si_asign
+		     <if test="siSeq == 1">
+			 , si_status
+			 </if>
 		     ) 
 		 values
 		 (
-			10||seq_vac.currval
+	  		10||seq_vac.currval
 		  , #{ signEmpNo }
 		  , #{ siSeq }
 		  , #{ siAsign }
+		  <if test="siSeq == 1">
+		  , 'C'
+		  </if>
 		 )
 	</insert>
+	
+	
+	
+	<!-- 외근 기안서 -->
+	
 	<insert id="insertOtwork">
 		insert
 		  into tb_otwork
 		  (
-		  
+		  	dp_no
+		  , ot_startdate
+		  , ot_enddate
+		  , ot_customer
+		  , ot_content
+		  , ot_trans
+		  , ot_note
+		  , ot_place
+		  , ot_supervisor
+		  ,	ot_call
 		  )
+		values
+		(
+		  20||seq_otw.currval
+		, #{otStartdate} 
+		, #{otEnddate} 
+		, #{otCustomer} 
+		, #{otContent} 
+		, #{otTrans} 
+		, #{otNote} 
+		, #{otPlace} 
+		, #{otSupervisor} 
+		, #{otCall} 
+		)
+	</insert>
+	<insert id="insertOwSign">
+		insert
+		  into tb_sign
+		     (
+		       dp_no
+		     , signemp_no
+		     , si_seq
+		     , si_asign
+	       	 <if test="siSeq == 1">
+			 , si_status
+			 </if>
+		     ) 
+		 values
+		 (
+			20||seq_otw.currval
+		  , #{ signEmpNo }
+		  , #{ siSeq }
+		  , #{ siAsign }
+	      <if test="siSeq == 1">
+		  , 'C'
+		  </if>
+		 )
+	</insert>
+	
+	<!-- 퇴직원 신청서 -->
+	
+	<insert id="insertReSignEmp">
+		insert
+		   into tb_resign
+		   (
+		   	  dp_no
+		   	, res_redate
+		   	, res_account
+		   	, res_bank
+		   	, res_content
+		   	, res_mem
+		   	, res_dept
+		   	, res_email
+		   	, res_nextmem
+		   	, res_tamem
+		   )
+		 values
+		 (
+		    30||seq_res.currval
+		  , #{ resRedate }
+		  , #{ resAccount }
+		  , #{ resBank }
+		  , #{ resContent }
+		  , #{ resMem }
+		  , #{ resDept }
+		  , #{ resEmail }
+		  , #{ resNextMem }
+		  , #{ resTaMem }
+		 )
 	
 	</insert>
+	<insert id="insertReSign">
+		insert
+		  into tb_sign
+		     (
+		       dp_no
+		     , signemp_no
+		     , si_seq
+		     , si_asign
+	         <if test="siSeq == 1">
+			 , si_status
+			 </if>
+		     ) 
+		 values
+		 (
+			30||seq_res.currval
+		  , #{ signEmpNo }
+		  , #{ siSeq }
+		  , #{ siAsign }
+		   <if test="siSeq == 1">
+		  , 'C'
+		  </if>
+		 )
+	</insert>
+	
+	
+	
+	<!-- 업무협조 기안서 -->
+	
+	
+	<insert id="insertCooperation">
+		insert
+		  into tb_coop
+			(
+			   dp_no
+			 , cp_requestor
+			 , cp_requestday
+			 , cp_content	
+			 , cp_dept
+			
+			)
+	    values
+	      (
+	        40||seq_coop.currval
+	      , #{cpRequestor}
+	      , #{cpRequestday}
+	      , #{cpContent} 
+	      , #{cpDept}
+	      )
+			
+	</insert>
+	<insert id="insertCoSign">
+		insert
+		  into tb_sign
+		     (
+		       dp_no
+		     , signemp_no
+		     , si_seq
+		     , si_asign
+	         <if test="siSeq == 1">
+			 , si_status
+			 </if>
+		     ) 
+		 values
+		 (
+			40||seq_coop.currval
+		  , #{ signEmpNo }
+		  , #{ siSeq }
+		  , #{ siAsign }
+		  <if test="siSeq == 1">
+		  , 'C'
+		  </if>
+		 )
+	</insert>
+	
+	<!-- 임시저장 리스트 -->
+	<select id="selectSaveListCount" resultType="_int">
+		select
+		       count(*)	
+		  from tb_dtpaper
+		 where dp_temp = 'Y'
+		   and dp_status = 'N'  
+	</select>
+	<select id="selectSaveList" resultMap="SelectSaveListResult">
+		select
+		       dp_no
+		      ,emp_no
+		      ,dp_title
+		      ,to_char(dp_create, 'YYYY-MM-DD') AS "dp_create"
+		      ,dp_modify
+		      ,dp_status
+		      ,dp_final
+		      ,dp_category
+		      ,dp_temp
+		      ,dp_origin
+		      ,dp_change
+		  from tb_dtpaper
+		 where dp_temp = 'Y'
+		   and dp_status = 'N'
+		   and emp_no = #{ empNo }
+		 order
+		    by dp_create desc
+	</select>
+	
+	
 </mapper>

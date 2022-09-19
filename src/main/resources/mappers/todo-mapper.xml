@@ -36,7 +36,7 @@
 		  FROM TB_TODO
 		 WHERE CATEGORY_NO = #{ categoryNo }
 		 ORDER 
-		 	BY TODO_DATE DESC
+		 	BY TODO_NO DESC
 	</select>
 	
 	<update id="doneTodo">

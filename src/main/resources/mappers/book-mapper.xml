@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="bookMapper">
+	
+	<resultMap id="bookResult" type="Book">
+		<result column="bk_no" property="bkNo" />
+		<result column="emp_no" property="empNo" />
+		<result column="rm_no" property="rmNo" />
+		<result column="bk_person" property="bkPerson" />
+		<result column="bk_title" property="bkTitle" />
+		<result column="bk_meetdate" property="bkDate" />
+		<result column="bk_start" property="bkStart" />
+		<result column="bk_end" property="bkEnd" />
+	</resultMap>
+	
+	<insert id="insertBook">
+		insert
+		  into tb_book
+		  (
+		    bk_no
+		  , emp_no
+		  , rm_no
+		  , bk_person
+		  , bk_title
+		  , bk_meetdate
+		  , bk_start
+		  , bk_end
+		  )
+		  values
+		  (
+		  	seq_bkno.nextval
+		  , #{ empNo }
+		  , #{ rmNo }
+		  , #{ bkPerson }
+		  , #{ bkTitle }
+		  , #{ bkDate }
+		  , #{ bkStart }
+		  , #{ bkEnd }
+		  )
+	</insert>
+
+</mapper>

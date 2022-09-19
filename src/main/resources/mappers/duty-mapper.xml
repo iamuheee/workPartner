@@ -15,6 +15,8 @@
 		<result column="END_DATE" property="endDate" />
 		<result column="STATUS" property="status" />
 		<result column="EMP_NAME" property="empName" />
+		<result column="FILE_ORIGIN_NAME" property="fileOriginName"/>
+		<result column="FILE_PATH" property="filePath"/>
 	</resultMap>
 	
 	<resultMap id="dutyChargeResult" type="DutyCharge">
@@ -30,6 +32,7 @@
 		     (
 		       SEQ_DNO.NEXTVAL
 		     , #{empNo}
+		     , #{empName}
 		     , #{calendarYN}
 		     , #{importance}
 		     , #{progress}
@@ -39,7 +42,7 @@
 		     , #{startDate}
 		     , #{endDate}
 		     , 'Y'
-		     , #{dutyName}
+		     ,#{filePath}
 		     ) 
 	</insert>
 	
@@ -50,19 +53,37 @@
 		VALUES
 			 (
 			   SEQ_DNO.CURRVAL
-			 , #{empNo}
-			 , #{empName}
+			 , #{empICNo}
+			 , #{empICName}
 			 )
-			 
 	</insert>
 	
+	<!-- 게시글 작성시 파일 업로드하는 경우 -->
 	<insert id="insertFile">
 		INSERT
 		  INTO TB_FILE
 		VALUES
 			 (
 			   SEQ_FILENO.NEXTVAL
-			 , SEQ_DNO.CURRVAL
+			 , SEQ_DNO.CURRVAL <!-- 게시글작성과 동시에 파일 업로드 -->
+			 , 1
+			 , #{fileOriginName}
+			 , #{fileChangeName}
+			 , #{filePath}
+			 , DEFAULT
+			 , NULL
+			 , 'Y'
+			 )
+	</insert>
+	
+	<!-- 게시글 수정에서 최초로 파일 업로드하는 경우 -->
+	<insert id="insertDutyFile">
+		INSERT
+		  INTO TB_FILE
+		VALUES
+			 (
+			   SEQ_FILENO.NEXTVAL
+			 , #{refNo} <!-- 게시글수정에서 최초 파일 업로드 -->
 			 , 1
 			 , #{fileOriginName}
 			 , #{fileChangeName}
@@ -203,7 +224,6 @@
 			</choose>
 		   ORDER
 		      BY D.DUTY_NO DESC
-				 
 	</select>
 	
 	
@@ -221,9 +241,35 @@
 			 , START_DATE
 			 , END_DATE
 			 , STATUS
+			 , FILE_PATH
 		  FROM TB_DUTY
 		 WHERE DUTY_NO = #{dutyNo}
 		   AND STATUS = 'Y'
+	</select>
+	
+	
+	<select id="selectDutyWithFile" resultMap="dutyResult">
+		SELECT
+			   DUTY_NO
+			 , EMP_NO
+			 , EMP_NAME
+			 , CALENDAR_YN
+			 , IMPORTANCE
+			 , PROGRESS
+			 , TITLE
+			 , CONTENT
+			 , ENROLL_DATE
+			 , START_DATE
+			 , END_DATE
+			 , STATUS
+			 , D.FILE_PATH
+			 , FILE_ORIGIN_NAME
+		  FROM TB_DUTY D
+		  JOIN TB_FILE F
+		    ON DUTY_NO = FILE_REF_NO
+		 WHERE DUTY_NO = #{dutyNo}
+		   AND STATUS = 'Y'
+		   AND FILE_CATEGORY = 1
 	</select>
 	
 	<select id="selectDutyCharge" resultMap="dutyChargeResult">
@@ -233,5 +279,67 @@
 		  FROM TB_DUTY_CHARGE 
 		 WHERE DUTY_NO = #{dutyNo}
 	</select>
+	
+	<update id="updateDuty">
+		UPDATE TB_DUTY
+		   SET CALENDAR_YN = #{calendarYN}
+		     , IMPORTANCE = #{importance}
+		     , PROGRESS = #{progress}
+		     , TITLE = #{title}
+		     , CONTENT = #{content}
+		     , START_DATE = #{startDate}
+		     , END_DATE = #{endDate}
+		  <if test="filePath != null">
+		  	 , FILE_PATH = #{filePath} 
+		  </if>
+	     WHERE DUTY_NO = #{dutyNo}
+	</update>
+	
+	<update id="deleteDutyCharge">
+		DELETE
+		  FROM TB_DUTY_CHARGE
+		 WHERE DUTY_NO = #{dutyNo}
+	</update>
+	
+	<insert id="updateDutyCharge">
+		INSERT 
+		  INTO TB_DUTY_CHARGE
+		VALUES
+			 (
+			   #{dutyNo}
+			 , #{empICNo}
+			 , #{empICName}
+			 )
+	</insert>
+	
+	<update id="updateDutyFile">
+		UPDATE TB_FILE
+		   SET FILE_ORIGIN_NAME = #{fileOriginName}
+		  	 , FILE_CHANGE_NAME = #{fileChangeName}
+		  	 , FILE_PATH = #{filePath}
+		  	 , FILE_UPLOAD_DATE = CURRENT_DATE
+	  	 WHERE FILE_REF_NO = #{refNo}
+	  	   AND FILE_CATEGORY = 1
+	</update>
+	
+	<delete id="deleteDutyComment">
+		DELETE
+		  FROM TB_COMMENT
+		 WHERE COM_TYPE = 1
+		   AND COM_REF_BNO = #{dutyNo}
+	</delete>
+	
+	<update id="deleteDutyFile">
+		UPDATE TB_FILE
+		   SET FILE_STATUS = 'N'
+		 WHERE FILE_CATEGORY = 1
+		   AND FILE_REF_NO = #{dutyNo}
+	</update>
+	
+	<update id="deleteDuty">
+		UPDATE TB_DUTY
+		   SET STATUS = 'N'
+		 WHERE DUTY_NO = #{dutyNo}
+	</update>
 	
 </mapper>

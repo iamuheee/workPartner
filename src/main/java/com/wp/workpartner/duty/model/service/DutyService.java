@@ -36,17 +36,15 @@ public interface DutyService {
 	// 업무 게시글 수정
 	int updateDuty(Duty d);
 	
+	// 업무 게시글에 수정되는 파일 있는 경우
+	int updateDutyFile(File f);
+	
+	// 업무 게시글 수정에서 최초로 파일 추가되는 경우
+	int insertDutyFile(File f);
+	
+	
+	
 	// 업무 게시글 삭제
 	int deleteDuty(String dutyNo);
 	
-	// 업무 게시글 댓글 작성 (ajax)
-	int insertDutyComment(Comment c);
-	
-	// 업무 게시글 댓글 수정 (ajax)
-	int updateDutyComment(Comment c);
-	
-	// 업무 게시글 댓글 삭제 (ajax)
-	int deleteDutyComment(int comNo);
-	
-
 }

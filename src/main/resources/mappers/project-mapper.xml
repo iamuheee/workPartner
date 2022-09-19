@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="projectMapper">
+
+	<resultMap id="projectResult" type="Project">
+		<result column="PROJ_NO" property="projNo" />
+		<result column="PROJ_TITLE" property="projTitle" />
+		<result column="EMP_NO" property="empNo" />
+		<result column="PROGRESS" property="progress" />
+		<result column="START_DATE" property="startDate" />
+		<result column="END_DATE" property="endDate" />
+		<result column="ENROLL_DATE" property="enrollDate" />
+		<result column="STATUS" property="status" />
+	</resultMap>
+	
+	<resultMap id="projectMemberResult" type="ProjectMember">
+		<result column="PROJ_NO" property="projNo" />
+		<result column="MEM_NO" property="memNo" />
+		<result column="MEM_NAME" property="memName" />
+		<result column="MEM_ROLE" property="memRole" />
+	</resultMap>
+	
+	<insert id="insertProject">
+		INSERT
+		  INTO TB_PROJECT
+		VALUES
+			 (
+			   SEQ_PNO.NEXTVAL
+			 , #{projTitle}
+			 , #{empNo}
+			 , #{progress}
+			 , #{startDate}
+			 , #{endDate}
+			 , DEFAULT
+			 , DEFAULT 
+			 )
+	</insert>
+
+</mapper>

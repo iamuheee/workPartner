@@ -26,7 +26,11 @@
 		<typeAlias type="com.wp.workpartner.mail.model.vo.MailStatus" alias="MailStatus" />
 		<typeAlias type="com.wp.workpartner.notice.model.vo.Notice" alias="Notice" />
 		<typeAlias type="com.wp.workpartner.notice.model.vo.NoticeComment" alias="NoticeComment" />	
+		<typeAlias type="com.wp.workpartner.project.model.vo.Project" alias="Project"/>
+		<typeAlias type="com.wp.workpartner.project.model.vo.ProjectMember" alias="ProjectMember"/>
 		
+		<typeAlias type="com.wp.workpartner.common.model.vo.Comment" alias="Comment" />	
+		<typeAlias type="com.wp.workpartner.common.model.vo.File" alias="File"/>
 		
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Cooperation" alias="Cooperation"/>
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Dtpaper" alias="Dtpaper"/>
@@ -38,8 +42,20 @@
 		<typeAlias type="com.wp.workpartner.sign.model.vo.SelectVacation" alias="SelectVacation"/>
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Sign" alias="Sign"/>
 		<typeAlias type="com.wp.workpartner.sign.model.vo.Vacation" alias="Vacation"/>	
+
 		
 		<typeAlias type="com.wp.workpartner.attendance.model.vo.Attendance" alias="Attendance"/>
+
+		<typeAlias type="com.wp.workpartner.project.model.vo.Project" alias="Project"/>
+		<typeAlias type="com.wp.workpartner.project.model.vo.ProjectMember" alias="ProjectMember"/>
+		
+		<typeAlias type="com.wp.workpartner.room.model.vo.Room" alias="Room"/>
+		<typeAlias type="com.wp.workpartner.room.model.vo.Equip" alias="Equip"/>
+		<typeAlias type="com.wp.workpartner.room.model.vo.UsingEquip" alias="UsingEquip"/>
+		<typeAlias type="com.wp.workpartner.room.model.vo.ClosedRoom" alias="ClosedRoom"/>
+		
+		<typeAlias type="com.wp.workpartner.book.model.vo.Book" alias="Book"/>
+
 	</typeAliases>
 	
 	<!-- <유의사항> -->
@@ -53,6 +69,10 @@
 		<mapper resource="/mappers/notice-mapper.xml" />
 		<mapper resource="/mappers/Sign-mapper.xml"/>
 		<mapper resource="/mappers/attendance-mapper.xml"/>
+		<mapper resource="/mappers/room-mapper.xml" />
+		<mapper resource="/mappers/comment-mapper.xml"/>
+		<mapper resource="/mappers/book-mapper.xml"/>
+		<mapper resource="/mappers/project-mapper.xml"/>
 	</mappers>
 	
 </configuration>

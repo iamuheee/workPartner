@@ -13,8 +13,8 @@ import lombok.ToString;
 
 public class ClosedRoom {
 	
+	private String crNo;
 	private String rmNo;
-	private String crDate;
 	private String crStart;
 	private String crEnd;
 	private String crReason;

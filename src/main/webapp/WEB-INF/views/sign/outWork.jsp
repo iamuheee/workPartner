@@ -127,13 +127,13 @@ input, select, textarea {
 }
 
 .otworkPaper input[type=text] {
-	width: 97%;
-	box-sizing: border-box;
+	width: 95%;
 	margin: auto;
+	margin-left:10px;
 	height: 100%;
 	border: 0;
 	font-size: 16px;
-	background-color: #ffffff48;
+	background-color: #ffffff48 !important;
 	padding: auto;
 }
 
@@ -169,21 +169,21 @@ input, select, textarea {
 	width: 28%;
 }
 </style>
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link
-		href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap"
-		rel="stylesheet">
-	<link rel="stylesheet"
-		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-	<link rel="stylesheet"
-		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-	<script src="https://uicdn.toast.com/tui-tree/latest/tui-tree.js"></script>
-	<link rel="stylesheet" type="text/css"
-		href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css" />
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<!-- <script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<script src="https://uicdn.toast.com/tui-tree/latest/tui-tree.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- <script>
         $(document).ready(function () {
             $("#today").change(function () {
                 console.log("gd");
@@ -206,65 +206,53 @@ input, select, textarea {
 	<jsp:include page="../sign/insertTitle.jsp" />
 
 	<br>
-    <section>
-        <div style="margin: auto; margin-top: 10px; width: 800px;">
-            <table class="otworkPaper"
-				style="border:1px solid rgba(143, 143, 143, 0.547)" align="center">
-                <tr>
-                    <td class="tableTitle" width="100">신청자</td>
-                    <td width="280" align="right"><input
-						type="text" id="writeEmp"></td>
-                    <td class="tableTitle" width="100">담당자</td>
-                    <td width="280" align="right"
-						style="border-right:0;">
-                        <input type="text">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tableTitle">외근목적</td>
-                    <td align="right"><input type="text"></td>
-                    <td class="tableTitle">거래처</td>
-                    <td align="right" style="border-right:0;"><input
-						type="text"></td>
-                </tr>
-                <tr>
-                    <td class="tableTitle">교통수단</td>
-                    <td align="left">
-                        <select name="" id="" style="margin-left:10px">
-                            <option value="">대중교통</option>
-                            <option value="">자차이용</option>
-                            <option value="">도보이용</option>
-                        </select>
-                    </td>
-                    <td class="tableTitle">위치</td>
-                    <td style="border-right:0;" align="right"><input
-						type="text"></td>
-                </tr>
-                <tr>
-                    <td class="tableTitle">시간</td>
-                    <td colspan="3" align="left" style="border-right:0;">
-                        <input type="datetime-local" id="startTime"
-						style="margin-left:10px">
-                        ~
-                        <input type="datetime-local" id="startTime">
-                    </td>
-                  
-                </tr>
-                <tr>
-                    <td class="tableTitle" style="border-bottom: 0;">비고</td>
-                    <td colspan="3"
-						style="border-bottom: 0; border-right:0;">
-                        <textarea name="" id="" cols="53" rows="10"
-							style="resize: none; height:95%; width: 96%; margin-top: 3px; border: 0; font-size: 16px;"></textarea>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </section>
-    	</section>
-	</form>
+	<section>
+		<div style="margin: auto; margin-top: 10px; width: 800px;">
+			<table class="otworkPaper" style="border: 1px solid rgba(143, 143, 143, 0.547)" align="center">
+				<tr>
+					<td class="tableTitle" width="100">신청자</td>
+					<td width="280" align="right"><input type="text" id="writeEmp"
+						name="otCall" value="${ loginUser.empName }" readonly></td>
+					<td class="tableTitle" width="100">담당자</td>
+					<td width="280" align="right" style="border-right: 0;"><input
+						type="text" name="otSupervisor"></td>
+				</tr>
+				<tr>
+					<td class="tableTitle">외근목적</td>
+					<td align="right"><input type="text" name="otContent"></td>
+					<td class="tableTitle">거래처</td>
+					<td align="right" style="border-right: 0;"><input type="text"
+						name="otCustomer"></td>
+				</tr>
+				<tr>
+					<td class="tableTitle">교통수단</td>
+					<td align="left"><select name="otTrain"
+						style="margin-left: 10px">
+							<option value="'대중교통'">대중교통</option>
+							<option value="'자차'">자차</option>
+							<option value="'도보'">도보</option>
+					</select></td>
+					<td class="tableTitle">위치</td>
+					<td style="border-right: 0;" align="right"><input type="text"
+						name="otPlace"></td>
+				</tr>
+				<tr>
+					<td class="tableTitle">시간</td>
+					<td colspan="3" align="left" style="border-right: 0;">
+					<input type="datetime-local" id="startTime" style="margin-left: 10px" name="otStartdate"> ~ 
+					<input type="datetime-local" id="endTime" name="otEnddate">
+					</td>
+
+				</tr>
+				<tr>
+					<td class="tableTitle" style="border-bottom: 0;">비고</td>
+					<td colspan="3" style="border-bottom: 0; border-right: 0;"><textarea name="otNote" id="" cols="53" rows="10" style="resize: none; height: 95%; width: 96%; margin-top: 3px; border: 0; font-size: 16px;"></textarea>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</section>
+	</section>
 	</form>
 </body>
-
-
 </html>

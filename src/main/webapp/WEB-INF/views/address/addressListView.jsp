@@ -754,7 +754,7 @@
                             	value  +=			'"></th>'
                                 		+			'<th align="left"><h5><b>'+ result.empName +'</b></h5></th>'                               
                                 		+           '<th  align="right">'
-                                    	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.em?email='+ result.empEmail +'">mail</a>'
+                                    	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.ma?email='+ result.empEmail +'">mail</a>'
                                 		+			'</th>'
                                 		+			'<th><button type="button" class="material-symbols-outlined aHover btn-text" data-toggle="modal" data-target="#addressChat">chat</button></th>'
                            				+		 '</tr>'                       
@@ -899,7 +899,7 @@
             				
                         			//console.log(value);
             				$("#tableArea").html(value);
-            				 $(".pasingAdd").html(pageValue); 
+            				$(".pasingAdd").html(pageValue); 
             				            				            				
             				$("#addTitle").html("<h4><b>내 연락처</b></h4>");      
             				$("#deleteFeat").attr("style", "visibility:visible");
@@ -938,7 +938,7 @@
                           		value += '<th class="fontSmallSize" style="width: 70px;">'+ result.addressNickName+'</th>';
                           	} 		
                              value +=           '<th  align="right">'
-                                	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.em?no='+ result.addressEmail +'">mail</a>'
+                                	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.ma?email='+ result.addressEmail +'">mail</a>'
                             		+			'</th>'
                        				+		 '</tr>'                       
                     				+'</thead>'
@@ -1271,6 +1271,7 @@
                     			if(result == "success"){
                     				
                     				// 각각의 테이블 조회하는 ajax 호출
+                    				// 지금 테이블이 별표연락처라면 삭제 후 다시 별표연락처를 조회하도록
                     				if($("#tableArea>table").is("#dataStarAddTable")){                					
                     					selectStarAdd();
                     				}else{
@@ -1293,9 +1294,7 @@
                 }
                 
                 <!--==================================== 다중선택 전체선택 script ======================================= -->
-                $(document).ready(function() {
-                   
-                }); 
+        
             </script>
 		
 </body>

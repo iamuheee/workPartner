@@ -188,7 +188,7 @@
    .menubarHeadBold{ font-weight: 620;}
    .mainOuter{
    		width:95%;
-        margin:auto;
+        margin:0px auto;
         padding:10px;
     }
     
@@ -361,7 +361,6 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseAuth1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages1">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-												<a class="btn btn-sm btn-primary btn-size" href="enroll.du" style="margin:10px;">업무등록 바로가기</a>
 												<a class="nav-link nav-choice" href="list.du">전체 업무</a>
 												<a class="nav-link nav-choice" href="list.to">To Do 리스트</a>
 												<a class="nav-link nav-choice" href="">월간 캘린더</a>
@@ -374,10 +373,10 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseProject" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages1">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="">홈</a>
-	                                           <a class="nav-link nav-choice" href="">참여프로젝트</a>
-	                                           <a class="nav-link nav-choice" href="">프로젝트 생성</a>
-	                                           <a class="nav-link nav-choice" href="">프로젝트 관리</a>
+	                                           <a class="nav-link nav-choice" href="main.pr">홈</a>
+	                                           <a class="nav-link nav-choice" href="list.pr">참여프로젝트</a>
+	                                           <a class="nav-link nav-choice" href="enroll.pr">프로젝트 생성</a>
+	                                           <a class="nav-link nav-choice" href="manage.pr">프로젝트 관리</a>
 	                                       </nav>
 	                                   </div>
 	                               </nav>
@@ -422,10 +421,10 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseAuth2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="saveSi.si">임시저장</a>
-	                                           <a class="nav-link nav-choice" href="contSi.si">진행중</a>
-	                                           <a class="nav-link nav-choice" href="reSi.si">반려됨</a>
-	                                           <a class="nav-link nav-choice" href="endSi.si">완료됨</a>                                            
+                                               <a class="nav-link nav-choice" href="saveSi.si?empNo=${ loginUser.empNo }">임시저장</a>
+	                                           <a class="nav-link nav-choice" href="contSi.si?empNo=${ loginUser.empNo }">진행중</a>
+	                                           <a class="nav-link nav-choice" href="reSi.si?empNo=${ loginUser.empNo }">반려됨</a>
+	                                           <a class="nav-link nav-choice" href="endSi.si?empNo=${ loginUser.empNo }">완료됨</a>                                          
 	                                       </nav>
 	                                   </div>
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseApproval1" aria-expanded="false" aria-controls="pagesCollapseApproval1">
@@ -486,13 +485,9 @@
 	                               <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
 	                           </a>
 	                           <div class="collapse" id="collapseReservation" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-	                               <nav class="sb-sidenav-menu-nested nav">                                   
-	                                   <a class="nav-link nav-choice" href="">예약하기</a>
-	                                   <a class="nav-link nav-choice" href="">내예약현황</a>
-	                                   <div class="collapse" id="collapseReservation" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
 	                           	   <nav class="sb-sidenav-menu-nested nav">
-												<a class="btn btn-sm btn-primary btn-size" href="enroll.bk" style="margin:10px;">+ 회의실 예약</a>
-												<a class="nav-link nav-choice" href="">내 예약 현황</a>
+												<a class="btn btn-sm btn-primary btn-size" href="enrollForm.bk" style="margin:10px;">+ 회의실 예약</a>
+												<a class="nav-link nav-choice" href="list.bk">내 예약 현황</a>
                                    </nav>
                                    <!-- 인사부 직원에게만 보여지는 메뉴 -->
 	                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages1">
@@ -502,8 +497,8 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseProject" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages1">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                       	   <a class="btn btn-sm btn-primary btn-size" href="enrollForm.rm" style="margin:10px;">+ 회의실 등록</a>
-	                                           <a class="nav-link nav-choice" href="">회의실 관리</a>
+	                                       	   <a class="btn btn-sm btn-primary btn-size" href="enrollForm.ro" style="margin:10px;">+ 회의실 등록</a>
+	                                           <a class="nav-link nav-choice" href="list.ro">회의실 관리</a>
 	                                           <a class="nav-link nav-choice" href="">예약 이력 조회</a>
 	                                       </nav>
 	                                   </div>                                                                    
@@ -514,32 +509,32 @@
 	                          <!-- 인사부 직원에게만 보이는 메뉴 -->
 	                          <!-- 기능 구현 끝난 뒤에 활성화 -->
 	                          <%-- <c:if test="${ loginUser.depCd eq '인사부' }"> --%>
-		                          <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
-		                           <span class="material-symbols-outlined">
-		                               manage_accounts
-		                           </span>
-		                           <span  class="menubarHeadBold">&nbsp; 인사관리</span>
-		                           <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-		                           </a>                            
-		                           <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-		                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages3">
-		                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth3" aria-expanded="false" aria-controls="pagesCollapseAuth3">
-		                                       임직원 계정관리
-		                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-		                                   </a>
-		                                   <div class="collapse" id="pagesCollapseAuth3" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages3">
-		                                       <nav class="sb-sidenav-menu-nested nav">
-		                                           <a class="nav-link nav-choice" href="enrollForm.em">사용자 등록</a>
-		                                           <a class="nav-link nav-choice" href="list.em">사용자 조회/수정</a>                                        
-		                                       </nav>
-		                                   </div>
-		                                   <a class="nav-link collapsed nav-choice" href="adminPosition.att">직위/직무등록</a>
-		                               </nav>
-		                           </div>
-	                           <%-- </c:if> --%>
-	                       </div>
-	                   </div>
-	                   
+	                          <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages3">
+	                           <span class="material-symbols-outlined">
+	                               manage_accounts
+	                           </span>
+	                           <span  class="menubarHeadBold">&nbsp; 인사관리</span>
+	                           <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                           </a>                            
+	                           <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+	                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages3">
+	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth3" aria-expanded="false" aria-controls="pagesCollapseAuth3">
+	                                       임직원 계정관리
+	                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+	                                   </a>
+	                                   <div class="collapse" id="pagesCollapseAuth3" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages3">
+	                                       <nav class="sb-sidenav-menu-nested nav">
+	                                           <a class="nav-link nav-choice" href="enrollForm.em">사용자 등록</a>
+	                                           <a class="nav-link nav-choice" href="list.em">사용자 조회/수정</a>                                        
+	                                       </nav>
+	                                   </div>
+	                                   <a class="nav-link collapsed nav-choice" href="adminPosition.att">직위/직무등록</a>
+	                               </nav>
+	                           </div>
+                           <%-- </c:if> --%>
+                        </div>
+                   </div>
+                    
 	               </nav>
 	           </div>
 	           <jsp:include page="../sign/dtpaperSignList.jsp"/>
