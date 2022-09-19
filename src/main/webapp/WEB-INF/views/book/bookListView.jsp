@@ -11,7 +11,6 @@
 	#bookList-outer {
         /* border:1px solid blue; */
         width:100%;
-        height:100vh;
         padding:10px;
         margin:auto;
         position:relative;
@@ -21,11 +20,16 @@
         width:100%;
         font-size:16px;
     }
+    
+    #bookList button{
+    	margin-right:5px;
+    }
 
     #bookDate {
         font-size:14px;
     }
 
+	
     
     /* --------- */
     
@@ -33,6 +37,10 @@
         width: fit-content;
         margin: auto;
         margin-top:30px;
+    }
+    
+    #pagingArea button{
+    	cursor:pointer;
     }
 
     .page-link {
@@ -106,7 +114,7 @@
 		
 		<!-- 예약 이력 목록 -->
 		<div id="bookListArea">
-		    <table id="bookList" class="table table-hover">
+		    <table id="bookListTb" class="table table-hover">
 		        <thead>
 		            <tr>
 		                <th scope="col">No.</th>
@@ -116,64 +124,21 @@
 		                <th scope="col">상태</th>
 		            </tr>
 		        </thead>
-		        <tbody>
+		        <tbody id="bookList">
+		        <!-- ---------------------------- -->
 		            <tr>
 		                <td>5</td>
 		                <td>회의실 이름</td>
 		                <td>동해물과 백두산이 마르고 닳도록</td>
 		                <td id="bookDate">YYYY-MM-DD HH:00 ~ YYYY:MM:DD HH:00</td>
 		                <td>
+		                	<button type="button" class="btn btn-secondary btn-sm">이용완료</button>
 		                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBook">변경</button>
 		                    <button type="button" class="btn btn-danger btn-sm" onclick="return userConfirm();">취소</button>
 		                </td>
 		            </tr>
-		
-		            <tr>
-		                <td>4</td>
-		                <td>회의실 이름</td>
-		                <td>하느님이 보우하사 우리나라 만세</td>
-		                <td id="bookDate">YYYY-MM-DD HH:00 ~ YYYY:MM:DD HH:00</td>
-		                <td>
-		                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBook">변경</button>
-		                    <button type="button" class="btn btn-danger btn-sm" onclick="return userConfirm();">취소</button>
-		                </td>
-		            </tr>
-		
-		            <tr>
-		                <td>3</td>
-		                <td>회의실 이름</td>
-		                <td>무궁화 삼천리 화려강산 대한사람 대한으로</td>
-		                <td id="bookDate">YYYY-MM-DD HH:00 ~ YYYY:MM:DD HH:00</td>
-		                <td>
-		                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBook">변경</button>
-		                    <button type="button" class="btn btn-danger btn-sm" onclick="return userConfirm();">취소</button>
-		                </td>
-		            </tr>
-		
-		            <tr>
-		                <td>2</td>
-		                <td>회의실 이름</td>
-		                <td>길이 보전하세</td>
-		                <td id="bookDate">YYYY-MM-DD HH:00 ~ YYYY:MM:DD HH:00</td>
-		                <td>
-		                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBook">변경</button>
-		                    <button type="button" class="btn btn-danger btn-sm" onclick="return userConfirm();">취소</button>
-		                </td>
-		            </tr>
-		
-		            <tr>
-		                <td>1</td>
-		                <td>회의실 이름</td>
-		                <td>남산 위의 저 소나무 철갑을 두른 듯 바람서리 불변함은 우리 기상일세</td>
-		                <td id="bookDate">YYYY-MM-DD HH:00 ~ YYYY:MM:DD HH:00</td>
-		                <td>
-		                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBook">변경</button>
-		                    <button type="button" class="btn btn-danger btn-sm" onclick="return userConfirm();">취소</button>
-		                </td>
-		            </tr>
+	           <!-- ---------------------------- -->
 		        </tbody>
-		
-		        
 		    </table>
 		</div>
 		
@@ -261,24 +226,111 @@
 		
 		<!-- 페이징 처리 -->
 		<div id="pagingArea">
-		    <nav aria-label="Page navigation example">
-		        <ul class="pagination">
-		        <li class="page-item">
-		            <a class="page-link" href="#" aria-label="Previous">
-		            <span aria-hidden="true">‹</span>
-		            </a>
-		        </li>
-		        <li class="page-item"><a class="page-link" href="#">1</a></li>
-		        <li class="page-item"><a class="page-link" href="#">2</a></li>
-		        <li class="page-item"><a class="page-link" href="#">3</a></li>
-		        <li class="page-item">
-		            <a class="page-link" href="#" aria-label="Next">
-		            <span aria-hidden="true">›</span>
-		            </a>
-		        </li>
-		        </ul>
-		    </nav>
 		</div>
+		
+		<script>
+		
+		$(function(){
+			selectBookList();
+		})
+		
+		/* 날짜 비교용 함수 */
+		function leadingZeros(n, digits) {
+		    var zero = '';
+		    n = n.toString();
+
+		    if (n.length < digits) {
+		        for (i = 0; i < digits - n.length; i++)
+		            zero += '0';
+		    }
+		    return zero + n;
+		}
+		
+		/* 내 예약 현황 조회용 ajax */
+		function selectBookList(cpage) {
+			$.ajax({
+				url:"select.bk",
+				type:"post",
+				data:{
+					cpage:cpage,
+					empNo:${ loginUser.empNo }
+				},
+				success:function(result){
+					console.log("내 예약 현황 조회용 ajax 통신 성공");
+					console.log(result);
+					
+					let list = result.list;
+					let pi = result.pi;
+					
+					let value = "";
+					let pgValue = "";
+					
+					if(!list){	// 회의실 예약 이력이 없을 때
+						value += "조회된 회의실 예약 내역이 없습니다.";
+					
+					}else {
+						for(let i=0; i<list.length; i++){
+							value += '<tr>'
+								   +	'<td>' + (list.length - i) + '</td>'
+								   +	'<td>' + list[i].room.rmName + '</td>'
+								   +	'<td>' + list[i].bkTitle + '</td>'
+								   +	'<td class="bookDate">' + list[i].bkDate + ' ' + list[i].bkStart + ' ~ ' + list[i].bkEnd + '</td>';
+								   
+								   /* 예약 일자와 오늘 날짜 비교 */
+								   let endDate = list[i].bkDate + list[i].bkEnd;	// 예약 끝나는 날짜 + 시간 == 예약종료일시
+								   let now = new Date();
+								   
+								   if(endDate){	
+									   
+									   now = leadingZeros(now.getFullYear(), 4) + '-' +
+								    	     leadingZeros(now.getMonth() + 1, 2) + '-' +
+								    	     leadingZeros(now.getDate(), 2);
+									   
+									   if(now > endDate){	// 오늘 > 예약종료일시 == 이용 후
+										   value += '<td><button type="button" class="btn btn-secondary btn-sm" disabled>이용완료</button></td>'; 
+									   }else {	// 이용 전
+										   if(list[i].bkStatus == 'N') {	// bkStatus는 '예약취소상태'를 나타내므로 N이면 정상예약 중인 상태임
+												  value += '<td><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBook">변경</button>'
+												  	     + '<button type="button" class="btn btn-danger btn-sm" onclick="return userConfirm();">취소</button></td>';
+										   }else { // 취소
+											   value += '<td><button type="button" class="btn btn-warning btn-sm">취소완료</button></td>'; 
+										   }
+									   }
+								   }
+							value += '</tr>';
+						}
+					}
+					
+					/* ----- 페이징 처리 ----- */
+					if(pi.currentPage != 1){
+               			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectBookList("+ (pi.currentPage - 1) + ")'>&lt;</button>"	
+               		}
+               		
+               		for(let p=pi.startPage; p<=pi.endPage; p++) { 
+       		   			if(p == pi.currentPage) { 
+       				   			pgValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
+       				   	}else {
+       				   			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectBookList("+ p +")'>" + p + "</button>"
+       		           	} 
+       		         }     
+                
+       		         if(pi.currentPage != pi.maxPage) {
+       		        	  pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectBookList("  + (pi.currentPage + 1) + ")'>&gt;</button>"
+       		         }
+       		         
+					$("#bookList").html(value);
+					$("#pagingArea").html(pgValue);
+					
+				},
+				error:function(){
+					console.log("내 예약 현황 조회용 ajax 통신 실패");
+				}
+			})
+		}
+		
+		</script>
+		
+
 
 </body>
 </html>

@@ -186,34 +186,34 @@
 		                                <div id="bkTimeArea">
 		                                    <select name="bkStart" id="bkStart" class="bkInfoTd" required>
 		                                        <option value="">시작 시간</option>
-		                                        <option value="0800">08:00</option>
-		                                        <option value="0900">09:00</option>
-		                                        <option value="1000">10:00</option>
-		                                        <option value="1100">11:00</option>
-		                                        <option value="1200">12:00</option>
-		                                        <option value="1300">13:00</option>
-		                                        <option value="1400">14:00</option>
-		                                        <option value="1500">15:00</option>
-		                                        <option value="1600">16:00</option>
-		                                        <option value="1700">17:00</option>
-		                                        <option value="1800">18:00</option>
-		                                        <option value="1900">19:00</option>
+		                                        <option value="08:00">08:00</option>
+		                                        <option value="09:00">09:00</option>
+		                                        <option value="10:00">10:00</option>
+		                                        <option value="11:00">11:00</option>
+		                                        <option value="12:00">12:00</option>
+		                                        <option value="13:00">13:00</option>
+		                                        <option value="14:00">14:00</option>
+		                                        <option value="15:00">15:00</option>
+		                                        <option value="16:00">16:00</option>
+		                                        <option value="17:00">17:00</option>
+		                                        <option value="18:00">18:00</option>
+		                                        <option value="19:00">19:00</option>
 		                                    </select>
 		                                    <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
 		                                    <select name="bkEnd" id="bkEnd" class="bkInfoTd" required>
 		                                        <option value="">종료 시간</option>
-		                                        <option value="0900">09:00</option>
-		                                        <option value="1000">10:00</option>
-		                                        <option value="1100">11:00</option>
-		                                        <option value="1200">12:00</option>
-		                                        <option value="1300">13:00</option>
-		                                        <option value="1400">14:00</option>
-		                                        <option value="1500">15:00</option>
-		                                        <option value="1600">16:00</option>
-		                                        <option value="1700">17:00</option>
-		                                        <option value="1800">18:00</option>
-		                                        <option value="1900">19:00</option>
-		                                        <option value="2000">20:00</option>
+		                                        <option value="09:00">09:00</option>
+		                                        <option value="10:00">10:00</option>
+		                                        <option value="11:00">11:00</option>
+		                                        <option value="12:00">12:00</option>
+		                                        <option value="13:00">13:00</option>
+		                                        <option value="14:00">14:00</option>
+		                                        <option value="15:00">15:00</option>
+		                                        <option value="16:00">16:00</option>
+		                                        <option value="17:00">17:00</option>
+		                                        <option value="18:00">18:00</option>
+		                                        <option value="19:00">19:00</option>
+		                                        <option value="20:00">20:00</option>
 		                                    </select>
 		                                </div>
 		                            </td>

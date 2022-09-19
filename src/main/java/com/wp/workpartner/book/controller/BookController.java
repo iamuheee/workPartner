@@ -1,14 +1,22 @@
 package com.wp.workpartner.book.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.wp.workpartner.book.model.Service.BookService;
 import com.wp.workpartner.book.model.vo.Book;
+import com.wp.workpartner.common.model.vo.PageInfo;
+import com.wp.workpartner.common.template.Pagination;
 
 @Controller
 public class BookController {
@@ -69,6 +77,33 @@ public class BookController {
 			model.addAttribute("errorMsg", "회의실 예약 실패");
 			return "common/error";
 		}
+	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 19.
+	 * @method	: (ajax) 내 회의실 예약 현황 조회 요청 처리
+	 * @param	: cpage, empNo
+	 * @return	: pi(페이징 처리), list(내 예약 현황 ArrayList)
+	 */
+	@ResponseBody
+	@RequestMapping(value="select.bk", produces="application/json; charset=UTF-8")
+	public String ajaxSelectBookList(@RequestParam(value="cpage", defaultValue="1") int currentPage, String empNo) {
+		
+//		System.out.println("empNo: " + empNo);
+		// 페이징 처리도 같이 해야 함
+		
+		int listCount = bService.selectListCount(empNo);
+//		System.out.println(listCount);
+		
+		PageInfo pi = Pagination.getPageInfo(listCount,  currentPage, 5, 10);
+		ArrayList<Book> list = bService.selectBookList(empNo, pi);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pi", pi);
+		map.put("list", list);
+		
+		return new Gson().toJson(map);
 	}
 	
 	

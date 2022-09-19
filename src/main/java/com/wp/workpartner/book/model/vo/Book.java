@@ -1,5 +1,7 @@
 package com.wp.workpartner.book.model.vo;
 
+import com.wp.workpartner.room.model.vo.Room;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,4 +26,6 @@ public class Book {
 	private String bkEnroll;
 	private String bkModify;
 	private String bkStatus;
+	
+	private Room room;
 }

@@ -11,8 +11,16 @@
 		<result column="bk_meetdate" property="bkDate" />
 		<result column="bk_start" property="bkStart" />
 		<result column="bk_end" property="bkEnd" />
+		<result column="bk_status" property="bkStatus"/>
+		<collection property="room" resultMap="roomResult"/>
 	</resultMap>
 	
+	<resultMap id="roomResult" type="Room">
+		<result column="rm_name" property="rmName"/>
+	</resultMap>
+	
+	<!-- 회의실 예약 등록 -->
+	<!-- 작성자 : 박태은 -->
 	<insert id="insertBook">
 		insert
 		  into tb_book
@@ -38,5 +46,32 @@
 		  , #{ bkEnd }
 		  )
 	</insert>
+	
+	<!-- 내 예약 건수(listCount) 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectListCount" resultType="_int">
+		select
+		       count(*)
+		  from tb_book
+		 where emp_no = #{ empNo }
+	</select>
+	
+	<!-- 내 예약 현황 목록 조회 -->
+	<!-- 작성자 : 박태은 -->
+ 	<select id="selectBookList" resultMap="bookResult">
+		select
+		       bk_no
+		     , rm_name
+		     , bk_title
+		     , bk_meetdate
+		     , bk_start
+		     , bk_end
+		     , bk_status
+		  from tb_book
+		  join tb_room using(rm_no)
+		 where emp_no = #{empNo}
+		 order
+		    by bk_meetdate desc
+	</select> 
 
 </mapper>

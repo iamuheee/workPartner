@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.wp.workpartner.book.model.dao.BookDao;
 import com.wp.workpartner.book.model.vo.Book;
+import com.wp.workpartner.common.model.vo.PageInfo;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -23,6 +24,16 @@ public class BookServiceImpl implements BookService {
 		return bDao.insertBook(sqlSession, b);
 	}
 
+	@Override
+	public int selectListCount(String empNo) {
+		return bDao.selectListCount(sqlSession, empNo);
+	}
+	
+	@Override
+	public ArrayList selectBookList(String empNo, PageInfo pi) {
+		return bDao.selectBookList(sqlSession, empNo, pi);
+	}
+	
 	@Override
 	public ArrayList selectBookByDate(String meetDate) {
 		return null;
@@ -42,5 +53,9 @@ public class BookServiceImpl implements BookService {
 	public int deleteBook(Book b) {
 		return 0;
 	}
+
+	
+
+
 
 }
