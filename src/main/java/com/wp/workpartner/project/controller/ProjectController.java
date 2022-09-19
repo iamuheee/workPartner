@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.service.ProjectServiceImpl;
 import com.wp.workpartner.project.model.vo.Project;
+import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Controller
 public class ProjectController {
@@ -31,10 +33,12 @@ public class ProjectController {
 		return mv;
 	}
 	
+	
 	@RequestMapping("enroll.pr")
 	public String selectProjectForm() {
 		return "project/projectInsertForm";
 	}
+	
 	
 	@RequestMapping("insert.pr")
 	public String insertProject(HttpSession session, Project p) {
@@ -45,6 +49,7 @@ public class ProjectController {
 		}
 		return "project/projectMain";
 	}
+	
 	
 	@RequestMapping("list.pr")
 	public ModelAndView selectProjectList(ModelAndView mv, HttpSession session) {
@@ -77,11 +82,13 @@ public class ProjectController {
 		}
 	}
 	
+	
 	@RequestMapping("manage.pr")
-	public String selectProjectManage(String projNo, Model m) {
+	public String manageProduct(String projNo, Model m) {
 		m.addAttribute("p", pService.selectProject(projNo));
 		return "project/projectManageForm";
 	}
+	
 	
 	@RequestMapping("update.pr")
 	public String updateProject(Project p, Model m) {
@@ -94,6 +101,7 @@ public class ProjectController {
 		}
 	}
 	
+	
 	@ResponseBody
 	@RequestMapping(value="delete.pr", produces="application/html; charset=utf-8")
 	public String deleteProject(String projNo) {
@@ -105,6 +113,58 @@ public class ProjectController {
 		
 	}
 	
+	
+	@RequestMapping("member.pr")
+	public ModelAndView manageMember(ModelAndView mv, String projNo) {
+		mv.addObject("p", pService.selectProject(projNo))
+		  .setViewName("project/projectMemberList");
+		return mv;
+	}
+
+	
+	@ResponseBody
+	@RequestMapping(value="mlist.pr", produces="application/json; charset=utf-8")
+	public String selectMemberList(Project p, String projNo) {
+		ArrayList<ProjectMember> mlist = pService.selectMemberList(p);
+		if(mlist != null) {
+			return new Gson().toJson(mlist);
+		}else {
+			return "실패했어....";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="updateme.pr", produces="application/html; charset=utf-8")
+	public String updateMember(ProjectMember m) {
+		int result = pService.updateMember(m);
+		if(result > 0) {
+			return "성공적으로 변경했습니다.";
+		}else {
+			return "변경에 실패했습니다.";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="deleteme.pr", produces="application/html; charset=utf-8")
+	public String deleteMember(ProjectMember m) {
+		if( pService.deleteMember(m) > 0) {
+			return "성공적으로 삭제했습니다.";
+		}else {
+			return "멤버 삭제에 실패했습니다.";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="byrole.pr", produces="application/json; charset:utf-8")
+	public String selectMemberByRole(ProjectMember m) {
+		System.out.println(m);
+		ArrayList<ProjectMember> mlist = pService.selectMemberList(m);
+		System.out.println(mlist);
+		return new Gson().toJson( mlist );
+	}
 	
 	
 }

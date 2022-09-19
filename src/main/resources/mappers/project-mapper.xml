@@ -19,6 +19,10 @@
 		<result column="MEM_NO" property="memNo" />
 		<result column="MEM_NAME" property="memName" />
 		<result column="MEM_ROLE" property="memRole" />
+		<result column="EMP_PHONE" property="phone" />
+		<result column="EMP_EMAIL" property="email" />
+		<result column="DEP_NAME" property="department" />
+		<result column="POS_NAME" property="position" />
 	</resultMap>
 	
 	<insert id="insertProject">
@@ -38,26 +42,39 @@
 	</insert>
 	
 	<select id="selectProjectList" resultMap="projectResult">
-		SELECT PROJ_NO
+		SELECT P.PROJ_NO
 			 , PROJ_TITLE
 			 , PROGRESS
 			 , START_DATE
 			 , END_DATE
 			 , ENROLL_DATE
-			 , STATUS
-		  FROM TB_PROJECT
-		  JOIN TB_PROJECT_MEM
-		 USING (PROJ_NO)
+		  FROM TB_PROJECT P
+		  JOIN TB_PROJECT_MEM M
+		    ON P.PROJ_NO = M.PROJ_NO
 		 WHERE MEM_NO = #{empNo}
-		   AND STATUS = 'Y'
+		   AND P.STATUS = 'Y'
+		   AND M.STATUS = 'Y'
+		   AND MEM_STATUS = '참여'
 	</select>
 
-	<select id="selectProjectMember" resultMap="projectMemberResult">
+	<select id="selectMemberList" resultMap="projectMemberResult">
 		SELECT MEM_NO
 			 , MEM_NAME
 			 , MEM_ROLE
+			 , EMP_PHONE
+			 , EMP_EMAIL
+			 , DEP_NAME
+			 , POS_NAME
 		  FROM TB_PROJECT_MEM
+		  JOIN TB_EMPLOYEE
+		    ON EMP_NO = MEM_NO
+		  JOIN TB_DEPARTMENT
+		 USING (DEP_CD)
+		  JOIN TB_POSITION
+		 USING (POS_CD)
 		 WHERE PROJ_NO = #{projNo}
+		   AND STATUS = 'Y'
+		   AND MEM_STATUS = '참여'
 	</select>
 	
 	<select id="validateMember" resultType="_int">
@@ -67,6 +84,7 @@
 		 	ON P.PROJ_NO = M.PROJ_NO
 		 WHERE P.PROJ_NO = #{projNo}
 		   AND MEM_NO = #{empNo}
+		   AND MEM_ROLE IN ('팀장', '관리자')
 	</select>
 	
 	<select id="selectProject" resultMap="projectResult">
@@ -76,11 +94,9 @@
 			 , START_DATE
 			 , END_DATE
 			 , ENROLL_DATE
-			 , STATUS
-		  FROM TB_PROJECT
-		  JOIN TB_PROJECT_MEM
-		 USING (PROJ_NO)
+		  FROM TB_PROJECT 
 		 WHERE PROJ_NO = #{projNo}
+		   AND STATUS = 'Y'
 	</select>
 	
 	<update id="updateProject">
@@ -97,5 +113,41 @@
 		   SET STATUS = 'N'
 		 WHERE PROJ_NO = #{projNo}
 	</update>
+	
+	<update id="updateMember">
+		UPDATE TB_PROJECT_MEM
+		   SET MEM_ROLE = #{memRole}
+		 WHERE PROJ_NO = #{projNo}
+		   AND MEM_NO = #{memNo}
+	</update>
+	
+	<delete id="deleteMember">
+		UPDATE TB_PROJECT_MEM
+		   SET STATUS = 'N'
+		 WHERE PROJ_NO = #{projNo}
+		   AND MEM_NO = #{memNo}
+	</delete>
+	
+	<select id="selectMemberList2" resultMap="projectMemberResult">
+		SELECT MEM_NO
+			 , MEM_NAME
+			 , MEM_ROLE
+			 , EMP_PHONE
+			 , EMP_EMAIL
+			 , DEP_NAME
+			 , POS_NAME
+		  FROM TB_PROJECT_MEM
+		  JOIN TB_EMPLOYEE
+		    ON EMP_NO = MEM_NO
+		  JOIN TB_DEPARTMENT
+		 USING (DEP_CD)
+		  JOIN TB_POSITION
+		 USING (POS_CD)
+		 WHERE PROJ_NO = #{projNo}
+		   AND MEM_ROLE = #{memRole}
+		   AND STATUS = 'Y'
+		   AND MEM_STATUS = '참여'
+	</select>
+
 
 </mapper>

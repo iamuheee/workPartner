@@ -22,6 +22,6 @@ public class Project {
 	private String enrollDate;
 	private String status;
 	
-	ArrayList<ProjectMember> projMember;
-
+	ArrayList<ProjectMember> mlist;
+	private String memName;
 }

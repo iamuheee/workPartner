@@ -19,8 +19,12 @@ public class ProjectDao {
 		return (ArrayList)sqlSession.selectList("projectMapper.selectProjectList", empNo);
 	}
 	
-	public ArrayList<ProjectMember> selectProjectMember(SqlSessionTemplate sqlSession, Project p){
-		return (ArrayList)sqlSession.selectList("projectMapper.selectProjectMember", p);
+	public ArrayList<ProjectMember> selectMemberList(SqlSessionTemplate sqlSession, Project p){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectMemberList", p);
+	}
+	
+	public ArrayList<ProjectMember> selectMemberList(SqlSessionTemplate sqlSession, ProjectMember m){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectMemberList2", m);
 	}
 	
 	public int validateMember(SqlSessionTemplate sqlSession, Project p) {
@@ -38,5 +42,14 @@ public class ProjectDao {
 	public int deleteProject(SqlSessionTemplate sqlSession, String projNo) {
 		return sqlSession.update("projectMapper.deleteProject", projNo);
 	}
+	
+	public int updateMember(SqlSessionTemplate sqlSession, ProjectMember m) {
+		return sqlSession.update("projectMapper.updateMember", m);
+	}
+	
+	public int deleteMember(SqlSessionTemplate sqlSession, ProjectMember m) {
+		return sqlSession.update("projectMapper.deleteMember", m);
+	}
+	
 
 }

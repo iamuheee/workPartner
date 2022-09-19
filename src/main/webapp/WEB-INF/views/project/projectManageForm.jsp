@@ -84,7 +84,7 @@
             <div class="project-menubar">
                 <ul class="group-pmenu" style="color:black;">
                     <li class="pmenu-item"><a href="manage.pr">프로젝트 관리</a></li>
-                    <li class="pmenu-item"><a href="">멤버 관리</a></li>
+                    <li class="pmenu-item"><a href="member.pr?projNo=${p.projNo}">멤버 관리</a></li>
                 </ul>
                 <hr style="clear:both;">
             </div>

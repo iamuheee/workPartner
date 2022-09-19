@@ -65,7 +65,7 @@
 	                    <div class="card-inner">
 		                    <span class="project-title">${p.projTitle}</span><br>
 		                    <input type="hidden" value="${p.progress}" id="priority">
-		                    <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(${p.projMember.size()})</span>
+		                    <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(${p.mlist.size()})</span>
 	                	</div>
 	                </div>
                 </c:forEach>
