@@ -50,35 +50,42 @@ font-family: 'Noto Sans KR', sans-serif;
 
 </style>
 <script>
-    function send() { 
-        var data = $("#empIC");
-        window.opener.sendMeData(data);
-        window.close();
-    }
-    
-	// 3명까지만 넘어 갈 수 있도록
-    function countInCharge(){
-        if($("#myform tr").length <= 3){
-            send();
-        }else{
-           alert("업무 담당자는 3명이 최대 인원입니다.");
-           $("#myform tr").remove();
-        }
-    }
-    
+	function send() { 
+		console.log( $("#memNo").val() ) /* 숫자,숫자,숮자 */
+		console.log( $("#memName").val() ) /* 이름,이름,이름 */
+		if( confirm( $("#memName").val() + "님을 프로젝트에 초대하는 것이 맞나요?") ){
+	    	
+			$.ajax({
+				url:"insertme.pr",
+				data:{
+					projNo:opener.$("#projNo").val(),
+					memNo:$("#memNo").val(),
+					memName:$("#memName").val(),
+					memRole:opener.$("#newMemRole").val()
+				},
+				success:function(result){
+					alert(result);
+				    window.close();
+				}
+			})
+			
+	    }else{
+			alert("천천히 골라주십쇼!");	 
+		    window.close();
+	    }
+	    
+	}
 </script>
 
 </head>
 <body>
     <div style="height: 20px;"></div>
     <div class="adOuter">
-    
-		<script>
-		</script>    
-	    
-	    <input type="hidden" id="flag" value="">
-	    <div class="member-list" >
-	    </div>
+
+		<div style="display:none">
+			<input type="hidden" id="memNo">
+			<input type="hidden" id="memName">
+		</div>
     
         <div class="adContainer">
 
@@ -171,9 +178,8 @@ font-family: 'Noto Sans KR', sans-serif;
 						
 					});
 					
-					let empICNo = "";
-					let empICName = "";
-					let empIChtml = "";
+					let memNo = "";
+					let memName = "";
 					for(let i=0; i<arr.length; i++){
 						 value  += '<tr>'     
 			                     +    '<td width="60px" class="empICNo"> ' + arr[i].empNo + ' </td>'
@@ -182,8 +188,18 @@ font-family: 'Noto Sans KR', sans-serif;
 			                     +    '<td><input type="hidden" name="empNo" value="'+ arr[i].empNo +'"></td>'                           
 			                     +    '<td><span class="removeAdmin" style="cursor: pointer;"> x</span></td>'                            
 			                     + '</tr>';
-
+			            
+	                    // 부모창에 돌려보내기 위한 구문들
+			        	memNo += arr[i].empNo + ",";
+	                    memName += arr[i].empName + ",";
+	
 					}
+					
+					memNo = memNo.substr(0, memNo.length - 1);
+					memName = memName.substr(0, memName.length - 1);
+					
+					$("#memNo").val(memNo);
+					$("#memName").val(memName);
 					
 					$("#adminEmpList").append(value);
 					$("input[name='chk']").prop("checked", false); 
@@ -195,7 +211,7 @@ font-family: 'Noto Sans KR', sans-serif;
             <!-- 버튼 : 해당 버튼 클릭 시 부모창으로 정보 전달 -->
             <div class="footer" align="end">             
               
-                <input type="button" class="btn btn-sm btn-primary" value="보내기" onclick="countInCharge()"/>
+                <input type="button" class="btn btn-sm btn-primary" value="보내기" onclick="send()"/>
               
             </div>
 

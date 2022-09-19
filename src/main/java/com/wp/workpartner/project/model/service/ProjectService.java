@@ -30,5 +30,7 @@ public interface ProjectService {
 	
 	int deleteMember(ProjectMember m);
 	
+	int insertMember(ProjectMember m);
+	
 	
 }

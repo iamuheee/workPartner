@@ -33,10 +33,6 @@
                 padding:100px;
                 padding-top:10px;
             }
-            a{
-                text-decoration: none;
-                color:black;
-            }
             .filter{
                 font-size: small;
                 color: gray;
@@ -73,16 +69,29 @@
                 <hr style="clear:both;">
             </div>
 
-            <div class="filter-area" style="padding-left:10px;">
-                <a href="팝업창띄우기" class="filter">새로운 멤버 추가</a>
+			<div style="float:left;">
+				<a class="addMember filter" style="text-decoration:none;color:black;font-size:small;color:gray;">새로운 관리자 초대</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a class="addMember filter" style="text-decoration:none;color:black;font-size:small;color:gray;">새로운 멤버 초대</a>
+				<input type="hidden" id="newMemRole">
+			</div>
                 
-                <script>
-	                window.name = "parentWindow"
-        			let childWindow; // 자식창
-        			childWindow = window.open("addressDuty.ad","childWindow", "height=700, width=1200, resizable=no, scrollbars=no");
-                </script>
+           <script>
+           	$(".addMember").click(function(){
+           		if($(this).text() == '새로운 관리자 초대'){
+           			$("#newMemRole").val("관리자");
+           		}else{
+           			$("#newMemRole").val("일반멤버");
+           		}
+             	window.name = "parentWindow"
+    			let childWindow; // 자식창
+    			childWindow = window.open("addressProject.ad","childWindow", "height=700, width=1200, resizable=no, scrollbars=no");
+           		
+           	})
+           </script>
                 
                 
+            <div class="filter-area" style="padding-left:10px; float:right">
                 <span class="filter" style="margin-left:20px;">빠른 조회</span>
                 <select id="filterRole" name="memRole" class="filter">
                     <option class="role" value="all" selected>전체</option>
@@ -175,7 +184,7 @@
             	})	
             </script>
             
-            
+            <br><br>
             
             <table class="table" >
                 <thead>

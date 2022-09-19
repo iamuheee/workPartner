@@ -51,5 +51,9 @@ public class ProjectDao {
 		return sqlSession.update("projectMapper.deleteMember", m);
 	}
 	
+	public int insertMember(SqlSessionTemplate sqlSession, ProjectMember m) {
+		return sqlSession.insert("projectMapper.insertMember", m);
+	}
+	
 
 }

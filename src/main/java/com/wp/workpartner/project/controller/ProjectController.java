@@ -160,10 +160,20 @@ public class ProjectController {
 	@ResponseBody
 	@RequestMapping(value="byrole.pr", produces="application/json; charset:utf-8")
 	public String selectMemberByRole(ProjectMember m) {
-		System.out.println(m);
 		ArrayList<ProjectMember> mlist = pService.selectMemberList(m);
 		System.out.println(mlist);
 		return new Gson().toJson( mlist );
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="insertme.pr", produces="application/html; charset=utf-8")
+	public String insertMember(ProjectMember m) {
+		if( pService.insertMember(m) > 0 ) {
+			return "성공적으로 멤버를 초대했습니다! 수락까지 기다려주세요.";
+		}else {
+			return "멤버 초대에 실패했습니다.";
+		}
 	}
 	
 	
