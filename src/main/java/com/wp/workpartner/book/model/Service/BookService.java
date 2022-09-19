@@ -27,6 +27,6 @@ public interface BookService {
 	int updateBook(Book b);
 	
 	// 회의실 예약 취소 서비스 (update)
-	int deleteBook(Book b);
+	int deleteBook(String bkNo);
 	
 }

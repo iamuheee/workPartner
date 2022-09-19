@@ -40,6 +40,11 @@ public class BookServiceImpl implements BookService {
 	}
 	
 	@Override
+	public int updateBook(Book b) {
+		return bDao.updateBook(sqlSession, b);
+	}
+	
+	@Override
 	public ArrayList selectBookByDate(String meetDate) {
 		return null;
 	}
@@ -49,14 +54,10 @@ public class BookServiceImpl implements BookService {
 		return null;
 	}
 
-	@Override
-	public int updateBook(Book b) {
-		return 0;
-	}
 
 	@Override
-	public int deleteBook(Book b) {
-		return 0;
+	public int deleteBook(String bkNo) {
+		return bDao.deleteBook(sqlSession, bkNo);
 	}
 
 	

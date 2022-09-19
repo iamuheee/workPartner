@@ -240,10 +240,10 @@
 										   value += '<td><button type="button" class="btn btn-secondary btn-sm" disabled>이용완료</button></td>'; 
 									   }else {	// 이용 전
 										   if(list[i].bkStatus == 'N') {	// bkStatus는 '예약취소상태'를 나타내므로 N이면 정상예약 중인 상태임
-												  value += '<td><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBookMd" onclick="selectBook(' + list[i].bkNo + ');">변경</button>'
-												  	     + '<button type="button" class="btn btn-danger btn-sm" onclick="return userConfirm();">취소</button></td>';
+												  value += '<td><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBookMd" onclick="selectBook(' + list[i].bkNo + ');">일정변경</button>'
+												  	     + '<button type="button" class="btn btn-danger btn-sm" onclick="userConfirm(' + list[i].bkNo + ');">예약취소</button></td>';
 										   }else { // 취소
-											   value += '<td><button type="button" class="btn btn-warning btn-sm">취소완료</button></td>'; 
+											   value += '<td><button type="button" class="btn btn-warning btn-sm" disabled>취소완료</button></td>'; 
 										   }
 									   }
 								   }
@@ -291,7 +291,7 @@
 				},
 				success:function(b){
 					console.log("회의실 예약 상세조회용 ajax 통신 성공");
-					console.log(b);
+					//console.log(b);
 					
 					/* b에 담긴 값을 예약 변경용 모달창에 뿌려준다. */
 					let value = "";
@@ -363,6 +363,7 @@
                 		   + '<tr>'
                 		   +	'<td colspan="2" style="height:60px;">'
                 		   + 	'<input type="text" name="bkTitle" id="bkTitle" placeholder="' + b.bkTitle + '" class="bkInfoTd" required>'
+                		   +	'<input type="hidden" name="bkNo" id="bkNo" value="' + b.bkNo + '">'	// 예약번호(bkNo)를 숨겨서 함께 보냄
                 		   +	'</td>'
                 		   + '</tr>';
                 		   
@@ -374,6 +375,41 @@
 					console.log("회의실 예약 상세조회용 ajax 통신 실패");
 				}
 			})
+		}
+		
+		/* 회의실 예약 취소 확인용 confirm */
+		function userConfirm(bkNo){
+			if(confirm("회의실 예약을 취소하시겠습니까?")) {
+				deleteBook(bkNo);	// 확인 버튼을 누르면 ajax 실행
+			}else{
+				return false;
+			}
+		}
+		
+		/* 회의실 예약 취소용 ajax */
+		function deleteBook(bkNo){
+				$.ajax({
+					url:"delete.bk",
+					type:"post",
+					data:{
+						bkNo:bkNo
+					},
+					success:function(result){
+						console.log("회의실 예약 취소용 ajax 통신 성공");
+						//console.log(result);
+						
+						// 회의실 예약 목록 조회용 ajax 실행
+						if(result == "success"){
+							selectBookList();
+						}
+					},
+					error:function(){
+						console.log("회의실 예약 취소용 ajax 통신 실패");
+					}
+				})
+				
+				
+			
 		}
 		
 		</script>

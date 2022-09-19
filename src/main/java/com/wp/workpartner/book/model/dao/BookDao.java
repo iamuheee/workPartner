@@ -34,4 +34,11 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.selectBook", bkNo);
 	}
 	
+	public int updateBook(SqlSessionTemplate sqlSession, Book b) {
+		return sqlSession.update("bookMapper.updateBook", b);
+	}
+	
+	public int deleteBook(SqlSessionTemplate sqlSession, String bkNo) {
+		return sqlSession.update("bookMapper.deleteBook", bkNo);
+	}
 }
