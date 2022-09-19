@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.service.ProjectService;
+import com.wp.workpartner.project.model.vo.Project;
 
 @Controller
 public class ProjectController {
@@ -37,9 +38,21 @@ public class ProjectController {
 		return "project/projectInsertForm";
 	}
 	
+	@RequestMapping("insert.pr")
+	public String insertProject(HttpSession session, Project p) {
+		p.setEmpNo( ((Employee)session.getAttribute("loginUser")).getEmpNo() );
+		if( pService.insertProject(p) > 0) {
+			session.setAttribute("alertMsg", "성공적으로 프로젝트를 등록했습니다.");
+		}else {
+			session.setAttribute("alertMsg", "프로젝트 등록에 실패했습니다.");
+		}
+		return "project/projectMain";
+	}
+	
+	
 	@RequestMapping("manage.pr")
 	public String selectProjectManage() {
-		return "project/projectManage";
+		return "project/projectManageForm";
 	}
 	
 }

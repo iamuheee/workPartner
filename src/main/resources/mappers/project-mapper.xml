@@ -7,7 +7,6 @@
 		<result column="PROJ_NO" property="projNo" />
 		<result column="PROJ_TITLE" property="projTitle" />
 		<result column="EMP_NO" property="empNo" />
-		<result column="IMPORTANCE" property="importance" />
 		<result column="PROGRESS" property="progress" />
 		<result column="START_DATE" property="startDate" />
 		<result column="END_DATE" property="endDate" />
@@ -21,5 +20,21 @@
 		<result column="MEM_NAME" property="memName" />
 		<result column="MEM_ROLE" property="memRole" />
 	</resultMap>
+	
+	<insert id="insertProject">
+		INSERT
+		  INTO TB_PROJECT
+		VALUES
+			 (
+			   SEQ_PNO.NEXTVAL
+			 , #{projTitle}
+			 , #{empNo}
+			 , #{progress}
+			 , #{startDate}
+			 , #{endDate}
+			 , DEFAULT
+			 , DEFAULT 
+			 )
+	</insert>
 
 </mapper>

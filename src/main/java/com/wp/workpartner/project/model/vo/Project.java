@@ -16,7 +16,6 @@ public class Project {
 	private String projNo;
 	private String projTitle;
 	private String empNo; // 프로젝트 등록자
-	private String importance;
 	private String progress;
 	private String startDate;
 	private String endDate;

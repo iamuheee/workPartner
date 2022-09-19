@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Login - SB Admin</title>
+        <title>WorkPartner!</title>
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://use.fontawesome.com/95b5cbecad.js"></script>
@@ -60,8 +60,8 @@
     </head>
     <body>
     	
-    	<jsp:include page="../common/mainPage.jsp" />
-    
+    	<jsp:include page="../common/menubar.jsp" />
+    	    
         <br><br><br>
         <div class="container">
             <div class="left">
@@ -76,13 +76,13 @@
                             <div class="project-card">
                                 <br>
                                 <span class="project-title">프로젝트명</span><br>
-                                <input type="hidden" value="${ 프로젝트 우선순위 }" id="priority">
+                                <input type="hidden" value="<%-- ${ 프로젝트 우선순위 } --%>" id="priority">
                                 <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(4)</span>
                             </div>
                             <div class="project-card">
                                 <br>
                                 <span class="project-title">프로젝트명</span><br>
-                                <input type="hidden" value="${ 프로젝트 우선순위 }" id="priority">
+                                <input type="hidden" value="<%-- ${ 프로젝트 우선순위 } --%>" id="priority">
                                 <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(4)</span>
                             </div>
                         </div>
