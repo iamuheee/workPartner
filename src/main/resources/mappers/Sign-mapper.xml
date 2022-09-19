@@ -4,7 +4,7 @@
 
 	<resultMap id="SelectVacationResult" type="SelectVacation">
 		<result column="dp_no" property="dpNo"/>
-		<result column="emp_no" property="emp_no"/>
+		<result column="emp_no" property="empNo"/>
 		<result column="dp_title" property="dpTitle"/>
 		<result column="dp_create" property="dpCreate"/>
 		<result column="dp_modify" property="dpModify"/>
@@ -19,6 +19,20 @@
 		<result column="va_category" property="vaCategory"/>
 		<result column="va_content" property="vaContent"/>
 		<result column="va_useday" property="vaUseday"/>
+	</resultMap>
+	
+	<resultMap id="SelectSaveListResult" type="Dtpaper">
+		<result column="dp_no" property="dpNo"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="dp_title" property="dpTitle"/>
+		<result column="dp_create" property="dpCreate"/>
+		<result column="dp_modify" property="dpModify"/>
+		<result column="dp_status" property="dpStatus"/>
+		<result column="dp_final" property="dpFinal"/>
+		<result column="dp_category" property="dpCategory"/>
+		<result column="dp_temp" property="dpTemp"/>
+		<result column="dp_origin" property="dpOrigin"/>
+		<result column="dp_change" property="dpChange"/>
 	</resultMap>
 	 <!-- 연차 기안서 -->
 	<insert id="insertDtpaper">
@@ -303,8 +317,34 @@
 		 )
 	</insert>
 	
-	
-	
+	<!-- 임시저장 리스트 -->
+	<select id="selectSaveListCount" resultType="_int">
+		select
+		       count(*)	
+		  from tb_dtpaper
+		 where dp_temp = 'Y'
+		   and dp_status = 'N'  
+	</select>
+	<select id="selectSaveList" resultMap="SelectSaveListResult">
+		select
+		       dp_no
+		      ,emp_no
+		      ,dp_title
+		      ,to_char(dp_create, 'YYYY-MM-DD') AS "dp_create"
+		      ,dp_modify
+		      ,dp_status
+		      ,dp_final
+		      ,dp_category
+		      ,dp_temp
+		      ,dp_origin
+		      ,dp_change
+		  from tb_dtpaper
+		 where dp_temp = 'Y'
+		   and dp_status = 'N'
+		   and emp_no = #{ empNo }
+		 order
+		    by dp_create desc
+	</select>
 	
 	
 </mapper>

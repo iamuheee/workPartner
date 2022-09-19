@@ -77,6 +77,15 @@ public class SignServiceImpl implements SignService {
 	}
 //  기안서목록
 	@Override
+	public int selectSaveListCount() {
+		return sDao.selectSaveListCount(sqlSession);
+	}
+	
+	@Override
+	public ArrayList<Dtpaper> selectSaveList(PageInfo pi, String empNo) {
+		return sDao.selectSaveList(sqlSession, pi, empNo);
+	}
+	@Override
 	public int selectProgressListCount() {
 		return 0;
 	}
@@ -86,15 +95,6 @@ public class SignServiceImpl implements SignService {
 		return null;
 	}
 
-	@Override
-	public int selectSaveListCount() {
-		return 0;
-	}
-
-	@Override
-	public ArrayList<Dtpaper> selectSaveList(PageInfo pi) {
-		return null;
-	}
 
 	@Override
 	public int selectReSignListCount() {

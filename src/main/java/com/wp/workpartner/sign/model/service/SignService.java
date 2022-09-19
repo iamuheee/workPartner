@@ -31,7 +31,7 @@ public interface SignService {
 	ArrayList<Dtpaper> selectProgressList(PageInfo pi);
 //	임시저장 리스트
 	int selectSaveListCount();
-	ArrayList<Dtpaper> selectSaveList(PageInfo pi);
+	ArrayList<Dtpaper> selectSaveList(PageInfo pi, String empName);
 //	반려중 리스트
 	int selectReSignListCount();
 	ArrayList<Dtpaper> selectReSignList(PageInfo pi);

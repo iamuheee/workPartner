@@ -1,10 +1,13 @@
 package com.wp.workpartner.sign.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.sign.model.vo.Cooperation;
 import com.wp.workpartner.sign.model.vo.Dtpaper;
 import com.wp.workpartner.sign.model.vo.Otwork;
@@ -70,5 +73,17 @@ public class SignDao {
 	}
 	public int insertCooperation(SqlSessionTemplate sqlSession, Cooperation c) {
 		return sqlSession.insert("signMapper.insertCooperation", c);
+	}
+	
+//	기안서 임시저장 리스트
+	public int selectSaveListCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("signMapper.selectSaveListCount");
+	}
+	public ArrayList<Dtpaper> selectSaveList(SqlSessionTemplate sqlSession,PageInfo pi,String empNo){
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("signMapper.selectSaveList", empNo, rowBounds);
 	}
 }

@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.common.template.FileUpload;
+import com.wp.workpartner.common.template.Pagination;
 import com.wp.workpartner.sign.model.service.SignServiceImpl;
 import com.wp.workpartner.sign.model.vo.Cooperation;
 import com.wp.workpartner.sign.model.vo.Dtpaper;
@@ -308,9 +312,15 @@ public class SignController {
 	
 // 기안서 리스트 조회
 	@RequestMapping("saveSi.si")
-	public String selectSaveSignList(Model model) {
+	public ModelAndView selectSaveList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo) {
 		model.addAttribute("flag", "save");
-		return "sign/dpaperSaveResign";
+		int saveListCount = sService.selectSaveListCount();
+		PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 15, 5);
+		ArrayList<Dtpaper> saveList = sService.selectSaveList(pi, empNo);
+		mv.addObject("pi",pi)
+		.addObject("saveList",saveList)
+		.setViewName("sign/dpaperSaveResign");
+		return mv;
 	}
 	@RequestMapping("contSi.si")
 	public String selectContSignList(Model model) {

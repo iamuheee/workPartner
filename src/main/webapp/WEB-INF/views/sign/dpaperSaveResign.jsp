@@ -12,12 +12,12 @@
             border-top: 1px solid #878787;
             border-bottom: 1px solid #878787;
             height: 50x;
-            font-size: 16px;
+            font-size: 18px;
         }
 
         table td {
             border-bottom: 0.5px solid #878787;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         table {
@@ -32,7 +32,7 @@
             font-size: 14px;
         }
         .pagination{
-            font-size:12px;
+            font-size:14px;
             margin-top:10px; 
             margin-right: auto; 
             margin-left:auto; 
@@ -40,26 +40,31 @@
 
         }
         .endSignList a{
-            background-color: rgba(128, 128, 128, 0.343);
             padding: 1px;
         }
-        #layoutSidenav_content{
+       /*  #layoutSidenav_content{
             font-family: 'Noto Sans KR', sans-serif;
-        }
+        } */
         .mainOuter{
 			margin-top:0 !important;
 		}
+		.dpTitle{
+			text-decoration-line: none;
+			color: #212529;
+		}
     </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"/>
-	
+		
                 <c:choose>
                     <c:when test="${ flag == 'save' }">
                         <div class="container-fluid px-4" style="margin-top: 30px;">
                             <div style="margin-bottom: 50px; line-height: 10px;">
                                 <ol class="breadcrumb mb-4" style="font-size:18px; width: 100%;">
-                                    <li>기안서 >&nbsp</a></li>
+                                    <li>기안서 >&nbsp</a> <input type="hidden" name="dpNo" value="${ dpNo }"></li>
                                     <li><b>임시저장</b></li>
                                 </ol>
                                 <hr>
@@ -87,7 +92,7 @@
                                         style="width: 15%; box-shadow: 0px 0px 2px #878787; border:none;"
                                         align="right">
                                     <button
-                                        style="width:60px; padding:0; border: none; background: #87878740; box-shadow: 0px 0px 2px #878787;">검색</button>
+                                        style="width:60px; height:26px; padding:0; border: none; background: #87878740; box-shadow: 0px 0px 2px #878787;">검색</button>
                                 </div>
 
 
@@ -97,34 +102,88 @@
                                     <tr align="center">
                                         <th width="5%"><input type="checkbox" style="scale: 1.3;"></th>
                                         <th class="endNum" width="10%">서식</th>
-                                        <th class="endTitle" width="30%">제목</th>
-                                        <th class="endCreate" width="10%">임시저장일</th>
-                                        <th width="10%">진행상태</th>
-                                        <th width="10%">이어서 작성하기</th>
+                                        <th class="endTitle" width="40%">제목</th>
+                                        <th class="endCreate" width="15%">임시저장일</th>
+                                        <th width="15%">첨부파일</th>
+                                        <th width="15%">이어서 작성하기</th>
                                     </tr>
 
-                                    <tr align="center">
-                                        <td><input type="checkbox" style="scale: 1.3;"></td>
-                                        <td>업무협조</td>
-                                        <td>여기는 제목이 나타나는 곳</td>
-                                        <td>2022-09-01</td>
-                                        <td><span style=" background-color: #8787875f;">임시저장</span></td>
-                                        <td><a>작성하기</a></td>
-                                    </tr>
+				
+									<c:choose>
+				                		<c:when test="${empty saveList }">
+				                			<tr>
+				                				<td colspan="6">현재 게시글이 없습니다.</td>
+				                			</tr>
+				                		</c:when>
+				                		<c:otherwise>
+				                			<c:forEach var="s" items="${ saveList }">
+							                    <tr align="center">
+							                   	    <td><input type="checkbox" style="scale: 1.3;"></td>
+							                        <td>${ s.dpCategory }</td>
+							                        <c:choose>
+								                        <c:when test="${empty s.dpTitle }">
+								                        	<td><a href="" class="dpTitle">제목없음</a></td>
+								                        </c:when>
+								                        <c:otherwise>
+								                        	<td><a href="" class="dpTitle">${ s.dpTitle }</a></td>
+								                        </c:otherwise>
+							                        </c:choose>
+							                        <td>${ s.dpCreate }</td>
+							                        <td>
+								                        <c:if test="${ not empty s.dpOrigin }">
+								                       		<span class="material-icons" style="vertical-align:middle; font-size:17px; color:#878787;">
+															attachment
+															</span>
+								                        </c:if>
+							                        </td>
+                                       				<td><a href="" class="dpTitle">작성하기</a></td>
+							                    </tr>
+							                    <script>
+													$(document).ready(function(){
+														$(".dpTitle").click(function(){
+								                    		if('${s.dpCategory}' == '연차'){
+																$(".dpTitle").attr("href", "detailVa.si");
+															}else if('${s.dpCategory}' == '외근'){
+																$(".dpTitle").attr("href", "detailOtw.si");
+															}else if('${s.dpCategory}' == '퇴직원'){
+																$(".dpTitle").attr("href", "detailRes.si");
+															}else{
+																$(".dpTitle").attr("href", "detailCo.si");
+															}
+														})
+													})
+												</script>
+						                    </c:forEach>
+				                		</c:otherwise>
+				                   </c:choose>
                                 </table>
 
-                                <button
-                                    style="font-size: 14px; float:left; margin-left:33px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787;">삭제</button>
-                                <ul class="pagination"
-                                    style="margin-top:10px; margin-right: auto; margin-left:auto; width:400px">
-                                    <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">다음</a></li>
-                                </ul>
+                                <div id="pagingArea">
+                                <button style="float:left; margin-left:33px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
+					                <ul class="pagination">
+					                	<c:choose>
+					                		<c:when test="${ pi.currentPage eq 1 }">
+					                    		<li class="page-item disabled"><a class="page-link">이전</a></li>
+					                    	</c:when>
+					                    	<c:otherwise>
+					                    		<li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ pi.currentPage-1 }">Previous</a></li>
+					                    	</c:otherwise>
+					                    </c:choose>
+					                    
+					                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+					                  	  <li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ p }">${ p }</a></li>
+					                    </c:forEach>
+					                    
+					                    <c:choose>
+					                    	<c:when test="${ pi.currentPage eq pi.maxPage }">
+						                	    <li class="page-item disabled"><a class="page-link">다음</a></li>
+						                	</c:when>
+						                	<c:otherwise>
+						                    	<li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ pi.currentPage+1 }">다음</a></li>
+						                	</c:otherwise>    
+					                    </c:choose>
+					                </ul>
+					            </div>
                             </div>
                         </div>
                     </c:when>
@@ -182,22 +241,36 @@
                                         <td>여기는 제목이 나타나는 곳</td>
                                         <td>2022-09-01</td>
                                         <td>김범진 <span style="color: red;">반려됨</span></td>
-                                        <td><a >작성하기</a></td>
+                                        <td><a href="">작성하기</a></td>
                                     </tr>
                                 </table>
 
-                                <button
-                                    style="float:left; margin-left:33px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
-                                <ul class="pagination"
-                                    style="margin-top:10px; margin-right: auto; margin-left:auto; width:400px">
-                                    <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">다음</a></li>
-                                </ul>
+                                <div id="pagingArea">
+                                <button style="float:left; margin-left:33px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
+					                <ul class="pagination">
+					                	<c:choose>
+					                		<c:when test="${ pi.currentPage eq 1 }">
+					                    		<li class="page-item disabled"><a class="page-link">이전</a></li>
+					                    	</c:when>
+					                    	<c:otherwise>
+					                    		<li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ pi.currentPage-1 }">Previous</a></li>
+					                    	</c:otherwise>
+					                    </c:choose>
+					                    
+					                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+					                  	  <li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ p }">${ p }</a></li>
+					                    </c:forEach>
+					                    
+					                    <c:choose>
+					                    	<c:when test="${ pi.currentPage eq pi.maxPage }">
+						                	    <li class="page-item disabled"><a class="page-link">다음</a></li>
+						                	</c:when>
+						                	<c:otherwise>
+						                    	<li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ pi.currentPage+1 }">다음</a></li>
+						                	</c:otherwise>    
+					                    </c:choose>
+					                </ul>
+					            </div>
                             </div>
                         </div>
                     </c:otherwise>
@@ -206,10 +279,5 @@
         
         </div>
     </div>
-	 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-    <script src="js/scripts.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-    <script src="js/datatables-simple-demo.js"></script>
 </body>
 </html>
