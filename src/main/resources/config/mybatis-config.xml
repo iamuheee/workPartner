@@ -45,6 +45,8 @@
 		<typeAlias type="com.wp.workpartner.room.model.vo.Equip" alias="Equip"/>
 		<typeAlias type="com.wp.workpartner.room.model.vo.UsingEquip" alias="UsingEquip"/>
 		<typeAlias type="com.wp.workpartner.room.model.vo.ClosedRoom" alias="ClosedRoom"/>
+		
+		<typeAlias type="com.wp.workpartner.book.model.vo.Book" alias="Book"/>
 	</typeAliases>
 	
 	<!-- <유의사항> -->
@@ -59,6 +61,7 @@
 		<mapper resource="/mappers/Sign-mapper.xml"/>
 		<mapper resource="/mappers/room-mapper.xml" />
 		<mapper resource="/mappers/comment-mapper.xml"/>
+		<mapper resource="/mappers/book-mapper.xml"/>
 	</mappers>
 	
 </configuration>
