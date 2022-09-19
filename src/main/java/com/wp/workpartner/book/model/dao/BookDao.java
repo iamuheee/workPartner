@@ -20,6 +20,7 @@ public class BookDao {
 	public int selectListCount(SqlSessionTemplate sqlSession, String empNo) {
 		return sqlSession.selectOne("bookMapper.selectListCount", empNo);
 	}
+	
 	public ArrayList selectBookList(SqlSessionTemplate sqlSession, String empNo, PageInfo pi) {
 //		System.out.println("dao:"+empNo);
 		int limit = pi.getBoardLimit();
@@ -28,5 +29,9 @@ public class BookDao {
 		
 		return (ArrayList)sqlSession.selectList("bookMapper.selectBookList", empNo, rowBounds); 
 	}
-
+	
+	public Book selectBook(SqlSessionTemplate sqlSession, String bkNo) {
+		return sqlSession.selectOne("bookMapper.selectBook", bkNo);
+	}
+	
 }

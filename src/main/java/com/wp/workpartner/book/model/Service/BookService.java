@@ -14,6 +14,9 @@ public interface BookService {
 	int selectListCount(String empNo);
 	ArrayList selectBookList(String empNo, PageInfo pi);	
 	
+	// 내 예약 상세 조회 서비스 (select)
+	Book selectBook(String bkNo);
+	
 	// 회의실 예약 목록 조회 서비스 (select)
 	// 날짜별 조회
 	ArrayList selectBookByDate(String meetDate);

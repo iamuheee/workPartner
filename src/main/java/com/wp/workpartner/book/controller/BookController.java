@@ -87,7 +87,7 @@ public class BookController {
 	 * @return	: pi(페이징 처리), list(내 예약 현황 ArrayList)
 	 */
 	@ResponseBody
-	@RequestMapping(value="select.bk", produces="application/json; charset=UTF-8")
+	@RequestMapping(value="selectList.bk", produces="application/json; charset=UTF-8")
 	public String ajaxSelectBookList(@RequestParam(value="cpage", defaultValue="1") int currentPage, String empNo) {
 		
 //		System.out.println("empNo: " + empNo);
@@ -106,5 +106,21 @@ public class BookController {
 		return new Gson().toJson(map);
 	}
 	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 19.
+	 * @method	: (ajax) 회의실 예약 상세 내역 조회 요청
+	 * @param	: bkNo - 회의실 예약 번호
+	 * @return	: Book b - 회의실 예약 정보
+	 */
+	@ResponseBody
+	@RequestMapping(value="select.bk", produces="application/json; charset=UTF-8")
+	public String ajaxSelectBook(String bkNo) {
+//		System.out.println(bkNo);
+		
+		Book b = bService.selectBook(bkNo);
+		
+		return new Gson().toJson(b);
+	}
 	
 }
