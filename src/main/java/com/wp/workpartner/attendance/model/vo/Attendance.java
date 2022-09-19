@@ -25,4 +25,9 @@ public class Attendance {
 	private String status;
 	private String hollyday;
 	
+	private String depName;
+	private String posName;
+	private String empName;
+	private String workhours;
+	
 }

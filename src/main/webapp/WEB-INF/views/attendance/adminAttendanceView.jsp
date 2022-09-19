@@ -26,7 +26,7 @@
 <body>
 
 	<jsp:include page="../common/menubar.jsp" />
-
+	
 	<div style="height:2%"></div>
 	
 	<div id="outer" style="width:96%">
@@ -48,11 +48,11 @@
 			           <th>휴가</th>
 			       </tr>
 			       <tr>
-			           <td class="alignCenter">56</td>
-			           <td class="alignCenter">7</td>
-			           <td class="alignCenter">3</td>
-			           <td class="alignCenter">4</td>
-			           <td class="alignCenter">5</td>
+			           <td class="alignCenter">${status1}</td>
+			           <td class="alignCenter">${status2}</td>
+			           <td class="alignCenter">${status3}</td>
+			           <td class="alignCenter">${status5}</td>
+			           <td class="alignCenter">${status4}</td>
 			       </tr>
 			   </table>
 			</div>
@@ -62,21 +62,22 @@
 		<br><br><br>
 		
 		<div style="width:80%">
-			<form action="adminAttlist.att" method="post" id="myForm" style="float:right">
+			<form action="adminAtt.att" method="post" id="myForm" style="float:right">
 	
 				<input type="date" name="date1">
 		        &nbsp~&nbsp	
 		        <input type="date" name="date2">
 		        
 				&nbsp	
-	
-				<select name="condition" form="myForm">
-					<option value="1">인사부</option>
-					<option value="2">회계부</option>
-					<option value="3">영업부</option>
-					<option value="4">개발부</option>
-				</select>
-	
+				
+				<c:if test="${ !empty list2 }">
+					<select name="condition" form="myForm">
+						<option value="0">모든부서</option>
+						<c:forEach var="c" items="${ list2 }">
+							<option value="${ c.depCd }">${ c.depName }</option>
+						</c:forEach>
+					</select>
+				</c:if>
 				&nbsp	
 	
 				<input type="text" placeholder="사원명/사번 검색" name="keyword">
@@ -105,79 +106,29 @@
 	                </tr>
 	            </thead>
 	            <tbody>
-	                <tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>2022-09-01</td>
-	                    <td>09:00:00</td>
-						<td>18:00:00</td>
-						<td>0시간</td>
-						<td>8시간</td>
-						<td>정상</td>
-	                </tr>
-					<tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>2022-09-01</td>
-	                    <td>09:00:00</td>
-						<td>18:00:00</td>
-						<td>0시간</td>
-						<td>8시간</td>
-						<td>정상</td>
-	                </tr>
-					<tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>2022-09-01</td>
-	                    <td>09:00:00</td>
-						<td>18:00:00</td>
-						<td>0시간</td>
-						<td>8시간</td>
-						<td>정상</td>
-	                </tr>
-					<tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>2022-09-01</td>
-	                    <td>09:00:00</td>
-						<td>18:00:00</td>
-						<td>0시간</td>
-						<td>8시간</td>
-						<td>정상</td>
-	                </tr>
-					<tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>2022-09-01</td>
-	                    <td>09:00:00</td>
-						<td>18:00:00</td>
-						<td>0시간</td>
-						<td>8시간</td>
-						<td>정상</td>
-	                </tr>
-					<tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>2022-09-01</td>
-	                    <td>09:00:00</td>
-						<td>18:00:00</td>
-						<td>0시간</td>
-						<td>8시간</td>
-						<td>정상</td>
-	                </tr>
-	                                 
+	               <c:choose>
+                		<c:when test="${empty list}">
+                			<tr>
+                				<td colspan="10">현재 게시글이 없습니다.</td>
+                			</tr>
+                		</c:when>
+                		<c:otherwise>
+							<c:forEach var="a" items="${list}">
+								<tr>
+			                        <td>${a.empNo}</td>
+			                        <td>${a.depName}</td>
+			                        <td>${a.posName}</td>
+			                        <td>${a.empName}</td>
+			                        <td>${a.attDate}</td>
+			                        <td>${a.attCmt}</td>
+			                        <td>${a.attQt}</td>
+			                        <td>${a.attTime}</td>
+			                        <td>${a.workhours}</td>
+			                        <td>${a.status}</td>         
+			                    </tr>
+							</c:forEach>
+                		</c:otherwise>                    
+                    </c:choose>      
 	
 	            </tbody>
 	        
@@ -212,5 +163,11 @@
 	</div>
 	
 	<br><br><br><br><br><br><br><br><br>
+	
+	<script>
+		console.log("${list}");
+		console.log("${condition}")
+		
+	</script>
 </body>
 </html>
