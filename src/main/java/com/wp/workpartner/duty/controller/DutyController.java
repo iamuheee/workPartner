@@ -129,15 +129,19 @@ public class DutyController {
 		// 2. Duty객체를 수정 페이지에 보냄
 		Duty d = dService.selectDuty(dutyNo);
 		
-		String empICNo = "", empICName = "";
-		for( DutyCharge dc : d.getEmpIC() ) {
-			empICNo += dc.getEmpICNo() + ",";
-			empICName += dc.getEmpICName() + ",";
+		if(d != null) {
+			String empICNo = "", empICName = "";
+			for( DutyCharge dc : d.getEmpIC() ) {
+				empICNo += dc.getEmpICNo() + ",";
+				empICName += dc.getEmpICName() + ",";
+			}
+			d.setEmpICNo(empICNo.substring(0, empICNo.length() - 1));
+			d.setEmpICName(empICName.substring(0, empICName.length() - 1));
+			System.out.println(d);
+			mv.addObject("d", d).setViewName("duty/dutyUpdateForm");
+		}else {
+			mv.addObject("errorMsg","업무 수정 페이지 이동에 실패했습니다.").setViewName("common/error");
 		}
-		d.setEmpICNo(empICNo.substring(0, empICNo.length() - 1));
-		d.setEmpICName(empICName.substring(0, empICName.length() - 1));
-		
-		mv.addObject("d", d).setViewName("duty/dutyUpdateForm");
 		return mv;
 	}
 	
@@ -154,15 +158,15 @@ public class DutyController {
 	public String updateDuty(MultipartFile upfile, Duty d, HttpSession session, Model m) {
 		int result1 = 0, result2 = 1; 
 		
-		result1 = dService.updateDuty(d);
 
 		if(upfile.getOriginalFilename().length() > 0) {
 			// 새로 업로드된 파일이 있는 경우
 			File file = File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/"));
-			System.out.println(file);
-			System.out.println(d);
 			file.setRefNo(Integer.parseInt(d.getDutyNo()));
+			d.setFilePath(file.getFilePath());
 			
+			result1 = dService.updateDuty(d);
+
 			if(d.getFilePath() == null) {
 				// 기존 파일이 없는 경우
 				result2 = dService.insertDutyFile(file);
@@ -170,6 +174,11 @@ public class DutyController {
 				// 기존 파일이 있는 경우
 				result2 = dService.updateDutyFile(file);
 			}
+			
+		}else {
+			// 새로 업로드된 파일이 없는 경우
+			result1 = dService.updateDuty(d);
+			
 		}
 		
 		if(result1 * result2 > 0) {

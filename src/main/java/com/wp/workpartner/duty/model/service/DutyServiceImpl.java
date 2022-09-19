@@ -167,27 +167,23 @@ public class DutyServiceImpl implements DutyService {
 	
 	@Override
 	public int insertDutyFile(File f) {
-		return dDao.insertNewFile(sqlSession, f);
+		return dDao.insertDutyFile(sqlSession, f);
 	}
 
 
 	@Override
 	public int deleteDuty(String dutyNo) {
-		// 해당 업무의 담당자 삭제
-		DutyCharge dc = new DutyCharge();
-		dc.setDutyNo(Integer.parseInt(dutyNo));
-		int result1 = 1 * dDao.deleteDutyCharge(sqlSession, dc);
 		
 		// 해당 업무의 댓글 삭제
-		int result2 = 1 * dDao.deleteDutyComment(sqlSession, dutyNo);
+		int result1 = dDao.deleteDutyComment(sqlSession, dutyNo);
 		
-		// 해당 업무에 파일 있으면 삭제
-		int result3 = 1 * dDao.deleteDutyFile(sqlSession, dutyNo);
+		// 해당 업무에 파일 있으면 status를 NULL으로
+		int result2 = dDao.deleteDutyFile(sqlSession, dutyNo);
 		
-		// 해당 업무 삭제
-		int result4 = 1 * dDao.deleteDuty(sqlSession, dutyNo);
+		// 해당 업무 status를 NULL으로
+		int result3 = dDao.deleteDuty(sqlSession, dutyNo);
 		
-		return result1 * result2 * result3 * result4;
+		return result1 + result2 + result3; // 성공이라면 최소 1은 되어야 함
 	}
 
 

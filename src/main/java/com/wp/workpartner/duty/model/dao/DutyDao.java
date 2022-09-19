@@ -121,7 +121,7 @@ public class DutyDao {
 	public Duty selectDuty(SqlSessionTemplate sqlSession, String dutyNo) {
 		Duty d = sqlSession.selectOne("dutyMapper.selectDuty", dutyNo);
 		if(d.getFilePath() != null) {
-			d = sqlSession.selectOne("dutyMapper.selectDutyWithFile", d);
+			d = sqlSession.selectOne("dutyMapper.selectDutyWithFile", dutyNo);
 		}
 		return d;
 	}
@@ -151,7 +151,7 @@ public class DutyDao {
 		return sqlSession.update("dutyMapper.updateDutyFile", f);
 	}
 	
-	public int insertNewFile(SqlSessionTemplate sqlSession, File f) {
+	public int insertDutyFile(SqlSessionTemplate sqlSession, File f) {
 		return sqlSession.insert("dutyMapper.insertNewFile", f);
 	}
 	
@@ -162,11 +162,11 @@ public class DutyDao {
 	}
 	
 	public int deleteDutyFile(SqlSessionTemplate sqlSession, String dutyNo) {
-		return sqlSession.delete("dutyMapper.deleteDutyFile", dutyNo);
+		return sqlSession.update("dutyMapper.deleteDutyFile", dutyNo);
 	}
 	
 	public int deleteDuty(SqlSessionTemplate sqlSession, String dutyNo) {
-		return sqlSession.delete("dutyMapper.deleteDuty", dutyNo);
+		return sqlSession.update("dutyMapper.deleteDuty", dutyNo);
 	}
 	
 }

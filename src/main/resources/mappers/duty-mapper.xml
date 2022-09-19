@@ -77,7 +77,7 @@
 	</insert>
 	
 	<!-- 게시글 수정에서 최초로 파일 업로드하는 경우 -->
-	<insert id="insertNewFile">
+	<insert id="insertDutyFile">
 		INSERT
 		  INTO TB_FILE
 		VALUES
@@ -289,6 +289,9 @@
 		     , CONTENT = #{content}
 		     , START_DATE = #{startDate}
 		     , END_DATE = #{endDate}
+		  <if test="filePath != null">
+		  	 , FILE_PATH = #{filePath} 
+		  </if>
 	     WHERE DUTY_NO = #{dutyNo}
 	</update>
 	
@@ -326,17 +329,17 @@
 		   AND COM_REF_BNO = #{dutyNo}
 	</delete>
 	
-	<delete id="deleteDutyFile">
-		DELETE
-		  FROM TB_FILE
+	<update id="deleteDutyFile">
+		UPDATE TB_FILE
+		   SET FILE_STATUS = 'N'
 		 WHERE FILE_CATEGORY = 1
 		   AND FILE_REF_NO = #{dutyNo}
-	</delete>
+	</update>
 	
-	<delete id="deleteDuty">
-		DELETE
-		  FROM TB_DUTY
+	<update id="deleteDuty">
+		UPDATE TB_DUTY
+		   SET STATUS = 'N'
 		 WHERE DUTY_NO = #{dutyNo}
-	</delete>
+	</update>
 	
 </mapper>

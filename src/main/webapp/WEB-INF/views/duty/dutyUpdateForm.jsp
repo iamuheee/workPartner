@@ -192,7 +192,7 @@
             	<c:if test="${not empty d.filePath}">
             		<span>현재 업로드된 파일 : </span>
 	            	<a href="${d.filePath}">${d.fileOriginName}</a>
-	            	<input type="hidden" name="fileOriginName" value="${ d.originName }">
+	            	<input type="hidden" name="fileOriginName" value="${ d.fileOriginName }">
 	                <input type="hidden" name="filePath" value="${ d.filePath }">
             	</c:if>
             </div>
