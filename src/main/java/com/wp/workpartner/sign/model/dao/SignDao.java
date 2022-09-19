@@ -55,6 +55,9 @@ public class SignDao {
 		
 		return result;
 	}
+	public int saveDtpaper(SqlSessionTemplate sqlSession, Dtpaper d) {
+		return sqlSession.insert("signMapper.saveDtpaper", d);
+	}
 //	기안서 푸터
 	public int insertVacation(SqlSessionTemplate sqlSession, Vacation v) {
 		return sqlSession.insert("signMapper.insertVacation", v);

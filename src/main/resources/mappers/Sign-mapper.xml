@@ -57,6 +57,45 @@
 			  , #{ dpChange }
 			  ) 
 	</insert>
+	<insert id="saveDtpaper">
+		
+		insert
+		 
+		  into tb_dtpaper
+		  	  (
+		  	  	dp_no
+		  	  ,	emp_no
+		  	  , dp_title
+		  	  , dp_category
+		  	  , dp_temp
+		  	  , dp_origin
+		  	  , dp_change
+		  	  
+		  	  )
+		values
+			  (
+			  <choose>
+				  <when test="dpCategory.equals('연차')">
+				  	10||seq_vac.nextval
+				  </when>
+			  	  <when test="dpCategory.equals('외근')">
+				  	20||seq_otw.nextval
+				  </when>
+				  <when test="dpCategory.equals('퇴직원')">
+				  	30||seq_res.nextval
+				  </when>
+			  	  <otherwise>
+				  	40||seq_coop.nextval
+				  </otherwise>
+			  </choose>
+			  , #{ empNo }
+			  , #{ dpTitle }
+			  , #{ dpCategory }
+			  , 'Y'
+			  , #{ dpOrigin }
+			  , #{ dpChange }
+			  ) 
+	</insert>
 	<insert id="insertVacation">
 		insert
 			
@@ -159,30 +198,6 @@
 	</insert>
 	
 	<!-- 퇴직원 신청서 -->
-	
-	<insert id="saveReDtpaper">
-		
-		insert
-		 
-		  into tb_dtpaper
-		  	  (
-		  	  	dp_no
-		  	  ,	emp_no
-		  	  , dp_title
-		  	  , dp_category
-		  	  , dp_origin
-		  	  , dp_change
-		  	  )
-		values
-			  (
-			  	30||seq_res.nextval
-			  , #{ empNo }
-			  , #{ dpTitle }
-			  , #{ dpCategory }
-			  , #{ dpOrigin }
-			  , #{ dpChange }
-			  ) 
-	</insert>
 	
 	<insert id="insertReSignEmp">
 		insert

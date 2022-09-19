@@ -21,7 +21,7 @@ public interface SignService {
 	int insertReSign(ArrayList<Sign> signList);
 	int insertCoSign(ArrayList<Sign> signList);
 	int insertDtpaper(Dtpaper d);
-	
+	int saveDtpaper(Dtpaper d);
 	int insertCooperation(Cooperation c);
 	int insertVacation(Vacation v);
 	int insertOtwork(Otwork o);

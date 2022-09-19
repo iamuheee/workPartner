@@ -71,6 +71,10 @@ public class SignServiceImpl implements SignService {
 	public int insertDtpaper(Dtpaper d) {
 		return sDao.insertDtpaper(sqlSession, d);
 	}
+	@Override
+	public int saveDtpaper(Dtpaper d) {
+		return sDao.saveDtpaper(sqlSession, d);
+	}
 //  기안서목록
 	@Override
 	public int selectProgressListCount() {
@@ -202,6 +206,7 @@ public class SignServiceImpl implements SignService {
 	public SelectOtwork selectOtwork(int dpNo) {
 		return null;
 	}
+	
 	
 
 	
