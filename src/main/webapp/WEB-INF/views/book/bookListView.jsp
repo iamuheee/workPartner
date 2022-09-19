@@ -125,19 +125,7 @@
 		            </tr>
 		        </thead>
 		        <tbody id="bookList">
-		        <!-- ---------------------------- -->
-		            <tr>
-		                <td>5</td>
-		                <td>회의실 이름</td>
-		                <td>동해물과 백두산이 마르고 닳도록</td>
-		                <td id="bookDate">YYYY-MM-DD HH:00 ~ YYYY:MM:DD HH:00</td>
-		                <td>
-		                	<button type="button" class="btn btn-secondary btn-sm">이용완료</button>
-		                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBook">변경</button>
-		                    <button type="button" class="btn btn-danger btn-sm" onclick="return userConfirm();">취소</button>
-		                </td>
-		            </tr>
-	           <!-- ---------------------------- -->
+		           <!-- ajax로 목록 받는 영역 -->
 		        </tbody>
 		    </table>
 		</div>
@@ -153,72 +141,28 @@
 		        }
 		</script>
 		
-		<!-- 수정 버튼 클릭 시 뜨는 모달 ==> 예약 정보 수정 -->
-		<div class="modal fade" id="updateBook">
+		<!-- 변경 버튼 클릭 시 뜨는 모달 ==> 예약 정보 수정 -->
+		<div class="modal fade" id="updateBookMd">
 		    <div class="modal-dialog">
 		        <div class="modal-content">
 		            <!-- Modal Header -->
 		            <div class="modal-header">
-		                <h4 class="modal-title"><span class="material-symbols-outlined">update</span>&nbsp;회의실 예약 변경</h4>
+		                <h4 class="modal-title"><i class="fas fa-sync"></i>&nbsp;&nbsp;회의실 일정 변경</h4>
 		                <button type="button" class="close" data-dismiss="modal">&times;</button> 
 		            </div>
-		
-		            <form action="회의실예약수정받아주는url" method="post">
+						<form action="update.bk" method="post">		
 		                <!-- Modal Body -->
 		                <div class="modal-body">
 		                    <table id="bookInfo">
-		                        <tr>
-		                            <th>회의실</th>
-		                            <td>
-		                                <!-- 회의실 이름 뿌리고 회의실 번호 값으로 넘김 -->
-		                                <select name="rmNo" id="rmNo" required>
-		                                    <option value="">회의실 이름 자리</option>
-		                                    <option value="">Room A</option>
-		                                </select>
-		                            </td>
-		                        </tr>
-		                        <tr>
-		                            <th>예약자</th>
-		                            <td>예약 사원 이름 자리</td>
-		                        </tr>
-		                        <tr>
-		                            <th>날짜</th>
-		                            <td>
-		                                <input type="date" name="bkDate" id="bkDate" required>
-		                            </td>
-		                        </tr>
-		                        <tr>
-		                            <th>시간</th>
-		                            <td>
-		                                <div id="bkTimeArea">
-		                                    <select name="bkStart" id="bkStart" required>
-		                                        <option value="">시작 시간</option>
-		                                        <option value="">13:00</option>
-		                                    </select>
-		                                    <span>&nbsp;~&nbsp;</span>
-		                                    <select name="bkEnd" id="bkEnd">
-		                                        <option value="">종료 시간</option>
-		                                        <option value="">14:00</option>
-		                                    </select>
-		                                </div>
-		                            </td>
-		                        </tr>
-		                        <tr>
-		                            <th colspan="2">회의 제목</th>
-		                        </tr>
-		                        <tr>
-		                            <td colspan="2">
-		                                <input type="text" name="bkTitle" id="bkTitle" placeholder="회의 제목 자리" required>
-		                            </td>
-		                        </tr>
+		                       
 		                    </table>
 		                </div>
 		                <!-- Modal footer -->
 		                <div class="modal-footer">
-		                    <button type="submit" class="btn btn-primary" style="margin-right:5px;">수정</button>
+		                    <button type="submit" class="btn btn-primary" id="insertBk" style="margin-right:5px;">저장</button>
 		                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 		                </div>
-		            </form>
+	                </form>
 		        </div>
 		    </div>
 		</div>
@@ -249,7 +193,7 @@
 		/* 내 예약 현황 조회용 ajax */
 		function selectBookList(cpage) {
 			$.ajax({
-				url:"select.bk",
+				url:"selectList.bk",
 				type:"post",
 				data:{
 					cpage:cpage,
@@ -257,7 +201,7 @@
 				},
 				success:function(result){
 					console.log("내 예약 현황 조회용 ajax 통신 성공");
-					console.log(result);
+					//console.log(result);
 					
 					let list = result.list;
 					let pi = result.pi;
@@ -265,58 +209,64 @@
 					let value = "";
 					let pgValue = "";
 					
-					if(!list){	// 회의실 예약 이력이 없을 때
-						value += "조회된 회의실 예약 내역이 없습니다.";
-					
+					if(list.length == 0){	// 회의실 예약 이력이 없을 때
+						value += "<table><tr align='center'><td colspan='5'>조회된 회의실 예약 내역이 없습니다.</td></tr></table>";
+						
 					}else {
 						for(let i=0; i<list.length; i++){
-							value += '<tr>'
+							value += '<table id="bookInfo">'
+								   + '<tr>'
 								   +	'<td>' + (list.length - i) + '</td>'
 								   +	'<td>' + list[i].room.rmName + '</td>'
 								   +	'<td>' + list[i].bkTitle + '</td>'
-								   +	'<td class="bookDate">' + list[i].bkDate + ' ' + list[i].bkStart + ' ~ ' + list[i].bkEnd + '</td>';
+								   +	'<td class="bookDate">' + list[i].bkDate + ' ' + list[i].bkStart + '~' + list[i].bkEnd + '</td>';
 								   
 								   /* 예약 일자와 오늘 날짜 비교 */
-								   let endDate = list[i].bkDate + list[i].bkEnd;	// 예약 끝나는 날짜 + 시간 == 예약종료일시
+								   let endDate = list[i].bkDate + ' ' + list[i].bkEnd;	// 예약 끝나는 날짜 + 시간 == 예약종료일시
 								   let now = new Date();
 								   
 								   if(endDate){	
 									   
 									   now = leadingZeros(now.getFullYear(), 4) + '-' +
 								    	     leadingZeros(now.getMonth() + 1, 2) + '-' +
-								    	     leadingZeros(now.getDate(), 2);
+								    	     leadingZeros(now.getDate(), 2) + ' ' + 
+								    	     leadingZeros(now.getHours(), 2) + ':' +
+								    	     leadingZeros(now.getMinutes(), 2);
+									   
+									   //console.log(now);
+									   //console.log(endDate);
 									   
 									   if(now > endDate){	// 오늘 > 예약종료일시 == 이용 후
 										   value += '<td><button type="button" class="btn btn-secondary btn-sm" disabled>이용완료</button></td>'; 
 									   }else {	// 이용 전
 										   if(list[i].bkStatus == 'N') {	// bkStatus는 '예약취소상태'를 나타내므로 N이면 정상예약 중인 상태임
-												  value += '<td><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBook">변경</button>'
+												  value += '<td><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBookMd" onclick="selectBook(' + list[i].bkNo + ');">변경</button>'
 												  	     + '<button type="button" class="btn btn-danger btn-sm" onclick="return userConfirm();">취소</button></td>';
 										   }else { // 취소
 											   value += '<td><button type="button" class="btn btn-warning btn-sm">취소완료</button></td>'; 
 										   }
 									   }
 								   }
-							value += '</tr>';
+							value += '</tr></table>';
 						}
+						
+						/* ----- 페이징 처리 ----- */
+						if(pi.currentPage != 1){
+	               			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectBookList("+ (pi.currentPage - 1) + ")'>&lt;</button>"	
+	               		}
+	               		
+	               		for(let p=pi.startPage; p<=pi.endPage; p++) { 
+	       		   			if(p == pi.currentPage) { 
+	       				   			pgValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
+	       				   	}else {
+	       				   			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectBookList("+ p +")'>" + p + "</button>"
+	       		           	} 
+	       		         }     
+	                
+	       		         if(pi.currentPage != pi.maxPage) {
+	       		        	  pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectBookList("  + (pi.currentPage + 1) + ")'>&gt;</button>"
+	       		         }
 					}
-					
-					/* ----- 페이징 처리 ----- */
-					if(pi.currentPage != 1){
-               			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectBookList("+ (pi.currentPage - 1) + ")'>&lt;</button>"	
-               		}
-               		
-               		for(let p=pi.startPage; p<=pi.endPage; p++) { 
-       		   			if(p == pi.currentPage) { 
-       				   			pgValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
-       				   	}else {
-       				   			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectBookList("+ p +")'>" + p + "</button>"
-       		           	} 
-       		         }     
-                
-       		         if(pi.currentPage != pi.maxPage) {
-       		        	  pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectBookList("  + (pi.currentPage + 1) + ")'>&gt;</button>"
-       		         }
        		         
 					$("#bookList").html(value);
 					$("#pagingArea").html(pgValue);
@@ -324,6 +274,104 @@
 				},
 				error:function(){
 					console.log("내 예약 현황 조회용 ajax 통신 실패");
+				}
+			})
+		}
+		
+		/* 회의실 예약 상세조회용 ajax */
+		// 조회해 와서 화면에 뿌려주는 용도
+		// 변경 버튼 누를 때 실행됨
+		function selectBook(bkNo){
+						
+			$.ajax({
+				url:"select.bk",
+				type:"post",
+				data:{
+					bkNo:bkNo
+				},
+				success:function(b){
+					console.log("회의실 예약 상세조회용 ajax 통신 성공");
+					console.log(b);
+					
+					/* b에 담긴 값을 예약 변경용 모달창에 뿌려준다. */
+					let value = "";
+					
+					value += '<tr>'
+					   	   +	'<th>회의실</th>'
+					   	   +	'<td><button class="btn btn-warning" disabled>'+ b.room.rmName +'</td>'
+                    	   + '</tr>'
+                    	   + '<tr>'
+                    	   + 	'<th>날짜</th>'
+                    	   +    '<td>'
+                    	   +		'<input type="date" class="bkInfoTd" name="bkDate" id="bkDate" required value=' + b.bkDate + '>'
+                    	   +	'</td>'
+                    	   + '</tr>'
+                    	   + '<tr>'
+                    	   +	'<th>시간</th>'
+                    	   +    '<td>'
+                    	   +		'<div id="bkTimeArea">'
+                    	   +			'<select name="bkStart" id="bkStart" class="bkInfoTd" required>'
+                    	   
+	                    	   for(let i=8; i<20; i++){
+	                    		   if(i<=9){
+	                    			   if('0'+i+':00' == b.bkStart){
+	                    				   value += '<option value="0' + i + ':00" selected>0' + i + ':00</option>'; 
+	                    			   }else {
+	                    				   value += '<option value="0' + i + ':00">0' + i + ':00</option>'; 
+	                    			   }
+	                    		   }else {
+	                    			   if(i+':00' == b.bkStart) {
+	                    				   value += '<option value="' + i + ':00" selected>' + i + ':00</option>'; 
+	                    			   }else {
+	                    				   value += '<option value="' + i + ':00">' + i + ':00</option>';
+	                    			   }
+	                    			   
+	                    		   }
+	                       	   }
+
+                    value +=		 	'</select>'
+                           + 			'<span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>'
+                           +			'<select name="bkEnd" id="bkEnd" class="bkInfoTd" required>'
+                           
+			             	   for(let i=9; i<21; i++){
+			            		   if(i==9){
+			            			   if('0'+i+':00' == b.bkEnd){
+			            				   value += '<option value="0' + i + ':00" selected>0' + i + ':00</option>'; 
+			            			   }else {
+			            				   value += '<option value="0' + i + ':00">0' + i + ':00</option>'; 
+			            			   }
+			            		   }else {
+			            			   if(i+':00' == b.bkEnd) {
+			            				   value += '<option value="' + i + ':00" selected>' + i + ':00</option>'; 
+			            			   }else {
+			            				   value += '<option value="' + i + ':00">' + i + ':00</option>';
+			            			   }
+			            		   }
+			               	   }
+                           	
+                    value += 			'</select>'
+                           +		'</div>'
+                           +	'</td>'
+                           + '</tr>'
+                           + '<tr>'
+                           +	'<th>참여 인원</th>'
+                           +	'<td><input type="number" name="bkPerson" id="bkPerson" min="1" class="bkInfoTd" required placeholder="'+ b.bkPerson + '">&nbsp;명'
+                		   + '</tr>'
+                		   + '<tr>'
+                		   + 	'<th colspan="2">회의 제목</th>'
+                		   + '</tr>'
+                		   + '<tr>'
+                		   +	'<td colspan="2" style="height:60px;">'
+                		   + 	'<input type="text" name="bkTitle" id="bkTitle" placeholder="' + b.bkTitle + '" class="bkInfoTd" required>'
+                		   +	'</td>'
+                		   + '</tr>';
+                		   
+                		   $("#bookInfo").html(value);
+					
+					
+				},
+				error:function(){
+					console.log("회의실 예약 상세조회용 ajax 통신 실패");
 				}
 			})
 		}

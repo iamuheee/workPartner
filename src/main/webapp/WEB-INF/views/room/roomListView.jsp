@@ -95,7 +95,6 @@
 	        <button class="btn btn-primary" onclick="location.href='enrollForm.ro';" type=button><i class="fa-solid fa-plus"></i> 회의실 등록</button>
 	    </div>
 	
-	    <!-- 회의실 목록 영역 -->
 	    <div id="roomListArea">
 				
 	    </div>

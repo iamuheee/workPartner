@@ -69,12 +69,10 @@
         height:60px;
         width: 30%;
         font-size:16px;
-        border-bottom:1px solid #D7DBE0;
     }
 
     #bookInfo td {
         font-size:16px;
-        border-bottom:1px solid #D7DBE0;
     }
 
     #bookInfo input {
@@ -116,6 +114,60 @@
     #bkTitle {
         width: 100%;
     }
+    
+    /* ================ */
+    
+        .modal-body #bookInfo {
+        margin:auto;
+    }
+
+    #bookInfo {
+        width:100%;
+    }
+
+    #bookInfo th{
+        height:50px;
+        width: 25%;
+        font-size:16px;
+    }
+
+    #bookInfo td {
+        font-size:16px;
+    }
+
+    #bookInfo input {
+        height:40px;
+        padding-left:10px;
+        border:1px solid #b7b9cc;
+    }
+
+    #rmNo {
+        width: 150px;
+        height:40px;
+        padding-left:10px;
+    }
+
+    #bkStart, #bkEnd {
+        width: 100px;
+        height:40px;
+        padding-left:10px;
+    }
+
+    #bkTimeArea {
+        display: flex;
+        align-items: center;
+    }
+
+    #bkTimeArea select {
+        border:1px solid #b7b9cc;
+        height:40px;
+        width:100px;
+        padding-left:10px;
+    }
+
+    #bkTitle {
+        width: 100%;
+    }
 </style>
 <body>
 	
@@ -147,7 +199,7 @@
 		
 	
 		<!-- 회의실 예약 버튼 클릭 시 뜨는 모달 ==> 예약 정보 수정 -->
-		<div class="modal" id="insertBookMd">
+		<div class="modal fade" id="insertBookMd">
 		    <div class="modal-dialog">
 		        <div class="modal-content">
 		            <!-- Modal Header -->
