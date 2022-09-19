@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wp.workpartner.employee.model.vo.Employee;
-import com.wp.workpartner.project.model.service.ProjectService;
+import com.wp.workpartner.project.model.service.ProjectServiceImpl;
 import com.wp.workpartner.project.model.vo.Project;
 
 @Controller
 public class ProjectController {
 	
 	@Autowired
-	private ProjectService pService;
+	private ProjectServiceImpl pService;
 	
 	
 	@RequestMapping("main.pr")
