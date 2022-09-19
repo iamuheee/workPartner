@@ -26,7 +26,7 @@
 		<typeAlias type="com.wp.workpartner.mail.model.vo.MailStatus" alias="MailStatus" />
 		<typeAlias type="com.wp.workpartner.notice.model.vo.Notice" alias="Notice" />
 		<typeAlias type="com.wp.workpartner.notice.model.vo.NoticeComment" alias="NoticeComment" />	
-		<typeAlias type="com.wp.workpartner.project.model.vo.Project" alias="Project"/s>
+		<typeAlias type="com.wp.workpartner.project.model.vo.Project" alias="Project"/>
 		<typeAlias type="com.wp.workpartner.project.model.vo.ProjectMember" alias="ProjectMember"/>
 		
 		<typeAlias type="com.wp.workpartner.common.model.vo.Comment" alias="Comment" />	
