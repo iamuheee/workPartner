@@ -39,7 +39,7 @@
             .setting-right{
                 float:left;
                 margin-left:150px;
-                width:50%;
+                width:30%;
                 word-break: break-all;
             }
             .btn-imp{
@@ -65,6 +65,7 @@
                 text-decoration: none;
                 color:black;
             }
+            .member{width:30%; float:left; text-align:center}
         </style>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -82,6 +83,7 @@
             </div>
 			
             <form action="insert.pr" method="post" class="inner-area">
+				<input type="hidden" name="empNo" value="${loginUser.empNo}">
 
                 <span class="title">프로젝트 제목</span> <br><br>
                 <input type="text" name="projTitle" class="form-control" required>
@@ -102,6 +104,7 @@
                 <div class="setting-right">
                     <span class="title">마감일</span>
                     <input type="date" name="endDate" class="form-control" required>
+                    <br>                
                 </div>
                 <br style="clear:both;"><br><hr>
                 <div class="submit-area" align="right">
@@ -110,6 +113,21 @@
                 </div>
             </form>
         </div>
+        
+        <script>
+	    	// 시작일 날짜로 오늘 이전 날짜 불가능하도록 만들기
+	    	let year = new Date().getFullYear();
+	    	let month = ('0' + (new Date().getMonth() + 1)).slice(-2);
+	    	let date = ('0' + new Date().getDate()).slice(-2);
+	   		$("input[name=startDate]").attr("min", year + '-' + month + '-' + date );
+	   		$("input[name=endDate]").attr("min", year + '-' + month + '-' + date );
+	   		
+	    	// 마감일 날짜로 시작일 이전 날짜 불가능하도록 만들기
+	    	$("input[name=startDate]").change(function(){
+	    		$("input[name=endDate]").attr("min", $(this).val());
+	    	})
+    	
+        </script>
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

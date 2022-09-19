@@ -177,7 +177,7 @@
     	let month = ('0' + (new Date().getMonth() + 1)).slice(-2);
     	let date = ('0' + new Date().getDate()).slice(-2);
    		$("input[name=startDate]").attr("min", year + '-' + month + '-' + date );
-    	
+   		$("input[name=endDate]").attr("min", year + '-' + month + '-' + date );
    		
     	// 마감일 날짜로 시작일 이전 날짜 불가능하도록 만들기
     	$("input[name=startDate]").change(function(){

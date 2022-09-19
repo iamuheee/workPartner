@@ -2,7 +2,6 @@ package com.wp.workpartner.address.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -298,6 +297,12 @@ public class AddressController {
 	@RequestMapping("addressDuty.ad")
 	public String addressDuty() {
 		return "address/addressDuty";
+	}
+	
+	// 프로젝트용 주소록
+	@RequestMapping("addressProject.ad")
+	public String addressProject() {
+		return "address/addressProject";
 	}
 	
 	

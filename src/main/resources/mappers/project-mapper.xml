@@ -36,5 +36,66 @@
 			 , DEFAULT 
 			 )
 	</insert>
+	
+	<select id="selectProjectList" resultMap="projectResult">
+		SELECT PROJ_NO
+			 , PROJ_TITLE
+			 , PROGRESS
+			 , START_DATE
+			 , END_DATE
+			 , ENROLL_DATE
+			 , STATUS
+		  FROM TB_PROJECT
+		  JOIN TB_PROJECT_MEM
+		 USING (PROJ_NO)
+		 WHERE MEM_NO = #{empNo}
+		   AND STATUS = 'Y'
+	</select>
+
+	<select id="selectProjectMember" resultMap="projectMemberResult">
+		SELECT MEM_NO
+			 , MEM_NAME
+			 , MEM_ROLE
+		  FROM TB_PROJECT_MEM
+		 WHERE PROJ_NO = #{projNo}
+	</select>
+	
+	<select id="validateMember" resultType="_int">
+		SELECT COUNT(*)
+		  FROM TB_PROJECT P
+		  JOIN TB_PROJECT_MEM M
+		 	ON P.PROJ_NO = M.PROJ_NO
+		 WHERE P.PROJ_NO = #{projNo}
+		   AND MEM_NO = #{empNo}
+	</select>
+	
+	<select id="selectProject" resultMap="projectResult">
+		SELECT PROJ_NO
+			 , PROJ_TITLE
+			 , PROGRESS
+			 , START_DATE
+			 , END_DATE
+			 , ENROLL_DATE
+			 , STATUS
+		  FROM TB_PROJECT
+		  JOIN TB_PROJECT_MEM
+		 USING (PROJ_NO)
+		 WHERE PROJ_NO = #{projNo}
+	</select>
+	
+	<update id="updateProject">
+		UPDATE TB_PROJECT
+		   SET PROJ_TITLE = #{projTitle}
+		   	 , PROGRESS = #{progress}
+		   	 , START_DATE = #{startDate}
+		   	 , END_DATE = #{endDate}
+		 WHERE PROJ_NO = #{projNo}
+	</update>
+	
+	<update id="deleteProject">
+		UPDATE TB_PROJECT
+		   SET STATUS = 'N'
+		 WHERE PROJ_NO = #{projNo}
+	</update>
 
 </mapper>

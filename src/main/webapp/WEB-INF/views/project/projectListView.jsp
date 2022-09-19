@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Login - SB Admin</title>
+        <title>WorkPartner!</title>
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://use.fontawesome.com/95b5cbecad.js"></script>
@@ -28,17 +28,16 @@
                 width: 200px;
                 height: 100px;
                 border: 1px solid lightgray;
-                border-left: 10px solid blue;
                 border-radius: 5px;
                 margin-right:40px;
-                padding-left:10px;
+                padding-left:20px;
                 margin-bottom: 20px;
             }
             .project-title{
-                font-size: 15px;
+                font-size: 18px;
                 font-weight: bold;
             }
-            .project-card:hover{
+            .card-inner:hover{
                 cursor:pointer;
             }
         </style>
@@ -55,33 +54,67 @@
                 <hr>
             </div>
             <div class="inner-area">
-                <div class="project-card" onclick="updateProj(${프로젝트번호});">
-                    <button onclick="매핑값" class="btn btn-sm" style="margin-left:80%;">
-                        <i class="fa fa-cog" aria-hidden="true"></i>
-                    </button>
-                    <br>
-                    <span class="project-title">프로젝트명</span><br>
-                    <input type="hidden" value="${ 프로젝트 우선순위 }" id="priority">
-                    <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(4)</span>
-                </div>
+            	<c:forEach var="p" items="${ plist }">
+	                <div class="project-card" >
+	                    <input type="hidden" class="progress" value="${p.progress}">
+	                    <form id="projectForm"> <input type="hidden" name="projNo" value="${p.projNo}"> </form>
+	                    <button class="manageProj" class="manage" style="margin-left:70%; border:none;background-color:white; width:50px; height:30px;">
+	                        <i class="fa fa-cog" aria-hidden="true"></i>
+	                    </button>
+	                    <br>
+	                    <div class="card-inner">
+		                    <span class="project-title">${p.projTitle}</span><br>
+		                    <input type="hidden" value="${p.progress}" id="priority">
+		                    <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(${p.projMember.size()})</span>
+	                	</div>
+	                </div>
+                </c:forEach>
             </div>
         </div>
 
         <script>
-            // 프로젝트 관리 버튼 (톱니바퀴) 클릭 시 해당 프로젝트의 관리 페이지로 가는 버튼
-            function updateProj(projNo){
-                // no라는 key-value쌍을 전달하면서 update.pr 라는 매핑값으로 요청 
-                location.href = "update.pr?no=" + projNo;
-            }
+            $(function(){
+	            // 프로젝트 관리 버튼 (톱니바퀴) 클릭 시 해당 프로젝트의 관리 페이지로 가는 버튼
+	            // 단, 해당 사원이 선택한 프로젝트의 관리자 이상이 아니면 접근 불가
+				$(document).on("click", ".manageProj", function(){
+					let form = $(this).siblings("form");
+					$.ajax({
+						url:"validate.pr",
+						data:{
+							empNo:${loginUser.empNo},
+							projNo:$(this).siblings("form").children("input").val()
+						},
+						success:function(result){
+							if(result == "Y"){
+								form.attr("action", "manage.pr");
+								form.submit();
+							}else{
+								alert("접근 권한이 없습니다.");
+							}
+						},
+						error:function(){
+							console.log("권한 체크하는 AJAX 통신 실패");
+						}
+					})
+				})            
+            	
+				// 카드 영역을 클릭하면 해당 프로젝트의 업무공유방으로 이동
+            	$(document).on("click", ".card-inner", function(){
+            		let form = $(this).siblings("form");
+            		form.attr("action", "proom.pr");
+            		form.submit();
+            	})
+            })
 
             // 프로젝트 진행 상황에 따라 색깔이 바뀌도록하는 함수
             $(function(){
                 $(".project-card").each(function(){
-                    switch( $(this).children("#priority").val() ){
-                        case 1 : $(this).css("border-left", "10px solid red");
-                        case 2 : $(this).css("border-left", "10px solid orange");
-                        case 3 : $(this).css("border-left", "10px solid blue");
-                        case 4 : $(this).css("border-left", "10px solid lightgray");
+                	console.log("실행됨")
+                    switch( $(this).children(".progress").val() ){
+                        case '준비' : $(this).css("border-left", "10px solid gold"); break;
+                        case '진행' : $(this).css("border-left", "10px solid green"); break;
+                        case '지연' : $(this).css("border-left", "10px solid orchid"); break;
+                        case '완료' : $(this).css("border-left", "10px solid lightgray"); break;
                     }
                 })
             })
