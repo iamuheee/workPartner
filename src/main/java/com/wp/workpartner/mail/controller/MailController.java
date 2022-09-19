@@ -336,14 +336,15 @@ public class MailController {
 		//=> 그래서 회사에선 db에 여러개의 값 넣을때 |또는 / 를 쓰기도 함 (,는 대중적으로 많이 쓰여서 이런경우가 생기니까)
 		
 		ArrayList<Mail> list = new ArrayList<>();
-					
+		
+		// String[] arr을 for문으로 => "gg/xxxx@gamil.com/s"   ""   ""   이렇게 순서대로 접근해서 
 		for(String s : arr) {
 			
-			String[] mArr = s.split("/"); // ["66", "xxxx@gmail.com", "S"]; => 얘를 쪼개기
+			String[] mArr = s.split("/"); // ["66/xxxx@gmail.com/S"]; => 애를 쪼개기
 			
-			System.out.println(mArr[0]);
-			System.out.println(mArr[1]);
-			System.out.println(mArr[2]);
+			//System.out.println(mArr[0]);
+			//System.out.println(mArr[1]);
+			//System.out.println(mArr[2]);
 			// 각각을 mail객체에 담기
 			Mail m = new Mail();
 			m.setMailNo(mArr[0]);
@@ -409,7 +410,7 @@ public class MailController {
 		ArrayList<File> list = mService.selectFileDetail(mailNo);
 				
 		mv.addObject("m", m).addObject("list", list).setViewName("email/emailForwardView");
-		System.out.println(m);		
+		//System.out.println(m);		
 		return mv;
 	}
 	
@@ -566,7 +567,7 @@ public class MailController {
 		
 	}
 	
-	/** 전달용메일쓰기
+	/** 전달용 메일쓰기
 	 * @param mail 메일내용
 	 * @param upfile 첨부파일
 	 * @param session 
@@ -589,19 +590,15 @@ public class MailController {
 		if(mail.getFileList() != null) {
 			ArrayList<File> fileList = mail.getFileList();
 			for(File file : fileList) {
-				System.out.println(file);				
+				//System.out.println(file);				
 				// 기존의 file을 삭제하게되면 ArrayList에서 지워지지않고 file의 fileOriginName, 등등이 그대로 넘어와 null예외됨 
 				if(file.getFileOriginName() != null) {
 					mail.setMailFile("Y");	
 				}
 			}
 		}
-		
-		
-		
+				
 		int result = mService.insertMail(mail);
-		
-		
 		
 		// 2. tb_mail_status
 					
@@ -620,7 +617,7 @@ public class MailController {
 			
 		// 전달받은 파일
 		int result5 =1;
-		System.out.println(mail.getFileList());
+		//System.out.println(mail.getFileList());
 		if(mail.getFileList() != null) {
 			ArrayList<File> fileList = mail.getFileList();
 			for(File file : fileList) {
@@ -632,9 +629,7 @@ public class MailController {
 				}
 			}
 		}
-		
-		System.out.println(result5);
-		
+						
 		//파일 등록 => 새로 추가한 파일 
 		int result4 = 1;
 		/*
@@ -672,11 +667,168 @@ public class MailController {
 			return "common/error";
 		}
 		
-		
-		
-			
 	}
 	
+	/** 메일함 다중선택 > 읽음 
+	 * @param arr : 메일번호, 받은사람이메일, 메일종류(S:보낸메일/R:받은/C:참조된)
+	 */
+	@ResponseBody
+	@RequestMapping("readEmailGroup.ma")
+	public String ajaxReadEmailGroup(String[] arr) {
+		
+		ArrayList<Mail> list = new ArrayList<>();
+					
+		for(String s : arr) {
+			
+			String[] mArr = s.split("/"); // ["66", "xxxx@gmail.com", "S"]; => 얘를 쪼개기
+						
+			// 각각을 mail객체에 담기
+			Mail m = new Mail();
+			m.setMailNo(mArr[0]);
+			m.setMailEmail( mArr[1] ); // => 받은사람일 경우 null이여야하는데 undefined로 문자열임 => sql에서 조건처리 
+			m.setMailCategory(mArr[2]);
+			
+			// mail객체를 list에 담기 
+			list.add(m);			
+		}
+		
+		// map에 담기
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("list", list);		
+		int result = mService.readEmailGroup(map);
+		
+		// pl/sql로 한 sql문은 처리된 행수를 반환하지않는다 => 그러므로 -1나옴 => jsp에서 if(result>0)인경우 라는 조건을 없앰
+		return result > 0 ? "success" : "fail";	
+		
+	}
+	
+	/** 메일함 다중선택 > 중요메일함IN 
+	 * @param arr : 메일번호, 받은사람이메일, 메일종류(S:보낸메일/R:받은/C:참조된)
+	 */
+	@ResponseBody
+	@RequestMapping("starOnEmailGroup.ma")
+	public String ajaxStarOnEmailGroup(String[] arr) {
+		
+		ArrayList<Mail> list = new ArrayList<>();
+					
+		for(String s : arr) {
+			
+			String[] mArr = s.split("/"); 
+						
+			// 각각을 mail객체에 담기
+			Mail m = new Mail();
+			m.setMailNo(mArr[0]);
+			m.setMailEmail( mArr[1] ); // => 받은사람일 경우 null이여야하는데 undefined로 문자열임 => sql에서 조건처리 
+			m.setMailCategory(mArr[2]);
+			
+			// mail객체를 list에 담기 
+			list.add(m);						
+		}		
+		// map에 담기
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("list", list);		
+		int result = mService.starOnEmailGroup(map);
+		
+		// pl/sql로 한 sql문은 처리된 행수를 반환하지않는다 => 그러므로 -1나옴 => jsp에서 if(result>0)인경우 라는 조건을 없앰
+		return result > 0 ? "success" : "fail";	
+		
+	}
+	
+	/** 메일함 다중선택 > 중요메일함OUT
+	 * @param arr : 메일번호, 받은사람이메일, 메일종류(S:보낸메일/R:받은/C:참조된)
+	 */
+	@ResponseBody
+	@RequestMapping("starOffEmailGroup.ma")
+	public String ajaxStarOffEmailGroup(String[] arr) {
+		
+		ArrayList<Mail> list = new ArrayList<>();
+					
+		for(String s : arr) {
+			
+			String[] mArr = s.split("/"); 
+						
+			// 각각을 mail객체에 담기
+			Mail m = new Mail();
+			m.setMailNo(mArr[0]);
+			m.setMailEmail( mArr[1] ); // => 받은사람일 경우 null이여야하는데 undefined로 문자열임 => sql에서 조건처리 
+			m.setMailCategory(mArr[2]);
+			
+			// mail객체를 list에 담기 
+			list.add(m);						
+		}		
+		// map에 담기
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("list", list);		
+		int result = mService.starOffEmailGroup(map);
+		
+		// pl/sql로 한 sql문은 처리된 행수를 반환하지않는다 => 그러므로 -1나옴 => jsp에서 if(result>0)인경우 라는 조건을 없앰
+		return result > 0 ? "success" : "fail";	
+		
+	}
+	
+	/** 휴지통 다중선택 > 완전삭제
+	 * @param arr : 메일번호, 받은사람이메일, 메일종류(S:보낸메일/R:받은/C:참조된)
+	 */
+	@ResponseBody
+	@RequestMapping("deleteFix.ma")
+	public String ajaxDeleteFix(String[] arr) {
+		
+		ArrayList<Mail> list = new ArrayList<>();
+					
+		for(String s : arr) {
+			
+			String[] mArr = s.split("/"); 
+						
+			// 각각을 mail객체에 담기
+			Mail m = new Mail();
+			m.setMailNo(mArr[0]);                                    // String[] 문자열로 받았으니까  
+			m.setMailEmail( mArr[1] ); // => 받은사람일 경우 null이여야하는데 undefined로 문자열임 => sql에서 조건처리 
+			m.setMailCategory(mArr[2]);
+			
+			// mail객체를 list에 담기 
+			list.add(m);						
+		}		
+		// map에 담기
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("list", list);		
+		int result = mService.deleteFix(map);
+		
+		// pl/sql로 한 sql문은 처리된 행수를 반환하지않는다 => 그러므로 -1나옴 => jsp에서 if(result>0)인경우 라는 조건을 없앰
+		return result > 0 ? "success" : "fail";	
+		
+	}
+	
+	/** 휴지통 다중선택 > 복구
+	 * @param arr : 메일번호, 받은사람이메일, 메일종류(S:보낸메일/R:받은/C:참조된)
+	 */
+	@ResponseBody
+	@RequestMapping("updateMailY.ma")
+	public String ajaxUpdateMailY(String[] arr) {
+		
+		ArrayList<Mail> list = new ArrayList<>();
+					
+		for(String s : arr) {
+			
+			String[] mArr = s.split("/"); 
+						
+			// 각각을 mail객체에 담기
+			Mail m = new Mail();
+			m.setMailNo(mArr[0]);                                    // String[] 문자열로 받았으니까  
+			m.setMailEmail( mArr[1] ); // => 받은사람일 경우 null이여야하는데 undefined로 문자열임 => sql에서 조건처리 
+			m.setMailCategory(mArr[2]);
+			
+			// mail객체를 list에 담기 
+			list.add(m);						
+		}		
+		// map에 담기
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("list", list);		
+		int result = mService.updateMailY(map);
+		
+		// pl/sql로 한 sql문은 처리된 행수를 반환하지않는다 => 그러므로 -1나옴 => jsp에서 if(result>0)인경우 라는 조건을 없앰
+		return result > 0 ? "success" : "fail";	
+		
+	}
 	
 	
 	

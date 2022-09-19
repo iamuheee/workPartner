@@ -6,10 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
 <!-- css  -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/emailCss/email1.css">
-
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"></jsp:include>
@@ -68,9 +66,9 @@
 
                &nbsp;&nbsp; <input type="checkbox" name="" id="cbx_chkAll" onclick=""> &nbsp;&nbsp;
                
-                <button type="button" class="btn btn-sm btn-danger">영구삭제</button>                
+                <button type="button" class="btn btn-sm btn-danger" onclick="deleteFix();">영구삭제</button>                
 
-                <button type="button" class="btn btn-sm btn-primary">복원</button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="mailReset();">복구</button>
 
             </div>
     
@@ -148,7 +146,7 @@
 	         else $("input[name=chk]").prop("checked", false);
 	     });
 				
-   	 	// 전체메일함 조회
+   	 	// 휴지통 조회
    	 	function selectTotalList(cpage){
    	 		
    	 		$.ajax({
@@ -177,6 +175,7 @@
 	   				               +     '<td>'
 	   	   	 					   +		'<input type="checkbox" class="chk" name="chk" value="'+ list[i].mailNo +'">'
 	   	   	 					   +		'<input type="hidden" class="mailEmail" name="mailEmail" value="'+ list[i].mailEmail +'">'
+	   	   	 				  	   +		'<input type="hidden" class="mailCategory" name="mailCategory" value="'+ list[i].mailCategory +'">'	  
 	   	   	 					   +	'</td>'                
 	   				               +     '<td>'
 	   				               +         '<span class="material-symbols-outlined"';
@@ -243,67 +242,113 @@
    	 		})
    	 	}
    	 	
-   	 	// 1-1 다중선택 => 휴지통
-   	 	// check된 항목들의 메일번호담고(loginUser.empEmail), 만약 체크안한상태로 클릭시 안넘어가도록 조건처리
-   	 	function deleteEmailGroup(){
+   	 	// 1-1 다중선택 => 영구삭제
+   	 	// 만약 체크안한상태로 클릭시 안넘어가도록 조건처리
+   	 	function deleteFix(){
    	 		var arr = new Array();
 	   	 	$("input[name='chk']:checked").each(function(){
 	    		arr.push(($(this).val()));                		
 	    	});
 	   	 	
 		   	 if(arr.length > 0){
-	     		ajaxDeleteEmailGroup(arr);
+		   		ajaxDeleteFix(arr);
 		     }else{
 		     		alert("메일을 선택해주세요");
 		     }
    	 	}
    	 	
-   	 	// 1-2 휴지통함으로 이동
-   	 	function ajaxDeleteEmailGroup(arr){
+   	 	// 1-2 완전삭제처리
+   	 	function ajaxDeleteFix(arr){
    	 		
-   	 		if(confirm( arr.length + "개의 메일을 삭제하시겠습니까? ")){
+   	 		if(confirm( "휴지통의 메일을 지우면 지워진 메일은 복구할 수 없습니다. 메일을 삭제하시겠습니까?")){
    	 			
-   	 			// 배열선언
-   	 			//let arrMailNo = new Array();
-   	 			//let arrEmail = new Array();
+   	 			//메일 구분을 위해서는 1.메일번호 2.받은사람 이메일 3.메일종류(받은메일,보낸메일,참조메일) 
+   	 		
    	 			let arr = new Array();
    	 			
-	   	 		$("input[name='chk']:checked").each(function(){			
-	   	 		// {속성명:값} 객체에 담기
-		   	 		const obj = {
-		   	 			mailNo: $(this).val(),
-		   	 			email:$(this).next().val()	 
-		   	 		};
-   	 				arr.push(obj);  	 				
-   	 				//arrMailNo.push($(this).val());
-   	 				//arrEmail.push($(this).next().val());
-   	 			//console.log(email);
-   	 			console.log(arr);
+	   	 		$("input[name='chk']:checked").each(function(){				   	 		
+	   	 		// ==> 최종 : "/" 문자열로 여며서 담기 ["66/xxxx@gmail.com/S", "", "", ...]
+		   	 		const obj = $(this).val() + "/" + 
+		   	 					$(this).next().val() + "/" + 
+		   	 					$(this).next().next().val();
+   	 				arr.push(obj);  	
 	   	 		}); 
-	   	 		
+   	 				   	 		
    	 			$.ajax({
-   	 				url:"deleteEmailGroup.ma",
+   	 				url:"deleteFix.ma",
    	 				type:"post",
    	 				traditional:true,
-   	 				data: {
-   	 					// 생각1. arr배열에 각각 
-   	 					//arrMailNo:arrMailNo,
-   	 					//arrEmail:arrEmail
-   	 					  
-   	 					// 생각2. [{메일번호,받는사람이메일},{},{},..] 로 담아서 넘기기
+   	 				data: {   	 					
    	 					arr:arr
    	 				},
    	 				success:function(result){
-   	 					if(result == "success"){
-   	 						// 전체조회
-   	 						selectTotalList();
-   	 					}
+   	 					
+ 						alert("메일을 영구삭제했습니다.");
+ 						// 전체조회
+ 						selectTotalList();
+ 						
+ 						// 혹시 전체체크됐을때 기능 후 체크가 사라지도록
+				        $("#cbx_chkAll").prop("checked", false);
+   	 					
    	 				},
    	 				error:function(){
-   	 					console.log("전체메일함 삭제용 ajax 실패");
+   	 					console.log("휴지통 영구삭제용 ajax 실패");
    	 				}
    	 			})  
    	 		}
+   	 	}
+   	 	
+   		// 1-1 다중선택 => 복구
+   	 	// 만약 체크안한상태로 클릭 시 안 넘어가도록 조건 처리
+   	 	function mailReset(){
+   	 		var arr = new Array();
+	   	 	$("input[name='chk']:checked").each(function(){
+	    		arr.push(($(this).val())); // checked 된 input의 value를 받고          		
+	    	});
+	   	 	
+		   	 if(arr.length > 0){ // 그 받아서 차곡차곡 쌓은 arr.length가 0이라면 체크된게 없다는거
+		   		ajaxMailReset(arr);
+		     }else{
+		     		alert("메일을 선택해주세요");
+		     }
+   	 	}
+   	 	
+   	 	// 1-2 복구
+   	 	function ajaxMailReset(arr){
+   	 		
+   	 		//메일 구분을 위해서는 1.메일번호 2.받은사람이메일 3.메일종류(받은메일,보낸메일,참조메일) 
+   	 		
+	 		let arrY = new Array();
+	 			
+   	 		$("input[name='chk']:checked").each(function(){				   	 		
+   	 		// ==> 최종 : "/" 문자열로 여며서 담기 ["66/xxxx@gmail.com/S", "", "", ...]
+	   	 		const obj = $(this).val() + "/" + 
+	   	 					$(this).next().val() + "/" + 
+	   	 					$(this).next().next().val();
+	 				arrY.push(obj);  	
+   	 		}); 
+	 				   	 		
+	 			$.ajax({
+	 				url:"updateMailY.ma",
+	 				type:"post",
+	 				traditional:true,
+	 				data: {   	 					
+	 					arr:arrY
+	 				},
+	 				success:function(result){
+	 					
+						alert("메일이 복구됐습니다.");
+						// 전체조회
+						selectTotalList();
+						
+						// 혹시 전체체크됐을때 복구기능 후 체크가 사라지도록
+				        $("#cbx_chkAll").prop("checked", false);
+	 					
+	 				},
+	 				error:function(){
+	 					console.log("휴지통 복구용 ajax 실패");
+	 				}
+	 			})
    	 	}
    	 	
    	 	
