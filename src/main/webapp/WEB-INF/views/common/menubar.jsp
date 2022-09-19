@@ -188,7 +188,7 @@
    .menubarHeadBold{ font-weight: 620;}
    .mainOuter{
    		width:95%;
-        margin:auto;
+        margin:0px auto;
         padding:10px;
     }
     
