@@ -289,25 +289,7 @@ input[type=text] {
 				<form action="" method="post" name="insertForm" id="insertForm" style="float: left"
 					enctype="multipart/form-data"> 
 					<input type="hidden" name="dpCategory" value="${ paperName }">
-		<%-- <c:choose>
-			<c:when test="${ paperName == '연차' }"> 
-			 </c:when> 
-			 <c:when test="${ paperName == '외근' }">
-				<form action="insertOw.si" method="post"   id="insertForm" style="float: left"
-					enctype="multipart/form-data">
-					<input type="hidden" name="dpCategory" value="${ paperName }">
-			</c:when>
-			<c:when test="${ paperName == '퇴직원' }">
-				<form action="insertRe.si" method="post"  id="insertForm" style="float: left"
-					enctype="multipart/form-data">
-					<input type="hidden" name="dpCategory" value="${ paperName }">
-			</c:when>
-			<c:otherwise>
-				<form action="insertCo.si" method="post"  id="insertForm" style="float: left"
-					enctype="multipart/form-data">
-					<input type="hidden" name="dpCategory" value="${ paperName }">
-			</c:otherwise> 
-		 </c:choose>  --%> 
+		
 	<section class="mainTitle">
 			<a class="insertBtn" onclick="insertCheck();">기안하기</a>
 			<a class="insertBtn" onclick="saveCheck()">임시저장</a>
@@ -316,18 +298,18 @@ input[type=text] {
 	</section>
 	<script>
 		function saveCheck() {
-			if (confirm("임시 저장하시겠습니까?") == true) { //확인
+			if (confirm("임시저장하시겠습니까?") == true) { //확인
 				
 				if('${paperName}' == '연차'){
-					document.saveForm.action = "insertV.si";
+					document.insertForm.action = "saveVa.si";
 				}else if('${paperName}' == '외근'){
-					document.saveForm.action = "insertOw.si";
+					document.insertForm.action = "saveOt.si";
 				}else if('${paperName}' == '업무협조'){
-					document.saveForm.action = "insertCo.si";
+					document.insertForm.action = "saveCo.si";
 				}else {
-					document.saveForm.action = "insertRe.si";
+					document.insertForm.action = "saveRe.si";
 				}
-				document.saveForm.submit();
+				document.insertForm.submit();
 			} else { //취소
 				return false;
 			}
@@ -400,13 +382,6 @@ input[type=text] {
 		</div>
 	</section>
 
-	<script>
-	
-		function fn_editFL()
-			{
-				
-			}
-	</script>
 
 	<script>
 		var chartPopup;

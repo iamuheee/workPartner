@@ -45,25 +45,7 @@ public class SignServiceImpl implements SignService {
 	public int insertCoSign(ArrayList<Sign> signList) {
 		return sDao.insertCoSign(sqlSession, signList);
 	}
-//  기안서 바디
-	@Override
-	public int insertVaDtpaper(Dtpaper d) {
-		return sDao.insertVaDtpaper(sqlSession, d);
-	}
-	@Override
-	public int insertOwDtpaper(Dtpaper d) {
-		return sDao.insertOwDtpaper(sqlSession, d);
-	}
 
-	@Override
-	public int insertReDtpaper(Dtpaper d) {
-		return sDao.insertReDtpaper(sqlSession, d);
-	}
-
-	@Override
-	public int insertCoDtpaper(Dtpaper d) {
-		return sDao.insertCoDtpaper(sqlSession, d);
-	}
 //  기안서 푸터
 	@Override
 	public int insertVacation(Vacation v) {
@@ -83,7 +65,16 @@ public class SignServiceImpl implements SignService {
 	public int insertCooperation(Cooperation c) {
 		return sDao.insertCooperation(sqlSession, c);
 	}
-
+	
+//  기안서 통합 서식
+	@Override
+	public int insertDtpaper(Dtpaper d) {
+		return sDao.insertDtpaper(sqlSession, d);
+	}
+	@Override
+	public int saveDtpaper(Dtpaper d) {
+		return sDao.saveDtpaper(sqlSession, d);
+	}
 //  기안서목록
 	@Override
 	public int selectProgressListCount() {
@@ -215,6 +206,8 @@ public class SignServiceImpl implements SignService {
 	public SelectOtwork selectOtwork(int dpNo) {
 		return null;
 	}
+	
+	
 
 	
 

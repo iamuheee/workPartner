@@ -16,6 +16,9 @@
 		<result column="rm_enroll" property="rmEnroll" />
 		<result column="rm_modify" property="rmModify" />
 		<result column="rm_person" property="rmPerson" />
+		<collection property="file" resultMap="fileResult" />
+		<collection property="closedRoom" resultMap="closedRoomResult" />
+		<collection property="usingEquip" resultMap="usingEquipResult" />
 	</resultMap>
 	
 	<resultMap id="fileResult" type="File">
@@ -31,8 +34,29 @@
 	</resultMap>
 	
 	<resultMap id="usingEquipResult" type="UsingEquip">
-		<result column="rm_no" property="rmNo" />
+		<!-- <result column="rm_no" property="rmNo" /> -->
 		<result column="eq_no" property="eqNo" />
+		<result column="eq_status" property="eqStatus" />
+		<collection property="equip" resultMap="equipResult"/>
+	</resultMap>
+	
+	<resultMap id="closedRoomResult" type="ClosedRoom">
+		<result column="cr_no" property="crNo" />
+		<!-- <result column="rm_no" property="rmNo" /> -->
+		<result column="cr_start" property="crStart" />
+		<result column="cr_end" property="crEnd" />
+		<result column="cr_reason" property="crReason" />
+	</resultMap>
+	
+	<resultMap id="selectRoomDetail" type="Room">
+		<id column="rm_no" property="rmNo" />
+		<result column="rm_name" property="rmName" />
+		<result column="rm_status" property="rmStatus" />
+		<result column="rm_person" property="rmPerson" />
+		<collection property="files" resultMap="fileResult" />
+		<collection property="closedRooms" resultMap="closedRoomResult" />
+		<!-- <collection property="usingEquips" resultMap="usingEquipResult" /> -->
+		<collection property="equips" resultMap="equipResult"/>
 	</resultMap>
 	
 	<!-- 회의 장비 추가 -->
@@ -132,5 +156,57 @@
 		  )
 	</foreach>
 	</update>
-
+	
+	<!-- 회의실 목록 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectRoomList" resultMap="roomResult">
+		select
+		       rm_no
+		     , rm_name
+		     , file_path
+		  from tb_room
+		  join tb_file on(rm_no = file_ref_no)
+		 where file_ref_no = rm_no
+		   and file_level = 1
+		   and rm_status = 'Y'
+		 order
+		    by rm_name asc
+	</select>
+    
+    <!-- 회의실 정보 조회 -->
+    <!-- 작성자 : 박태은 -->
+    <select id="selectRoom" resultMap="selectRoomDetail">
+	    select 
+	    	   rm_no
+	         , r.rm_name
+	         , r.rm_status
+	         , r.rm_person
+	         , f.file_no
+	         , f.file_path
+	         , f.file_level
+	         , c.cr_no
+	         , c.cr_start
+	         , c.cr_end
+	         , c.cr_reason
+		     , e.eq_name
+		from tb_room r
+		left join tb_file f on(rm_no = file_ref_no)
+		left join tb_closedroom c on(r.rm_no = c.rm_no)
+		left join tb_usingequip u on(r.rm_no = u.rm_no)
+		left join tb_equip e on(u.eq_no = e.eq_no)
+	   where rm_no = #{rmNo}
+		 and u.eq_status = 'Y'
+		 and e.eq_status = 'Y'
+	   order by f.file_level asc
+    </select>
+    
+    <!-- 회의실 삭제 -->
+    <!-- 작성자 : 박태은 -->
+    <update id="deleteRoom">
+    	update
+    	       tb_room
+    	   set rm_status = 'N'
+    	 where rm_no = #{rmNo}
+    </update>
+		 
 </mapper>

@@ -45,7 +45,7 @@ public class RoomController {
 	 * @method	: 회의실 등록 페이지 요청 처리 메소드 
 	 * @return	: String
 	 */
-	@RequestMapping("enrollForm.rm")
+	@RequestMapping("enrollForm.ro")
 	public String insertForm() {
 		return "room/roomEnrollForm";
 	}
@@ -118,7 +118,7 @@ public class RoomController {
 			
 			if(result2 > 0 ) {	// 2. tb_file insert 성공 시
 				String[] equips = r.getEqNo().split(",");	// 체크박스로 넘어온 값을 배열에 담아 넘김
-				System.out.println("equips : " + equips);
+//				System.out.println("equips : " + equips);
 				int result3 = rService.insertUsingEquip(equips);
 				
 				if(result3 == equips.length) {	// 3. tb_usingequip insert 성공 시
@@ -131,6 +131,53 @@ public class RoomController {
 		
 		model.addAttribute("errorMsg", "회의실 등록 실패");
 		return "common/error";
+	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 18.
+	 * @method	: 회의실 목록 조회 요청 처리
+	 * @return	: list
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectList.ro", produces="application/json; charset=UTF-8")
+	public String ajaxSelectList() {
+		ArrayList<Room> list = rService.selectRoomList();
+		return new Gson().toJson(list);
+	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 18.
+	 * @method	: 작성중
+	 * @param	: 
+	 * @return	: String
+	 */
+	@ResponseBody
+	@RequestMapping(value="select.ro", produces="application/json; charset=UTF-8")
+	public String ajaxSelectRoom(String rmNo) {
+		System.out.println(rmNo);	// 넘어온 rmNo 값 조회
+		
+		ArrayList<Room> r = rService.selectRoom(rmNo);
+		
+		return new Gson().toJson(r);
+	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 19.
+	 * @method	: 회의실 삭제 요청 처리 
+	 * @param	: rmNo
+	 * @return	: result
+	 */
+	@ResponseBody
+	@RequestMapping("delete.ro")
+	public String ajaxDeleteRoom(String rmNo) {
+//		System.out.println(rmNo);
+		int result = rService.deleteRoom(rmNo);
+//		System.out.println(result);
+		return (result > 0) ? "success" : "fail";
+		
 	}
 	
 

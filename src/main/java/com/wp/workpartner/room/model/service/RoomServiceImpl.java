@@ -2,7 +2,6 @@ package com.wp.workpartner.room.model.service;
 
 import java.util.ArrayList;
 
-import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,19 +45,25 @@ public class RoomServiceImpl implements RoomService{
 	}
 
 	@Override
-	public Room selectRoom(Room r) {
-		return null;
+	public ArrayList selectRoom(String rmNo) {
+		return rDao.selectRoom(sqlSession, rmNo);
 	}
-
+	
 	@Override
 	public int updateRoom(Room r) {
 		return 0;
 	}
 
 	@Override
-	public int deleteRoom(Room r) {
-		return 0;
+	public int deleteRoom(String rmNo) {
+		return rDao.deleteRoom(sqlSession, rmNo);
 	}
+
+	@Override
+	public ArrayList selectRoomList() {
+		return rDao.selectRoomList(sqlSession);
+	}
+
 
 	
 

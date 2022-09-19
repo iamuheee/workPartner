@@ -15,17 +15,8 @@ import com.wp.workpartner.sign.model.vo.Vacation;
 @Repository
 public class SignDao {
 //  기안서 바디
-	public int insertVaDtpaper(SqlSessionTemplate sqlSession, Dtpaper d) {
-		return sqlSession.insert("signMapper.insertVaDtpaper", d);
-	}
-	public int insertOwDtpaper(SqlSessionTemplate sqlSession, Dtpaper d) {
-		return sqlSession.insert("signMapper.insertOwDtpaper", d);
-	}
-	public int insertReDtpaper(SqlSessionTemplate sqlSession, Dtpaper d) {
-		return sqlSession.insert("signMapper.insertReDtpaper", d);
-	}
-	public int insertCoDtpaper(SqlSessionTemplate sqlSession, Dtpaper d) {
-		return sqlSession.insert("signMapper.insertCoDtpaper", d);
+	public int insertDtpaper(SqlSessionTemplate sqlSession, Dtpaper d) {
+		return sqlSession.insert("signMapper.insertDtpaper", d);
 	}
 //	결재선
 	public int insertVaSign(SqlSessionTemplate sqlSession, ArrayList<Sign> signList) {
@@ -36,7 +27,6 @@ public class SignDao {
 		}
 		
 		return result;
-		//return sqlSession.insert("signMapper.insertSign", signList);
 	}
 	public int insertOwSign(SqlSessionTemplate sqlSession, ArrayList<Sign> signList) {
 		
@@ -46,7 +36,6 @@ public class SignDao {
 		}
 		
 		return result;
-		//return sqlSession.insert("signMapper.insertSign", signList);
 	}
 	public int insertReSign(SqlSessionTemplate sqlSession, ArrayList<Sign> signList) {
 		
@@ -56,7 +45,6 @@ public class SignDao {
 		}
 		
 		return result;
-		//return sqlSession.insert("signMapper.insertSign", signList);
 	}
 	public int insertCoSign(SqlSessionTemplate sqlSession, ArrayList<Sign> signList) {
 		
@@ -66,7 +54,9 @@ public class SignDao {
 		}
 		
 		return result;
-		//return sqlSession.insert("signMapper.insertSign", signList);
+	}
+	public int saveDtpaper(SqlSessionTemplate sqlSession, Dtpaper d) {
+		return sqlSession.insert("signMapper.saveDtpaper", d);
 	}
 //	기안서 푸터
 	public int insertVacation(SqlSessionTemplate sqlSession, Vacation v) {

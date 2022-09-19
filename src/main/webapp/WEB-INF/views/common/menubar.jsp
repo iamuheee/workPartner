@@ -498,7 +498,7 @@
 	                                   <div class="collapse" id="pagesCollapseProject" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages1">
 	                                       <nav class="sb-sidenav-menu-nested nav">
 	                                       	   <a class="btn btn-sm btn-primary btn-size" href="enrollForm.ro" style="margin:10px;">+ 회의실 등록</a>
-	                                           <a class="nav-link nav-choice" href="">회의실 관리</a>
+	                                           <a class="nav-link nav-choice" href="list.ro">회의실 관리</a>
 	                                           <a class="nav-link nav-choice" href="">예약 이력 조회</a>
 	                                       </nav>
 	                                   </div>                                                                    

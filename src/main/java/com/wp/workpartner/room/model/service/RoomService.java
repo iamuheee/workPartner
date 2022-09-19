@@ -1,8 +1,7 @@
 package com.wp.workpartner.room.model.service;
 
 import java.util.ArrayList;
-
-import org.springframework.web.multipart.MultipartFile;
+import java.util.HashMap;
 
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.room.model.vo.Room;
@@ -20,13 +19,16 @@ public interface RoomService {
 	int insertRoomImg(File file, int fileLevel);
 	int insertUsingEquip(String[] equips);
 	
-	// 회의실 조회 서비스 (select)
-	Room selectRoom(Room r);
+	// 회의실 목록 조회 서비스 (select) -- ajax
+	ArrayList selectRoomList();
+	
+	// 회의실 조회 서비스 (select) -- ajax
+	ArrayList selectRoom(String rmNo);
 	
 	// 회의실 수정 서비스 (update)
 	int updateRoom(Room r);
 	
 	// 회의실 삭제 서비스 (update)
-	int deleteRoom(Room r);
+	int deleteRoom(String rmNo);
 
 }
