@@ -142,7 +142,8 @@
             				let html = "";
             				// dlist[i] = ProjectBoard 객체
             				for(let i=0; i<dlist.length; i++){
-            				html += 	'<div class="card-title">'
+            				html += '<div class="card shadow-sm border-1 rounded-lg">'
+            					  +		'<div class="card-title">'
             					  + 		'<div class="left" style="width:8%; height:50px;">'
             					  +				'<span class="title" style="line-height:70px; padding:20px;">' + dlist[i].refType + '</span>'
             					  +			'</div>'
@@ -183,17 +184,16 @@
 	                              +		'<div class="card-body">'
 	                              +			'<h2 class="title">' + dlist[i].title + '</h3>'
 	                              +			'<div class="content"><p style="white-space:pre-line">' + dlist[i].content +'</p></div>'
-	                              +		'</div>'            					  
+	                              +		'</div>'      
+	                              +	'</div><br><br>'
             				}
             				
             				$("#duty-wrapper").html(html);
-            					  
             			},
             			error:function(){
             				console.log("실패~");
             			}
             		})
-            		
             	}
             
             
@@ -202,15 +202,11 @@
 		            loadDutyList();
 
             	})	
-            	
-            	// 각 progress 버튼에 스타일 주기
             </script>
             
-            <div id="duty-wrapper" class="card shadow-sm border-1 rounded-lg">
-
-
+			<div id="duty-wrapper"></div>
 			
-			</div>
+			
 			<br><br>
 				
 			
