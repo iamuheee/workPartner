@@ -251,11 +251,28 @@
 		select 
 				dep_cd
 			  , dep_name
-			from TB_DEPARTMENT 
+			from tb_department 
 	</select>
 	
-	<select id="postionList" resultMap="positionResult">
-	
+	<select id="positionList" resultMap="positionResult">
+		 select 
+				pos_cd
+			  ,	pos_name
+		   from tb_position
 	</select>
+	
+	<insert id="insertPosition">
+		insert 
+			into tb_position
+				(
+					pos_cd
+				  , pos_name
+				)
+				values
+				(
+					#{positionCode}
+				  , #{positionName}
+				)	
+	</insert>
 	
 </mapper>

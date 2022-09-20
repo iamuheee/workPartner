@@ -46,10 +46,15 @@ public class AttServiceImpl implements AttService{
 		return aDao.departmentList(sqlSession);
 	}
 	
-	  // 직무조회	
+	// 직무조회	
 	@Override
 	public ArrayList<Position> positionList() {
 		return aDao.positionList(sqlSession);
+	}
+	// 직무등록
+	@Override
+	public int insertPosition(String positionCode, String positionName) {
+		return aDao.insertPosition(positionCode, positionName, sqlSession);
 	}
 
 }

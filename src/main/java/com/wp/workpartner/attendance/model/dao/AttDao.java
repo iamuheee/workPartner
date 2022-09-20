@@ -66,5 +66,14 @@ public class AttDao {
 		return (ArrayList)sqlSession.selectList("attendanceMapper.positionList");
 	}
 
+	public int insertPosition(String positionCode, String positionName, SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("positionCode", positionCode);
+		map.put("positionName", positionName);
+		
+		return sqlSession.insert("attendanceMapper.insertPosition", map);
+	}
+
 
 }

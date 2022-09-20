@@ -2,6 +2,8 @@ package com.wp.workpartner.attendance.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,6 +80,14 @@ public class AttController {
 		return "attendance/adminVacationView";
 	}
 	
+	/** 공휴일 관리화면 이동하는 url
+	 * @return url
+	 */
+	@RequestMapping("adminHoliday.att")
+	private String adminHoliday() {
+		return "attendance/adminHolidayView";
+	}
+	
 	/** 직위/직무 url
 	 * @return url
 	 */
@@ -88,10 +98,25 @@ public class AttController {
 		ArrayList<Position> list2 = aService.positionList();    // 직위정보 가져오기
 		
 		model.addAttribute("list", list);
+		model.addAttribute("list2", list2);
 		
 		return "attendance/adminPositionView";
 	}
 	
+	// 직위 등록
+	@RequestMapping(value="insert.pst", produces="application/json; charset=utf-8")
+	private String insertPosition(Model model, HttpSession session, String positionCode, String positionName) {
+		
+		int result = aService.insertPosition(positionCode, positionName);
+		
+		if(result > 0) {  
+			session.setAttribute("alertMsg", "성공적으로 직위가 등록되었습니다.");
+			return "redirect:adminPosition.att";
+		}else { 
+			model.addAttribute("errorMsg", "게시글 등록 실패");
+			return "common/errorPage";
+		}
+	}
 	
 	
 	

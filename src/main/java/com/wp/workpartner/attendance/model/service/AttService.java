@@ -21,6 +21,9 @@ public interface AttService {
 	// 직위데이터가져오기
 	ArrayList<Position> positionList();
 	
+	// 직위등록하기
+	int insertPosition(String positionCode, String positionName);
+	
 	
 }
 

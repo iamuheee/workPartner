@@ -34,7 +34,7 @@
 	<div id="outer" style="width:96%">
 		<!-- 상단 메뉴 제목 영역 -->
 		<div id="header">
-		    <h3>직위/직무 설정</h3>
+		    <h3>공휴일 관리</h3>
 		</div>
 		
 		<div style="width:80%"><hr></div>
@@ -52,8 +52,8 @@
 					<table class="table table-hover" style="text-align:center">
 						<thead>
 							<tr>                            
-								<th>직위코드</th>
-								<th>직위명</th>			
+								<th>공휴일코드</th>
+								<th>공휴일명</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -77,42 +77,6 @@
 				</div>
 		    </div>
 			
-			<!-- 테이블 -->
-		    <div class="div1" style="width:44%; height:600px; float:right;" >
-		  
-				<br>
-				<div style="height: 90%; width:90%">
-				  <button onclick="" class="btn btn-sm btn-primary" style="width:50px; height:30px; font-size:15px; float:right" >등록</button>
-
-				  <br><br>
-
-				  <table class="table table-hover" style="text-align:center">
-					  <thead>
-						  <tr>                            
-							  <th>부서코드</th>
-							  <th>부서명</th>			
-						  </tr>
-					  </thead>
-					  <tbody>
-					  	<c:choose>
-						  	<c:when test="${ empty list }">
-						  		<td colspan="2">조회된 부서가 없습니다.</td>
-							</c:when>
-							<c:otherwise>
-								<c:forEach var="d" items="${list}">
-								  <tr>
-									  <td>${d.depCd}</td>
-								  	  <td>${d.depName}</td>
-							  	  </tr>
-							 	</c:forEach>
-							</c:otherwise> 
-					 	</c:choose>
-					  </tbody>
-				  
-		  
-				  </table>
-			  </div>
-		  </div>
 		</div>
 		<div style="clear:both"></div>
 	
@@ -133,7 +97,7 @@
                         </button>
                     </div>
                     <div class="modal-body">                          
-                         <form action="insert.pst" method="get">                                              
+                         <form action="" method="get">                                              
                             <div align="center">
                                 <table>    
                                 	<tr>                                    
