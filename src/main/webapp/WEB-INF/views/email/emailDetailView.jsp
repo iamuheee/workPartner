@@ -8,14 +8,19 @@
 <title>Insert title here</title>
 <!-- css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/emailCss/email1.css">
-
+<style>
+.emMain {
+	/* background-color:rgb(248, 248, 248); */
+	padding: 5px 70px 10px 70px;
+}
+</style>
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"></jsp:include>	
 
     <div style="height: 20px;"></div>
 
-    <div class="emOuter1" >
+    <!-- <div class="emOuter1" > -->
 
         <div class="EmContainer1">
            
@@ -36,7 +41,8 @@
                <c:if test="${ m.mailSecurity eq 'S' }">
                		<span class="borderStyle">기밀</span>
                </c:if>
-                ${ m.mailTitle } 
+               <br>
+                <span style="font-size:16px"><b>${ m.mailTitle }</b></span> 
                 <c:if test="${ m.mailImportant eq 'I' }">
 	                <span style="color: red;">!</span> 
                 </c:if>
@@ -77,6 +83,7 @@
                                                  
                 </div>
                 
+                <hr>
                 <br>
             </div>
             
@@ -92,7 +99,7 @@
         </div>
 
         
-    </div>
+   <!--  </div> -->
 
     
 </body>

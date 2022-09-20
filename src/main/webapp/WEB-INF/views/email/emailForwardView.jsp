@@ -545,7 +545,7 @@
 	                					selectValue += 'selected';
 	                					
 	                					sigText +=  '<div style="font-size: 11px; color:#525252;" id="sigContent">'
-	                							 +		"<br><br><br><br><br><br> <hr style='width:90%'>"
+	                							 +		"<br><br><br><br><br><br> <hr style='width:90%; height: 0.5px;'>"
 			   					                 +       '<b>이름 </b>'+ list[i].sigName+' <br>'
 			   					                 +       '<b>부서 </b>'+ list[i].sigDepartment+'&nbsp; <b> 직급</b>  '+ list[i].sigPosition+' <br>';
 			   					        if(list[i].sigAddress != null){
@@ -569,7 +569,7 @@
                 				selectValue	+= '</select> ';
                 				
                 				sigText 	+=  '<div style="height:100px"></div>' 
-                							 +	'<div style="font-size: 10px; color:#525252;">'                            
+                							 +	'<div style="font-size: 11px; color:#525252;">'                            
 				                             +		 '-------------------Original Message ------------------- <br>'
 				                             +  	 'From:" ${m.mailSenderName} " <br>'
 				                             +  	 'To: ${loginUser.empEmail } <br>'
@@ -582,6 +582,8 @@
                 			// select-option	
 	            			$("#sigArea").html(selectValue); 
                 			$(".note-editable").html(sigText);
+                			// 사용자가 내용입력안할경우 내가 넣은 이전메일내용, 서명모두 사라져버려서 insert로 빈문자열도 넣어줌
+                			$('#summernote').summernote('insertText', ' ');
                 			
             			}		                       
             			
@@ -605,7 +607,7 @@
             			
             			for(let j=0; j<list.length; j++){
             				if(list[j].sigNo == sigNo){
-                				sigText +=       "<br><br><br><br><br><br> <hr style='width:90%'>"
+                				sigText +=       "<br><br><br><br><br><br> <hr style='width:90%; height: 0.5px;'>"
                 						 +		 '<b>이름 </b>'+ list[j].sigName+' <br>'
     					                 +       '<b>부서 </b>'+ list[j].sigDepartment+' <b>직급</b> '+ list[j].sigPosition+' <br>';
     					        if(list[j].sigAddress != null){
