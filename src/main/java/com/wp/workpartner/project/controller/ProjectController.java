@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.service.ProjectServiceImpl;
 import com.wp.workpartner.project.model.vo.Project;
+import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Controller
@@ -68,6 +69,11 @@ public class ProjectController {
 	
 	@RequestMapping("proom.pr")
 	public ModelAndView selectProject(ModelAndView mv, String projNo) {
+		Project p = pService.selectProject(projNo);
+		p.setBlist( pService.selectProjectBoardList(p) );
+		// 이제 Project p 안에는 ArrayList<ProjectMember>, ArrayList<ProjectBoard>가 담겨있음
+		// ProjectBoard 안에는 게시글 종류에 따라 ProjectDuty, ProjectMeeting이 담겨있음
+		mv.addObject("p", p).setViewName("project/projectDetailMain");
 		return mv;
 	}
 	

@@ -6,6 +6,9 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.wp.workpartner.project.model.vo.Project;
+import com.wp.workpartner.project.model.vo.ProjectBoard;
+import com.wp.workpartner.project.model.vo.ProjectDuty;
+import com.wp.workpartner.project.model.vo.ProjectMeeting;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Repository
@@ -56,8 +59,19 @@ public class ProjectDao {
 	}
 	
 	public int insertMember(SqlSessionTemplate sqlSession, ProjectMember m) {
-		System.out.println(m);
 		return sqlSession.insert("projectMapper.insertMember", m);
+	}
+	
+	public ArrayList<ProjectBoard> selectProjectBoardList(SqlSessionTemplate sqlSession, Project p){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectProjectBoardList", p);
+	}
+	
+	public ProjectDuty selectProjectDuty(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.selectOne("projectMapper.selectProjectDuty", pb);
+	}
+	
+	public ProjectMeeting selectProjectMeeting(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.selectOne("projectMapper.selectProjectMeeting", pb);
 	}
 	
 

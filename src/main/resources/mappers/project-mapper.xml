@@ -25,6 +25,46 @@
 		<result column="POS_NAME" property="position" />
 	</resultMap>
 	
+	<resultMap id="projectBoardResult" type="ProjectBoard">
+		<result column="PBOARD_NO" property="pboardNo" />
+		<result column="PROJ_NO" property="projNo" />
+		<result column="PBOARD_WRITER" property="pboardWriter" />
+		<result column="EMP_NAME" property="writerName" />
+		<result column="REF_TYPE" property="refType" />
+		<result column="TITLE" property="title" />
+		<result column="CONTENT" property="content" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="MODIFY_DATE" property="modifyDate" />
+		<result column="STATUS" property="status" />
+	</resultMap>
+	
+	<resultMap id="projectDutyResult" type="ProjectDuty">
+		<result column="PBAORD_NO" property="pboardNo" />
+		<result column="IMPORTANCE" property="importance" />
+		<result column="PROGRESS" property="progress" />
+		<result column="START_DATE" property="startDate" />
+		<result column="END_DATE" property="endDate" />
+		<result column="IN_CHARGE" property="incharge" />
+		<result column="CALENDAR_YN" property="calendarYN" />
+	</resultMap>
+	
+	<resultMap id="projectMeetingResult" type="ProjectMeeting">
+		<result column="PBOARD_NO" property="pboardNo" />
+		<result column="MEETING_DATE" property="meetingDate" />
+		<result column="START_TIME" property="startTime" />
+		<result column="END_TIME" property="endTime" />
+		<result column="MEETING_PLACE" property="meetingPlace" />
+		<result column="IN_CHARGE" property="incharge" />
+		<result column="CALENDAR_YN" property="calendarYN" />
+	</resultMap>
+	
+	<resultMap id="projectMeetingMemberResult" type="ProjectMeetingMember">
+		<result column="PBOARD_NO" property="pboardNo" />
+		<result column="EMP_NO" property="empNo" />
+		<result column="EMP_NAME" property="empName" />
+		<result column="ATTENDANCE_YN" property="attendanceYN" />
+	</resultMap>
+	
 	<insert id="insertProject">
 		INSERT
 		  INTO TB_PROJECT
@@ -168,6 +208,46 @@
 		  FROM TB_PROJECT_MEM
 		 WHERE PROJ_NO = #{projNo}
 		   AND MEM_NO IN ${memNo}
+	</select>
+	
+	<select id="selectProjectBoardList" resultMap="projectBoardResult">
+		SELECT PBOARD_NO
+			   PROJ_NO
+			 , PBOARD_WRITER
+			 , EMP_NAME
+			 , REF_TYPE
+			 , TITLE
+			 , CONTENT
+			 , CREATE_DATE
+		  FROM TB_PBOARD
+		  JOIN TB_EMPLOYEE
+		  	ON PBOARD_WRITER = EMP_NO
+		 WHERE PROJ_NO = #{projNo}
+		   AND STATUS = 'Y'
+	</select>
+	
+	<select id="selectProjectDuty" resultMap="projectDutyResult">
+		SELECT PBOARD_NO
+		     , IMPORTANCE
+		     , PROGRESS
+		     , START_DATE
+		     , END_DATE
+		     , IN_CHARGE
+		     , CALENDAR_YN
+		  FROM TB_PDUTY
+		 WHERE PBOARD_MP = #{pboardNo}
+	</select>
+	
+	<select id="selectProjectMeeting" resultMap="projectMeetingResult">
+		SELECT PBOARD_NO
+			 , MEETING_DATE
+			 , START_TIME
+			 , END_TIME
+			 , MEETING_PLACE
+			 , IN_CHARGE
+			 , CALENDAR_YN
+		  FROM TB_PMEET
+		 WHERE PBOARD_MP = #{pboardNo}
 	</select>
 
 

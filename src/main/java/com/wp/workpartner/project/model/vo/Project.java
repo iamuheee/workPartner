@@ -24,4 +24,7 @@ public class Project {
 	
 	ArrayList<ProjectMember> mlist;
 	private String memName;
+	
+	ArrayList<ProjectBoard> blist;
+	ArrayList<ProjectBookmark> bmklist;
 }

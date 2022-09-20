@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.dao.ProjectDao;
 import com.wp.workpartner.project.model.vo.Project;
+import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Service
@@ -123,6 +124,19 @@ public class ProjectServiceImpl implements ProjectService{
 			}
 			return result;
 		}
+	}
+
+
+	@Override
+	public ArrayList<ProjectBoard> selectProjectBoardList(Project p) {
+		ArrayList<ProjectBoard> blist = pDao.selectProjectBoardList(sqlSession, p);
+		for(ProjectBoard pb : blist) {
+			switch( pb.getRefType() ) {
+			case "업무" : pb.setPduty( pDao.selectProjectDuty(sqlSession, pb) ); break;
+			case "회의" : pb.setPmeet( pDao.selectProjectMeeting(sqlSession, pb) ); break;
+			}
+		}
+		return blist;
 	}
 	
 	
