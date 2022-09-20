@@ -306,7 +306,7 @@ public class AddressController {
 	}
 	
 	// 프로젝트 게시판 담당자용 주소록
-	@RequestMapping("addressPcharge.ad");
+	@RequestMapping("addressPcharge.ad")
 	public String addressPcharge() {
 		return "address/addressPcharge";
 	}
