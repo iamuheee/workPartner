@@ -31,7 +31,8 @@ public class Employee {
 	private String empProfile;
 	private String empAccStatus;
 	private String empNtAdmin;
-	private String depCd;
+	private String depCd;   // 부서이름
+	private String depCode; // 부서코드
 	private String posCd;
 	private String empTenure;
 	private String empSigUse;

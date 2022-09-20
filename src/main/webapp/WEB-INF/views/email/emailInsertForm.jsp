@@ -244,7 +244,7 @@
 	                 <tr>
 	                    <td colspan="2" width="90px">
 	                        <button id="btn-upload" type="button" class="btn btn-sm btn-secondary">파일 추가</button>
-	                        <input id="upfile" name="upfile"  multiple="multiple" type="file" style="display:none;">
+	                        <input id="upfile" name="upfile"  multiple="multiple" type="file" style="display:none;" >
 	                    </td>
 	                    <td colspan="2"><span style="font-size:10px; color: gray;">※첨부파일은 최대 3개까지 등록이 가능합니다.</span></td>
 	                </tr>

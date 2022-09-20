@@ -46,6 +46,7 @@
 		<result column="END_DATE" property="endDate" />
 		<result column="IN_CHARGE" property="incharge" />
 		<result column="CALENDAR_YN" property="calendarYN" />
+		<result column="IN_CHARGE_NAME" property="inchargeName"/>
 	</resultMap>
 	
 	<resultMap id="projectMeetingResult" type="ProjectMeeting">
@@ -55,14 +56,24 @@
 		<result column="END_TIME" property="endTime" />
 		<result column="MEETING_PLACE" property="meetingPlace" />
 		<result column="IN_CHARGE" property="incharge" />
+		<result column="IN_CHARGE_NAME" property="inchargeName" />
 		<result column="CALENDAR_YN" property="calendarYN" />
 	</resultMap>
 	
 	<resultMap id="projectMeetingMemberResult" type="ProjectMeetingMember">
 		<result column="PBOARD_NO" property="pboardNo" />
-		<result column="EMP_NO" property="empNo" />
-		<result column="EMP_NAME" property="empName" />
+		<result column="MEM_NO" property="memNo" />
+		<result column="MEM_NAME" property="memName" />
 		<result column="ATTENDANCE_YN" property="attendanceYN" />
+	</resultMap>
+	
+	<resultMap id="fileResult" type="file">
+		<result column="FILE_NO" property="fileNo" />
+		<result column="FILE_REF_NO" property="refNo" />
+		<result column="FILE_CATEGORY" property="fileCategory" />
+		<result column="FILE_ORIGIN_NAME" property="fileOriginName" />
+		<result column="FILE_ORIGIN_NAME" property="fileChangeName" />
+		<result column="FILE_PATH" property="filePath" />
 	</resultMap>
 	
 	<insert id="insertProject">
@@ -297,6 +308,48 @@
 		     , DEFAULT
 		     )
 	</insert>
+	
+	<select id="selectDutyBoardList" resultMap="projectBoardResult">
+		SELECT
+			   PROJ_NO
+			 , PBOARD_NO
+			 , PBOARD_WRITER
+			 , EMP_NAME
+			 , REF_TYPE
+			 , TITLE
+			 , CONTENT
+			 , CREATE_DATE
+		  FROM TB_PBOARD
+		  JOIN TB_EMPLOYEE
+		    ON PBOARD_WRITER = EMP_NO
+		 WHERE PROJ_NO = #{projNo}
+		   AND STATUS = 'Y'
+		   AND REF_TYPE = '업무'
+	</select>
+	
+	<select id="selectDuty" resultMap="projectDutyResult">
+		SELECT
+			   PBOARD_NO
+			 , PROGRESS
+			 , START_DATE
+			 , END_DATE
+			 , IN_CHARGE
+			 , IN_CHARGE_NAME
+			 , CALENDAR_YN
+		  FROM TB_PDUTY
+		 WHERE PBOARD_NO = #{pboardNo}
+	</select>
+	
+	<select id="selectFile" resultMap="fileResult">
+		SELECT
+		       FILE_NO
+		     , FILE_ORIGIN_NAME
+		     , FILE_PATH
+		  FROM TB_FILE
+		 WHERE FILE_CATEGORY = 2
+		   AND FILE_STATUS = 'Y'
+		   AND FILE_REF_NO = #{pboardNo}
+	</select>
 
 
 </mapper>

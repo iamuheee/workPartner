@@ -19,6 +19,7 @@
 		<result column="emp_acc_status" property="empAccStatus" />
 		<result column="emp_nt_admin" property="empNtAdmin" />
 		<result column="dep_name" property="depCd" /> <!-- join해서 가져올 부서명 -->
+		<result column="dep_cd" property="depCode" /> <!-- 실제 부서코드 -->
 		<result column="pos_name" property="posCd" /> <!-- join해서 가져올 직위명 -->
 		<result column="emp_tenure" property="empTenure" />
 		<result column="emp_sig_use" property="empSigUse" />

@@ -140,8 +140,41 @@
                 <div class="setting-right">
                     <span class="title">마감일</span>
                     <input type="date" name="endDate" class="form-control" required><br>
-                    
                 </div>
+                
+                <script>
+             		// 시작일 날짜로 오늘 이전 날짜 불가능하도록 만들기
+	            	let year = new Date().getFullYear();
+	            	let month = ('0' + (new Date().getMonth() + 1)).slice(-2);
+	            	let date = ('0' + new Date().getDate()).slice(-2);
+	           		$("input[name=startDate]").attr("min", year + '-' + month + '-' + date );
+	           		$("input[name=endDate]").attr("min", year + '-' + month + '-' + date );
+	           		
+	            	// 마감일 날짜로 시작일 이전 날짜 불가능하도록 만들기
+	            	$("input[name=startDate]").change(function(){
+	            		$("input[name=endDate]").attr("min", $(this).val());
+	            	})
+	            	
+          	    	// TB_DUTY의 TITLE 컬럼의 자료형은 VARCHAR2(500BYTE)임 -> 제목 란에 500BYTE 초과하게 적으면 막아주기
+			    	$("input[name=title]").keyup(function(){
+			    		let totalByte = 0;
+			    		for( let i=0; i< $(this).val().length; i++ ){
+				    		if( escape($(this).val().charAt(i)) > 4 ){ 
+				    			// escape("문자열") : 해당 문자열을 16진수로 반환, 아스키코드는 0x??의 4자리로 표현됨 (한글 등은 4자리 초과)
+				    			totalByte += 2;
+				    		}else{
+				    			totalByte++;
+			    			}
+				    		
+							if(totalByte > 50){
+				    			alert("최대 글자수를 초과하였습니다. 다시 입력해주세요.");
+				    			// 마지막 글자 삭제해주기
+								$(this).val().substring( 0, $(this).val().length - 1 );					
+							}	    			
+			    		}
+			    	})
+                </script>
+                
                 <br style="clear:both;"><br><hr>
                 <div class="submit-area" align="right">
                     <button class="btn btn-secondary" onclick="javascript:history.back();">이전</button>

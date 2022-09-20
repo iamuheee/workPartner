@@ -87,5 +87,16 @@ public class ProjectDao {
 		return sqlSession.insert("projectMapper.insertFile", f);
 	}
 	
+	public ArrayList<ProjectBoard> selectDutyBoardList(SqlSessionTemplate sqlSession, Project p){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectDutyBoardList", p);
+	}
+	
+	public ProjectDuty selectDuty(SqlSessionTemplate sqlSession, ProjectBoard pb){
+		return sqlSession.selectOne("projectMapper.selectDuty", pb);
+	}
+	
+	public File selectFile(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.selectOne("projectMapper.selectFile", pb);
+	}
 
 }

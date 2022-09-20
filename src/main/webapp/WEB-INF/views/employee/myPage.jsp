@@ -8,133 +8,101 @@
 <title>Insert title here</title>
 <style>
 	#mypage-outer {
-/*         border:1px solid blue; */
+        /* border:1px solid blue; */
         width:100%;
-        height:100%;
         padding:10px;
         margin:auto;
         position:relative;
-        
-    }
+            }
 
-    /*
-    #mypage-body * {
-        /* border:1px solid pink; 
-        width:90%;
-        margin:auto;
-        font-size:16px;
-    }
-    */
+	#mypage-body {
+		/* border:1px solid red; */
+		width:95%;
+		margin:auto;
+		margin-top:35px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
 
-    #myInfo-top, #myInfo-mid, #myInfo-bottom {
-        width:90%;
-        margin:auto;
-        font-size:16px;
-        margin-bottom: 30px;
-    }
+	#mypage-body {
+		/* border:1px solid grey; */
+	}
 
-    #myInfo-top {
-        display:flex;
-        justify-content: space-between;
-    }
+	#mypage-left{
+		/* border:1px solid lightgrey; */
+		width:26%;
+		height:auto;
+		box-shadow: 1px 1px 16px 0 rgb(0 0 0 / 16%);
+		padding:20px 10px 0 10px;
+	}
 
-    #basicInfoArea {
+	#mypage-right{
+		/* border: 1px solid red; */
+		width:70%;
+		height:70vh;
+	}
+
+	#profileTb{
+		width:100%;
+	}
+
+	#profileImg{
         width:80%;
-    }
-
-    #basicInfo{
-        width:100%;
-        height:auto;
-    }
-
-    #basicInfo * {
-        padding:10px;
-    }
-
-    #profileArea {
-        width:300px;
-        margin-right:40px;
-        height:auto;
-        padding:7px;
-        display:flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    #profileImg{
-        width:200px;
-        height:200px;
+        height:80%;
         border:1px solid lightgray;
         border-radius: 50%;
     }
 
-    #updateInfoBtn {
-        width:100%;
-        display: flex;
-    }
-
-    #updateInfoBtn * {
-        width:60px;
-        margin-right: 10px;
-    }
-
-    .updateImg:hover {
+	#profileImg:hover {
         filter:brightness(0.5);
         transition: .35s;
         cursor: pointer;
     }
 
-    #changePwd table {
-        height:150px;
+	.table-area{	/* 테이블들을 감싸는 div */
+		width:90%;
+		height:auto;
+		border-radius: 12px;
+		padding:5px 17px 16px 17px;
+		box-shadow: 2px 2px 14px 0 rgb(0 0 0 / 8%);
+		/* background-color: lightpink; */
+	}
+
+	.btn-area{
+		width:90%;
+		padding-top:20px;
+		display: flex;
+		justify-content: right;
+	}
+
+	.infoTb{
+		width:100%;
+		border-radius: 8px;
+		
+	}
+
+	.infoTb * {
+		/* border:1px solid black; */
+		padding:7px;
+		font-size: 16px;
+	}
+
+	.infoTb input {
+        width: 300px;
+        height:35px;
+        border:1px solid rgba(0,0,0,.125);
+		border-radius: 8px;
     }
 
-    #changePwd table input {
-        width:250px;
-        height:40px;
-        border:1px solid #b7b9cc;
-        padding-left:10px;
-    }
+	.modal-body input{
+		width:250px;
+		height:35px;
+		border:1px solid rgba(0,0,0,.125);
+		border-radius: 8px;
+		padding-left:10px;
+	}
 
-    #basicInfoArea, #profileArea, #workInfoArea, #contactInfoArea {
-        border-radius: 8px;
-        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    }
-
-    .tableTitle {
-        height:30px;
-        font-size:16px;
-        font-weight: bold;
-        background-color:#f1f1f1;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-    }
-
-    #basicInfo th {
-        width:20%;
-        height:50px;
-    }
-
-    #basicInfo *, #workInfo *, #contactInfo * {
-        padding-left:10px;
-    }
-
-    #workInfo, #contactInfo {
-        table-layout: auto;
-        width:100%;
-        height:165px;
-        table-layout: fixed;
-    }
-    
-    #workInfo th, #contactInfo th{
-        height:50px;
-    }
-
-    #contactInfo input {
-        width: 200px;
-        height:40px;
-        border:1px solid #b7b9cc;
-    }
-    
 </style>
 </head>
 <body>
@@ -145,158 +113,196 @@
 	
 	    <!-- 상단 메뉴 제목 영역 -->
 	    <div id="mypage-header">
-	        <h3>내 정보 관리</h3>
+	        <h3>마이페이지</h3>
 	    </div>
 	    <hr>
 	
 	    <!-- 내 정보 관리 영역 -->
 	    <div id="mypage-body">
-	        <div id="myInfo-top">
-	            <!-- 프로필 사진 -->
-	            <div id="profileArea" align="center">
-	                <!-- 프로필 이미지 변경 -->
-	                <div class="updateImg">
-	                    <img id="profileImg" src="<c:out value='${ loginUser.empProfile }' default='resources/profile_images/defaultProfile.png'/>" onclick="$('#profileImgFile').click();">
-	                    <input type="file" id="profileImgFile" style="display:none;">
-	                </div>
-	                <br>
-	            </div>
+			<!-- 왼쪽 프로필 사진 + 연차 조회 영역 -->
+			<div id="mypage-left">
+				<table id="profileTb">
+					<tr align="center" style="height:300px">
+						<th>
+							<img id="profileImg" src="<c:out value='${ loginUser.empProfile }' default='resources/profile_images/defaultProfile.png'/>" onclick="$('#profileImgFile').click();">
+	                    	<input type="file" id="profileImgFile" style="display:none;">
+						</th>
+					</tr>
+					<tr align="center">
+						<th><h3>${ loginUser.empName }</h3></th>
+					</tr>
+					<tr align="center">
+						<th><h5>${ loginUser.depCd } / ${ loginUser.posCd }</h5><br></th>
+					</tr>
+					<tr align="center">
+						<th>
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePwd">비밀번호 변경</button>
+						</th>
+					</tr>
+				</table>
+			</div> <!-- 왼쪽 영역 끝-->
+			
+			<!-- 오른쪽 정보 영역 -->
+			<div id="mypage-right">
+				<!-- 기본 정보 테이블 영역 -->
+				<div class="table-area" style="border: 1px solid rgba(0,0,0,.125);">
+					<table class="infoTb">
+						<tr>
+							<th colspan="2" style="border-bottom: 1px solid lightgrey;">기본 정보</th>
+						</tr>
+						<tr>
+							<th style="width:20%;">이름</th>
+							<td>${ loginUser.empName }</td>
+						</tr>
+						<tr>
+							<th>사번</th>
+							<td>${ loginUser.empNo }</td>
+						</tr>
+						<tr>
+							<th>아이디</th>
+							<td>${ loginUser.empId }</td>
+						</tr>
+					</table>
+				</div><!-- 기본 정보 끝 -->
+				<br>
+				<div class="table-area" style="border: 1px solid rgba(0,0,0,.125);">
+					<table class="infoTb">
+						<tr>
+							<th colspan="2" style="border-bottom:1px solid lightgrey;">인사 정보</th>
+						</tr>
+						<tr>
+							<th style="width:20%;">부서</th>
+							<td>${ loginUser.depCd }</td>
+						</tr>
+						<tr>
+							<th>직위</th>
+							<td>${ loginUser.posCd }</td>
+						</tr>
+						<tr>
+							<th>입사일</th>
+							<td>${ loginUser.empEnrollDate }</td>
+						</tr>
+					</table>
+				</div><!-- 인사 정보 끝 -->
+				<br>
+				<form action="개인정보변경요청받아주는서버" method="post">
+				<div class="table-area" style="border: 1px solid rgba(0,0,0,.125);">
+					<table class="infoTb">
+						<tr>
+							<th colspan="2" style="border-bottom:1px solid lightgrey;">연락처 정보</th>
+						</tr>
+						<tr>
+							<th style="width:20%;">이메일</th>
+							<td>${ loginUser.empEmail }</td>
+						</tr>
+						<tr>
+							<th>외부 이메일</th>
+							<td><input type="email" class="updateInfo" name="empEmail" placeholder="${ loginUser.empExEmail }" required></td>
+						</tr>
+						<tr>
+							<th>내선번호</th>
+							<td><input type="phone" class="updateInfo " name="empPhone" placeholder="${ loginUser.empExtension }" required></td>
+						</tr>
+						<tr>
+							<th>휴대전화</th>
+							<td><input type="phone" class="updateInfo" name="empExtension" placeholder="${ loginUser.empPhone }" required></td>
+						</tr>
+					</table>
+				</div><!-- 연락처 정보 끝 -->
+				<div class="btn-area">
+					<div>
+						<button type="submit" class="btn btn-primary">저장</button>
+						<button type="button" class="btn btn-secondary" onclick="location.href='javascript:history.back();'">취소</button>
+					</div>
+				</div> <!-- 버튼 영역 끝 -->
+				</form>
+				
+			</div> <!-- 오른쪽 영역 끝 -->
+		</div>
+
+		<!-- 비밀번호 변경 버튼 클릭 시 뜨는 모달 -->
+		<div class="modal fade" id="changePwd">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<h4 class="modal-title"><i class="fa-solid fa-unlock"></i>&nbsp;&nbsp;비밀번호 변경</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button> 
+					</div>
+
+					<form action="비밀번호변경요청받아주는서버" method="post">
+						<!-- Modal Body -->
+						<div class="modal-body">
+							<table>
+								<tr>
+									<th width="150px">기존 비밀번호</th>
+									<td>
+										<input type="password" id="empPwd" name="empPwd">
+									</td>
+								</tr>
+								<tr>
+									<th>새 비밀번호</th>
+									<td>
+										<input type="password" id="updatePwd" name="updatePwd">
+									</td>
+								</tr>
+								<tr>
+									<th>비밀번호 확인</th>
+									<td>
+										<input type="password" id="checkPwd" name="checkPwd">
+									</td>
+								</tr>
+							</table>
+						</div>
+						
+						<!-- Modal footer -->
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">변경</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		<script>
+		$(function(){
+			$("#profileImgFile").change(function(){
+				
+				// AJAX로 파일을 넘기고자 할 경우 
+				// 가상의 form 요소를 만들고, 파일을 담은 후에 전달해야 함
+				// ==> 자바스크립트에서 객체로 제공함
+				// ==> FormData 객체
+				
+				let formData = new FormData();
+				
+				let uploadFile = this.files[0]	// == 현재 선택된 파일 객체(사용자가 선택한 첨부파일)
+				console.log(uploadFile);
+				
+				formData.append("uploadFile", uploadFile);	
+				formData.append("empId", "${ loginUser.empId }");	
+				formData.append("originalFile", "${ loginUser.empProfile }");
+		
+				$.ajax({
+					url:"uploadProfile.em",
+					data:formData,
+					contentType:false,	// multipart/form-data로 전송하기 위해 작성해야 하는 구문 ==> 작성하지 않으면 파일이 제대로 넘어가지 않는다.
+					processData:false,
+					type:"POST",
+					success:function(){
+						console.log("프로필 이미지 변경용 ajax 통신 성공");
+						/* location.reload(); */ 
+					},
+					error:function(){
+						console.log("프로필 이미지 변경용 ajax 통신 실패");
+					}
+				})
+					})
+				}
+				)
+			</script>
 	
-	            <!-- 기본 정보 -->
-	            <div id="basicInfoArea">
-	                <table id="basicInfo">
-	                    <tr>
-	                        <td colspan="2" class="tableTitle">기본 정보</td>
-	                    <tr>
-	                        <th width="30%">이름</th>
-	                        <td>${ loginUser.empName }</td>
-	                    </tr>
-	                    <tr>
-	                        <th>사번</th>
-	                        <td>${ loginUser.empNo }</td>
-	                    </tr>
-	                    <tr>
-	                        <th>아이디</th>
-	                        <td>${ loginUser.empId }</td>
-	                    </tr>
-	                    <tr>
-	                        <th>비밀번호</th>
-	                        <td>
-	                            <button type="button" id="changePwdBtn" class="btn btn-primary" data-toggle="modal" data-target="#changePwd" style="width:35%">
-	                            비밀번호 변경
-	                            </button>
-	                        </td>
-	                    </tr>
-	                </table>
-	            </div>
-	
-	            <!-- 비밀번호 변경 버튼 클릭 시 뜨는 모달 -->
-	            <div class="modal fade" id="changePwd">
-	                <div class="modal-dialog">
-	                    <div class="modal-content">
-	                        <!-- Modal Header -->
-	                        <div class="modal-header">
-	                            <h4 class="modal-title"><span class="material-symbols-outlined">key</span>&nbsp;비밀번호 변경</h4>
-	                            <button type="button" class="close" data-dismiss="modal">&times;</button> 
-	                        </div>
-	
-	                        <form action="비밀번호변경요청받아주는서버" method="post">
-	                            <!-- Modal Body -->
-	                            <div class="modal-body">
-	                                <table>
-	                                    <tr>
-	                                        <th width="150px">기존 비밀번호</th>
-	                                        <td>
-	                                            <input type="password" id="empPwd" name="empPwd">
-	                                        </td>
-	                                    </tr>
-	                                    <tr>
-	                                        <th>새 비밀번호</th>
-	                                        <td>
-	                                            <input type="password" id="updatePwd" name="updatePwd">
-	                                        </td>
-	                                    </tr>
-	                                    <tr>
-	                                        <th>비밀번호 확인</th>
-	                                        <td>
-	                                            <input type="password" id="checkPwd" name="checkPwd">
-	                                        </td>
-	                                    </tr>
-	                                </table>
-	                            </div>
-	                            
-	                            <!-- Modal footer -->
-	                            <div class="modal-footer">
-	                                <button type="submit" class="btn btn-primary">변경</button>
-	                                <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-	                            </div>
-	                        </form>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	
-	        <!-- 인사정보 영역 -->
-	        <div id="myInfo-mid">
-	            <div id="workInfoArea">
-	                <table id="workInfo">
-	                    <tr>
-	                        <td colspan="4" class="tableTitle">인사 정보</td>
-	                    <tr>
-	                        <th>부서</th>
-	                        <td>${ loginUser.depCd }</td>
-	                        <th>직위</th>
-	                        <td>${ loginUser.posCd }</td>
-	                    </tr>
-	                    <tr>
-	                        <th>입사일</th>
-	                        <td>${ loginUser.empEnrollDate }</td>
-	                        <th>최종 부서 이동일</th>
-	                        <td></td>
-	                    </tr>
-	                </table>
-	            </div>
-	        </div>
-	
-	        <!-- 연락처 정보 영역 -->
-	        <div id="myInfo-bottom">
-	            <form action="개인정보변경요청받아주는서버" method="post">
-	                <div>
-	                    <div id="contactInfoArea">
-	                        <table id="contactInfo">
-	                            <tr>
-	                                <td colspan="4" class="tableTitle">연락처 정보</td>
-	                            </tr>
-	                            <tr>
-	                                <th>이메일</th>
-	                                <td>${ loginUser.empEmail }</td>
-	                                <th>외부 이메일</th>
-	                                <td>
-	                                    <input type="email" class="updateInfo" name="empEmail" placeholder="${ loginUser.empExEmail }" required>
-	                                </td>
-	                            </tr>
-	                            <tr>
-	                                <th style="width:100px">내선번호</th>
-	                                <td>
-	                                    <input type="phone" class="updateInfo " name="empPhone" placeholder="${ loginUser.empExtension }" required>
-	                                </td>
-	                                <th>전화번호</th>
-	                                <td>
-	                                    <input type="phone" class="updateInfo" name="empExtension" placeholder="${ loginUser.empPhone }" required>
-	                                </td>
-	                            </tr>
-	                        </table>
-	                        </div>
-	                        <br>
-	                        <!-- 저장 버튼 -->
-	                    <div id="updateInfoBtn">
-	                        <button type="submit" class="btn btn-primary">저장</button>
-	                        <button type="button" class="btn btn-secondary" onclick="location.href='javascript:history.back();'">취소</button>
-	                    </div>
-	                </div>
-	            </form>
-	        </div>
-	    </div>
 	</div>
 
 </body>

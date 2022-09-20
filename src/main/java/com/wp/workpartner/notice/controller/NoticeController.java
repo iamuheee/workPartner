@@ -6,11 +6,15 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.wp.workpartner.common.model.vo.PageInfo;
+import com.wp.workpartner.common.template.Pagination;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.notice.model.service.NoticeService;
+import com.wp.workpartner.notice.model.vo.Notice;
 
 @Controller
 public class NoticeController {
@@ -87,6 +91,61 @@ public class NoticeController {
 		
 	}
 	
+	/** 상단 주요 공지사항 list조회
+	 * @param currentPage 현재 페이지
+	 * @param searchCategory 검색 카테고리
+	 * @param keyword 검색 입력어
+	 * @param filter 필터링
+	 * @param orderNotice 순서
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectTop.nt", produces="applicaton/json; charset=utf-8")
+	public String ajaxSelectTopNotice(@RequestParam(value="cpage", defaultValue="1")int currentPage, 
+			String searchCategory, String keyword, String filter, String orderNotice) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("searchCategory", searchCategory);
+		map.put("keyword", keyword);
+		map.put("filter", filter);
+		map.put("orderNotice", orderNotice);
+						
+		int listCount = ntService.selectTopNoticeCount(map);
+						
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 3, 4);
+		ArrayList<Notice> list = ntService.selectTopNotice(map, pi);
+		
+		HashMap<String, Object> hm = new HashMap<>();
+		hm.put("list",list);
+		hm.put("pi", pi);
+		
+		return new Gson().toJson(hm);
+				
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="selectNormal.nt", produces="applicaton/json; charset=utf-8")
+	public String ajaxSelectNormalNotice(@RequestParam(value="cpage", defaultValue="1")int currentPage, 
+			String searchCategory, String keyword, String filter, String orderNotice) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("searchCategory", searchCategory);
+		map.put("keyword", keyword);
+		map.put("filter", filter);
+		map.put("orderNotice", orderNotice);
+						
+		int listCount = ntService.selectNormalNoticeCount(map);
+						
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 3, 9);
+		ArrayList<Notice> list = ntService.selectNormalNotice(map, pi);
+		
+		HashMap<String, Object> hm = new HashMap<>();
+		hm.put("list",list);
+		hm.put("pi", pi);
+		
+		return new Gson().toJson(hm);
+				
+	}
 	
 	
 	

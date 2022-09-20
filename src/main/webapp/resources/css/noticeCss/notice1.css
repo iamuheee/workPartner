@@ -1,10 +1,10 @@
 @charset "UTF-8";
 /* ==============================================================
 
-noticeListView
+noticeListView => 수정
 
 ===============================================================*/ 
-.ntOuter{
+/* .ntOuter{
     margin: auto;
     padding: 20px;         
     align-items: center;
@@ -13,9 +13,9 @@ noticeListView
     width: 80%; 
     height: 85%;
 }
-
+ */
 /* 그리드영역 */
-.ntContainer{
+/* .ntContainer{
      margin: 30px;
      display: grid;
      grid-gap: 10px;
@@ -28,9 +28,6 @@ noticeListView
                           'footer footer';    
     color: rgb(43, 42, 42);  
     font-size: 13px;
- }
- .ntContainer div{
-     /* border: 1px solid  black;         */
  } 
 
 .ntMenu1_1{ grid-area: menu1_1; }
@@ -45,6 +42,64 @@ noticeListView
 
  .ntPasing{
     grid-area: footer;
+    place-items: center;
+    display: grid;
+} */
+
+table tr:hover{
+	cursor:pointer;
+	background-color:#f1f1f1;
+}
+
+.ntOuter{
+    margin: auto;
+    padding: 5px;         
+    align-items: center;
+    box-shadow :  2px 3px 5px 2px rgb(212, 211, 211);;
+    border-radius: 10px;
+    width: 80%; 
+    height: 100%;
+}
+
+/* 그리드영역 */
+.ntContainer{
+     margin: 10px;
+     display: grid;
+     grid-gap: 10px;
+     height: 100vh;         
+     grid-template-columns: 1fr 1fr;
+     grid-template-rows: 30px 30px 0.4fr 30px 0.6fr 30px;
+     grid-template-areas: 'menu1_1 menu1_2'
+                          'menu2_1 menu2_2'
+                          'main1 main1'
+                          'footer1 footer1'    
+                          'main2 main2'
+                          'footer2 footer2';    
+    color: rgb(43, 42, 42);  
+    font-size: 13px;
+ }
+ .ntContainer div{
+      border: 1px solid  black;        
+ } 
+
+.ntMenu1_1{ grid-area: menu1_1; }
+
+.ntMenu1_2{ grid-area: menu1_2; }
+ 
+ .ntMenu2_1{ grid-area: menu2_1;}
+
+ .ntMenu2_2{ grid-area: menu2_2;}
+      
+ .ntMainTop{grid-area: main1;}
+ .ntMain{grid-area: main2;}
+
+ .ntPasing1{
+    grid-area: footer1;
+    place-items: center;
+    display: grid;
+}
+.ntPasing2{
+    grid-area: footer2;
     place-items: center;
     display: grid;
 }
