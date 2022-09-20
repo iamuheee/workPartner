@@ -100,21 +100,29 @@ public class ProjectServiceImpl implements ProjectService{
 
 	@Override
 	public int insertMember(ProjectMember m) {
-		ArrayList<ProjectMember> mlist;
-		String[] memNos = m.getMemNo().split(",");
-		String[] memNames = m.getMemName().split(",");
 		
-		int result = 1;
-		for(int i=0; i<memNos.length; i++) {
-			ProjectMember pm = new ProjectMember();
-			pm.setProjNo(m.getProjNo());
-			pm.setMemNo(memNos[i]);
-			pm.setMemName(memNames[i]);
-			pm.setMemRole(m.getMemRole());
+		// 이미 멤버로 추가된 사원인지 검사하고 들어가자
+		m.setMemNo( "(" + m.getMemNo() + ")" );
+		if( pDao.validateNewMember(sqlSession, m) > 0) {
+			return 0;
 			
-			result *= pDao.insertMember(sqlSession, pm);
+		}else {
+			m.setMemNo( m.getMemNo().substring(1, m.getMemNo().length()-1) );
+			String[] memNos = m.getMemNo().split(",");
+			String[] memNames = m.getMemName().split(",");
+			
+			int result = 1;
+			for(int i=0; i<memNos.length; i++) {
+				ProjectMember pm = new ProjectMember();
+				pm.setProjNo(m.getProjNo());
+				pm.setMemNo(memNos[i]);
+				pm.setMemName(memNames[i]);
+				pm.setMemRole(m.getMemRole());
+				
+				result *= pDao.insertMember(sqlSession, pm);
+			}
+			return result;
 		}
-		return result;
 	}
 	
 	

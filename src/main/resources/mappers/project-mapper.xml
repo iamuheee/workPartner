@@ -162,6 +162,13 @@
 		     , 'Y'
 		     )
 	</insert>
+	
+	<select id="validateNewMember" resultType="_int">
+		SELECT COUNT(*)
+		  FROM TB_PROJECT_MEM
+		 WHERE PROJ_NO = #{projNo}
+		   AND MEM_NO IN ${memNo}
+	</select>
 
 
 </mapper>

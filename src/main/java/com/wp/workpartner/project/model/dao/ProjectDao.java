@@ -31,6 +31,10 @@ public class ProjectDao {
 		return sqlSession.selectOne("projectMapper.validateMember", p);
 	}
 	
+	public int validateNewMember(SqlSessionTemplate sqlSession, ProjectMember m) {
+		return sqlSession.selectOne("projectMapper.validateNewMember", m);
+	}
+	
 	public Project selectProject(SqlSessionTemplate sqlSession, String projNo) {
 		return sqlSession.selectOne("projectMapper.selectProject", projNo);
 	}
@@ -52,6 +56,7 @@ public class ProjectDao {
 	}
 	
 	public int insertMember(SqlSessionTemplate sqlSession, ProjectMember m) {
+		System.out.println(m);
 		return sqlSession.insert("projectMapper.insertMember", m);
 	}
 	

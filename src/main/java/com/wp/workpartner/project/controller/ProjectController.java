@@ -172,7 +172,7 @@ public class ProjectController {
 		if( pService.insertMember(m) > 0 ) {
 			return "성공적으로 멤버를 초대했습니다! 수락까지 기다려주세요.";
 		}else {
-			return "멤버 초대에 실패했습니다.";
+			return "이미 초대했거나 멤버로 존재하는 사원입니다. 다시 해주세요.";
 		}
 	}
 	
