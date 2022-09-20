@@ -9,13 +9,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.wp.workpartner.common.model.vo.File;
+import com.wp.workpartner.common.template.FileUpload;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.service.ProjectServiceImpl;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
+import com.wp.workpartner.project.model.vo.ProjectDuty;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Controller
@@ -70,10 +74,15 @@ public class ProjectController {
 	@RequestMapping("proom.pr")
 	public ModelAndView selectProject(ModelAndView mv, String projNo) {
 		Project p = pService.selectProject(projNo);
-		p.setBlist( pService.selectProjectBoardList(p) );
-		// 이제 Project p 안에는 ArrayList<ProjectMember>, ArrayList<ProjectBoard>가 담겨있음
-		// ProjectBoard 안에는 게시글 종류에 따라 ProjectDuty, ProjectMeeting이 담겨있음
-		mv.addObject("p", p).setViewName("project/projectDetailMain");
+		if(p != null) {
+			p.setBlist( pService.selectProjectBoardList(p) );
+			// 이제 Project p 안에는 ArrayList<ProjectMember>, ArrayList<ProjectBoard>가 담겨있음
+			// ProjectBoard 안에는 게시글 종류에 따라 ProjectDuty, ProjectMeeting이 담겨있음
+			mv.addObject("p", p).setViewName("project/projectDetailMain");
+		}else {
+			mv.addObject("errorMsg", "현재 해당 업무 페이지에 접근할 수 없습니다.")
+			  .setViewName("common/errorPage");
+		}
 		return mv;
 	}
 	
@@ -167,7 +176,6 @@ public class ProjectController {
 	@RequestMapping(value="byrole.pr", produces="application/json; charset:utf-8")
 	public String selectMemberByRole(ProjectMember m) {
 		ArrayList<ProjectMember> mlist = pService.selectMemberList(m);
-		System.out.println(mlist);
 		return new Gson().toJson( mlist );
 	}
 	
@@ -179,6 +187,32 @@ public class ProjectController {
 			return "성공적으로 멤버를 초대했습니다! 수락까지 기다려주세요.";
 		}else {
 			return "이미 초대했거나 멤버로 존재하는 사원입니다. 다시 해주세요.";
+		}
+	}
+	
+	@RequestMapping("newduty.pr")
+	public String insertDutyForm(ProjectBoard pb, Model m) {
+		m.addAttribute("pb", pb);
+		return "project/projectDutyInsertForm";
+	}
+	
+	
+	@RequestMapping("insertd.pr")
+	public String insertDuty(ProjectBoard pb, ProjectDuty pd, MultipartFile upfile, Model m, HttpSession session) {
+		pb.setPduty(pd);
+		int result1 = pService.insertDuty(pb);
+		int result2 = 1;
+		if( upfile.getOriginalFilename().length() > 0 ) {
+			File f = File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/"));
+			result2 *= pService.insertFile(f);
+		}
+		
+		if( result1 * result2 > 0) {
+			session.setAttribute("alertMsg", "프로젝트 업무를 성공적으로 등록했습니다.");
+			return "redirect:proom.pr?projNo=" + pb.getProjNo();
+		}else {
+			m.addAttribute("errorMsg", "프로젝트 업무 등록에 실패했습니다.");
+			return "common/error";
 		}
 	}
 	

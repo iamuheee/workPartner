@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectDuty;
@@ -72,6 +73,18 @@ public class ProjectDao {
 	
 	public ProjectMeeting selectProjectMeeting(SqlSessionTemplate sqlSession, ProjectBoard pb) {
 		return sqlSession.selectOne("projectMapper.selectProjectMeeting", pb);
+	}
+	
+	public int insertBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.insert("projectMapper.insertBoard", pb);
+	}
+	
+	public int insertDuty(SqlSessionTemplate sqlSession, ProjectDuty pd) {
+		return sqlSession.insert("projectMapper.insertDuty", pd);
+	}
+	
+	public int insertFile(SqlSessionTemplate sqlSession, File f) {
+		return sqlSession.insert("projectMapper.insertFile", f);
 	}
 	
 

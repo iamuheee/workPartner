@@ -24,6 +24,8 @@ public class ProjectBoard {
 	private String modifyDate;
 	private String status;
 	
+	private String bmkDate;
+	
 	private ProjectDuty pduty;
 	private ProjectMeeting pmeet; 
 

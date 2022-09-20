@@ -2,6 +2,7 @@ package com.wp.workpartner.project.model.service;
 
 import java.util.ArrayList;
 
+import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
@@ -34,6 +35,10 @@ public interface ProjectService {
 	int insertMember(ProjectMember m);
 	
 	ArrayList<ProjectBoard> selectProjectBoardList(Project p);
+	
+	int insertDuty(ProjectBoard pb);
+	
+	int insertFile(File f);
 	
 	
 }

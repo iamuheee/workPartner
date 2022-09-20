@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.dao.ProjectDao;
 import com.wp.workpartner.project.model.vo.Project;
@@ -138,6 +139,23 @@ public class ProjectServiceImpl implements ProjectService{
 		}
 		return blist;
 	}
+
+
+	@Override
+	public int insertDuty(ProjectBoard pb) {
+		// ProjectBoard pb에는 TB_PBOARD, TB_PDUTY에 대한 정보가 담겨있음
+		int result1 = pDao.insertBoard(sqlSession, pb);
+		int result2 = pDao.insertDuty(sqlSession, pb.getPduty());
+		return result1 * result2;
+	}
+
+
+	@Override
+	public int insertFile(File f) {
+		return pDao.insertFile(sqlSession, f);
+	}
+	
+	
 	
 	
 	

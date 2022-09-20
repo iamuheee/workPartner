@@ -228,14 +228,13 @@
 	
 	<select id="selectProjectDuty" resultMap="projectDutyResult">
 		SELECT PBOARD_NO
-		     , IMPORTANCE
 		     , PROGRESS
 		     , START_DATE
 		     , END_DATE
 		     , IN_CHARGE
 		     , CALENDAR_YN
 		  FROM TB_PDUTY
-		 WHERE PBOARD_MP = #{pboardNo}
+		 WHERE PBOARD_NO = #{pboardNo}
 	</select>
 	
 	<select id="selectProjectMeeting" resultMap="projectMeetingResult">
@@ -249,6 +248,55 @@
 		  FROM TB_PMEET
 		 WHERE PBOARD_MP = #{pboardNo}
 	</select>
+	
+	<insert id="insertBoard">
+	INSERT 
+	  INTO TB_PBOARD
+	VALUES
+		 (
+		   SEQ_PBNO.NEXTVAL
+		 , #{projNo}
+		 , #{pboardWriter}
+		 , '업무'
+		 , #{title}
+		 , #{content}
+		 , DEFAULT
+		 , DEFAULT
+		 , DEFAULT
+		 )
+	</insert>
+	
+	<insert id="insertDuty">
+		INSERT
+		  INTO TB_PDUTY
+		VALUES
+			 (
+			   SEQ_PBNO.CURRVAL
+			 , #{progress}
+			 , #{startDate}
+			 , #{endDate}
+			 , #{incharge}
+			 , #{calendarYN}
+			 , #{inchargeName}
+			 )
+	</insert>
+	
+	<insert id="insertFile">
+		INSERT
+		  INTO TB_FILE
+		VALUES
+		     (
+		       SEQ_FILENO.NEXTVAL
+		     , SEQ_PBNO.CURRVAL
+		     , 2
+		     , #{fileOriginName}
+		     , #{fileChangeName}
+		     , #{filePath}
+		     , DEFAULT
+		     , DEFAULT
+		     , DEFAULT
+		     )
+	</insert>
 
 
 </mapper>

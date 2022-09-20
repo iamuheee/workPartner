@@ -51,36 +51,40 @@ font-family: 'Noto Sans KR', sans-serif;
 </style>
 <script>
 	function send() { 
-		console.log( $("#memNo").val() ) /* 숫자,숫자,숮자 */
-		console.log( $("#memName").val() ) /* 이름,이름,이름 */
-		if( confirm( $("#memName").val() + "님을 프로젝트에 초대하는 것이 맞나요?") ){
-	    	
-			$.ajax({
-				url:"insertme.pr",
-				data:{
-					projNo:opener.$("#projNo").val(),
-					memNo:$("#memNo").val(),
-					memName:$("#memName").val(),
-					memRole:opener.$("#newMemRole").val()
-				},
-				success:function(result){
-					alert(result);
-				    window.close();
-				}
-			})
+		
+		if( $("#myform tr").length != 1 ){
+			alert("한 명의 프로젝트 업무 담당자를 지정해야 합니다.");
+			$("#myform tr").remove();
+		}else{
 			
-	    }else{
-			alert("천천히 골라주십쇼!");	 
-		    window.close();
-	    }
+			if( confirm( $("input[name=inchargeName]").val() + "님을 담당자로 지정하는 것이 맞나요?") ){
+		    	let data = $("#inchargeEmp");
+		    	opener.sendMeData(data);
+		    	alert("성공적으로 담당자로 추가되었습니다.");
+				window.close();
+		    }else{
+				alert("천천히 골라주십쇼!");	 
+				$("#myform tr").remove();
+		    }
+			
+			
+		}
+		
+		
 	    
 	}
 </script>
 
 </head>
 <body>
+	<div style="display:none">
+    	<div id="inchargeEmp"></div>
+	</div>
+
     <div style="height: 20px;"></div>
     <div class="adOuter">
+    
+
 
 		<div style="display:none">
 			<input type="hidden" id="memNo">
@@ -178,8 +182,7 @@ font-family: 'Noto Sans KR', sans-serif;
 						
 					});
 					
-					let memNo = "";
-					let memName = "";
+					let html = "";
 					for(let i=0; i<arr.length; i++){
 						 value  += '<tr>'     
 			                     +    '<td width="60px" class="empICNo"> ' + arr[i].empNo + ' </td>'
@@ -190,16 +193,16 @@ font-family: 'Noto Sans KR', sans-serif;
 			                     + '</tr>';
 			            
 	                    // 부모창에 돌려보내기 위한 구문들
-			        	memNo += arr[i].empNo + ",";
-	                    memName += arr[i].empName + ",";
-	
+	                    html += '<ul>'
+	                    	  + 	'<li>'
+	                    	  + 		'<span><b>' + arr[i].empName + '</b></span>님을 담당자로 추가하셨습니다.'
+	                    	  + 	'</li>'
+	                    	  + '</ul>'
+	                    	  + '<input type="hidden" name="incharge" value="' + arr[i].empNo + '">'
+	                    	  + '<input type="hidden" name="inchargeName" value="' + arr[i].empName + '">';
 					}
 					
-					memNo = memNo.substr(0, memNo.length - 1);
-					memName = memName.substr(0, memName.length - 1);
-					
-					$("#memNo").val(memNo);
-					$("#memName").val(memName);
+					$("#inchargeEmp").html(html);
 					
 					$("#adminEmpList").append(value);
 					$("input[name='chk']").prop("checked", false); 

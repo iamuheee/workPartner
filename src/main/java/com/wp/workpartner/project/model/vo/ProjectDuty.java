@@ -11,10 +11,10 @@ import lombok.ToString;
 @ToString
 public class ProjectDuty {
 	private String pboardNo;
-	private String importance;
 	private String progress;
 	private String startDate;
 	private String endDate;
 	private String incharge;
+	private String inchargeName;
 	private String calendarYN;
 }
