@@ -63,7 +63,7 @@ table {
 				<div style="margin-bottom: 50px; line-height: 10px;">
 					<ol class="breadcrumb mb-4" style="font-size: 18px; width: 100%;">
 						<li>기안서 >&nbsp</a></li>
-						<li><b><input type="hidden" name="fn" value="진행중">진행</b></li>
+						<li><b>진행중</b></li>
 					</ol>
 					<hr>
 				</div>
@@ -91,7 +91,7 @@ table {
 					<table class="endSignList" width="100%">
 
 						<tr align="center">
-							<th width="10%" >번호</th>
+							<th width="10%" >문서번호</th>
 							<th class="endNum" width="10%">서식</th>
 							<th class="endTitle" width="30%">제목</th>
 							<th class="endCreate" width="10%">첨부파일</th>
@@ -127,7 +127,7 @@ table {
 				                        </td>
 				                        <td>${ p.dpFinal } </td>
 				                        <td>${ p.dpCreate }</td>
-				                        <td>${ p.empName }</td>
+				                        <td>${ p.signEmpName }</td>
 				                    </tr>
 				                    <script>
 										$(document).ready(function(){
@@ -147,7 +147,7 @@ table {
 			                    </c:forEach>
 	                		</c:otherwise>
 	                   </c:choose>
-
+					
 					</table>
 					<c:if test="${not empty progressList }">
                         <div id="pagingArea">
@@ -216,22 +216,63 @@ table {
 					<table class="endSignList" width="100%">
 
 						<tr align="center">
-							<th width="5%">번호</th>
+							<th width="5%">문서번호</th>
 							<th class="endNum" width="10%">서식</th>
 							<th class="endTitle" width="30%">제목</th>
 							<th width="10%">기안일</th>
-							<th class="endCreate" width="10%">최종 결재자</th>
+							<th class="endCreate" width="10%">첨부파일</th>
+							<th class="endCreate" width="10%">최종결재자</th>
 							<th width="10%">결재일</th>
 						</tr>
-
-						<tr align="center">
-							<td>1</td>
-							<td>업무협조</td>
-							<td>여기는 제목이 나타나는 곳</td>
-							<td>2022-09-01</td>
-							<td>강보람 <span style="color: #19ce60;">결재완료</span></td>
-							<td>2022-10-01</td>
-						</tr>
+						<c:choose>
+	                		<c:when test="${empty endSignList }">
+	                			<tr>
+	                				<td colspan="7" align="center">현재 게시글이 없습니다.</td>
+	                			</tr>
+	                		</c:when>
+	                		<c:otherwise>
+	                			<c:forEach var="p" items="${ progressList }">
+				                    <tr align="center">
+				                   	    <td>${ p.dpNo }</td>
+				                        <td>${ p.dpCategory }</td>
+				                        <c:choose>
+					                        <c:when test="${empty p.dpTitle }">
+					                        	<td><a href="" class="dpTitle">제목없음</a></td>
+					                        </c:when>
+					                        <c:otherwise>
+					                        	<td><a href="" class="dpTitle">${ p.dpTitle }</a></td>
+					                        </c:otherwise>
+				                        </c:choose>
+				                        <td>${ p.dpCreate }</td>
+				                        <td>
+					                        <c:if test="${ not empty p.dpOrigin }">
+					                       		<span class="material-icons" style="vertical-align:middle; font-size:17px; color:#878787;">
+												attachment
+												</span>
+					                        </c:if>
+				                        </td>
+				                        <td>${ p.signEmpName }</td>
+				                        <td>${ p.lastSigndate } </td>
+				                    </tr>
+				                    <script>
+										$(document).ready(function(){
+											$(".dpTitle").click(function(){
+					                    		if('${s.dpCategory}' == '연차'){
+													$(".dpTitle").attr("href", "detailVa.si");
+												}else if('${s.dpCategory}' == '외근'){
+													$(".dpTitle").attr("href", "detailOtw.si");
+												}else if('${s.dpCategory}' == '퇴직원'){
+													$(".dpTitle").attr("href", "detailRes.si");
+												}else{
+													$(".dpTitle").attr("href", "detailCo.si");
+												}
+											})
+										})
+									</script>
+			                    </c:forEach>
+	                		</c:otherwise>
+	                   </c:choose>
+						
 					</table>
 					<c:if test="${not empty endSignList }">
                         <div id="pagingArea">

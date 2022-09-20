@@ -349,7 +349,17 @@ public class SignController {
 			return mv;
 		}
 	// 결재완료
-	
+		@RequestMapping("endSi.si")
+		public ModelAndView selectEndSignList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn) {
+			model.addAttribute("flag", "end");
+			int saveListCount = sService.selectProgressListCount(fn, empNo);
+			PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 5, 15);
+			ArrayList<Dtpaper> endSignList = sService.selectProgressList(pi, empNo, fn);
+			mv.addObject("pi",pi)
+			.addObject("endSignList", endSignList)
+			.setViewName("sign/dpaperContEnd");
+			return mv;
+		}
 	
 //	타부서 결재함
 	@RequestMapping("othSi.si")

@@ -156,11 +156,12 @@
 						                    </c:forEach>
 				                		</c:otherwise>
 				                   </c:choose>
+				                   
                                 </table>
 
                                 <c:if test="${not empty saveList }">
                                 <div id="pagingArea">
-                                <button style="float:left; margin-left:33px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
+                                <button style="float:left; margin-left:10px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
 					                <ul class="pagination">
 					                	<c:choose>
 					                		<c:when test="${ pi.currentPage eq 1 }">
@@ -287,7 +288,7 @@
 
                                	<c:if test="${ not empty reSignList }">
                                 <div id="pagingArea">
-                                <button style="float:left; margin-left:33px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
+                                <button style="float:left; margin-left:10px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
 					                <ul class="pagination">
 					                	<c:choose>
 					                		<c:when test="${ pi.currentPage eq 1 }">

@@ -45,7 +45,7 @@
 		<result column="dp_category" property="dpCategory"/>
 		<result column="dp_origin" property="dpOrigin"/>
 		<result column="dp_change" property="dpChange"/>
-		<result column="emp_name" property="empName"/>
+		<result column="sign_empname" property="signEmpName"/>
 	</resultMap>
 	
 	<resultMap id="SelectSignListResult" type="Sign">
@@ -414,10 +414,20 @@
 				    join tb_employee on (signemp_no = emp_no)
 				   where dp_no = d.dp_no 
 				     and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
-				  ) AS emp_name
+				  ) AS sign_empname
+			  ,(select si_appdate 
+			      from tb_sign s 
+			     where s.dp_no = d.dp_no 
+			       and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no))
 		  from tb_dtpaper d
-		 where 
-		       		dp_final =  '진행중' or dp_final = '대기'
+		 where 	dp_final = 	<choose>
+			 					<when test="fn.equals('진행중')">
+						       		'진행중' or dp_final = '대기'
+			 					</when>
+			 					<otherwise>
+			 						'결재완료'
+			 					</otherwise>
+			 				  </choose>
 		   and dp_status = 'N'
 		   and d.emp_no = #{ empNo }
 		 order
@@ -440,8 +450,14 @@
 		select
 		       count(*)	
 		  from tb_dtpaper
-		 where dp_final = 
-		 						'진행중' or dp_final = '대기'
+		 where dp_final = <choose> 
+		 					<when test="fn.equals('진행중')">
+					       		 '진행중' or dp_final = '대기'
+		 					</when>
+		 					<otherwise>
+		 						 '결재완료'
+		 					</otherwise>
+		 				</choose>
 		   and dp_status = 'N' 
 		   and emp_no = ${ empNo }
 	</select>
