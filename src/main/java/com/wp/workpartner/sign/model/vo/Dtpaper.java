@@ -25,6 +25,8 @@ public class Dtpaper {
 	private String dpTemp;
 	private String dpOrigin;
 	private String dpChange;
+	private Sign sign;
+	private String empName;
 	
 	private ArrayList<Sign> signList;
 	//private ArrayList<Vacation> vacationList;

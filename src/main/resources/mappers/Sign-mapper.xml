@@ -31,7 +31,9 @@
 		<result column="dp_category" property="dpCategory"/>
 		<result column="dp_origin" property="dpOrigin"/>
 		<result column="dp_change" property="dpChange"/>
+		
 	</resultMap>
+	
 	<resultMap id="SelectProgressListResult" type="Dtpaper">
 		<result column="dp_no" property="dpNo"/>
 		<result column="emp_no" property="empNo"/>
@@ -43,8 +45,9 @@
 		<result column="dp_category" property="dpCategory"/>
 		<result column="dp_origin" property="dpOrigin"/>
 		<result column="dp_change" property="dpChange"/>
-		<collection property="signList" resultMap="SelectSignListResult"/>
+		<result column="emp_name" property="empName"/>
 	</resultMap>
+	
 	<resultMap id="SelectSignListResult" type="Sign">
 		<result column="dp_no" property="dpNo"/>
 		<result column="signemp_no" property="signEmpNo"/>
@@ -394,10 +397,10 @@
 		 order
 		    by dp_create desc
 	</select>
-	<select id="selectProgressList" resultMap="SelectListResult">
+	<select id="selectProgressList" resultMap="SelectProgressListResult">
 		select
-		       dp_no
-		      ,d.emp_no
+		       d.dp_no
+		      ,emp_no
 		      ,dp_title
 		      ,to_char(dp_create, 'YYYY-MM-DD') AS "dp_create"
 		      ,dp_modify
@@ -406,56 +409,40 @@
 		      ,dp_category
 		      ,dp_origin
 		      ,dp_change
-		      ,s.emp_name
+		      ,(select emp_name 
+				    from tb_sign 
+				    join tb_employee on (signemp_no = emp_no)
+				   where dp_no = d.dp_no 
+				     and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
+				  ) AS emp_name
 		  from tb_dtpaper d
-		  join tb_sign s using (dp_no)
-		  join tb_employee e on (s.signemp_no = e.emp_no)
-		 where dp_final = <choose>
-		 					<when test="fn.equals('임시저장')">
-		 						'임시저장'
-		 					</when>
-		 					<when test="fn.equals('진행중')">
-		 						'진행중'
-		 					</when>
-		 					<when test="fn.equals('반려됨')">
-		 						'반려됨'
-		 					</when>
-		 					<when test="fn.equals('결재완료')">
-		 						'결재완료'
-		 					</when>
-		 					<otherwise>
-		 						'대기'
-		 					</otherwise>
-		 				  </choose>
+		 where 
+		       		dp_final =  '진행중' or dp_final = '대기'
 		   and dp_status = 'N'
-		   and emp_no = #{ empNo }
-		   and si_status = 'C' or si_status = 'N'
+		   and d.emp_no = #{ empNo }
 		 order
 		    by dp_create desc
 	</select>
+	
+	<!-- <select>
+		select signemp_no
+		  from sign
+		 where max(si_seq)
+	</select>
+	<select>
+		select emp_name
+		  from employee
+		 where emp_no = (select signemp_no from sign where si_seq = max(si_seq))
+	</select> -->
+	
+	
 	<select id="selectProgressListCount" resultType="_int">
 		select
 		       count(*)	
 		  from tb_dtpaper
-		 where dp_final = <choose>
-		 					<when test="fn.equals('임시저장')">
-		 						'임시저장'
-		 					</when>
-		 					<when test="fn.equals('진행중')">
+		 where dp_final = 
 		 						'진행중' or dp_final = '대기'
-		 					</when>
-		 					<when test="fn.equals('반려됨')">
-		 						'반려됨'
-		 					</when>
-		 					<when test="fn.equals('결재완료')">
-		 						'결재완료'
-		 					</when>
-		 					<otherwise>
-		 						'대기'
-		 					</otherwise>
-		 				  </choose>
 		   and dp_status = 'N' 
 		   and emp_no = ${ empNo }
-	
 	</select>
 </mapper>

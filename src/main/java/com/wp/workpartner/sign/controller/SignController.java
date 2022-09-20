@@ -73,7 +73,7 @@ public class SignController {
 				if(result2 > 0) {
 					int result3 = sService.insertVaSign(signList);
 					if(result3 > 0) {
-						session.setAttribute("alertMsg", "결재 신청 되었습니다.");
+						session.setAttribute("alertSignMsg", "결재신청되었습니다.");
 					}
 				}
 				return "redirect:selectVa.si";
@@ -107,7 +107,7 @@ public class SignController {
 				if(result2 > 0) {
 					int result3 = sService.insertOwSign(signList);
 					if(result3 > 0) {
-						session.setAttribute("alertMsg", "결재 신청 되었습니다.");
+						session.setAttribute("alertSignMsg", "결재신청되었습니다.");
 					}
 				}
 				return "redirect:sign/selectOutWork";
@@ -141,7 +141,7 @@ public class SignController {
 			if(result2 > 0) {
 				int result3 = sService.insertReSign(signList);
 				if(result3 > 0) {
-					session.setAttribute("alertMsg", "결재 신청 되었습니다.");
+					session.setAttribute("alertSignMsg", "결재신청되었습니다.");
 				}
 			}
 			return "redirect:sign/selectOutWork";
@@ -175,7 +175,7 @@ public class SignController {
 			if(result2 > 0) {
 				int result3 = sService.insertCoSign(signList);
 				if(result3 > 0) {
-					session.setAttribute("alertMsg", "결재 신청 되었습니다.");
+					session.setAttribute("alertSignMsg", "결재신청되었습니다.");
 				}
 			}
 			return "redirect:sign/selectOutWork";
@@ -207,7 +207,7 @@ public class SignController {
 			if(result2 > 0 && signList != null) {
 					int result3 = sService.insertVaSign(signList);
 					if(result3 > 0) {
-						session.setAttribute("alertMsg", "결재 신청 되었습니다.");
+						session.setAttribute("alertSignMsg", "임시저장되었습니다.");
 				}
 			}
 			return "redirect:sign/selectOutWork";
@@ -238,7 +238,7 @@ public class SignController {
 			if(result2 > 0 && signList != null) {
 					int result3 = sService.insertOwSign(signList);
 					if(result3 > 0) {
-						session.setAttribute("alertMsg", "결재 신청 되었습니다.");
+						session.setAttribute("alertSignMsg", "임시저장되었습니다.");
 					}
 			}
 			return "redirect:sign/selectOutWork";
@@ -269,7 +269,7 @@ public class SignController {
 			if(result2 > 0 && signList != null) {
 				int result3 = sService.insertReSign(signList);
 				if(result3 > 0) {
-					session.setAttribute("alertMsg", "결재 신청 되었습니다.");
+					session.setAttribute("alertSignMsg", "임시저장되었습니다.");
 				}
 			}
 			return "redirect:sign/selectOutWork";
@@ -300,7 +300,7 @@ public class SignController {
 			if(result2 > 0 && signList != null) {
 				int result3 = sService.insertCoSign(signList);
 				if(result3 > 0) {
-					session.setAttribute("alertMsg", "결재 신청 되었습니다.");
+					session.setAttribute("alertSignMsg", "임시저장되었습니다.");
 				}
 			}
 			return "redirect:sign/selectOutWork";
@@ -316,7 +316,7 @@ public class SignController {
 	public ModelAndView selectSaveList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn) {
 		model.addAttribute("flag", "save");
 		int saveListCount = sService.selectListCount(fn, empNo);
-		PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 15, 5);
+		PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 5, 15);
 		ArrayList<Dtpaper> saveList = sService.selectList(pi, empNo, fn);
 		mv.addObject("pi",pi)
 		.addObject("saveList",saveList)
@@ -328,7 +328,7 @@ public class SignController {
 	public ModelAndView selectReSignList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn) {
 		model.addAttribute("flag", "ReSign");
 		int saveListCount = sService.selectListCount(fn, empNo);
-		PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 15, 5);
+		PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 5, 15);
 		ArrayList<Dtpaper> reSignList = sService.selectList(pi, empNo, fn);
 		mv.addObject("pi",pi)
 		.addObject("reSignList",reSignList)
@@ -341,7 +341,7 @@ public class SignController {
 		public ModelAndView selectProgressList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn) {
 			model.addAttribute("flag", "continue");
 			int saveListCount = sService.selectProgressListCount(fn, empNo);
-			PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 15, 5);
+			PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 5, 15);
 			ArrayList<Dtpaper> progressList = sService.selectProgressList(pi, empNo, fn);
 			mv.addObject("pi",pi)
 			.addObject("progressList", progressList)

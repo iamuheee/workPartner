@@ -286,9 +286,15 @@ input[type=text] {
 
 </head>
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-				<form action="" method="post" name="insertForm" id="insertForm" style="float: left"
-					enctype="multipart/form-data"> 
-					<input type="hidden" name="dpCategory" value="${ paperName }">
+	<c:if test="${ not empty alertSignMsg }">
+		<script>
+			alert("${alertSignMsg}");
+		</script>
+		<c:remove var="alertSignMsg" scope="session" />
+	</c:if>
+	<form action="" method="post" name="insertForm" id="insertForm" style="float: left"
+		enctype="multipart/form-data"> 
+	<input type="hidden" name="dpCategory" value="${ paperName }">
 		
 	<section class="mainTitle">
 			<a class="insertBtn" onclick="insertCheck();">기안하기</a>
