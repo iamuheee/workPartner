@@ -36,6 +36,8 @@
         margin: 10px;  
     }
     
+    .mainOuter{ margin:auto !important;}
+    
 </style>
 </head>
 <body>
