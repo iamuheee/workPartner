@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.wp.workpartner.common.model.vo.File;
@@ -198,7 +199,7 @@ public class ProjectController {
 	
 	
 	@RequestMapping("insertd.pr")
-	public String insertDuty(ProjectBoard pb, ProjectDuty pd, MultipartFile upfile, Model m, HttpSession session) {
+	public String insertDuty(ProjectBoard pb, ProjectDuty pd, MultipartFile upfile, Model m, HttpSession session, RedirectAttributes redirect) {
 		pb.setPduty(pd);
 		int result1 = pService.insertDuty(pb);
 		int result2 = 1;
@@ -209,12 +210,29 @@ public class ProjectController {
 		
 		if( result1 * result2 > 0) {
 			session.setAttribute("alertMsg", "프로젝트 업무를 성공적으로 등록했습니다.");
-			return "redirect:proom.pr?projNo=" + pb.getProjNo();
+			redirect.addFlashAttribute("projNo", pb.getProjNo());
+			return "redirect:proom.pr";
 		}else {
 			m.addAttribute("errorMsg", "프로젝트 업무 등록에 실패했습니다.");
 			return "common/error";
 		}
 	}
 	
+	
+	@RequestMapping("duty.pr")
+	public ModelAndView selectDutyList(ModelAndView mv, Project p) {
+		p = pService.selectProject( p.getProjNo() );
+		mv.addObject("p", p).setViewName("project/projectDutyListView");
+		return mv;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="dlist.pr", produces="application/json; charset=utf-8")
+	public String selectDutyList(Project p) {
+		ArrayList<ProjectBoard> dlist = pService.selectDutyList(p);
+		System.out.println(dlist);
+		return new Gson().toJson(dlist);
+		
+	}
 	
 }

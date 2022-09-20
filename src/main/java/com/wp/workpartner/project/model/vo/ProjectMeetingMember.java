@@ -10,9 +10,9 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ProjectMeetingMember {
-	private String pbardNo;
-	private String empNo;
-	private String empName;
+	private String pboardNo;
+	private String memNo;
+	private String memName;
 	private String attendanceYN;
 
 }

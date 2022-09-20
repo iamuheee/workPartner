@@ -40,5 +40,7 @@ public interface ProjectService {
 	
 	int insertFile(File f);
 	
+	ArrayList<ProjectBoard> selectDutyList(Project p);
+	
 	
 }

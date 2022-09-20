@@ -29,7 +29,7 @@ public class ProjectServiceImpl implements ProjectService{
 
 	@Override
 	public ArrayList<Employee> selectPopupList() {
-		// TODO Auto-generated method stub
+		// 프로젝트 회의 초대 가능 사원 팝업리스트 뽑을 때 사용할 것
 		return null;
 	}
 	
@@ -153,6 +153,19 @@ public class ProjectServiceImpl implements ProjectService{
 	@Override
 	public int insertFile(File f) {
 		return pDao.insertFile(sqlSession, f);
+	}
+
+
+	@Override
+	public ArrayList<ProjectBoard> selectDutyList(Project p) {
+		// refType이 '업무'인 ProjectBoard에 한해서만 조회하고
+		// ArrayList<ProjectBoard> 안에 각 필드로 ProjectDuty가 들어가야 함
+		ArrayList<ProjectBoard> blist = pDao.selectDutyBoardList(sqlSession, p);
+		for(ProjectBoard pb : blist) {
+			pb.setPduty( pDao.selectDuty(sqlSession, pb) );
+			pb.setFile( pDao.selectFile(sqlSession, pb) );
+		}
+		return blist;
 	}
 	
 	
