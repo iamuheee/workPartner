@@ -20,7 +20,8 @@ public class Notice {
 	 private String noticeCount;
 	 private String noticeImportant;
 	 private String noticeTop;
-	 private Date NoticeCreateDate;
-	 private Date NoticeModifyDate;
-	 private String NoticeFile;
+	 private String noticeCreateDate;
+	 private String noticeModifyDate;
+	 private String noticeFile;	 
+	 private String empName;
 }

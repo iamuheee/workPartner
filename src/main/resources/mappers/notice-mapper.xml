@@ -39,15 +39,17 @@
 		<result column="nt_title" property="noticeTitle"/>
 		<result column="nt_content" property="noticeContent"/>
 		<result column="emp_no" property="empNo"/>
+		<result column="emp_name" property="empName" /> 
 		<result column="nt_status" property="noticeStatus"/>
 		<result column="nt_count" property="noticeCount"/>
 		<result column="nt_important" property="noticeImportant"/>
 		<result column="nt_top" property="noticeTop"/>
-		<result column="nt_create_date" property="NoticeCreateDate"/>
-		<result column="nt_modify_date" property="NoticeModifyDate"/>
-		<result column="nt_file" property="NoticeFile"/>
+		<result column="nt_create_date" property="noticeCreateDate"/>
+		<result column="nt_modify_date" property="noticeModifyDate"/>
+		<result column="nt_file" property="noticeFile"/>
 	</resultMap>
 	
+	<!-- 추가관리자 조회  -->
 	<select id="selectNtAdminY" resultMap="empResult">
 		  select 
 		          emp_no
@@ -63,6 +65,7 @@
 		   	  by dep_cd asc	
 	</select>
 	
+	<!-- NtAdmin => 'N' -->
 	<update id="upDateAdminN">
 		update 
 				tb_employee
@@ -70,6 +73,7 @@
 		 where  emp_no = #{empNo}    		
 	</update>
 	
+	<!-- NtAdmin => 'Y' -->
 	<update id="updateAdminY">
 		update
 		       tb_employee
@@ -78,9 +82,186 @@
 			<foreach item="empNo" collection="arrEmp" open="emp_no in (" separator="," close=")">
 				#{empNo}
 			</foreach>
-		</where>   
-	
+		</where>   	
 	</update>
+	
+	<!-- 상단 공지사항 조회용 -->
+	<!-- 1-1 상단 공지사항 갯수 -->
+	<select id="selectTopNoticeCount" resultType="_int">
+		   select  count(*)
+             from  tb_notice             
+            where  nt_status = 'Y'   
+              and  nt_top = 'T'
+              <if test="keyword != null">
+	        	<if test="searchCategory == 'noticeTitle'">
+				   and nt_title
+				</if>
+				<if test="searchCategory == 'writer'">
+				   and emp_name
+				</if>
+				<if test="searchCategory == 'noticeContent'">
+				   and nt_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	         </if>   
+	         <choose>
+	         	<when test="filter == 'periodTotal'">
+	         		and nt_no is not null
+	         	</when>
+	         	<when test="filter == '6months'">
+	         		and months_between(sysdate, nt_create_date) <![CDATA[ <= ]]> 6
+	         	</when>
+	         	<when test="filter == '1month'">
+	         		and months_between(sysdate, nt_create_date) <![CDATA[ <= ]]> 1
+	         	</when>
+	         	<otherwise>
+	         		and floor(sysdate - nt_create_date) <![CDATA[ <= ]]> 7
+	         	</otherwise>
+	         </choose>	            
+	</select>
+	
+	<!-- 공지사항 top list  -->
+	<select id="selectTopNotice" resultMap="noticeResult">
+		   select  nt_no
+                 , nt_title
+                 , nt_content
+                 , emp_no
+                 , emp_name
+                 , nt_count
+                 , nt_important
+                 , nt_top
+                 , to_char(nt_create_date, 'YYYY-MM-DD') AS "nt_create_date"
+                 , nt_file
+             from  tb_notice             
+            where  nt_status = 'Y'   
+              and  nt_top = 'T'
+              <if test="keyword != null">
+	        	<if test="searchCategory == 'noticeTitle'">
+				   and nt_title
+				</if>
+				<if test="searchCategory == 'writer'">
+				   and emp_name
+				</if>
+				<if test="searchCategory == 'noticeContent'">
+				   and nt_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	         </if>   
+	         <choose>
+	         	<when test="filter == 'periodTotal'">
+	         		and nt_no is not null
+	         	</when>
+	         	<when test="filter == '6months'">
+	         		and months_between(sysdate, nt_create_date) <![CDATA[ <= ]]> 6
+	         	</when>
+	         	<when test="filter == '1month'">
+	         		and months_between(sysdate, nt_create_date) <![CDATA[ <= ]]> 1
+	         	</when>
+	         	<otherwise>
+	         		and floor(sysdate - nt_create_date) <![CDATA[ <= ]]> 7
+	         	</otherwise>
+	         </choose>	
+            order 
+               by 
+               <choose>
+               		<when test="orderNotice == 'createDesc'">
+		                 nt_create_date desc  
+               		</when>
+               		<otherwise>
+		                 nt_count desc
+               		</otherwise>
+               </choose>
+	</select>
+	
+	
+	<!-- 일반 공지사항 조회용 -->
+	<!-- 1-1 일반 공지사항 갯수 -->
+	<select id="selectNormalNoticeCount" resultType="_int">
+		   select  count(*)
+             from  tb_notice             
+            where  nt_status = 'Y'   
+              and  nt_top = 'N'
+              <if test="keyword != null">
+	        	<if test="searchCategory == 'noticeTitle'">
+				   and nt_title
+				</if>
+				<if test="searchCategory == 'writer'">
+				   and emp_name
+				</if>
+				<if test="searchCategory == 'noticeContent'">
+				   and nt_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	         </if>   
+	         <choose>
+	         	<when test="filter == 'periodTotal'">
+	         		and nt_no is not null
+	         	</when>
+	         	<when test="filter == '6months'">
+	         		and months_between(sysdate, nt_create_date) <![CDATA[ <= ]]> 6
+	         	</when>
+	         	<when test="filter == '1month'">
+	         		and months_between(sysdate, nt_create_date) <![CDATA[ <= ]]> 1
+	         	</when>
+	         	<otherwise>
+	         		and floor(sysdate - nt_create_date) <![CDATA[ <= ]]> 7
+	         	</otherwise>
+	         </choose>	            
+	</select>
+	
+	<!-- 공지사항 일반 list  -->
+	<select id="selectNormalNotice" resultMap="noticeResult">
+		   select  nt_no
+                 , nt_title
+                 , nt_content
+                 , emp_no
+                 , emp_name
+                 , nt_count
+                 , nt_important
+                 , nt_top
+                 , to_char(nt_create_date, 'YYYY-MM-DD') AS "nt_create_date"
+                 , nt_file
+             from  tb_notice             
+            where  nt_status = 'Y'   
+              and  nt_top = 'N'
+              <if test="keyword != null">
+	        	<if test="searchCategory == 'noticeTitle'">
+				   and nt_title
+				</if>
+				<if test="searchCategory == 'writer'">
+				   and emp_name
+				</if>
+				<if test="searchCategory == 'noticeContent'">
+				   and nt_content
+				</if> 
+				  like '%' || #{keyword} || '%'
+	         </if>   
+	         <choose>
+	         	<when test="filter == 'periodTotal'">
+	         		and nt_no is not null
+	         	</when>
+	         	<when test="filter == '6months'">
+	         		and months_between(sysdate, nt_create_date) <![CDATA[ <= ]]> 6
+	         	</when>
+	         	<when test="filter == '1month'">
+	         		and months_between(sysdate, nt_create_date) <![CDATA[ <= ]]> 1
+	         	</when>
+	         	<otherwise>
+	         		and floor(sysdate - nt_create_date) <![CDATA[ <= ]]> 7
+	         	</otherwise>
+	         </choose>	
+            order 
+               by 
+               <choose>
+               		<when test="orderNotice == 'createDesc'">
+		                 nt_create_date desc  
+               		</when>
+               		<otherwise>
+		                 nt_count desc
+               		</otherwise>
+               </choose>
+	</select>
+	
 	
 	
 	

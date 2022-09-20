@@ -7,8 +7,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.notice.model.dao.NoticeDao;
+import com.wp.workpartner.notice.model.vo.Notice;
 
 @Service
 public class NoticeServiceImpl implements NoticeService{
@@ -35,6 +37,30 @@ public class NoticeServiceImpl implements NoticeService{
 	@Override
 	public int updateAdminY(HashMap<String, Object> map) {
 		return ntDao.updateAdminY(sqlSession, map);
+	}
+
+	// 상단공지사항 갯수
+	@Override
+	public int selectTopNoticeCount(HashMap<String, Object> map) {
+		return ntDao.selectTopNoticeCount(sqlSession, map);
+	}
+
+	// 상단공지사항 조회
+	@Override
+	public ArrayList<Notice> selectTopNotice(HashMap<String, Object> map, PageInfo pi) {
+		return ntDao.selectTopNotice(sqlSession, map, pi);
+	}
+
+	// 일반 공지사항 갯수 조회
+	@Override
+	public int selectNormalNoticeCount(HashMap<String, Object> map) {
+		return ntDao.selectNormalNoticeCount(sqlSession, map);
+	}
+
+	// 일반공지사항 list 조회
+	@Override
+	public ArrayList<Notice> selectNormalNotice(HashMap<String, Object> map, PageInfo pi) {
+		return ntDao.selectNormalNotice(sqlSession, map, pi);
 	}
 	
 	
