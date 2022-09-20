@@ -95,17 +95,22 @@ public class SignServiceImpl implements SignService {
 	public ArrayList<Dtpaper> selectProgressList(PageInfo pi, String empNo, String fn) {
 		return sDao.selectProgressList(sqlSession, pi, empNo, fn);
 	}
-	
-	
-	
+//	타부서 결재함
 	@Override
-	public int selectSignListCount() {
+	public int selectOthSignListCount(String empNo) {
 		return 0;
 	}
-	
-
 	@Override
-	public ArrayList<Dtpaper> selectSignList(PageInfo pi) {
+	public ArrayList<Dtpaper> selectOthSignList(PageInfo pi, String empNo) {
+		return null;
+	}
+//	내부서 결재함
+	@Override
+	public int selectSignListCount(String empNo) {
+		return 0;
+	}
+	@Override
+	public ArrayList<Dtpaper> selectSignList(PageInfo pi, String empNo) {
 		return null;
 	}
 
@@ -188,6 +193,7 @@ public class SignServiceImpl implements SignService {
 	public SelectOtwork selectOtwork(int dpNo) {
 		return null;
 	}
+
 	
 	
 	

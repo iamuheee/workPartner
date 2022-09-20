@@ -537,7 +537,7 @@
                     
 	               </nav>
 	           </div>
-	           <jsp:include page="../sign/dtpaperSignList.jsp"/>
+	           <jsp:include page="../sign/dtpaperSignListView.jsp"/>
 	           <!-- content 영역-->
 	           <div id="layoutSidenav_content">
 	               <main class="mainOuter">

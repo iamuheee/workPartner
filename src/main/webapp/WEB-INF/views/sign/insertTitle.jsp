@@ -357,14 +357,7 @@ input[type=text] {
 		<div>
 			<h3>결재선</h3>
 			<table align="center" id="adminList">
-					<!-- <th width="100">결재</th>
-					<td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);" id="adminName"></td>
-					<th>결재</th>
-					<td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><input
-						type="text" name="sign2" value="김종군" readonly></td>
-					<th>결재</th>
-					<td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><input
-						type="text" name="sign3" value="김종군(마케팅)" readonly></td> -->
+			
 			</table>
 		</div>
 	</section>

@@ -346,17 +346,8 @@
 		 					<when test="fn.equals('임시저장')">
 		 						'임시저장'
 		 					</when>
-		 					<when test="fn.equals('진행중')">
-		 						'진행중'
-		 					</when>
-		 					<when test="fn.equals('반려됨')">
-		 						'반려됨'
-		 					</when>
-		 					<when test="fn.equals('결재완료')">
-		 						'결재완료'
-		 					</when>
 		 					<otherwise>
-		 						'대기'
+		 						'반려됨'
 		 					</otherwise>
 		 				  </choose>
 		   and dp_status = 'N'  
@@ -379,17 +370,8 @@
 		 					<when test="fn.equals('임시저장')">
 		 						'임시저장'
 		 					</when>
-		 					<when test="fn.equals('진행중')">
-		 						'진행중'
-		 					</when>
-		 					<when test="fn.equals('반려됨')">
-		 						'반려됨'
-		 					</when>
-		 					<when test="fn.equals('결재완료')">
-		 						'결재완료'
-		 					</when>
 		 					<otherwise>
-		 						'대기'
+		 						'반려됨'
 		 					</otherwise>
 		 				  </choose>
 		   and dp_status = 'N'

@@ -91,7 +91,8 @@ public class SignDao {
 		map.put("fn", fn);
 		return (ArrayList)sqlSession.selectList("signMapper.selectList", map, rowBounds);
 	}
-//  기안서 진행중, 대기 리스트
+	
+//	기안서 결재완료, 진행중, 대기 리스트
 	public int selectProgressListCount(SqlSessionTemplate sqlSession, String fn, String empNo) {
 		HashMap<String, String> map = new HashMap();
 		map.put("empNo", empNo);
