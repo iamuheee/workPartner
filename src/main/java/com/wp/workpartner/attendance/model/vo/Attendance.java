@@ -29,5 +29,7 @@ public class Attendance {
 	private String posName;
 	private String empName;
 	private String workhours;
+	private String dt;
+	private String empStatus;
 	
 }

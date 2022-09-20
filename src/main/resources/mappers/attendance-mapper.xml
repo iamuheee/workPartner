@@ -19,6 +19,8 @@
 		<result column="POS_NAME" property="posName"/>
 		<result column="EMP_NAME" property="empName"/>
 		<result column="ATT_WORKHOURS" property="workhours"/>
+		<result column="dt" property="dt"/>
+		<result column="emp_status" property="empStatus"/>
 	</resultMap>
 	
 	<resultMap id="departmentResult" type="AttDepartment">
@@ -26,121 +28,222 @@
 		<result column="dep_name" property="depName"/>
 	</resultMap>
 	
+	<resultMap id="positionResult" type="AttPosition">
+		<result column="POS_CD" property="posCd"/>
+		<result column="POS_NAME" property="posName"/>
+	</resultMap>
+	
 	<!-- 전사원 근태현황 조회 리스트개수 -->
 	<select id="selectSearchCount" resultType="_int">
-		select 
-		       count(*)
-		  from tb_attendance a
-		  join tb_employee e
-            on (a.emp_no = e.emp_no)
-		 where e.emp_status='Y'
-		   <if test="condition == '1'"> 
-		   	and e.dep_cd = '1'
-		   </if>
-		   <if test="condition == '2'">
-		   	and e.dep_cd = '2'
-		   </if>
-		   <if test="condition == '3'"> 
-		   	and e.dep_cd = '3'
-		   </if>
-			<if test="keyword != ''">
-		    and e.emp_name like '%' || #{keyword} || '%'
-		   	</if>
-		   	<if test="date1 != '' and date2 != ''">
-		    and (a.att_date between to_date(#{date1}, 'YYYY-MM-DD') and to_date(#{date2},'YYYY-MM-DD'))
-		    </if>
+		select count(*)
+			from (SELECT 
+			        c.emp_no,
+			        d.dep_name,
+			        d.dep_cd,
+			        p.pos_name,
+			        e.emp_name,
+			        c.dt,
+			        a.att_cmt,
+			        a.att_qt,
+			        a.att_time,
+			        e.emp_status,
+			        case when a.att_qt is not null  
+			             then trunc((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24)||'시간'||
+			                 trunc(((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24-(trunc((to_date(a.att_qt, 'hh24mi')
+			                        -to_date(a.att_cmt, 'hh24mi'))*24)))*60)||'분'
+			             else null 
+			        end as att_workhours,
+			        case when a.att_status is null 
+			             then '결근'
+			             else a.att_status
+			             end as att_status
+				    FROM
+				        tb_attendance a 
+				    right
+				     join (SELECT DT, EMP_NO
+				              FROM (
+				                        SELECT TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS DT,
+				                               TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'D') AS DAY
+				                           FROM ( 
+				                           			<choose>
+													 	<when test="(date1 != null and date1 != '') and (date2 != null and date2 != '')">
+											            	SELECT TO_CHAR(TO_DATE(#{date1},'YYYY-MM-DD'), 'YYYYMMDD') AS ST_DT 
+			                                              , 	   TO_CHAR(TO_DATE(#{date2},'YYYY-MM-DD'), 'YYYYMMDD') AS END_DT
+											            </when>
+											           	<otherwise>
+											           		SELECT TO_CHAR(SYSDATE,'YYYYMM')||'01' AS ST_DT 
+			                                              , 	   TO_CHAR(SYSDATE,'YYYYMMDD') AS END_DT
+											            </otherwise>
+													</choose>
+				                                    FROM DUAL 
+				                                  )
+				                         CONNECT BY LEVEL <![CDATA[<=]]> TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
+				                    ), (SELECT EMP_NO FROM TB_EMPLOYEE)
+				                WHERE DAY NOT IN (1, 7)
+				            )c on (a.emp_no = c.emp_no and a.att_date = c.dt)
+			        join tb_employee e
+				      on (c.emp_no = e.emp_no)
+				    join tb_position p
+				      on (e.pos_cd = p.pos_cd)
+				    join tb_department d
+				      on (e.dep_cd = d.dep_cd))
+			        where emp_status='Y'
+			        
+			        	<choose>
+							<when test='condition == "0"'></when>
+							<otherwise> 
+							   	and dep_cd = #{condition}
+							</otherwise>
+						</choose>
+						
+						<if test="keyword != null and keyword != ''">
+					    and (emp_name like '%' || #{keyword} || '%' or emp_no = #{keyword})
+					   	</if>
+					order by dt desc
+	    
 	</select>
 	
 	<!-- 전사원 근태현황 조회 리스트-->
 	<select id="selectSearchList" resultMap="AttendanceResult">
-		SELECT
-		    a.emp_no,
-		    d.dep_name,
-		    p.pos_name,
-		    e.emp_name,
-		    a.att_date,
-		    a.att_cmt,
-		    a.att_qt,
-		    a.att_time,
-		    case when a.att_qt is not null  
-		         then trunc((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24)||'시간'||
-		             trunc(((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24-(trunc((to_date(a.att_qt, 'hh24mi')
-		             		-to_date(a.att_cmt, 'hh24mi'))*24)))*60)||'분'
-		         else null 
-		    end as att_workhours,
-		    att_status
-		FROM
-		    tb_attendance a
-		join tb_employee e
-		  on (a.emp_no = e.emp_no)
-		join tb_position p
-		  on (e.pos_cd = p.pos_cd)
-		join tb_department d
-		  on (e.dep_cd = d.dep_cd)
-	   where e.emp_status='Y'
-	   <if test="condition eq '1'"> 
-	   	and e.dep_cd = '1'
-	   </if>
-	   <if test="condition eq '2'"> 
-	   	and e.dep_cd = '2'
-	   </if>
-	   <if test="condition eq '3'">  
-	   	and e.dep_cd = '3'
-	   </if>
-		<if test="keyword != null and !keyword.equals('')">
-	    and e.emp_name like '%' || #{keyword} || '%'
-	   	</if>
-	   	<if test="(date1 != null and !date1.equals('')) and (date2 != null and !date2.equals(''))">
-	    and (a.att_date between to_date(#{date1}, 'YYYY-MM-DD') and to_date(#{date2},'YYYY-MM-DD'))
-	    </if>
+		select *
+			from (SELECT 
+			        c.emp_no,
+			        d.dep_name,
+			        d.dep_cd,
+			        p.pos_name,
+			        e.emp_name,
+			        c.dt,
+			        a.att_cmt,
+			        a.att_qt,
+			        a.att_time,
+			        e.emp_status,
+			        case when a.att_qt is not null  
+			             then trunc((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24)||'시간'||
+			                 trunc(((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24-(trunc((to_date(a.att_qt, 'hh24mi')
+			                        -to_date(a.att_cmt, 'hh24mi'))*24)))*60)||'분'
+			             else null 
+			        end as att_workhours,
+			        case when a.att_status is null 
+			             then '결근'
+			             else a.att_status
+			             end as att_status
+				    FROM
+				        tb_attendance a 
+				    right
+				     join (SELECT DT, EMP_NO
+				              FROM (
+				                        SELECT TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS DT,
+				                               TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'D') AS DAY
+				                           FROM ( 
+				                           			<choose>
+													 	<when test="(date1 != null and date1 != '') and (date2 != null and date2 != '')">
+											            	SELECT TO_CHAR(TO_DATE(#{date1},'YYYY-MM-DD'), 'YYYYMMDD') AS ST_DT 
+			                                              , 	   TO_CHAR(TO_DATE(#{date2},'YYYY-MM-DD'), 'YYYYMMDD') AS END_DT
+											            </when>
+											           	<otherwise>
+											           		SELECT TO_CHAR(SYSDATE,'YYYYMM')||'01' AS ST_DT 
+			                                              , 	   TO_CHAR(SYSDATE,'YYYYMMDD') AS END_DT
+											            </otherwise>
+													</choose>
+				                                    FROM DUAL 
+				                                  )
+				                         CONNECT BY LEVEL <![CDATA[<=]]> TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
+				                    ), (SELECT EMP_NO FROM TB_EMPLOYEE)
+				                WHERE DAY NOT IN (1, 7)
+				            )c on (a.emp_no = c.emp_no and a.att_date = c.dt)
+			        join tb_employee e
+				      on (c.emp_no = e.emp_no)
+				    join tb_position p
+				      on (e.pos_cd = p.pos_cd)
+				    join tb_department d
+				      on (e.dep_cd = d.dep_cd))
+			        where emp_status='Y'
+			        
+			        	<choose>
+							<when test='condition == "0"'></when>
+							<otherwise> 
+							   	and dep_cd = #{condition}
+							</otherwise>
+						</choose>
+						
+						<if test="keyword != null and keyword != ''">
+					    and (emp_name like '%' || #{keyword} || '%' or emp_no = #{keyword})
+					   	</if>
+					order by dt desc
+	    
 	</select>
 	
 	
 	<!-- 전사원 근태현황 조회 근무상태 수 -->
 	<select id="statusCount" resultType="_int">
 
-		SELECT      
-			case when count(*) != 0 then count(*)
-	        else 0
-	        end
-	               
-            FROM
-            (
-                SELECT  B.DT
-                    ,   B.ATT_DATE
-                    ,   NVL(B.ATT_DATE,'결근') AS FATT_DATE
-                FROM
-                (
-                SELECT  A.DT
-                    ,   (SELECT CASE WHEN ATT_STATUS = '정상' THEN '정상'
-                                     WHEN ATT_STATUS = '지각' THEN '지각'
-                                     WHEN ATT_STATUS = '연차' THEN '연차'
-                                     WHEN ATT_STATUS = '오전반차' THEN '오전반차'
-                                     WHEN ATT_STATUS = '오후반차' THEN '오후반차'
-                                     END
-                   		 FROM tb_attendance WHERE ATT_DATE = A.DT ) AS ATT_DATE
-                    
-                 FROM (
-                             SELECT TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS DT
-                               FROM ( 
-                               			
-                               			<choose>
-										 	<when test="(date1 != null and !date1.equals('')) and (date2 != null and !date2.equals(''))">
-								            	SELECT TO_CHAR(SYSDATE,'YYYYMM')||'01' AS ST_DT 
-                                              , 	   TO_CHAR(SYSDATE,'YYYYMMDD') AS END_DT
-								            </when>
-								           	<otherwise>
-								           		SELECT TO_CHAR(TO_DATE(#{date1},'YYYYMMDD'), 'YYYYMMDD') AS ST_DT 
-                                              , 	   TO_CHAR(TO_DATE(#{date2},'YYYYMMDD'), 'YYYYMMDD') AS END_DT
-								            </otherwise>
-										</choose>                                
-                                        FROM DUAL 
-                                      )
-                             CONNECT BY LEVEL  &lt;=  TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
-                      ) A
-            	) B
-            ) C
-            where C.FATT_DATE = #{a}
+		select count(*)
+			from (SELECT 
+			        c.emp_no,
+			        d.dep_name,
+			        d.dep_cd,
+			        p.pos_name,
+			        e.emp_name,
+			        c.dt,
+			        a.att_cmt,
+			        a.att_qt,
+			        a.att_time,
+			        e.emp_status,
+			        case when a.att_qt is not null  
+			             then trunc((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24)||'시간'||
+			                 trunc(((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24-(trunc((to_date(a.att_qt, 'hh24mi')
+			                        -to_date(a.att_cmt, 'hh24mi'))*24)))*60)||'분'
+			             else null 
+			        end as att_workhours,
+			        case when a.att_status is null 
+			             then '결근'
+			             else a.att_status
+			             end as att_status
+				    FROM
+				        tb_attendance a 
+				    right
+				     join (SELECT DT, EMP_NO
+				              FROM (
+				                        SELECT TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS DT,
+				                               TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'D') AS DAY
+				                           FROM ( 
+				                           			<choose>
+													 	<when test="(date1 != null and date1 != '') and (date2 != null and date2 != '')">
+											            	SELECT TO_CHAR(TO_DATE(#{date1},'YYYY-MM-DD'), 'YYYYMMDD') AS ST_DT 
+			                                              , 	   TO_CHAR(TO_DATE(#{date2},'YYYY-MM-DD'), 'YYYYMMDD') AS END_DT
+											            </when>
+											           	<otherwise>
+											           		SELECT TO_CHAR(SYSDATE,'YYYYMM')||'01' AS ST_DT 
+			                                              , 	   TO_CHAR(SYSDATE,'YYYYMMDD') AS END_DT
+											            </otherwise>
+													</choose>
+				                                    FROM DUAL 
+				                                  )
+				                         CONNECT BY LEVEL <![CDATA[<=]]> TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
+				                    ), (SELECT EMP_NO FROM TB_EMPLOYEE)
+				                WHERE DAY NOT IN (1, 7)
+				            )c on (a.emp_no = c.emp_no and a.att_date = c.dt)
+			        join tb_employee e
+				      on (c.emp_no = e.emp_no)
+				    join tb_position p
+				      on (e.pos_cd = p.pos_cd)
+				    join tb_department d
+				      on (e.dep_cd = d.dep_cd))
+			        where emp_status='Y'
+			        
+			        	<choose>
+							<when test='condition == "0"'></when>
+							<otherwise> 
+							   	and dep_cd = #{condition}
+							</otherwise>
+						</choose>
+						
+						<if test="keyword != null and keyword != ''">
+					    and (emp_name like '%' || #{keyword} || '%' or emp_no = #{keyword})
+					   	</if>
+					 and att_status = #{a}
+					order by dt desc
+          
 
 	</select>
 	
@@ -150,4 +253,9 @@
 			  , dep_name
 			from TB_DEPARTMENT 
 	</select>
+	
+	<select id="postionList" resultMap="positionResult">
+	
+	</select>
+	
 </mapper>

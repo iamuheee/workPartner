@@ -103,27 +103,19 @@
 						  </tr>
 					  </thead>
 					  <tbody>
-						  <tr>
-							  <td>101</td>
-							  <td>인사</td>
-						  </tr>
-						  <tr>
-							<td>101</td>
-							<td>인사</td>
-						</tr>
-						<tr>
-							<td>101</td>
-							<td>인사</td>
-						</tr>
-						<tr>
-							<td>101</td>
-							<td>인사</td>
-						</tr>
-						<tr>
-							<td>101</td>
-							<td>인사</td>
-						</tr>
-						  
+					  	<c:choose>
+						  	<c:when test="${ empty list }">
+						  		<td colspan="2">조회된 부서가 없습니다.</td>
+							</c:when>
+							<c:otherwise>
+								<c:forEach var="d" items="${list}">
+								  <tr>
+									  <td>${d.depCd}</td>
+								  	  <td>${d.depName}</td>
+							  	  </tr>
+							 	</c:forEach>
+							</c:otherwise> 
+					 	</c:choose>
 					  </tbody>
 				  
 		  
