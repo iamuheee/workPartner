@@ -16,6 +16,7 @@
 	</resultMap>
 	
 	<resultMap id="roomResult" type="Room">
+		<result column="rm_no" property = "rmNo" />
 		<result column="rm_name" property="rmName"/>
 	</resultMap>
 	
@@ -106,6 +107,7 @@
 	</update>
 	
 	<!-- 회의실 예약 취소 -->
+	<!-- 작성자 : 박태은 -->
 	<update id="deleteBook">
 		update
 			   tb_book
@@ -114,5 +116,34 @@
 		     , bk_modify = current_date
 		 where bk_no = #{ bkNo }
 	</update>
+	
+	<!-- 전체 회의실 예약 목록 조회 -->
+	<select id="selectAllBookList" resultMap="bookResult">
+		select
+	           bk_no
+	         , rm_no 
+		     , rm_name
+		     , bk_title
+		     , bk_meetdate
+		     , bk_start
+		     , bk_end
+		     , bk_person
+		  from tb_book
+		  join tb_room using(rm_no)
+		 order
+		    by bk_meetdate asc
+	</select>
+	
+	<!-- 회의실 목록 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectRoomList" resultMap="roomResult">
+		select
+		       rm_no
+		     , rm_name
+		  from tb_room
+		 order
+		    by rm_no asc
+	</select>
+	
 
 </mapper>

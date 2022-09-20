@@ -22,6 +22,10 @@ public interface BookService {
 	ArrayList selectBookByDate(String meetDate);
 	// 회의실별 조회
 	ArrayList selectBookByRoom(String bkNo);
+
+	// 전체 조회
+	ArrayList selectAllBookList();
+	ArrayList selectRoomList();
 	
 	// 회의실 예약 수정 서비스 (update)
 	int updateBook(Book b);
