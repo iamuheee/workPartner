@@ -90,15 +90,15 @@ table {
 					<table class="endSignList" width="100%">
 
 						<tr align="center">
-							<th class="endNum" width="10%">문서번호</th>
-							<th class="endNum" width="10%">서식</th>
+							<th class="endNum" width="8%">문서번호</th>
+							<th class="endNum" width="8%">서식</th>
+							<th class="endCreate" width="8%">요청부서</th>
+							<th class="endCreate" width="8%">첨부파일</th>
 							<th class="endTitle" width="20%">제목</th>
-							<th class="endCreate" width="10%">요청부서</th>
-							<th class="endCreate" width="10%">첨부파일</th>
 							<th width="10%">기안자</th>
 							<th width="10%">기안일</th>
-							<th width="10%">현재결재자</th>
-							<th width="10%">최종결재자</th>
+							<th width="14%">현재결재자</th>
+							<th width="14%">최종결재자</th>
 						</tr>
 						<c:choose>
 	                		<c:when test="${empty othSignList }">
@@ -111,14 +111,6 @@ table {
 				                    <tr align="center">
 				                   	    <td>${ o.dpNo }</td>
 				                        <td>${ o.dpCategory }</td>
-				                        <c:choose>
-					                        <c:when test="${empty o.dpTitle }">
-					                        	<td><a href="" class="dpTitle">제목없음</a></td>
-					                        </c:when>
-					                        <c:otherwise>
-					                        	<td><a href="" class="dpTitle">${ o.dpTitle }</a></td>
-					                        </c:otherwise>
-				                        </c:choose>
 				                        <td>${ o.signDeptName }</td>
 				                        <td>
 					                        <c:if test="${ not empty o.dpOrigin }">
@@ -127,10 +119,18 @@ table {
 												</span>
 					                        </c:if>
 				                        </td>
-				                        <td>${ o.empNo }( ${ o.signDeptName })</td>
+				                        <c:choose>
+					                        <c:when test="${empty o.dpTitle }">
+					                        	<td><a href="" class="dpTitle">제목없음</a></td>
+					                        </c:when>
+					                        <c:otherwise>
+					                        	<td><a href="" class="dpTitle">${ o.dpTitle }</a></td>
+					                        </c:otherwise>
+				                        </c:choose>
+				                        <td>${ o.empNo}(${o.signDeptName})</td>
 				                        <td>${ o.dpCreate }</td>
 				                        <td>${ loginUser.empName }(${ loginUser.depCd }) </td>
-				                        <td>${ o.signEmpName }(${ o.signEmpdept })</td>
+				                        <td>${ o.signEmpName }(${ o.signEmpDept })</td>
 				                    </tr>
 				                    <script>
 										$(document).ready(function(){
