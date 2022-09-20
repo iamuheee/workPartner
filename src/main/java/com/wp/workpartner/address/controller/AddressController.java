@@ -299,13 +299,17 @@ public class AddressController {
 		return "address/addressDuty";
 	}
 	
-	// 프로젝트용 주소록
+	// 프로젝트 멤버추가용 주소록
 	@RequestMapping("addressProject.ad")
 	public String addressProject() {
 		return "address/addressProject";
 	}
 	
-	
+	// 프로젝트 게시판 담당자용 주소록
+	@RequestMapping("addressPcharge.ad");
+	public String addressPcharge() {
+		return "address/addressPcharge";
+	}
 	
 	
 }
