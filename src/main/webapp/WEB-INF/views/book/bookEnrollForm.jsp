@@ -36,13 +36,8 @@
 	margin-right:10px;
 	}
 	
-   #bkCalendar {
-   	width:95%;
-   	height:100%;
-   	background-color:pink;
-   	border:1px soild black;
-   	margin:auto;
-   	margin-top:30px;
+   #calendar{
+   	padding-bottom:50px;
    }
    
     
@@ -363,13 +358,13 @@
 					    	  },
 					   	  datesAboveResources: true,
 					   	    headerToolbar: {	// 헤더 표시 툴바
-					   	      left: 'myCustomButton resourceTimeGridDay,resourceTimeGridFourDay',
+					   	      left: 'myCustomButton prev,next',
 					   	      center: 'title',
-					   	      right: 'prev,next'
+					   	      right: 'today resourceTimeGridDay,resourceTimeGridFourDay'
 					   	    },
-					   	  customButtons: {
+					   	  customButtons: {	// 헤더 툴바에 커스텀한 버튼 추가
 					   		  myCustomButton: {
-					   			  text: '+ 회의실 등록',
+					   			  text: '예약하기',
 					   			  click: function(){
 					   					$('#insertBookMd').modal('show');
 					   			  }
@@ -391,7 +386,9 @@
 					      events: dataBook,	// db에서 조회한 예약들을 캘린더 위에 뿌림
 					      resources: dataRoom	// db에서 조회한 회의실 이름을 컬럼명으로 뿌림 
 					    });
+					    
 					    calendar.render();
+					    calendar.updateSize();
 					 // -------------------- 캘린더 렌더링 끝 --------------------
 					  }, // success 끝
 				  	  error:function(){
