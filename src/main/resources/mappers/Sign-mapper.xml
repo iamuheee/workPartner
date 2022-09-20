@@ -46,6 +46,9 @@
 		<result column="dp_origin" property="dpOrigin"/>
 		<result column="dp_change" property="dpChange"/>
 		<result column="sign_empname" property="signEmpName"/>
+		<result column="lastsingdate" property="lastSigndate"/>
+		<result column="sign_empdept" property="signEmpDept"/>
+		<result column="sign_deptname" property="signDeptName"/>
 	</resultMap>
 	
 	<resultMap id="SelectSignListResult" type="Sign">
@@ -261,7 +264,7 @@
 		  , #{ resNextMem }
 		  , #{ resTaMem }
 		 )
-	
+		
 	</insert>
 	<insert id="insertReSign">
 		insert
@@ -400,7 +403,8 @@
 			  ,(select si_appdate 
 			      from tb_sign s 
 			     where s.dp_no = d.dp_no 
-			       and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no))
+			       and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
+			       ) AS lastsigndate
 		  from tb_dtpaper d
 		 where 	dp_final = 	<choose>
 			 					<when test="fn.equals('진행중')">
@@ -442,5 +446,62 @@
 		 				</choose>
 		   and dp_status = 'N' 
 		   and emp_no = ${ empNo }
+	</select>
+	
+	<!-- 타부서 결재함 -->
+	<select id="selectOthSignListCount" resultType="_int">
+		select 
+				count(*)	
+		  from tb_dtpaper d
+		  join tb_sign s on ( d.dp_no = s.dp_no)
+		 where dp_final = '진행중' or dp_final = '대기'
+		   and dp_status = 'N'
+		   and si_status = 'C'
+		   and signemp_no = #{ empNo }
+		   
+	</select>
+	<select id="selectOthSignList" resultMap="SelectProgressListResult">
+		select
+		       d.dp_no
+		      ,(select e.emp_name
+			       		from tb_dtpaper p
+			      	    join tb_employee e on (p.emp_no = e.emp_no)
+			      	   where dp_no = d.dp_no
+			   ) as emp_no
+		      ,dp_title
+		      ,to_char(dp_create, 'YYYY-MM-DD') AS "dp_create"
+		      ,dp_modify
+		      ,dp_status
+		      ,dp_final
+		      ,dp_category
+		      ,dp_origin
+		      ,dp_change
+		      ,(select emp_name 
+				    from tb_sign 
+				    join tb_employee on (signemp_no = emp_no)
+				   where dp_no = d.dp_no 
+				     and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
+				  ) AS sign_empname
+			  ,(select dep_name
+				   from tb_sign s
+				   join tb_employee e on (s.signemp_no = e.emp_no)
+				   join tb_department b on (e.dep_cd = b.dep_cd)
+				   where dp_no = d.dp_no
+				   and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
+			   ) AS sign_empdept
+			   ,(select dep_name
+			       from tb_dtpaper p
+			       join tb_employee e on (p.emp_no = e.emp_no)
+			       join tb_department b on (e.dep_cd = b.dep_cd)
+			      where dp_no = d.dp_no
+			   ) AS sign_deptname
+		  from tb_dtpaper d
+		  join tb_sign s on ( d.dp_no = s.dp_no)
+		 where dp_final = '진행중' or dp_final = '대기'
+		   and dp_status = 'N'
+		   and si_status = 'C'
+		   and signemp_no = #{ empNo }
+		 order
+		    by dp_create desc
 	</select>
 </mapper>

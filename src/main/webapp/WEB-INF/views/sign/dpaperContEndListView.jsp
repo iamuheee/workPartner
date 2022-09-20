@@ -231,28 +231,28 @@ table {
 	                			</tr>
 	                		</c:when>
 	                		<c:otherwise>
-	                			<c:forEach var="p" items="${ progressList }">
+	                			<c:forEach var="e" items="${ endSignList }">
 				                    <tr align="center">
-				                   	    <td>${ p.dpNo }</td>
-				                        <td>${ p.dpCategory }</td>
+				                   	    <td>${ e.dpNo }</td>
+				                        <td>${ e.dpCategory }</td>
 				                        <c:choose>
-					                        <c:when test="${empty p.dpTitle }">
+					                        <c:when test="${empty e.dpTitle }">
 					                        	<td><a href="" class="dpTitle">제목없음</a></td>
 					                        </c:when>
 					                        <c:otherwise>
-					                        	<td><a href="" class="dpTitle">${ p.dpTitle }</a></td>
+					                        	<td><a href="" class="dpTitle">${ e.dpTitle }</a></td>
 					                        </c:otherwise>
 				                        </c:choose>
-				                        <td>${ p.dpCreate }</td>
+				                        <td>${ e.dpCreate }</td>
 				                        <td>
-					                        <c:if test="${ not empty p.dpOrigin }">
+					                        <c:if test="${ not empty e.dpOrigin }">
 					                       		<span class="material-icons" style="vertical-align:middle; font-size:17px; color:#878787;">
 												attachment
 												</span>
 					                        </c:if>
 				                        </td>
-				                        <td>${ p.signEmpName }</td>
-				                        <td>${ p.lastSigndate } </td>
+				                        <td>${ e.signEmpName }</td>
+				                        <td>${ e.lastSigndate } </td>
 				                    </tr>
 				                    <script>
 										$(document).ready(function(){

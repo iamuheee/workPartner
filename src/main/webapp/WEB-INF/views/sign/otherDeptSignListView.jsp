@@ -90,25 +90,67 @@ table {
 					<table class="endSignList" width="100%">
 
 						<tr align="center">
-							<th class="endNum" width="7%">서식</th>
-							<th class="endTitle" width="30%">제목</th>
+							<th class="endNum" width="10%">문서번호</th>
+							<th class="endNum" width="10%">서식</th>
+							<th class="endTitle" width="20%">제목</th>
 							<th class="endCreate" width="10%">요청부서</th>
+							<th class="endCreate" width="10%">첨부파일</th>
 							<th width="10%">기안자</th>
 							<th width="10%">기안일</th>
 							<th width="10%">현재결재자</th>
 							<th width="10%">최종결재자</th>
 						</tr>
-
-						<tr align="center">
-							<td>업무협조</td>
-							<td>여기는 제목이 나타나는 곳</td>
-							<td>마케팅</td>
-							<td>김범진</td>
-							<td>2022-09-01</td>
-							<td>강보람(인사)</td>
-							<td>김종군(마케팅)</td>
-						</tr>
-
+						<c:choose>
+	                		<c:when test="${empty othSignList }">
+	                			<tr>
+	                				<td colspan="8" align="center">현재 게시글이 없습니다.</td>
+	                			</tr>
+	                		</c:when>
+	                		<c:otherwise>
+	                			<c:forEach var="o" items="${ othSignList }">
+				                    <tr align="center">
+				                   	    <td>${ o.dpNo }</td>
+				                        <td>${ o.dpCategory }</td>
+				                        <c:choose>
+					                        <c:when test="${empty o.dpTitle }">
+					                        	<td><a href="" class="dpTitle">제목없음</a></td>
+					                        </c:when>
+					                        <c:otherwise>
+					                        	<td><a href="" class="dpTitle">${ o.dpTitle }</a></td>
+					                        </c:otherwise>
+				                        </c:choose>
+				                        <td>${ o.signDeptName }</td>
+				                        <td>
+					                        <c:if test="${ not empty o.dpOrigin }">
+					                       		<span class="material-icons" style="vertical-align:middle; font-size:17px; color:#878787;">
+												attachment
+												</span>
+					                        </c:if>
+				                        </td>
+				                        <td>${ o.empNo }( ${ o.signDeptName })</td>
+				                        <td>${ o.dpCreate }</td>
+				                        <td>${ loginUser.empName }(${ loginUser.depCd }) </td>
+				                        <td>${ o.signEmpName }(${ o.signEmpdept })</td>
+				                    </tr>
+				                    <script>
+										$(document).ready(function(){
+											$(".dpTitle").click(function(){
+					                    		if('${s.dpCategory}' == '연차'){
+													$(".dpTitle").attr("href", "detailVa.si");
+												}else if('${s.dpCategory}' == '외근'){
+													$(".dpTitle").attr("href", "detailOtw.si");
+												}else if('${s.dpCategory}' == '퇴직원'){
+													$(".dpTitle").attr("href", "detailRes.si");
+												}else{
+													$(".dpTitle").attr("href", "detailCo.si");
+												}
+											})
+										})
+									</script>
+			                    </c:forEach>
+	                		</c:otherwise>
+	                   </c:choose>
+					
 					</table>
 					<ul class="pagination"
 						style="margin-top: 10px; margin-right: auto; margin-left: auto; width: 400px">

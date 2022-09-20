@@ -25,9 +25,15 @@ public class Dtpaper {
 	private String dpTemp;
 	private String dpOrigin;
 	private String dpChange;
-	private Sign sign;
+	
+//	내가 쓴 기안서 리스트 조회용
 	private String signEmpName;
 	private String lastSigndate;
+	
+//	타부서 결재함
+	private String signEmpDept;
+	private String signDeptName;
+	
 	
 	private ArrayList<Sign> signList;
 	//private ArrayList<Vacation> vacationList;

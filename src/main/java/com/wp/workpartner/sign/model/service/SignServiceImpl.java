@@ -98,11 +98,11 @@ public class SignServiceImpl implements SignService {
 //	타부서 결재함
 	@Override
 	public int selectOthSignListCount(String empNo) {
-		return 0;
+		return sDao.selectOthSignListCount(sqlSession, empNo);
 	}
 	@Override
 	public ArrayList<Dtpaper> selectOthSignList(PageInfo pi, String empNo) {
-		return null;
+		return sDao.selectOthSignList(sqlSession,pi, empNo);
 	}
 //	내부서 결재함
 	@Override

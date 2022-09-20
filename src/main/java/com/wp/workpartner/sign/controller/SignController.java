@@ -371,6 +371,7 @@ public class SignController {
 		mv.addObject("pi",pi)
 		.addObject("othSignList", othSignList)
 		.setViewName("sign/otherDeptSignListView");
+		System.out.println(othSignList);
 		return mv;
 	}
 	@RequestMapping("othEndSi.si")
