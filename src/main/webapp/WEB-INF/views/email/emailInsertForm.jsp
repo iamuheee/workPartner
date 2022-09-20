@@ -372,10 +372,7 @@
 	                    <td colspan="4">
 	                        
 	                        <!-- 메일내용 -->
-	                        <textarea id="summernote" name="mailContent" id="mailContent" required>
-	                        
-	                        	
-	                        </textarea>
+	                        <textarea id="summernote" name="mailContent" id="mailContent" required> </textarea>
 	                        
 	                        
 	                    </td>

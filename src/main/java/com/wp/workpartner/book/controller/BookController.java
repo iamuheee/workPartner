@@ -123,4 +123,44 @@ public class BookController {
 		return new Gson().toJson(b);
 	}
 	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 20.
+	 * @method	: 회의실 예약 수정 요청
+	 * @param	: Book b
+	 * @return	: redirect:list.bk
+	 */
+	@RequestMapping("update.bk")
+	public String updateBook(Book b, HttpSession session, Model model) {
+		//System.out.println("updateBk 넘어온 값 : " + b); // 잘 넘어옴
+		// bkPerson, bkDate, bkStart, bkEnd, bkModify(내가 직접 넣어줘야 함)
+		
+		int result = bService.updateBook(b);
+		System.out.println(result);
+		
+		if(result > 0) {
+			session.setAttribute("alertMsg", "회의실 예약 일정 변경에 성공했습니다.");
+			return "redirect:list.bk";
+		}else {
+			model.addAttribute("errorMsg", "회의실 예약 변경 실패");
+			return "common/error";
+		}
+	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 20.
+	 * @method	: (ajax) 회의실 예약 취소 요청 
+	 * @param	: bkNo
+	 * @return	: String result
+	 */
+	@ResponseBody
+	@RequestMapping("delete.bk")
+	public String ajaxDeleteBook(String bkNo) {
+		System.out.println("bkNo : " + bkNo);
+		int result = bService.deleteBook(bkNo);
+		System.out.println(result);
+		
+		return (result > 0) ? "success" : "fail";
+	}
 }

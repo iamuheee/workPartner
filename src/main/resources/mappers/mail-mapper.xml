@@ -434,6 +434,7 @@
 		      </if>		       
 	</select>
 	
+	<!-- 다중선택 메일 삭제  -->
 	<update id="deleteEmailGroup" parameterType="java.util.HashMap">
 		<foreach item="m" collection="list" index="index" open="DECLARE BEGIN" separator=";" close="; END;">		 	
 			update 
@@ -453,12 +454,111 @@
 		 </foreach>
 	</update> 
 	
+	<!-- 다중선택 읽음표시  -->
+	<update id="readEmailGroup" parameterType="java.util.HashMap">
+		<foreach item="m" collection="list" index="index" open="DECLARE BEGIN" separator=";" close="; END;">		 	
+			update 
+				   tb_mail_status
+			   set mail_read = 'Y'
+			 where
+			 		mail_no = #{m.mailNo}
+			 	<choose>
+			 		<when test="m.mailEmail != 'undefined'">
+					 	and	mail_email = #{m.mailEmail}	
+			 		</when>
+			 		<otherwise>
+			 			and mail_email IS NULL 
+			 		</otherwise>
+			 	</choose>
+			 	and mail_category = #{m.mailCategory}						
+		 </foreach>
+	</update> 
+	
+	<!-- 다중선택 중요메일함 IN -->
+	<update id="starOnEmailGroup" parameterType="java.util.HashMap">
+		<foreach item="m" collection="list" index="index" open="DECLARE BEGIN" separator=";" close="; END;">		 	
+			update 
+				   tb_mail_status
+			   set mail_star = 'Y'
+			 where
+			 		mail_no = #{m.mailNo}
+			 	<choose>
+			 		<when test="m.mailEmail != 'undefined'">
+					 	and	mail_email = #{m.mailEmail}	
+			 		</when>
+			 		<otherwise>
+			 			and mail_email IS NULL 
+			 		</otherwise>
+			 	</choose>
+			 	and mail_category = #{m.mailCategory}						
+		 </foreach>
+	</update> 
+	
+	<!-- 다중선택 중요메일함 OUT -->
+	<update id="starOffEmailGroup" parameterType="java.util.HashMap">
+		<foreach item="m" collection="list" index="index" open="DECLARE BEGIN" separator=";" close="; END;">		 	
+			update 
+				   tb_mail_status
+			   set mail_star = 'N'
+			 where
+			 		mail_no = #{m.mailNo}
+			 	<choose>
+			 		<when test="m.mailEmail != 'undefined'">
+					 	and	mail_email = #{m.mailEmail}	
+			 		</when>
+			 		<otherwise>
+			 			and mail_email IS NULL 
+			 		</otherwise>
+			 	</choose>
+			 	and mail_category = #{m.mailCategory}						
+		 </foreach>
+	</update> 
+	
+	<!-- 다중선택 완전삭제 -->
+	<update id="deleteFix" parameterType="java.util.HashMap">
+		<foreach item="m" collection="list" index="index" open="DECLARE BEGIN" separator=";" close="; END;">		 	
+			delete 
+			  from tb_mail_status
+			 where
+			 	   mail_no = #{m.mailNo}
+			 	<choose>
+			 		<when test="m.mailEmail != 'undefined'">
+					 	and	mail_email = #{m.mailEmail}	
+			 		</when>
+			 		<otherwise>
+			 			and mail_email IS NULL 
+			 		</otherwise>
+			 	</choose>
+			 	and mail_category = #{m.mailCategory}						
+		 </foreach>
+	</update> 
+	
+	<!-- 다중선택 메일 복구  -->
+	<update id="updateMailY" parameterType="java.util.HashMap">
+		<foreach item="m" collection="list" index="index" open="DECLARE BEGIN" separator=";" close="; END;">		 	
+			update 
+				   tb_mail_status
+			   set mail_status = 'Y'
+			 where
+			 		mail_no = #{m.mailNo}
+			 	<choose>
+			 		<when test="m.mailEmail != 'undefined'">
+					 	and	mail_email = #{m.mailEmail}	
+			 		</when>
+			 		<otherwise>
+			 			and mail_email IS NULL
+			 		</otherwise>
+			 	</choose>
+			 	and mail_category = #{m.mailCategory}						
+		 </foreach>
+	</update> 
+	
 	<!-- 상세페이지 -->
 	<select id="selectMailDetail" resultMap="mailResult">
 		  select  
 		        mail_no,
 		        mail_title, 
-		        NVL(mail_content,' ') as "mail_content",
+		        NVL(mail_content,'내용 : ') as "mail_content",
 		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
 		        mail_important,
 		        mail_security,

@@ -89,5 +89,30 @@
 		  join tb_room using(rm_no)
 		 where bk_no = #{ bkNo }
 	</select>
+	
+	<!-- 회의실 예약 정보 수정 -->
+	<!-- 작성자 : 박태은 -->
+	<update id="updateBook">
+		update
+			   tb_book
+		   set 
+			    bk_person = #{ bkPerson }
+			  , bk_title = #{ bkTitle }
+			  , bk_meetdate = #{ bkDate }
+			  , bk_start = #{ bkStart }
+			  , bk_end = #{ bkEnd }
+			  , bk_modify = current_date  
+		  where bk_no = #{ bkNo }
+	</update>
+	
+	<!-- 회의실 예약 취소 -->
+	<update id="deleteBook">
+		update
+			   tb_book
+		   set 
+		       bk_status = 'Y'
+		     , bk_modify = current_date
+		 where bk_no = #{ bkNo }
+	</update>
 
 </mapper>

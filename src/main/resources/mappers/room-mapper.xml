@@ -70,7 +70,7 @@
 		  )
 		  values
 		  (
-		    seq_eqno.currval
+		    seq_eqno.nextval
 		  , #{eqName}
 		  )
 	</insert>
@@ -83,6 +83,8 @@
 		     , eq_name
 		  from tb_equip
 		 where eq_status = 'Y'
+		 order
+		    by eq_no asc
 	</select>
 	
 	<!-- 회의실 등록 -->

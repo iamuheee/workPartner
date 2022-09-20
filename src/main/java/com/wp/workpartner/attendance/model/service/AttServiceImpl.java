@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.wp.workpartner.attendance.model.dao.AttDao;
 import com.wp.workpartner.attendance.model.vo.Attendance;
+import com.wp.workpartner.attendance.model.vo.Department;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.duty.model.vo.Duty;
 
@@ -31,6 +32,17 @@ public class AttServiceImpl implements AttService{
 	@Override
 	public ArrayList<Attendance> selectSearchList(String date1, String date2, String condition, String keyword, PageInfo pi) {
 		return (ArrayList)aDao.selectSearchList(date1, date2, condition, keyword, pi, sqlSession);
+	}
+
+
+	@Override
+	public int statusCount(String a, String date1, String date2) {
+		return aDao.statusCount(a, date1, date2, sqlSession);
+	}
+
+	@Override
+	public ArrayList<Department> departmentList() {
+		return aDao.departmentList(sqlSession);
 	}
 	
 }
