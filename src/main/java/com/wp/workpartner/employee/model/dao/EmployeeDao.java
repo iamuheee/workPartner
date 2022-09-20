@@ -82,4 +82,8 @@ public class EmployeeDao {
 		
 		return sqlSession.update("employeeMapper.updateAccStatus", map);
 	}
+	
+	public int uploadProfile(SqlSessionTemplate sqlSession, Employee e) {
+		return sqlSession.update("employeeMapper.uploadProfile", e);
+	}
 }

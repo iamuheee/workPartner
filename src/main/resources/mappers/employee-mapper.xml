@@ -315,5 +315,14 @@
 		 where emp_id = #{empId}
 	</update>
 	
+	<!-- 프로필 이미지 변경 -->
+	<!-- 작성자 : 박태은 -->
+	<update id="uploadProfile">
+		update
+		       tb_employee
+		   set emp_profile = #{empProfile}
+		     , emp_modifydate = current_date
+		 where emp_id = #{empId}
+	</update>
 
 </mapper>

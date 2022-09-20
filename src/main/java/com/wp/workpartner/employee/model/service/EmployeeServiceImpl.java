@@ -42,11 +42,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public int deleteEmployee(Employee e) {
-		return 0;
-	}
-
-	@Override
 	public int idCheck(String empId) {
 		return eDao.idCheck(sqlSession, empId);
 	}
@@ -58,9 +53,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public int updateProfile(Employee e) {
-		return 0;
+		return eDao.uploadProfile(sqlSession, e);
 	}
-
 
 	@Override
 	public int selectEmpListCount() {

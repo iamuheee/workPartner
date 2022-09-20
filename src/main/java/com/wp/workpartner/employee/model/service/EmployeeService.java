@@ -27,9 +27,6 @@ public interface EmployeeService {
 	// 사용자 정보 수정 서비스 (update)
 	int updateEmployee(Employee e);
 	
-	// 계정 비활성화 서비스 (update)
-	int deleteEmployee(Employee e);
-	
 	// 아이디 중복체크 서비스 (select) -- ajax
 	int idCheck(String userId);
 	

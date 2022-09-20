@@ -48,8 +48,8 @@
 	}
 
 	#profileImg{
-        width:80%;
-        height:80%;
+        width:200px;
+        height:200px;
         border:1px solid lightgray;
         border-radius: 50%;
     }
@@ -258,7 +258,7 @@
 						<!-- Modal footer -->
 						<div class="modal-footer">
 							<button type="submit" class="btn btn-primary">변경</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 						</div>
 					</form>
 				</div>
@@ -282,7 +282,7 @@
 				
 				formData.append("uploadFile", uploadFile);	
 				formData.append("empId", "${ loginUser.empId }");	
-				formData.append("originalFile", "${ loginUser.empProfile }");
+				formData.append("originalFile", "${ loginUser.empProfile }");	// 기존 프로필이 없으면 빈 문자열이 넘어감 (자스에서 문자열 취급하려면 반드시 "")
 		
 				$.ajax({
 					url:"uploadProfile.em",
@@ -292,16 +292,15 @@
 					type:"POST",
 					success:function(){
 						console.log("프로필 이미지 변경용 ajax 통신 성공");
-						/* location.reload(); */ 
+						location.reload(); 
 					},
 					error:function(){
 						console.log("프로필 이미지 변경용 ajax 통신 실패");
 					}
 				})
-					})
-				}
-				)
-			</script>
+				})
+			})
+		</script>
 	
 	</div>
 

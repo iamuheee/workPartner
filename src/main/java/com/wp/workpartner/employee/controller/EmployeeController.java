@@ -179,7 +179,7 @@ public class EmployeeController {
 	/**
 	 * @author	: Taeeun Park
 	 * @date	: 2022. 9. 11.
-	 * @method	: 마이페이지 요청 처리 메소드
+	 * @method	: 마이페이지 이동 요청 처리 메소드
 	 * @return	: String "employee/myPage";
 	 */
 	@RequestMapping("mypage.em")
@@ -336,6 +336,38 @@ public class EmployeeController {
 		
 		int result = eService.updateAccStatus(empId, accStatus);
 		return (result > 0) ? "success" : "fail";
+	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 21.
+	 * @method	: (ajax) 프로필 이미지 변경 요청 처리
+	 * @param	: uploadFile, Employee e, (originalFile(기존파일명))
+	 */
+	@ResponseBody
+	@RequestMapping("uploadProfile.em")
+	public void ajaxUploadProfile(MultipartFile uploadFile, Employee e, String originalFile, HttpSession session) {
+		
+//		System.out.println(uploadFile);
+//		System.out.println(e);
+//		System.out.println(originalFile);
+		
+		if(uploadFile != null) {
+
+			String saveFilePath = FileUpload.saveFile(uploadFile, session, "resources/profile_images/");
+			e.setEmpProfile(saveFilePath);
+			
+			int result = eService.updateProfile(e);
+//			System.out.println("result : " + result);
+			
+			if(result > 0) {
+				session.setAttribute("loginUser", eService.loginEmployee(e));	// 최신 회원 정보 조회해서 바꿔치기
+				
+				if(!originalFile.equals("")) {	// 기존 프로필 이미지가 있었을 경우 찾아서 제거함
+					new java.io.File( session.getServletContext().getRealPath(originalFile) ).delete();
+				}
+			}
+		}
 	}
 	
 }
