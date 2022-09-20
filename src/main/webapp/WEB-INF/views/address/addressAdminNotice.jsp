@@ -70,7 +70,7 @@ font-family: 'Noto Sans KR', sans-serif;
             <div class="header">
                 <table>
                     <tr>
-                        <td width="80px"><h4>주소록</h4></td>                       
+                        <td><span style="font-size:25px"><b>주소록</b></span> &nbsp;&nbsp;&nbsp; 관리자여부가 <span style="color:red">'N'</span>인 경우만 선택지에 넘어갑니다.</td>                       
                     </tr>
                 </table>
                 <hr>       
@@ -148,23 +148,29 @@ font-family: 'Noto Sans KR', sans-serif;
 						const obj = {
 							empNo:$(this).parent().siblings(".no").text(),
 							depCd:$(this).parent().siblings(".depCd").text(),
-							empName:$(this).parent().siblings(".name").text()							
+							empName:$(this).parent().siblings(".name").text(),
+							empNtAdmin:$(this).parent().siblings(".empNtAdmin").text()							
 						};				
 						
 						arr.push(obj);
 						
 					});
 									
+					// empNo, ntAdmin상태를 숨겨놓기
+					// ntAdmin이 N인 애들만 넘겨주기
 					for(let i=0; i<arr.length; i++){
-						 value  += '<tr>'     
-			                     +    '<td width="60px"> ' + arr[i].empNo + ' </td>'
-			                     +    '<td width="80px"> '+ arr[i].depCd +' </td>'
-			                     +    '<td>  '+ arr[i].empName +'  </td>'
-			                     +    '<td><input type="hidden" name="empNo" value="'+ arr[i].empNo +'"></td>'                           
-			                     +    '<td><span class="removeAdmin" style="cursor: pointer;"> x</span></td>'                            
-			                     + '</tr>';
-			                     
-			                     console.log(arr[i].empNo);
+						if(arr[i].empNtAdmin !='Y'){
+							value  += '<tr>'     
+			                    	+    '<td width="60px"> ' + arr[i].empNo + ' </td>'
+			                  	 	+    '<td width="80px"> '+ arr[i].depCd +' </td>'
+			                  	    +    '<td>  '+ arr[i].empName +'  </td>'
+			                     	+    '<td><input type="hidden" class="empNo" name="empNo" value="'+ arr[i].empNo +'"></td>'                           
+			                     	+    '<td><input type="hidden" name="empNtAdmin" value="'+ arr[i].empNtAdmin +'"></td>'                           
+			                    	+    '<td><span class="removeAdmin" style="cursor: pointer;"> x</span></td>'                            
+			                        + '</tr>';	
+						}
+												
+			                 //console.log(arr[i].empNo);
 					}
 					console.log(value);
 					$("#adminEmpList").append(value);
@@ -199,6 +205,7 @@ font-family: 'Noto Sans KR', sans-serif;
       	// 부서별 목록 ajax
       	function selectDepList(){
       		
+      		// 인사부는 제외한 부서목록 조회
       		$.ajax({      			
       			url: "depList.ad",
       			success:function(list){
@@ -206,18 +213,20 @@ font-family: 'Noto Sans KR', sans-serif;
       				let value = "";
       				
       				for(let i=0; i<list.length; i++){
-      					value  += '<li>'
-                      		   +	 '<div class="btn-group dropright btnPadding">'
-                          	   + 	 	'<button type="button" class="btn btn-text">'
-                               +	    	'<span style="font-size: 15px;">' + list[i].departmentName + '</span>'
-                               +			'<input type="hidden" class="depCd" value="' + list[i].departmentCode + '">'
-                          	   +	     '</button>'
-                          	   +      '</div>'
-                          	   +  '</li>';
-                          	   
-                          $("#empSubMenu").html(value);	   
-                          	   
+      					//console.log(list[i].departmentCode);
+      					if(list[i].departmentCode != '1'){
+      						value  += '<li>'
+	                       		   +	 '<div class="btn-group dropright btnPadding">'
+	                           	   + 	 	'<button type="button" class="btn btn-text">'
+	                               +	    	'<span style="font-size: 15px;">' + list[i].departmentName + '</span>'
+	                               +			'<input type="hidden" class="depCd" value="' + list[i].departmentCode + '">'
+	                           	   +	     '</button>'
+	                           	   +      '</div>'
+	                           	   +  '</li>';	
+      					}      					      					                          	   
       				}
+                         $("#empSubMenu").html(value);	   
+                         
       			},
       			error:function(){
       				console.log("부서리스트 ajax통신 실패");
@@ -246,7 +255,7 @@ font-family: 'Noto Sans KR', sans-serif;
                           	   + 				'<th>이름</th>'
                           	   +				'<th>부서</th>'
                           	   +                '<th>직위</th>'
-                          	   +  				'<th>이메일</th>'
+                          	   +  				'<th>관리자여부</th>'                          	
                           	   +          '</tr>'                        
                           	   +    '</thead>'
                           	   +  '<tbody>'   ;                 						   
@@ -268,7 +277,7 @@ font-family: 'Noto Sans KR', sans-serif;
                                     +   		'<td class="name">'+ list[i].empName +'</td>'
                                   	+   		'<td class="depCd">'+ list[i].depCd +'</td>'
                                   	+  			'<td>'+ list[i].posCd +'</td>'
-                                  	+   		'<td class="email">'+ list[i].empEmail + '</td>';
+                                  	+   		'<td class="empNtAdmin">'+ list[i].empNtAdmin + '</td>';
                                   	+   	'</tr>'	;      
       					}
       					

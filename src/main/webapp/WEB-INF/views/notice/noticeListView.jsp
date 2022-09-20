@@ -18,7 +18,7 @@
         <div class="ntContainer">
 
             <!-- 관리자 설정 / 새 게시글 -->
-            <div class="ntMenu1_1" style="margin-right:90%">            
+            <div class="ntMenu1_1" style="margin-right:91%">            
                 <a id="adminSetting" class="material-symbols-outlined" href="admin.nt">
                     settings
                 </a>     

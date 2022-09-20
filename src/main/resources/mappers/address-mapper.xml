@@ -94,6 +94,7 @@
 		        , dep_name as dep_cd
 		        , pos_name as pos_cd   
 		        , emp_sig_use
+		        , emp_nt_admin
 		    from tb_employee
 		    join tb_department using(dep_cd)
 		    join tb_position using(pos_cd)
