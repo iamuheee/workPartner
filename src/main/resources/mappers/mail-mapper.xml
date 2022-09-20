@@ -369,7 +369,7 @@
 		 select  
 		        mail_no,
 		        mail_title, 
-		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        to_char(mail_create_date, 'YYYY-MM-DD HH24:MI:SS') AS "mail_create_date", 		       
 		        mail_important,
 		        mail_security,
 		        mail_file,		       
@@ -559,7 +559,7 @@
 		        mail_no,
 		        mail_title, 
 		        NVL(mail_content,'내용 : ') as "mail_content",
-		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        to_char(mail_create_date, 'YYYY-MM-DD HH24:MI:SS') AS "mail_create_date", 		       
 		        mail_important,
 		        mail_security,
 		        mail_file,
@@ -643,7 +643,7 @@
 		 select  
 		        mail_no,
 		        mail_title, 
-		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        to_char(mail_create_date, 'YYYY-MM-DD HH24:MI:SS') AS "mail_create_date", 		       
 		        mail_important,
 		        mail_security,
 		        mail_file,		       
@@ -748,7 +748,7 @@
 		 select  
 		        mail_no,
 		        mail_title, 
-		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        to_char(mail_create_date, 'YYYY-MM-DD HH24:MI:SS') AS "mail_create_date", 		       
 		        mail_important,
 		        mail_security,
 		        mail_file,		       
@@ -857,7 +857,7 @@
 		 select  
 		        mail_no,
 		        mail_title, 
-		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        to_char(mail_create_date, 'YYYY-MM-DD HH24:MI:SS') AS "mail_create_date", 		       
 		        mail_important,
 		        mail_security,
 		        mail_file,		       
@@ -983,7 +983,7 @@
 		 select  
 		        mail_no,
 		        mail_title, 
-		        to_char(mail_create_date, 'YYYY-MM-DD') AS "mail_create_date", 		       
+		        to_char(mail_create_date, 'YYYY-MM-DD HH24:MI:SS') AS "mail_create_date", 		       
 		        mail_important,
 		        mail_security,
 		        mail_file,		       
