@@ -91,7 +91,8 @@ public class SignDao {
 		map.put("fn", fn);
 		return (ArrayList)sqlSession.selectList("signMapper.selectList", map, rowBounds);
 	}
-//  기안서 진행중, 대기 리스트
+	
+//	기안서 결재완료, 진행중, 대기 리스트
 	public int selectProgressListCount(SqlSessionTemplate sqlSession, String fn, String empNo) {
 		HashMap<String, String> map = new HashMap();
 		map.put("empNo", empNo);
@@ -106,5 +107,15 @@ public class SignDao {
 		map.put("empNo", empNo);
 		map.put("fn", fn);
 		return (ArrayList)sqlSession.selectList("signMapper.selectProgressList", map, rowBounds);
+	}
+//	타부서 결재함
+	public int selectOthSignListCount(SqlSessionTemplate sqlSession, String empNo) {
+		return sqlSession.selectOne("signMapper.selectOthSignListCount", empNo);
+	}
+	public ArrayList<Dtpaper> selectOthSignList(SqlSessionTemplate sqlSession,PageInfo pi, String empNo){
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return (ArrayList)sqlSession.selectList("signMapper.selectOthSignList", empNo, rowBounds);
 	}
 }

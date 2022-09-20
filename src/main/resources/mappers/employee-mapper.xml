@@ -64,8 +64,9 @@
 		     , emp_movedate
 		     , emp_holtake
 		     , emp_holuse
-		  from tb_employee
-		  join tb_department using(dep_cd)
+		     , e.dep_cd
+		  from tb_employee e
+		  join tb_department d on(e.dep_cd = d.dep_cd)
 		  join tb_position using(pos_cd)
 	  	 where emp_status = 'Y'
 	  	   and emp_acc_status = 'Y'

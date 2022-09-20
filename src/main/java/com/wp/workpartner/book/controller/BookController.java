@@ -17,6 +17,7 @@ import com.wp.workpartner.book.model.Service.BookService;
 import com.wp.workpartner.book.model.vo.Book;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.common.template.Pagination;
+import com.wp.workpartner.room.model.vo.Room;
 
 @Controller
 public class BookController {
@@ -72,7 +73,7 @@ public class BookController {
 	
 		if(result > 0) {
 			session.setAttribute("alertMsg", "회의실 예약이 완료되었습니다.");
-			return "redirect:list.bk";
+			return "redirect:enrollForm.bk";
 		}else {
 			model.addAttribute("errorMsg", "회의실 예약 실패");
 			return "common/error";
@@ -162,5 +163,21 @@ public class BookController {
 		System.out.println(result);
 		
 		return (result > 0) ? "success" : "fail";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="calendar.bk", produces="application/json; charset=UTF-8")
+	public String getBookCal() {
+		// event용 data에 담을 예약 내역과 resource용 data에 담을 회의실 목록을 함께 가져가야 함
+		// event == 캘린더에 띄울 하나하나의 이벤트 객체
+		// resource == 각각의 회의실 정보를 담은 객체
+		ArrayList<Book> book = bService.selectAllBookList();
+		ArrayList<Room> room = bService.selectRoomList();
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("book", book);
+		map.put("room", room);
+		
+		return new Gson().toJson(map);
 	}
 }

@@ -53,12 +53,24 @@ public class BookServiceImpl implements BookService {
 	public ArrayList selectBookByRoom(String bkNo) {
 		return null;
 	}
-
+	
+	@Override
+	public ArrayList selectAllBookList() {
+		return bDao.selectAllBookList(sqlSession);
+	}
+	
+	@Override
+	public ArrayList selectRoomList() {
+		return bDao.selectRoomList(sqlSession);
+	}
 
 	@Override
 	public int deleteBook(String bkNo) {
 		return bDao.deleteBook(sqlSession, bkNo);
 	}
+
+
+	
 
 	
 

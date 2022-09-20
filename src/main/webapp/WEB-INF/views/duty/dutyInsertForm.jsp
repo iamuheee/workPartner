@@ -124,7 +124,6 @@
                 		$("#search-emp").after(data);
                 		$("#submit-btn").attr("disabled", false);
                 	}
-                	
                 </script>
                 
             </div>

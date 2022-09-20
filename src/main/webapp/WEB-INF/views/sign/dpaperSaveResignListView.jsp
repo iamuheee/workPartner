@@ -156,23 +156,24 @@
 						                    </c:forEach>
 				                		</c:otherwise>
 				                   </c:choose>
+				                   
                                 </table>
 
                                 <c:if test="${not empty saveList }">
                                 <div id="pagingArea">
-                                <button style="float:left; margin-left:33px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
+                                <button style="float:left; margin-left:10px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
 					                <ul class="pagination">
 					                	<c:choose>
 					                		<c:when test="${ pi.currentPage eq 1 }">
 					                    		<li class="page-item disabled"><a class="page-link">이전</a></li>
 					                    	</c:when>
 					                    	<c:otherwise>
-					                    		<li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ pi.currentPage-1 }">이전</a></li>
+					                    		<li class="page-item"><a class="page-link" href="saveSi.si?empNo=${loginUser.empNo }&fn=임시저장&cpage=${ pi.currentPage-1 }">이전</a></li>
 					                    	</c:otherwise>
 					                    </c:choose>
 					                    
 					                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-					                  	  <li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ p }">${ p }</a></li>
+					                  	  <li class="page-item"><a class="page-link" href="saveSi.si?empNo=${loginUser.empNo }&fn=임시저장&cpage=${ p }">${ p }</a></li>
 					                    </c:forEach>
 					                    
 					                    <c:choose>
@@ -180,7 +181,7 @@
 						                	    <li class="page-item disabled"><a class="page-link">다음</a></li>
 						                	</c:when>
 						                	<c:otherwise>
-						                    	<li class="page-item"><a class="page-link" href="saveSi.si?cpage=${ pi.currentPage+1 }">다음</a></li>
+						                    	<li class="page-item"><a class="page-link" href="saveSi.si?empNo=${loginUser.empNo }&fn=임시저장&cpage=${ pi.currentPage+1 }">다음</a></li>
 						                	</c:otherwise>    
 					                    </c:choose>
 					                </ul>
@@ -287,19 +288,19 @@
 
                                	<c:if test="${ not empty reSignList }">
                                 <div id="pagingArea">
-                                <button style="float:left; margin-left:33px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
+                                <button style="float:left; margin-left:10px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
 					                <ul class="pagination">
 					                	<c:choose>
 					                		<c:when test="${ pi.currentPage eq 1 }">
 					                    		<li class="page-item disabled"><a class="page-link">이전</a></li>
 					                    	</c:when>
 					                    	<c:otherwise>
-					                    		<li class="page-item"><a class="page-link" href="reSi.si?cpage=${ pi.currentPage-1 }">이전</a></li>
+					                    		<li class="page-item"><a class="page-link" href="reSi.si?empNo=${loginUser.empNo }&fn=반려됨&cpage=${ pi.currentPage-1 }">이전</a></li>
 					                    	</c:otherwise>
 					                    </c:choose>
 					                    
 					                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-					                  	  <li class="page-item"><a class="page-link" href="reSi.si?cpage=${ p }">${ p }</a></li>
+					                  	  <li class="page-item"><a class="page-link" href="reSi.si?empNo=${loginUser.empNo }&fn=반려됨&cpage=${ p }">${ p }</a></li>
 					                    </c:forEach>
 					                    
 					                    <c:choose>
@@ -307,7 +308,7 @@
 						                	    <li class="page-item disabled"><a class="page-link">다음</a></li>
 						                	</c:when>
 						                	<c:otherwise>
-						                    	<li class="page-item"><a class="page-link" href="reSi.si?cpage=${ pi.currentPage+1 }">다음</a></li>
+						                    	<li class="page-item"><a class="page-link" href="reSi.si?empNo=${loginUser.empNo }&fn=반려됨&cpage=${ pi.currentPage+1 }">다음</a></li>
 						                	</c:otherwise>    
 					                    </c:choose>
 					                </ul>

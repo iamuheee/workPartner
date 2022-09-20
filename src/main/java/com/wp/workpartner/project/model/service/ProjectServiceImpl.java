@@ -6,9 +6,11 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.dao.ProjectDao;
 import com.wp.workpartner.project.model.vo.Project;
+import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Service
@@ -100,22 +102,60 @@ public class ProjectServiceImpl implements ProjectService{
 
 	@Override
 	public int insertMember(ProjectMember m) {
-		ArrayList<ProjectMember> mlist;
-		String[] memNos = m.getMemNo().split(",");
-		String[] memNames = m.getMemName().split(",");
 		
-		int result = 1;
-		for(int i=0; i<memNos.length; i++) {
-			ProjectMember pm = new ProjectMember();
-			pm.setProjNo(m.getProjNo());
-			pm.setMemNo(memNos[i]);
-			pm.setMemName(memNames[i]);
-			pm.setMemRole(m.getMemRole());
+		// 이미 멤버로 추가된 사원인지 검사하고 들어가자
+		m.setMemNo( "(" + m.getMemNo() + ")" );
+		if( pDao.validateNewMember(sqlSession, m) > 0) {
+			return 0;
 			
-			result *= pDao.insertMember(sqlSession, pm);
+		}else {
+			m.setMemNo( m.getMemNo().substring(1, m.getMemNo().length()-1) );
+			String[] memNos = m.getMemNo().split(",");
+			String[] memNames = m.getMemName().split(",");
+			
+			int result = 1;
+			for(int i=0; i<memNos.length; i++) {
+				ProjectMember pm = new ProjectMember();
+				pm.setProjNo(m.getProjNo());
+				pm.setMemNo(memNos[i]);
+				pm.setMemName(memNames[i]);
+				pm.setMemRole(m.getMemRole());
+				
+				result *= pDao.insertMember(sqlSession, pm);
+			}
+			return result;
 		}
-		return result;
 	}
+
+
+	@Override
+	public ArrayList<ProjectBoard> selectProjectBoardList(Project p) {
+		ArrayList<ProjectBoard> blist = pDao.selectProjectBoardList(sqlSession, p);
+		for(ProjectBoard pb : blist) {
+			switch( pb.getRefType() ) {
+			case "업무" : pb.setPduty( pDao.selectProjectDuty(sqlSession, pb) ); break;
+			case "회의" : pb.setPmeet( pDao.selectProjectMeeting(sqlSession, pb) ); break;
+			}
+		}
+		return blist;
+	}
+
+
+	@Override
+	public int insertDuty(ProjectBoard pb) {
+		// ProjectBoard pb에는 TB_PBOARD, TB_PDUTY에 대한 정보가 담겨있음
+		int result1 = pDao.insertBoard(sqlSession, pb);
+		int result2 = pDao.insertDuty(sqlSession, pb.getPduty());
+		return result1 * result2;
+	}
+
+
+	@Override
+	public int insertFile(File f) {
+		return pDao.insertFile(sqlSession, f);
+	}
+	
+	
 	
 	
 	

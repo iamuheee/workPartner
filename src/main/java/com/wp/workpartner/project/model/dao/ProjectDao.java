@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.project.model.vo.Project;
+import com.wp.workpartner.project.model.vo.ProjectBoard;
+import com.wp.workpartner.project.model.vo.ProjectDuty;
+import com.wp.workpartner.project.model.vo.ProjectMeeting;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Repository
@@ -31,6 +35,10 @@ public class ProjectDao {
 		return sqlSession.selectOne("projectMapper.validateMember", p);
 	}
 	
+	public int validateNewMember(SqlSessionTemplate sqlSession, ProjectMember m) {
+		return sqlSession.selectOne("projectMapper.validateNewMember", m);
+	}
+	
 	public Project selectProject(SqlSessionTemplate sqlSession, String projNo) {
 		return sqlSession.selectOne("projectMapper.selectProject", projNo);
 	}
@@ -53,6 +61,30 @@ public class ProjectDao {
 	
 	public int insertMember(SqlSessionTemplate sqlSession, ProjectMember m) {
 		return sqlSession.insert("projectMapper.insertMember", m);
+	}
+	
+	public ArrayList<ProjectBoard> selectProjectBoardList(SqlSessionTemplate sqlSession, Project p){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectProjectBoardList", p);
+	}
+	
+	public ProjectDuty selectProjectDuty(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.selectOne("projectMapper.selectProjectDuty", pb);
+	}
+	
+	public ProjectMeeting selectProjectMeeting(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.selectOne("projectMapper.selectProjectMeeting", pb);
+	}
+	
+	public int insertBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.insert("projectMapper.insertBoard", pb);
+	}
+	
+	public int insertDuty(SqlSessionTemplate sqlSession, ProjectDuty pd) {
+		return sqlSession.insert("projectMapper.insertDuty", pd);
+	}
+	
+	public int insertFile(SqlSessionTemplate sqlSession, File f) {
+		return sqlSession.insert("projectMapper.insertFile", f);
 	}
 	
 

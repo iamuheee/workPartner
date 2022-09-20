@@ -2,6 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="noticeMapper">
 
+	<resultMap id="empResult" type="Employee">
+		<result column="emp_no" property="empNo" />
+		<result column="emp_id" property="empId" />
+		<result column="emp_pwd" property="empPwd" />
+		<result column="emp_name" property="empName" />
+		<result column="emp_phone" property="empPhone" />
+		<result column="emp_extension" property="empExtension" />
+		<result column="emp_email" property="empEmail" />
+		<result column="emp_exemail" property="empExEmail" />
+		<result column="emp_enrolldate" property="empEnrollDate" />
+		<result column="emp_retiredate" property="empRetireDate" />
+		<result column="emp_modifydate" property="empModifyDate" />
+		<result column="emp_status" property="empStatus" />
+		<result column="emp_profile" property="empProfile" />		
+		<result column="emp_nt_admin" property="empNtAdmin" />
+		<result column="dep_cd" property="depCd" />
+		<result column="pos_cd" property="posCd" />	
+		<result column="emp_sig_use" property="empSigUse" />		
+	</resultMap>
+	
 	<resultMap id="noticeCommentResult" type="NoticeComment">
 		<result column="ncom_no" property="nCommetNo"/>
 		<result column="nt_no" property="noticeNo"/>
@@ -27,4 +47,42 @@
 		<result column="nt_modify_date" property="NoticeModifyDate"/>
 		<result column="nt_file" property="NoticeFile"/>
 	</resultMap>
+	
+	<select id="selectNtAdminY" resultMap="empResult">
+		  select 
+		          emp_no
+		        , emp_Id		       
+		        , emp_name
+		        , emp_nt_admin
+		        , dep_name as dep_cd		        		       	      
+		    from tb_employee
+		    join tb_department using(dep_cd)		  
+		   where emp_nt_admin = 'Y'
+		     and emp_status = 'Y'
+		   order 
+		   	  by dep_cd asc	
+	</select>
+	
+	<update id="upDateAdminN">
+		update 
+				tb_employee
+		   set  emp_nt_admin = 'N'
+		 where  emp_no = #{empNo}    		
+	</update>
+	
+	<update id="updateAdminY">
+		update
+		       tb_employee
+		   set emp_nt_admin = 'Y'  
+		<where>
+			<foreach item="empNo" collection="arrEmp" open="emp_no in (" separator="," close=")">
+				#{empNo}
+			</foreach>
+		</where>   
+	
+	</update>
+	
+	
+	
+	
 </mapper>

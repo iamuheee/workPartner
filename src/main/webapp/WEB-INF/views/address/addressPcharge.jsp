@@ -50,19 +50,46 @@ font-family: 'Noto Sans KR', sans-serif;
 
 </style>
 <script>
-    function send() { 
-        var data = $("#myform tr");
-        window.opener.sendMeData(data);
-        window.close();
-    }
+	function send() { 
+		
+		if( $("#myform tr").length != 1 ){
+			alert("한 명의 프로젝트 업무 담당자를 지정해야 합니다.");
+			$("#myform tr").remove();
+		}else{
+			
+			if( confirm( $("input[name=inchargeName]").val() + "님을 담당자로 지정하는 것이 맞나요?") ){
+		    	let data = $("#inchargeEmp");
+		    	opener.sendMeData(data);
+		    	alert("성공적으로 담당자로 추가되었습니다.");
+				window.close();
+		    }else{
+				alert("천천히 골라주십쇼!");	 
+				$("#myform tr").remove();
+		    }
+			
+			
+		}
+		
+		
+	    
+	}
 </script>
 
 </head>
 <body>
-	
-		
+	<div style="display:none">
+    	<div id="inchargeEmp"></div>
+	</div>
+
     <div style="height: 20px;"></div>
     <div class="adOuter">
+    
+
+
+		<div style="display:none">
+			<input type="hidden" id="memNo">
+			<input type="hidden" id="memName">
+		</div>
     
         <div class="adContainer">
 
@@ -70,7 +97,7 @@ font-family: 'Noto Sans KR', sans-serif;
             <div class="header">
                 <table>
                     <tr>
-                        <td><span style="font-size:25px"><b>주소록</b></span> &nbsp;&nbsp;&nbsp; 관리자여부가 <span style="color:red">'N'</span>인 경우만 선택지에 넘어갑니다.</td>                       
+                        <td width="80px"><h4>주소록</h4></td>                       
                     </tr>
                 </table>
                 <hr>       
@@ -148,31 +175,35 @@ font-family: 'Noto Sans KR', sans-serif;
 						const obj = {
 							empNo:$(this).parent().siblings(".no").text(),
 							depCd:$(this).parent().siblings(".depCd").text(),
-							empName:$(this).parent().siblings(".name").text(),
-							empNtAdmin:$(this).parent().siblings(".empNtAdmin").text()							
+							empName:$(this).parent().siblings(".name").text()							
 						};				
 						
 						arr.push(obj);
 						
 					});
-									
-					// empNo, ntAdmin상태를 숨겨놓기
-					// ntAdmin이 N인 애들만 넘겨주기
+					
+					let html = "";
 					for(let i=0; i<arr.length; i++){
-						if(arr[i].empNtAdmin !='Y'){
-							value  += '<tr>'     
-			                    	+    '<td width="60px"> ' + arr[i].empNo + ' </td>'
-			                  	 	+    '<td width="80px"> '+ arr[i].depCd +' </td>'
-			                  	    +    '<td>  '+ arr[i].empName +'  </td>'
-			                     	+    '<td><input type="hidden" class="empNo" name="empNo" value="'+ arr[i].empNo +'"></td>'                           
-			                     	+    '<td><input type="hidden" name="empNtAdmin" value="'+ arr[i].empNtAdmin +'"></td>'                           
-			                    	+    '<td><span class="removeAdmin" style="cursor: pointer;"> x</span></td>'                            
-			                        + '</tr>';	
-						}
-												
-			                 //console.log(arr[i].empNo);
+						 value  += '<tr>'     
+			                     +    '<td width="60px" class="empICNo"> ' + arr[i].empNo + ' </td>'
+			                     +    '<td width="80px"> '+ arr[i].depCd +' </td>'
+			                     +    '<td class="empICName">  '+ arr[i].empName +'  </td>'
+			                     +    '<td><input type="hidden" name="empNo" value="'+ arr[i].empNo +'"></td>'                           
+			                     +    '<td><span class="removeAdmin" style="cursor: pointer;"> x</span></td>'                            
+			                     + '</tr>';
+			            
+	                    // 부모창에 돌려보내기 위한 구문들
+	                    html += '<ul>'
+	                    	  + 	'<li>'
+	                    	  + 		'<span><b>' + arr[i].empName + '</b></span>님을 담당자로 추가하셨습니다.'
+	                    	  + 	'</li>'
+	                    	  + '</ul>'
+	                    	  + '<input type="hidden" name="incharge" value="' + arr[i].empNo + '">'
+	                    	  + '<input type="hidden" name="inchargeName" value="' + arr[i].empName + '">';
 					}
-					console.log(value);
+					
+					$("#inchargeEmp").html(html);
+					
 					$("#adminEmpList").append(value);
 					$("input[name='chk']").prop("checked", false); 
 				}
@@ -205,7 +236,6 @@ font-family: 'Noto Sans KR', sans-serif;
       	// 부서별 목록 ajax
       	function selectDepList(){
       		
-      		// 인사부는 제외한 부서목록 조회
       		$.ajax({      			
       			url: "depList.ad",
       			success:function(list){
@@ -213,20 +243,18 @@ font-family: 'Noto Sans KR', sans-serif;
       				let value = "";
       				
       				for(let i=0; i<list.length; i++){
-      					//console.log(list[i].departmentCode);
-      					if(list[i].departmentCode != '1'){
-      						value  += '<li>'
-	                       		   +	 '<div class="btn-group dropright btnPadding">'
-	                           	   + 	 	'<button type="button" class="btn btn-text">'
-	                               +	    	'<span style="font-size: 15px;">' + list[i].departmentName + '</span>'
-	                               +			'<input type="hidden" class="depCd" value="' + list[i].departmentCode + '">'
-	                           	   +	     '</button>'
-	                           	   +      '</div>'
-	                           	   +  '</li>';	
-      					}      					      					                          	   
+      					value  += '<li>'
+                      		   +	 '<div class="btn-group dropright btnPadding">'
+                          	   + 	 	'<button type="button" class="btn btn-text">'
+                               +	    	'<span style="font-size: 15px;">' + list[i].departmentName + '</span>'
+                               +			'<input type="hidden" class="depCd" value="' + list[i].departmentCode + '">'
+                          	   +	     '</button>'
+                          	   +      '</div>'
+                          	   +  '</li>';
+                          	   
+                          $("#empSubMenu").html(value);	   
+                          	   
       				}
-                         $("#empSubMenu").html(value);	   
-                         
       			},
       			error:function(){
       				console.log("부서리스트 ajax통신 실패");
@@ -255,7 +283,7 @@ font-family: 'Noto Sans KR', sans-serif;
                           	   + 				'<th>이름</th>'
                           	   +				'<th>부서</th>'
                           	   +                '<th>직위</th>'
-                          	   +  				'<th>관리자여부</th>'                          	
+                          	   +  				'<th>이메일</th>'
                           	   +          '</tr>'                        
                           	   +    '</thead>'
                           	   +  '<tbody>'   ;                 						   
@@ -277,7 +305,7 @@ font-family: 'Noto Sans KR', sans-serif;
                                     +   		'<td class="name">'+ list[i].empName +'</td>'
                                   	+   		'<td class="depCd">'+ list[i].depCd +'</td>'
                                   	+  			'<td>'+ list[i].posCd +'</td>'
-                                  	+   		'<td class="empNtAdmin">'+ list[i].empNtAdmin + '</td>';
+                                  	+   		'<td class="email">'+ list[i].empEmail + '</td>';
                                   	+   	'</tr>'	;      
       					}
       					

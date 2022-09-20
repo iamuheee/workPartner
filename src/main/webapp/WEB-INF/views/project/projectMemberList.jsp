@@ -102,7 +102,6 @@
                 
                 <script>
 					 $("#filterRole").change(function(){
-						 console.log("ㅆㅂ!!")
 						 if( $(this).val() == 'all' ){
 							 loadMemberList();
 						 }else{

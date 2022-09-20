@@ -505,7 +505,7 @@
 	                					selectValue += 'selected';
 	                					
 	                					sigText +=  '<div style="font-size: 11px; color:#525252;" id="sigContent">'
-	                							 +		"<br><br><br><br><br><br> <hr style='width:90%'>"
+	                							 +		"<br><br><br><br><br><br> <hr style='width:90%; height: 0.5px;'>"
 			   					                 +       '<b>이름 </b>'+ list[i].sigName+' <br>'
 			   					                 +       '<b>부서 </b>'+ list[i].sigDepartment+'&nbsp; <b> 직급</b>  '+ list[i].sigPosition+' <br>';
 			   					        if(list[i].sigAddress != null){
@@ -530,7 +530,10 @@
             				
                 			// select-option	
 	            			$("#sigArea").html(selectValue); 
-                			$(".note-editable").html(sigText);
+                			//$(".note-editable").html(sigText);
+                			// summernote에서 소개해준 태그 입력하는 방법
+                			 $('#summernote').summernote('pasteHTML', sigText);
+                			//$('#summernote').summernote('insertNode', sigText);
                 			
             			}		                       
             			
@@ -554,7 +557,7 @@
             			
             			for(let j=0; j<list.length; j++){
             				if(list[j].sigNo == sigNo){
-                				sigText +=       "<br><br><br><br><br><br> <hr style='width:90%'>"
+                				sigText +=       "<br><br><br><br><br><br> <hr style='width:90%; height: 0.5px;'>"
                 						 +		 '<b>이름 </b>'+ list[j].sigName+' <br>'
     					                 +       '<b>부서 </b>'+ list[j].sigDepartment+' <b>직급</b> '+ list[j].sigPosition+' <br>';
     					        if(list[j].sigAddress != null){

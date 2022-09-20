@@ -20,21 +20,26 @@ public interface SignService {
 	int insertOwSign(ArrayList<Sign> signList);
 	int insertReSign(ArrayList<Sign> signList);
 	int insertCoSign(ArrayList<Sign> signList);
+	
 	int insertDtpaper(Dtpaper d);
 	int saveDtpaper(Dtpaper d);
-	int insertCooperation(Cooperation c);
+	
 	int insertVacation(Vacation v);
 	int insertOtwork(Otwork o);
 	int insertReSignEmp(ReSign r);
-//	진행중 리스트
-//	임시저장 리스트
+	int insertCooperation(Cooperation c);
+//	임시저장 반려됨 임시저장 리스트
 	int selectListCount(String fn, String empNo);
 	ArrayList<Dtpaper> selectList(PageInfo pi, String empNo, String fn);
+//	진행중 결재완료 진행중 대기 리스트
 	int selectProgressListCount(String fn, String empNo);
 	ArrayList<Dtpaper> selectProgressList(PageInfo pi, String empNo, String fn);
+//	타부터 결재리스트
+	int selectOthSignListCount(String empNo);
+	ArrayList<Dtpaper> selectOthSignList(PageInfo pi, String empNo);
 //  결재 할 리스트
-	int selectSignListCount();
-	ArrayList<Dtpaper> selectSignList(PageInfo pi);
+	int selectSignListCount(String empNo);
+	ArrayList<Dtpaper> selectSignList(PageInfo pi, String empNo);
 //  결재 할 기안서 상세조회
 	SelectCooperation selectSignCooperation(int dpNo, String empNo); 
 	SelectReSign selectSignResign(int dpNo, String empNo); 

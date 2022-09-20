@@ -433,8 +433,8 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseApproval1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="othSi.si">결재할기안서 </a>
-	                                           <a class="nav-link nav-choice" href="othEndSi.si">결재완료</a>                                         
+	                                           <a class="nav-link nav-choice" href="othSi.si?empNo=${ loginUser.empNo }">결재할기안서 </a>
+	                                           <a class="nav-link nav-choice" href="othEndSi.si?empNo=${ loginUser.empNo }">결재완료</a>                                         
 	                                       </nav>
 	                                   </div>
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseApproval2" aria-expanded="false" aria-controls="pagesCollapseApproval2">
@@ -443,8 +443,8 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseApproval2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages2">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="deptSi.si">결재할기안서 </a>
-	                                           <a class="nav-link nav-choice" href="deptEndSi.si">결재완료</a>                                         
+	                                           <a class="nav-link nav-choice" href="deptSi.si?empNo=${ loginUser.empNo }">결재할기안서 </a>
+	                                           <a class="nav-link nav-choice" href="deptEndSi.si?empNo=${ loginUser.empNo }">결재완료</a>                                         
 	                                       </nav>
 	                                   </div>
 	                               </nav>
@@ -537,7 +537,7 @@
                     
 	               </nav>
 	           </div>
-	           <jsp:include page="../sign/dtpaperSignList.jsp"/>
+	           <jsp:include page="../sign/dtpaperSignListView.jsp"/>
 	           <!-- content 영역-->
 	           <div id="layoutSidenav_content">
 	               <main class="mainOuter">

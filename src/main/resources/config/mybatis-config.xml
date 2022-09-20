@@ -28,7 +28,12 @@
 		<typeAlias type="com.wp.workpartner.notice.model.vo.NoticeComment" alias="NoticeComment" />	
 		<typeAlias type="com.wp.workpartner.project.model.vo.Project" alias="Project"/>
 		<typeAlias type="com.wp.workpartner.project.model.vo.ProjectMember" alias="ProjectMember"/>
+		<typeAlias type="com.wp.workpartner.project.model.vo.ProjectDuty" alias="ProjectDuty" />
+		<typeAlias type="com.wp.workpartner.project.model.vo.ProjectBoard" alias="ProjectBoard" />
+		<typeAlias type="com.wp.workpartner.project.model.vo.ProjectMeeting" alias="ProjectMeeting" />
+		<typeAlias type="com.wp.workpartner.project.model.vo.ProjectMeeting" alias="ProjectMeetingMember" />
 		
+				
 		<typeAlias type="com.wp.workpartner.common.model.vo.Comment" alias="Comment" />	
 		<typeAlias type="com.wp.workpartner.common.model.vo.File" alias="File"/>
 		
