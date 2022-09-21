@@ -7,6 +7,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.notice.model.vo.Notice;
@@ -48,5 +49,49 @@ public class NoticeDao {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		
 		return (ArrayList)sqlSession.selectList("noticeMapper.selectNormalNotice", map, rowBounds);
+	}
+	
+	public int insertSummernote(SqlSessionTemplate sqlSession, File file) {
+		return sqlSession.insert("noticeMapper.insertSummernote", file);
+	}
+	
+	public int insertNotice(SqlSessionTemplate sqlSession, Notice notice) {
+		return sqlSession.insert("noticeMapper.insertNotice", notice);
+	}
+	
+	public int insertFileNotice(SqlSessionTemplate sqlSession, File file) {
+		return sqlSession.insert("noticeMapper.insertFileNotice", file);
+	}
+	
+	public int increaseCount(SqlSessionTemplate sqlSession, String noticeNo) {
+		return sqlSession.update("noticeMapper.increaseCount", noticeNo);
+	}
+	
+	public Notice selectDetailNotice(SqlSessionTemplate sqlSession, String noticeNo) {
+		return sqlSession.selectOne("noticeMapper.selectDetailNotice", noticeNo);
+	}
+	
+	public ArrayList<File> selectFileDetail(SqlSessionTemplate sqlSession, String noticeNo){
+		return (ArrayList)sqlSession.selectList("noticeMapper.selectFileDetail", noticeNo);
+	}
+	
+	public int deleteNotice(SqlSessionTemplate sqlSession, String noticeNo) {
+		return sqlSession.update("noticeMapper.deleteNotice", noticeNo);
+	}
+	
+	public int updateNotice(SqlSessionTemplate sqlSession, Notice notice) {
+		return sqlSession.update("noticeMapper.updateNotice", notice);
+	}
+	
+	public int updateFileNotice(SqlSessionTemplate sqlSession, File file) {
+		return sqlSession.insert("noticeMapper.updateFileNotice", file);
+	}
+	
+	public int updateFileN(SqlSessionTemplate sqlSession, String noticeNo) {
+		return sqlSession.update("noticeMapper.updateFileN", noticeNo);
+	}
+	
+	public int updateFileY(SqlSessionTemplate sqlSession, File file) {
+		return sqlSession.update("noticeMapper.updateFileY", file);
 	}
 }

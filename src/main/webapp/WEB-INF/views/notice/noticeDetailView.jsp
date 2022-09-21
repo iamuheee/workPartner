@@ -6,25 +6,75 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/noticeCss/notice1.css">   
-</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/noticeCss/notice1.css">
+<!-- summerNote -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/summerNote/summernote-lite.css">   
+
 </head>
 <body>
     <jsp:include page="../common/menubar.jsp"/>
 
     <div style="height: 10px;"></div>
     <div  style="margin-left: 84%;">
-        <a class="btn btn-sm btn-primary" href="update.nt">수정</a> 
-        <a class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#deleteNotice">삭제</a>
+    	
+    	<!-- 글 작성자 이거나 인사부(기본관리자)이거나 -->
+    	<c:choose>
+    		<c:when test="${loginUser.empNo eq n.empNo or loginUser.empNtAdmin  eq 'A'}">
+    			 <a class="btn btn-sm btn-primary" href="update.nt?no=${ n.noticeNo }">수정</a> 
+        		 <button class="btn btn-sm btn-secondary" type="button" data-toggle="modal" data-target="#deleteNotice">삭제</button>	
+    		</c:when>
+    		<%-- <c:when test="${loginUser.empNtAdmin  eq 'A'}">
+    			 <a class="btn btn-sm btn-primary" href="update.nt">수정</a> 
+        		 <a class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#deleteNotice">삭제</a>
+    		</c:when> --%>
+    	</c:choose>
+    	
+       
     </div>
     <br>
     <div class="ntOuter1">       
         <div class="paddingStyle">        
 
-            <h6><b>2022 하반기 워크샵공지 <span style="color: red;">!</span></b></h6>
+            <h6><b>${ n.noticeTitle }
+             
+	             <c:if test="${n.noticeImportant eq 'I' }">
+	             	<span style="color: red;">!</span>
+	             </c:if>
+             
+             </b></h6>
             
             <br>
-            <textarea  class="textareaStyle1" style="resize: none;">내용자리 입니다.</textarea>  
+            <textarea id="summernote" name="mailContent">${n.noticeContent}</textarea> 
+            
+            
+        <!-- summerNote 관련 script-->      
+        <script src="${pageContext.request.contextPath}/resources/js/summerNote/summernote-lite.js"></script>
+		<script src="${pageContext.request.contextPath}/resources/js/summerNote/lang/summernote-ko-KR.js"></script>
+        <script>
+            $(document).ready(function() {
+            	            	
+                //여기 아래 부분
+                $('#summernote').summernote({
+                    //height:1000,                 // 에디터 높이
+                    minHeight: 500,             // 최소 높이
+                    maxHeight: 1500,             // 최대 높이
+                    focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+                    lang: "ko-KR",					// 한글 설정
+                   	toolbar: [ // toolbar사용 안하기                   	 
+                   	    ['style', []],
+                   	    ['font', []]                   	  
+                   	  ]
+                });     
+                
+                
+                
+                $('#summernote').summernote('disable'); // 비활성화
+          
+            });            
+        </script>
+          
+            
+            
             <br>
                 
         </div> 
@@ -35,11 +85,11 @@
             <table >
                 <tr>
                     <th width="60px">작성자</th>
-                    <td>&nbsp; 김인사</td>
+                    <td>&nbsp; ${n.empName }</td>
                 </tr>
                 <tr>
                     <th>등록일자</th>
-                    <td>&nbsp; 2022.08.20</td>
+                    <td>&nbsp; ${n.noticeCreateDate }</td>
                 </tr>
             </table>
         </div>
@@ -48,9 +98,18 @@
         
         <div class="fontsize13 paddingStyle">
             <b>첨부파일</b> <br>
-            <table style="margin-left: 15px; margin-top: 3px; font-size: 12px;">            
-                <tr><td><a href="" download="" class="aStyle">파일명.jpg</a></td></tr>
-                <tr><td><a href="" download="" class="aStyle">파일명.jpg</a></td></tr>
+            <table style="margin-left: 15px; margin-top: 3px; font-size: 12px;">   
+            	<c:choose>
+            		<c:when test="${empty list }">
+            			<tr><td>첨부파일이 없습니다.</td><tr>
+            		</c:when>
+            		<c:otherwise>
+            			<c:forEach var="f" items="${list }">
+            				 <tr><td><a href="${f.filePath }" download="${f.fileOriginName }" class="aStyle">${f.fileOriginName }</a></td></tr>
+            			</c:forEach>
+            		</c:otherwise>
+            	</c:choose>
+            
             </table>
         </div>
         
@@ -153,25 +212,23 @@
                 </div>
             </div>
 
-        </div>
-
-         <!-- 공지사항 삭제 Modal -->
-         <div class="modal fade" id="deleteNotice" tabindex="-1" aria-labelledby="deleteNoticeModalLabel" aria-hidden="true">
+        </div> 
+   		<!-- ======================================================== Modal ===================================================  -->
+   		<!-- 공지사항 삭제 Modal  -->     
+        <div class="modal fade" id="deleteNotice" tabindex="-1" aria-labelledby="deleteNoticeModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteNoticeModalLabel">공지사항 삭제</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                <div class="modal-content" align="center">                    
                     <div class="modal-body">
-                        삭제하시겠습니까?
+                       <form action="deleteNotice.nt" method="post">
+                       	 <br>
+                         해당 공지사항을 삭제하시겠습니까?
+                         <br><br>
+                         <input type="hidden" name="noticeNo" value="${n.noticeNo }">
+                         <button type="submit" class="btn btn-sm btn-danger">삭제</button>
+                         <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
+                       </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-danger">삭제</button>
-                        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -205,7 +262,7 @@
                     <div class="modal-body">
                         <form>
                             <textarea class="form-control" name="nCommentContent" id="content" cols="50" rows="2" style="resize:none; width:100%"></textarea> 
-                            <br>
+                            <br> 
                             <button type="submit" class="btn btn-sm btn-danger">삭제</button>
                             <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
                         </form>                      
@@ -215,10 +272,6 @@
             </div>
         </div>
 
-           
-
-
-        
         
     </div>
 </body>
