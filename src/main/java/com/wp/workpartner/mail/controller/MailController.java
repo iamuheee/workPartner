@@ -216,6 +216,15 @@ public class MailController {
 		
 		//System.out.println(upfile);
 		//System.out.println(mail); => 받은 사람 이메일name => 여러개의 input으로 넘어왔을때 , 콤마로 여며진걸 확인 할 수 있었음
+		if(mail.getMailImportant() == null) {
+			mail.setMailImportant("N");
+		};
+		if(mail.getMailSecurity() == null) {
+			mail.setMailSecurity("N");
+		}
+		if(mail.getMailFile() == null) {
+			mail.setMailFile("N");
+		}
 		
 		// 1. 순서상 실제로 넘어온 upfile 들 중에 실제 첨부파일이 담긴게 있는지 => 있다면 setMailFile에 Y를 담고 => 우선 mail먼저 insert(file테이블에는 mail_no필요)
 		for(int i=0; i<upfile.length; i++) {					
@@ -223,6 +232,7 @@ public class MailController {
 				mail.setMailFile("Y");									
 			 }
 		}		
+		//System.out.println(mail);
 		int result = mService.insertMail(mail);
 		
 		// 2. tb_mail_status
