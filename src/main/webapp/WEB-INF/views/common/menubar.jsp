@@ -363,8 +363,7 @@
 	                                       <nav class="sb-sidenav-menu-nested nav">
 												<a class="nav-link nav-choice" href="list.du">전체 업무</a>
 												<a class="nav-link nav-choice" href="list.to">To Do 리스트</a>
-												<a class="nav-link nav-choice" href="">월간 캘린더</a>
-												<a class="nav-link nav-choice" href="">주간 캘린더</a>
+												<a class="nav-link nav-choice" href="">캘린더</a>
 	                                       </nav>
 	                                   </div>
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseProject" aria-expanded="false" aria-controls="pagesCollapseProject">
@@ -376,7 +375,6 @@
 	                                           <a class="nav-link nav-choice" href="main.pr">홈</a>
 	                                           <a class="nav-link nav-choice" href="list.pr">참여프로젝트</a>
 	                                           <a class="nav-link nav-choice" href="enroll.pr">프로젝트 생성</a>
-	                                           <a class="nav-link nav-choice" href="manage.pr">프로젝트 관리</a>
 	                                       </nav>
 	                                   </div>
 	                               </nav>
