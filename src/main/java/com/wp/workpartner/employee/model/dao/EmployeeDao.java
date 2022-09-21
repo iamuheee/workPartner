@@ -86,4 +86,11 @@ public class EmployeeDao {
 	public int uploadProfile(SqlSessionTemplate sqlSession, Employee e) {
 		return sqlSession.update("employeeMapper.uploadProfile", e);
 	}
+	
+	public int updatePwd(SqlSessionTemplate sqlSession, String empId, String encPwd) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("empId", empId);
+		map.put("encPwd", encPwd);
+		return sqlSession.update("employeeMapper.updatePwd", map);
+	}
 }

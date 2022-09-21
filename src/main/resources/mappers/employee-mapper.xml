@@ -324,5 +324,16 @@
 		     , emp_modifydate = current_date
 		 where emp_id = #{empId}
 	</update>
+	
+	<!-- 마이페이지 비밀번호 수정 -->
+	<!-- 작성자 : 박태은 -->
+	<update id="updatePwd">
+		update
+		       tb_employee
+		   set emp_pwd = #{ encPwd }
+		     , emp_modifydate = current_date
+		 where emp_id = #{ empId }
+	</update>
+	
 
 </mapper>

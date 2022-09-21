@@ -95,6 +95,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int updateAccStatus(String empId, String accStatus) {
 		return eDao.updateAccStatus(sqlSession, empId, accStatus);
 	}
+
+	@Override
+	public int updatePwd(String empId, String encPwd) {
+		return eDao.updatePwd(sqlSession, empId, encPwd);
+	}
 	
 	
 

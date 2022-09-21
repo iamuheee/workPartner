@@ -53,4 +53,9 @@ public interface EmployeeService {
 	
 	// 계정 상태 수정 서비스 (update) -- ajax
 	int updateAccStatus(String empId, String accStatus);
+	
+	// 마이페이지 비밀번호 변경 서비스 (update)
+	int updatePwd(String empId, String encPwd);
+	
+	
 }

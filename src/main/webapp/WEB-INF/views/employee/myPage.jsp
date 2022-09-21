@@ -48,8 +48,8 @@
 	}
 
 	#profileImg{
-        width:200px;
-        height:200px;
+        width:210px;
+        height:210px;
         border:1px solid lightgray;
         border-radius: 50%;
     }
@@ -230,7 +230,8 @@
 						<button type="button" class="close" data-dismiss="modal">&times;</button> 
 					</div>
 
-					<form action="비밀번호변경요청받아주는서버" method="post">
+					<form action="updatePwd.em" method="post">
+					<input type="hidden" name="empId" value="${ loginUser.empId }">	<!-- 로그인한 회원의 id를 숨겨서 같이 보내줌 -->
 						<!-- Modal Body -->
 						<div class="modal-body">
 							<table>
