@@ -464,5 +464,17 @@
 		   AND COM_TYPE = 2
 	</delete>
 	
+	<select id="validateInchargeMember" resultType="_int">
+		SELECT COUNT(*)
+		  FROM TB_PROJECT P
+		  JOIN TB_PROJECT_MEM M
+		 USING (PROJ_NO)
+		 WHERE PROJ_NO = #{projNo}
+		   AND MEM_NO = #{empNo}
+		   AND P.STATUS = 'Y'
+		   AND M.STATUS = 'Y'
+		   AND MEM_STATUS = '참여'
+	</select>
+	
 
 </mapper>

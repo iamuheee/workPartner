@@ -315,4 +315,16 @@ public class ProjectController {
 		}
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping(value="validateme.pr", produces="application/html; charset=utf-8")
+	public String validateInchargeMember(Project p) {
+		int result = pService.validateInchargeMember(p);
+		if(result > 0) {
+			return "성공";
+		}else {
+			return "실패";
+		}
+	}
+	
 }

@@ -59,5 +59,7 @@ public interface ProjectService {
 	
 	int deleteComment(Comment c);
 	
+	int validateInchargeMember(Project p);
+	
 	
 }

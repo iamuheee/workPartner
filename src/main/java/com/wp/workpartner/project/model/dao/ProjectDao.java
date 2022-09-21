@@ -136,5 +136,9 @@ public class ProjectDao {
 		return sqlSession.delete("projectMapper.deleteComment", c);
 	}
 	
+	public int validateInchargeMember(SqlSessionTemplate sqlSession, Project p) {
+		return sqlSession.selectOne("projectMapper.validateInchargeMember", p);
+	}
+	
 
 }

@@ -226,6 +226,12 @@ public class ProjectServiceImpl implements ProjectService{
 		return pDao.deleteComment(sqlSession, c);
 	}
 
+
+	@Override
+	public int validateInchargeMember(Project p) {
+		return pDao.validateInchargeMember(sqlSession, p);
+	}
+
 	
 	
 	

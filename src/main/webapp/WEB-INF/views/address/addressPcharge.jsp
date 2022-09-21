@@ -50,28 +50,46 @@ font-family: 'Noto Sans KR', sans-serif;
 
 </style>
 <script>
+	$(function(){
+		$("#projNo").val( opener.$("input[name=projNo]").val() );
+		console.log( $("#projNo") );
+	})
+
+
 	function send() { 
 		
 		if( $("#myform tr").length != 1 ){
+			// 업무 담당자 1명으로 한정
 			alert("한 명의 프로젝트 업무 담당자를 지정해야 합니다.");
 			$("#myform tr").remove();
 		}else{
-			
-			if( confirm( $("input[name=inchargeName]").val() + "님을 담당자로 지정하는 것이 맞나요?") ){
-		    	let data = $("#inchargeEmp");
-		    	opener.sendMeData(data);
-		    	alert("성공적으로 담당자로 추가되었습니다.");
-				window.close();
-		    }else{
-				alert("천천히 골라주십쇼!");	 
-				$("#myform tr").remove();
-		    }
-			
-			
+			// 해당 사원이 프로젝트의 멤버인지 확인
+			$.ajax({
+				url:"validateme.pr",
+				data:{
+					projNo: $("#projNo").val(),
+					empNo: $("input[name=incharge]").val()
+				},
+				success:function(result){
+					if(result == '성공'){
+						// 해당 사원이 프로젝트 멤버임
+						if( confirm( $("input[name=inchargeName]").val() + "님을 담당자로 지정하는 것이 맞나요?") ){
+					    	let data = $("#inchargeEmp");
+					    	opener.sendMeData(data);
+					    	alert("성공적으로 담당자로 추가되었습니다.");
+							window.close();
+					    }else{
+							alert("천천히 골라주십쇼!");	 
+							$("#myform tr").remove();
+					    }
+					}else{
+						// 해당 사원은 프로젝트 멤버가 아님
+						alert("업무 담당자는 프로젝트 멤버여야 합니다.");
+						$("#myform tr").remove();
+					}
+				}
+			})
 		}
-		
-		
-	    
 	}
 </script>
 
@@ -83,12 +101,9 @@ font-family: 'Noto Sans KR', sans-serif;
 
     <div style="height: 20px;"></div>
     <div class="adOuter">
-    
-
 
 		<div style="display:none">
-			<input type="hidden" id="memNo">
-			<input type="hidden" id="memName">
+			<input type="hidden" id="projNo">
 		</div>
     
         <div class="adContainer">

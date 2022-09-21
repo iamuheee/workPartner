@@ -54,6 +54,14 @@ font-family: 'Noto Sans KR', sans-serif;
 		console.log( $("#memNo").val() ) /* 숫자,숫자,숮자 */
 		console.log( $("#memName").val() ) /* 이름,이름,이름 */
 		if( confirm( $("#memName").val() + "님을 프로젝트에 초대하는 것이 맞나요?") ){
+			
+			$.ajax({
+				url:"validateme.pr",
+				data:{
+					projNo:opener.$("#projNo")
+				}
+			})
+			
 	    	
 			$.ajax({
 				url:"insertme.pr",
