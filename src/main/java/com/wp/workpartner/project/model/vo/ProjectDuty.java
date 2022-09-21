@@ -1,5 +1,6 @@
 package com.wp.workpartner.project.model.vo;
 
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,4 +18,5 @@ public class ProjectDuty {
 	private String incharge;
 	private String inchargeName;
 	private String calendarYN;
+	
 }

@@ -133,8 +133,8 @@ public class ProjectServiceImpl implements ProjectService{
 		ArrayList<ProjectBoard> blist = pDao.selectProjectBoardList(sqlSession, p);
 		for(ProjectBoard pb : blist) {
 			switch( pb.getRefType() ) {
-			case "업무" : pb.setPduty( pDao.selectProjectDuty(sqlSession, pb) ); break;
-			case "회의" : pb.setPmeet( pDao.selectProjectMeeting(sqlSession, pb) ); break;
+			case "업무" : pb.setPduty( pDao.selectDuty(sqlSession, pb) ); break;
+			case "회의" : pb.setPmeet( pDao.selectMeeting(sqlSession, pb) ); break;
 			}
 		}
 		return blist;
@@ -167,6 +167,47 @@ public class ProjectServiceImpl implements ProjectService{
 		}
 		return blist;
 	}
+
+
+	@Override
+	public ProjectBoard selectDuty(ProjectBoard pb) {
+		pb = pDao.selectBoard(sqlSession, pb);
+		pb.setPduty( pDao.selectDuty(sqlSession, pb) );
+		pb.setFile( pDao.selectFile(sqlSession, pb) );
+		return pb;
+	}
+
+
+	@Override
+	public int updateDuty(ProjectBoard pb) {
+		int result1 = pDao.updateProjectBoard(sqlSession, pb);
+		int result2 = pDao.updateProjectDuty(sqlSession, pb.getPduty());
+		return result1 * result2;
+	}
+
+
+	@Override
+	public int insertFileWhenUpdate(File f) {
+		return pDao.insertFileWhenUpdate(sqlSession, f);
+	}
+
+
+	@Override
+	public int updateFile(File f) {
+		return pDao.updateFile(sqlSession, f);
+	}
+
+
+	@Override
+	public int deleteBoard(ProjectBoard pb) {
+		int result1 = pDao.deleteBoard(sqlSession, pb);
+		int result2 = 1 + pDao.deleteFile(sqlSession, pb); // 게시글에 파일이 없을 수도 있으니까
+		System.out.println(result1);
+		System.out.println(result2);
+		return result1 + result2;
+	}
+
+	
 	
 	
 	

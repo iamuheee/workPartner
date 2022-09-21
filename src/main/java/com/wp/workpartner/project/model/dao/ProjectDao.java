@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
@@ -67,11 +68,7 @@ public class ProjectDao {
 		return (ArrayList)sqlSession.selectList("projectMapper.selectProjectBoardList", p);
 	}
 	
-	public ProjectDuty selectProjectDuty(SqlSessionTemplate sqlSession, ProjectBoard pb) {
-		return sqlSession.selectOne("projectMapper.selectProjectDuty", pb);
-	}
-	
-	public ProjectMeeting selectProjectMeeting(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+	public ProjectMeeting selectMeeting(SqlSessionTemplate sqlSession, ProjectBoard pb) {
 		return sqlSession.selectOne("projectMapper.selectProjectMeeting", pb);
 	}
 	
@@ -97,6 +94,38 @@ public class ProjectDao {
 	
 	public File selectFile(SqlSessionTemplate sqlSession, ProjectBoard pb) {
 		return sqlSession.selectOne("projectMapper.selectFile", pb);
+	}
+	
+	public ArrayList<Comment> selectComment(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return (ArrayList)sqlSession.selectList("projectMapper.selectComment", pb);
+	}
+	
+	public ProjectBoard selectBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.selectOne("projectMapper.selectBoard", pb);
+	}
+	
+	public int updateProjectBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.update("projectMapper.updateProjectBoard", pb);
+	}
+	
+	public int updateProjectDuty(SqlSessionTemplate sqlSession, ProjectDuty pd) {
+		return sqlSession.update("projectMapper.updateProjectDuty", pd);
+	}
+	
+	public int insertFileWhenUpdate(SqlSessionTemplate sqlSession, File f) {
+		return sqlSession.insert("projectMapper.insertFileWhenUpdate", f);
+	}
+	
+	public int updateFile(SqlSessionTemplate sqlSession, File f) {
+		return sqlSession.update("projectMapper.updateFile", f);
+	}
+	
+	public int deleteBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.update("projectMapper.deleteBoard", pb);
+	}
+	
+	public int deleteFile(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.update("projectMapper.deleteFile", pb);
 	}
 
 }

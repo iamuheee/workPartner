@@ -15,7 +15,7 @@
         <script src="https://use.fontawesome.com/95b5cbecad.js"></script>
 
         <style>
-            a{
+            table a{
                 text-decoration: none;
                 color:black;
                 font-size: small;
@@ -58,7 +58,7 @@
             }
             .card-comment{
                 width:100%;
-                background-color: lightgray;
+                background-color: #f1f1f1;
                 border-bottom-left-radius: 5px;
                 border-bottom-right-radius: 5px;
             }
@@ -78,8 +78,8 @@
     </head>
     <body>
     	<jsp:include page="../common/menubar.jsp" />
-    
-        <br><br><br>
+    	
+    	<br>	
         <div class="container">
             <h1 style="font-weight:bolder;"><span>${p.projTitle}</span> 업무 공유방</h1>
             <hr>
@@ -136,56 +136,76 @@
             			data:{
             				projNo:$("input[name=projNo]").val()
             			},
+            			async:false,
             			success:function(dlist){
             				console.log(dlist);
             				
             				let html = "";
-            				// dlist[i] = ProjectBoard 객체
             				for(let i=0; i<dlist.length; i++){
-            				html += '<div class="card shadow-sm border-1 rounded-lg">'
-            					  +		'<div class="card-title">'
-            					  + 		'<div class="left" style="width:8%; height:50px;">'
-            					  +				'<span class="title" style="line-height:70px; padding:20px;">' + dlist[i].refType + '</span>'
-            					  +			'</div>'
-            					  +			'<div class="right" class="writer-info" style="width:92%; height:50px;">'
-            					  +				'<form action="editd.pr" method="post" class="edit-form">'
-            					  +					'<input type="hidden" name="pboardNo" value="' + dlist[i].pboardNo + '">'
-            					  +					'<table width="100%">'
-            					  +						'<tr>'
-            					  +							'<td width="90%" style="padding-top:15px;">'
-            					  +								'<span style="font-weight:bold;">'+ dlist[i].writerName + '</span><br>'
-            					  +								'<span style="font-size:small; color:gray;">' + dlist[i].createDate + '</span>'
-            					  +							'</td>'
-            					  +							'<td width="5%"><a class="submitEditForm">수정</a></td>'
-            					  +							'<td width="5%"><a class="delete-board">삭제</a></td>'
-            					  +						'</tr>'
-            					  +					'</table>'
-          					  	  +				'</form>'
-          					  	  +			'</div>'
-          					  	  +		'</div>'
-          					  	  +		'<hr style="border:0.1px solid white;">'
-          					  	  +		'<div class="card-description">'
-          					  	  +			'<table width="50%;" style="float:left; margin-right:50px; margin-left: 30px;">'
-          					  	  +				'<tr>'
-          					  	  +					'<th width="90px">담당자</th>'
-          					  	  +					'<td>' + dlist[i].pduty.inchargeName + '</td>'
-          					  	  +					'<th width="90px">진행상태</th>'
-  		                          + 				'<td>' + dlist[i].pduty.progress + '</td>'
-          					  	  +				'</tr>'
-          					  	  +				'<tr>'
-          					  	  +					'<th>시작일시</th>'
-          					  	  +					'<td>' + dlist[i].pduty.startDate + '</td>'
-          					  	  +					'<th>종료일시</th>'
-          					  	  +					'<td>' + dlist[i].pduty.endDate + '</td>'
-          					  	  +				'</tr>'
-          					  	  +			'</table>'
-	                              +		'</div>'
-	                              +		'<hr style="border:0.1px solid white;">'
-	                              +		'<div class="card-body">'
-	                              +			'<h2 class="title">' + dlist[i].title + '</h3>'
-	                              +			'<div class="content"><p style="white-space:pre-line">' + dlist[i].content +'</p></div>'
-	                              +		'</div>'      
-	                              +	'</div><br><br>'
+	            				html += '<div class="card shadow-sm border-1 rounded-lg">'
+	            					  +		'<div class="card-title">'
+	            					  + 		'<div class="left" style="width:8%; height:50px;">'
+	            					  +				'<span class="title" style="line-height:70px; padding:20px;">' + dlist[i].refType + '</span>'
+	            					  +			'</div>'
+	            					  +			'<div class="right" class="writer-info" style="width:92%; height:50px;">'
+	            					  +				'<form action="editd.pr" method="post" class="edit-form">'
+	            					  +					'<input type="hidden" name="pboardNo" value="' + dlist[i].pboardNo + '">'
+	            					  +					'<input type="hidden" class="pboardWriter" value="' + dlist[i].pboardWriter + '">'
+	            					  +					'<table width="100%">'
+	            					  +						'<tbody>'
+	            					  +							'<tr>'
+	            					  +								'<td width="90%" style="padding-top:15px;">'
+	            					  +									'<span style="font-weight:bold;">'+ dlist[i].writerName + '</span><br>'
+	            					  +									'<span style="font-size:small; color:gray;">' + dlist[i].createDate + '</span>'
+	            					  +								'</td>'
+	            					  +								'<td width="5%"><a class="submitEditForm">수정</a></td>'
+	            					  +								'<td width="5%"><a class="delete-board">삭제</a></td>'
+	            					  +							'</tr>'
+	            					  +						'</tbody>'
+	            					  +					'</table>'
+	          					  	  +				'</form>'
+	          					  	  +			'</div>'
+	          					  	  +		'</div>'
+	          					  	  +		'<hr style="border:0.1px solid white;">'
+	          					  	  +		'<div class="card-description">'
+	          					  	  +			'<table width="50%;" style="float:left; margin-right:50px; margin-left: 30px;">'
+	          					  	  +				'<tr>'
+	          					  	  +					'<th width="90px">담당자</th>'
+	          					  	  +					'<td>' + dlist[i].pduty.inchargeName + '</td>'
+	          					  	  +					'<th width="90px">진행상태</th>'
+	  		                          + 				'<td>' + dlist[i].pduty.progress + '</td>'
+	          					  	  +				'</tr>'
+	          					  	  +				'<tr>'
+	          					  	  +					'<th>시작일시</th>'
+	          					  	  +					'<td>' + dlist[i].pduty.startDate + '</td>'
+	          					  	  +					'<th>종료일시</th>'
+	          					  	  +					'<td>' + dlist[i].pduty.endDate + '</td>'
+	          					  	  +				'</tr>'
+	          					  	  +			'</table>'
+		                              +		'</div>'
+		                              +		'<hr style="border:0.1px solid white;">'
+		                              +		'<div class="card-body">'
+		                              +			'<h2 class="title">' + dlist[i].title + '</h3>'
+		                              +			'<div class="content"><p style="white-space:pre-line">' + dlist[i].content +'</p></div>';
+							if( dlist[i].file != null){
+		                         html +=		' <div class="content-file" align="center">'
+		                              +				'<span>다운로드 <i class="fa fa-download" aria-hidden="true"></i> &nbsp; </span>'
+		                              +				'<a href="' + dlist[i].file.filePath + '">' + dlist[i].file.fileOriginName + '</a>'
+		                              +			'</div>';      
+							}
+								html += 	'</div>'
+									  +		'<div class="card-comment">'
+									  +			'<input type="hidden" class="pboardNo" value="' + dlist[i].pboardNo + '">'
+									  +			'<table class="table-comment">'
+									  +			'</table>'
+									  +		'</div>'
+									  +		'<div class="write-comment" action="" method="post">'
+									  +			'<input type="hidden" name="comRefBno" value="글번호">'
+									  +			'<input type="hidden" name="comType" value="2">'
+									  +			'<textarea name="comContent" class="form-control" style="width:90%; height:80px; margin:20px; float:left; resize:none"></textarea>'
+									  +			'<button class="btn btn-sm btn-primary" onclick="insertComment();" style="float:left; height:80px; width:5%; margin-top:20px;">댓글<br>작성</button>'
+									  +		'</div>'
+		                              +	'</div><br><br>';
             				}
             				
             				$("#duty-wrapper").html(html);
@@ -195,44 +215,84 @@
             			}
             		})
             	}
-            
+            	
+            	function loadCommentList(){
+            		$(".table-comment").each(function(){
+	            		let parent = $(this);
+	            		
+            			$.ajax({
+	            			url:"dclist.pr",
+	            			data:{
+	            				comType:"2",
+	            				comRefBno:$(this).siblings("input").val()
+	            			},
+	            			success:function(dclist){
+	            				console.log("성공")
+	            				
+	            				let comment = "";
+	            				if(dclist != null){
+	            					for(let i=0; i<dclist.length; i++){
+										comment += '<tr width="100%" height="10px;">'
+										   		 +		'<th width="8%" style="padding-left:20px;">' + dclist[i].empName + '</th>'
+										   		 +		'<td width="72%;" style="padding:20px; white-space:pre-line;">' + dclist[i].comContent + '</td>'
+										   		 +		'<td width="10%;" style="color:gray;">' + dclist[i].comCreateDate + '</td>'
+										   		 +		'<td style="display:none">' + dclist[i].comNo + '</td>'
+										   		 +		'<td><a width="5%" href="">삭제</a></td>'
+										   		 + '</tr>'
+										parent.html(comment);
+	            					}
+	            				}else{
+	            					comment += '<tr><b>아직 등록된 댓글이 없습니다.</b></tr>';
+	            					parent.html(comment);
+	            				}
+	            			},
+	            			error:function(){
+	            				console.log("실패");
+	            			}
+	            		})
+	            		
+	            	})
+           		} 
             
             	// 페이지 로드되자마자 loadDutyList() 함수 호출
             	$(function(){
 		            loadDutyList();
-
+		            loadCommentList();
             	})	
             </script>
             
 			<div id="duty-wrapper"></div>
-			
-			
 			<br><br>
 				
-			
 			
 			<script>
 				// 수정 버튼을 누르면 해당 게시글의 수정 페이지로 이동
 				$(document).on("click", ".submitEditForm", function(){
-					$(this).parents("form").sumbit();
+					if( $(this).parent().parent().parent().parent().siblings(".pboardWriter").val() == ${loginUser.empNo} ){
+						$(this).parents("form").submit();
+					}else{
+						alert("다른 사원의 게시글은 수정할 수 없습니다.");
+					}
 				})
 				
 				// 삭제 버튼을 누르면 해당 게시글이 삭제되도록하는 ajax
 				$(document).on("click", ".delete-board", function(){
+					console.log(  );
 				    $.ajax({
 				        url:"deleted.pr",
 				        data:{
 				        	projNo:$("input[name=projNo]").val(),
-				            boardNo:$(this).parents("input[name=pboardNo]").val()
+				            pboardNo:$(this).parent().parent().parent().parent().siblings("input[name=pboardNo]").val()
 				        },
-				        success:function(result){
-				            alert(result);
+				        success:function(alertMsg){
+				            alert(alertMsg);
 				            loadDutyList();
+				            loadCommentList();
 				        },
 				        error:function(){
 				            console.log("ajax 통신 실패 : 업무 게시글 삭제")
 				        }
-				    })
+				    }) 
 				})
 				
 				function insertComment(){
@@ -244,8 +304,10 @@
 				            comType:$("input[name=comType]").val(),
 				            comContent:$("input[name=conContent]").val()
 				        },
-				        success:function(){
-				
+				        success:function(alertMsg){
+							alert(alertMsg);
+				        	loadDutyList();
+				        	loadCommentList();
 				        },
 				        error:function(){
 				            

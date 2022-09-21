@@ -42,5 +42,16 @@ public interface ProjectService {
 	
 	ArrayList<ProjectBoard> selectDutyList(Project p);
 	
+	ProjectBoard selectDuty(ProjectBoard pb);
+	
+	int updateDuty(ProjectBoard pb);
+	
+	int insertFileWhenUpdate(File f);
+	
+	int updateFile(File f);
+	
+	int deleteBoard(ProjectBoard pb);
+	
+	
 	
 }

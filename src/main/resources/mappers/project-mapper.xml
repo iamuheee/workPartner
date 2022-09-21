@@ -235,17 +235,8 @@
 		  	ON PBOARD_WRITER = EMP_NO
 		 WHERE PROJ_NO = #{projNo}
 		   AND STATUS = 'Y'
-	</select>
-	
-	<select id="selectProjectDuty" resultMap="projectDutyResult">
-		SELECT PBOARD_NO
-		     , PROGRESS
-		     , START_DATE
-		     , END_DATE
-		     , IN_CHARGE
-		     , CALENDAR_YN
-		  FROM TB_PDUTY
-		 WHERE PBOARD_NO = #{pboardNo}
+		 ORDER 
+		 	BY CREATE_DATE DESC
 	</select>
 	
 	<select id="selectProjectMeeting" resultMap="projectMeetingResult">
@@ -309,6 +300,23 @@
 		     )
 	</insert>
 	
+	<insert id="insertFileWhenUpdate">
+		INSERT
+		  INTO TB_FILE
+		VALUES
+		     (
+		       SEQ_FILENO.NEXTVAL
+		     , #{refNo}
+		     , 2
+		     , #{fileOriginName}
+		     , #{fileChangeName}
+		     , #{filePath}
+		     , DEFAULT
+		     , DEFAULT
+		     , DEFAULT
+		     )
+	</insert>
+	
 	<select id="selectDutyBoardList" resultMap="projectBoardResult">
 		SELECT
 			   PROJ_NO
@@ -325,6 +333,8 @@
 		 WHERE PROJ_NO = #{projNo}
 		   AND STATUS = 'Y'
 		   AND REF_TYPE = '업무'
+		 ORDER
+		 	BY CREATE_DATE DESC
 	</select>
 	
 	<select id="selectDuty" resultMap="projectDutyResult">
@@ -343,6 +353,7 @@
 	<select id="selectFile" resultMap="fileResult">
 		SELECT
 		       FILE_NO
+		     , FILE_REF_NO
 		     , FILE_ORIGIN_NAME
 		     , FILE_PATH
 		  FROM TB_FILE
@@ -350,6 +361,58 @@
 		   AND FILE_STATUS = 'Y'
 		   AND FILE_REF_NO = #{pboardNo}
 	</select>
+	
+	<select id="selectBoard" resultMap="projectBoardResult">
+		SELECT PBOARD_NO
+			 , PROJ_NO
+			 , PBOARD_WRITER
+			 , TITLE
+			 , CONTENT
+		  FROM TB_PBOARD
+		 WHERE PBOARD_NO = #{pboardNo}
+	</select>
+	
+	<update id="updateProjectBoard">
+		UPDATE TB_PBOARD
+		   SET TITLE = #{title}
+		   	 , CONTENT = #{content}
+		   	 , MODIFY_DATE = DEFAULT
+		 WHERE PBOARD_NO = #{pboardNo}
+	</update>
+	
+	<update id="updateProjectDuty">
+		UPDATE TB_PDUTY
+		   SET PROGRESS = #{progress}
+		     , START_DATE = #{startDate}
+		     , END_DATE = #{endDate}
+		     , IN_CHARGE = #{incharge}
+		     , IN_CHARGE_NAME = #{inchargeName}
+		     , CALENDAR_YN = #{calendarYN}
+		 WHERE PBOARD_NO = #{pboardNo}
+	</update>
+	
+	<update id="updateFile">
+		UPDATE TB_FILE
+		   SET FILE_ORIGIN_NAME = #{fileOriginName}
+		     , FILE_CHANGE_NAME = #{fileChangeName}
+		     , FILE_PATH = #{filePath}
+		     , FILE_UPLOAD_DATE = DEFAULT
+		 WHERE FILE_REF_NO = #{refNo}
+		   AND FILE_CATEGORY = 2
+	</update>
+	
+	<update id="deleteBoard">
+		UPDATE TB_PBOARD
+		   SET STATUS = 'N'
+		 WHERE PBOARD_NO = #{pboardNo}
+	</update>
+	
+	<update id="deleteFile">
+		UPDATE TB_FILE
+		   SET FILE_STATUS = 'N'
+		 WHERE FILE_CATEGORY = 2
+		   AND FILE_REF_NO = #{pboardNo}
+	</update>
 
 
 </mapper>

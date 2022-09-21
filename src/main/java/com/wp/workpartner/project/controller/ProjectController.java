@@ -1,6 +1,7 @@
 package com.wp.workpartner.project.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -191,6 +192,7 @@ public class ProjectController {
 		}
 	}
 	
+	
 	@RequestMapping("newduty.pr")
 	public String insertDutyForm(ProjectBoard pb, Model m) {
 		m.addAttribute("pb", pb);
@@ -210,8 +212,7 @@ public class ProjectController {
 		
 		if( result1 * result2 > 0) {
 			session.setAttribute("alertMsg", "프로젝트 업무를 성공적으로 등록했습니다.");
-			redirect.addFlashAttribute("projNo", pb.getProjNo());
-			return "redirect:proom.pr";
+			return "redirect:proom.pr?projNo=" + pb.getProjNo();
 		}else {
 			m.addAttribute("errorMsg", "프로젝트 업무 등록에 실패했습니다.");
 			return "common/error";
@@ -226,13 +227,67 @@ public class ProjectController {
 		return mv;
 	}
 	
+	
 	@ResponseBody
 	@RequestMapping(value="dlist.pr", produces="application/json; charset=utf-8")
 	public String selectDutyList(Project p) {
 		ArrayList<ProjectBoard> dlist = pService.selectDutyList(p);
-		System.out.println(dlist);
 		return new Gson().toJson(dlist);
-		
 	}
+	
+	
+	@RequestMapping("editd.pr")
+	public ModelAndView editDutyForm(ModelAndView mv, ProjectBoard pb) {
+		// pboardNo가 넘어옴 -> 해당 게시글 번화의 정보 조회해서 수정할 수 있도록
+		// 첨부파일 있는 게시글인지 확인하고, 있으면 첨부파일 정보도 가져와야 함
+		pb = pService.selectDuty(pb);
+		if(pb.getPduty() != null) {
+			mv.addObject("pb", pb).setViewName("project/projectDutyUpdateForm");
+		}else {
+			mv.addObject("errorMsg", "수정 페이지 이동에 실패했습니다.")
+			  .setViewName("common/error");
+		}
+		return mv;
+	}
+	
+	
+	@RequestMapping("updated.pr")
+	public String updateDutyForm(HttpSession session, Model m, ProjectBoard pb, File f, ProjectDuty pd, MultipartFile upfile) {
+		pb.setPduty(pd);
+		int result1 = pService.updateDuty(pb);
+		int result2 = 1;
+		
+		// 파일 업로드 있는 경우 : 기존 파일이 있는/없는 경우 
+		
+		if( upfile.getOriginalFilename().length() > 0 ) {
+			File newFile = File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/"));
+			newFile.setRefNo( Integer.parseInt(pb.getPboardNo()) );
+			if(f.getFilePath() != null) {
+				result2 *= pService.updateFile(newFile);
+			}else {
+				result2 *= pService.insertFileWhenUpdate(newFile);
+			}
+		}
+		if( result1 * result2 > 0) {
+			session.setAttribute("alertMsg", "프로젝트 업무를 성공적으로 수정했습니다.");
+			return "redirect:duty.pr?projNo=" + pb.getProjNo();
+		}else {
+			m.addAttribute("errorMsg", "프로젝트 업무 수정에 실패했습니다.");
+			return "common/error";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="deleted.pr", produces="application/html; charset=utf-8")
+	public String deleteDuty(ProjectBoard pb) {
+		int result = pService.deleteBoard(pb);
+		if(result > 1) {
+			return "해당 프로젝트 업무를 성공적으로 삭제했습니다.";
+			
+		}else {
+			return "해당 프로젝트 업무 삭제에 실패했습니다.";
+		}
+	}
+	
 	
 }
