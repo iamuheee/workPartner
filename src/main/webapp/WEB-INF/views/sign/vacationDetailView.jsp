@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -134,36 +135,105 @@
     </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    $(document).ready(function(){
+	$(document).ready(function() {
 
-        $( "#selectVacation" ).change(function() {
-            console.log($("#selectVacation").val());
+		$("#selectVacation").change(function() {
 
-            if($("#selectVacation").val() == "연차"){
-                $("#startTime").hide();
-                $("#endTime").hide();
-            }else{
-                $("#startTime").show();
-                $("#endTime").show();
-            }
+			if ($("#selectVacation").val() == "연차") {
+				$("#halfVa").attr("hidden", true);
+				$("#startTime").hide();
+				$("#endTime").hide();
+				$("#halfVa").hide();
+				$("#startTime").attr("disabled", true);
+				$("#endTime").attr("disabled", true);
+				$("#startTime2").attr("disabled", true);
+				$("#endTime2").attr("disabled", true);
+				
+			} else {
+				$("#halfVa").attr("hidden", false);
+				$("#startTime").show();
+				$("#endTime").show();
+				$("#halfVa").show();
+				$("#startTime").attr("hidden", false);
+				$("#endTime").attr("hidden", false);
+				$("#startTime").attr("disabled", false);
+				$("#endTime").attr("disabled", false);
+				$("#startTime2").attr("disabled", true);
+				$("#endTime2").attr("disabled", true);
+			}
 
-        });
-    });
+		});
+		$("#halfVa").change(function() {
+
+			if ($("#selectVacation").val() == "오전") {
+				$("#startTime2").hide();
+				$("#endTime2").hide();
+				$("#startTime2").attr("hidden", true);
+				$("#endTime2").attr("hidden", true);
+				$("#startTime").show();
+				$("#endTime").show();
+				$("#startTime").attr("dsiabled", false);
+				$("#endTime").attr("disabled", false);
+				$("#startTime2").attr("disabled", true);
+				$("#endTime2").attr("disabled", true);
+			} else {
+				$("#startTime2").attr("disabled", false);
+				$("#endTime2").attr("disabled", false);
+				$("#startTime2").attr("hidden", false);
+				$("#endTime2").attr("hidden", false);
+				$("#startTime2").show();
+				$("#endTime2").show();
+				$("#startTime").hide();
+				$("#endTime").hide();
+				$("#startTime").attr("hidden", true);
+				$("#endTime").attr("hidden", true);
+				$("#startTime").attr("disabled", true);
+				$("#endTime").attr("disabled", true);
+			}
+
+		});
+	});
 </script>
 </head>
 <!-- onload="window.resizeTo(620,800)" -->
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
 	<jsp:include page="../sign/selectTitle.jsp"/>
-    <br>
+	
+	<c:set var="vaStart" value="${ vaStart }"/>
+	<c:set var="vaEnd" value="${ vaEnd }"/>
+	<c:set var="va" value="${fn:split(v.vaEnd,',')}" />
+	 <br>
     <section>
-        <div style="border:0.5px solid rgba(143, 143, 143, 0.547); margin:auto; margin-top: 10px; width: 764px;" id="dpaperOuter">
-            <table style="margin-left:10px; border:0; border-spacing: 10px;">
+        <div style="margin:auto; margin-top: 10px; width: 800px;" >
+            <table style="margin-left:30px; border:0; border-spacing: 10px;" align="center">
                 <tr align="left">
                     <th width="70" style="border:0">
                         근태명
                     </th>
                     <td width="540" style="border:0">
-                        연차
+                        <select name="vaCategory" id="selectVacation" style="height:30px; border-radius: 4px;" disabled>
+                    	<c:choose>
+                    		<c:when test="${ v.vaCategory == '연차' }">
+                            	<option value="연차" selected>연차</option>
+                            	</select>
+                    		</c:when>
+                    		<c:otherwise>
+                            	<option value="반차" selected>반차</option>
+		                        </select>
+		                        <select name="halfVa" id="halfVa" style="height:30px; border-radius: 4px;" hidden>
+		                        	<c:choose>
+			                       		<c:when test="${ fn:split(vaStart, ',')[1] == '09:00'}">
+			                            	<option value="오전">오전</option>
+			                            </c:when>
+			                            <c:otherwise>
+				                            <c:if test="${ fn:split(vaEnd, ',')[1] == '13:00'}">
+				                            	<option value="오후">오후</option>
+				                            </c:if>
+			                            </c:otherwise>
+		                            </c:choose>
+		                        </select>
+                            </c:otherwise>
+                        </c:choose>
                     </td>
                 </tr>
                 <tr align="left">
@@ -171,7 +241,24 @@
                         시작일시
                     </th>
                     <td style="border:0">
-                        <span>2022-01-02</span>
+                    	<c:choose>
+                    		<c:when test="${v.vaCategory == '연차' }">
+	                       		<input type="date" id="currentDate" name="vaStart" style="height:30px; border-radius: 4px; text-align: center;">
+	                       	</c:when>
+	                       	<c:otherwise>
+		                       	<input type="date" id="currentDate" name="vaStart" style="height:30px; border-radius: 4px; text-align: center;">
+		                       	<c:choose>
+		                       		<c:when test="${ fn:split(vaStart, ',')[1] == '09:00'}">
+			                        	<input type="time" name="vaStart" style="height:30px; border-radius: 4px; text-align: center;" id="startTime" value="09:00" disabled hidden readonly>
+			                        </c:when>
+			                        <c:otherwise>
+			        					<c:if test="${ fn:split(vaStart, ',')[1] == '13:00'}">
+					                        <input type="time" name="vaStart" style="height:30px; border-radius: 4px; text-align: center;" id="startTime2" value="13:00" disabled hidden readonly>
+			        					</c:if>          
+			                        </c:otherwise>
+		                        </c:choose>
+	                        </c:otherwise>
+	                    </c:choose>
                     </td>
                 </tr>
                 <tr align="left">
@@ -179,7 +266,24 @@
                         종료일시
                     </th>
                     <td style="border:0">
-                        <span>2022-01-02</span>
+                    	<c:choose>
+                    		<c:when test="${v.vaCategory == '연차' }">
+	                       	 	<input type="date" id="currentDate2" name="vaEnd" style="height:30px; border-radius: 4px; text-align: center;" enabled>
+	                        </c:when>
+	                        <c:otherwise>
+	                       		<input type="date" id="currentDate2" name="vaEnd" style="height:30px; border-radius: 4px; text-align: center;" enabled>
+	                       		<c:choose>
+		                        	<c:when test="${ fn:split(vaEnd, ',')[1] == '13:00'}">
+		                       			<input type="time" name="vaEnd" style="height:30px; border-radius: 4px; text-align: center;" id="endTime" value="13:00" disabled hidden readonly>
+		                       		</c:when>
+	                       			<c:otherwise>
+	                       				<c:if test="${ fn:split(vaStart, ',')[1] == '18:00'}">
+	                       					<input type="time" name="vaEnd" style="height:30px; border-radius: 4px; text-align: center;" id="endTime2" value="18:00" step="1800" min="00:00" max="23:59" disabled hidden readonly>
+	                       				</c:if>
+	                       			</c:otherwise>
+	                       		</c:choose>
+	                        </c:otherwise>
+                        </c:choose>
                     </td>
                 </tr>
                 <tr align="left">
@@ -187,20 +291,20 @@
                         사유
                     </th>
                     <td style="border:0">
-                        <textarea name="" id="" cols="30" rows="10"
-                            style=" border-radius: 4px; width: 95%; resize: none;" readonly>ㄴ</textarea>
+                        <textarea name="vaContent" cols="30" rows="10" style=" border-radius: 4px; width: 650px; resize: none;" readonly>${ v.vaContent }</textarea>
                     </td>
                 </tr>
             </table>
         </div>
-        <div id="copyDpaper">
-
-        </div>
+        
     </section>
     <script>
         document.getElementById('currentDate').value = new Date().toISOString().substring(0, 10);
         document.getElementById('currentDate2').value = new Date().toISOString().substring(0, 10);;
     </script>
+	</section>
+	</form>
+
 
 </body>
 </html>

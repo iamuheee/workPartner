@@ -269,6 +269,9 @@
 	                            		 	똑같이 filebox로 class를 줌으로서 첨부파일 갯수가 3개 초과 안하도록
 	                            		 	=> 2개가 전달되었다면
 	                            		 	=> 다만 실제 input name="upfile"  multiple="multiple" type="file" 로 담긴 file은 [0]이다. 전달된얘들은 input type="hidden"일뿐 실제 파일받는거X => 기존에 저장된 파일을 보여줄뿐
+	                            		 	
+	                            		 	그럼 첨부파일 갯수 조건처리는
+	                            		 	 document.querySelectorAll('.filebox').length; 로 구분하기 때문에 기존의 뿌린애들에게 class로 두어서 갯수세는데 포함하게했음
 	                            		  -->
 	                            		 <div id="forwordFile${status.index}" class="filebox forword">
 				                           	<span class="name">${ f.fileOriginName }</span>
@@ -479,12 +482,18 @@
                 
                 let count2 = $("#recipientTB tr").length;
 
-                if(count2 < 3){
+                /* if(count2 < 3){
                     $("#recipientTB").append(data); 
                 }else{
                     alert("3명까지만 가능합니다.");                    
                     searchCCEmail.attr("placeholder", "총 3개까지 가능합니다.");
-                }                       
+                }  */  
+                
+                if(count2 + data.length < 4){
+               	 $("#recipientTB").append(data); 
+               }else{
+               	alert("3명까지만 가능합니다.");  
+               }
                
             }
 
@@ -497,12 +506,18 @@
             function sendDataCC(data){
                 let ccCount2 = $("#mailCC tr").length;
 
-                if(ccCount2 < 3){
+                /* if(ccCount2 < 3){
                     $("#mailCC").append(data); 
                 }else{
                     alert("3명까지만 가능합니다.");                    
                     searchCCEmail.attr("placeholder", "총 3개까지 가능합니다.");
-                }              
+                }   */     
+                if(ccCount2 + data.length < 4){
+                    $("#mailCC").append(data); 
+                }else{
+                    alert("3명까지만 가능합니다.");                    
+                    searchCCEmail.attr("placeholder", "총 3개까지 가능합니다.");
+                } 
                
             }
             

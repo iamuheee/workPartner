@@ -58,13 +58,12 @@
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"/>
-		
                 <c:choose>
                     <c:when test="${ flag == 'save' }">
                         <div class="container-fluid px-4" style="margin-top: 30px;">
                             <div style="margin-bottom: 50px; line-height: 10px;">
                                 <ol class="breadcrumb mb-4" style="font-size:18px; width: 100%;">
-                                    <li>기안서 >&nbsp</a> <input type="hidden" name="dpNo" value="${ dpNo }"></li>
+                                    <li>기안서 >&nbsp</a></li>
                                     <li><b>임시저장</b></li>
                                 </ol>
                                 <hr>
@@ -101,6 +100,7 @@
 
                                     <tr align="center">
                                         <th width="5%"><input type="checkbox" style="scale: 1.3;"></th>
+                                        <th class="endNum" width="10%">문서번호</th>
                                         <th class="endNum" width="10%">서식</th>
                                         <th class="endTitle" width="40%">제목</th>
                                         <th class="endCreate" width="15%">임시저장일</th>
@@ -117,15 +117,17 @@
 				                		</c:when>
 				                		<c:otherwise>
 				                			<c:forEach var="s" items="${ saveList }">
+				                			
 							                    <tr align="center">
 							                   	    <td><input type="checkbox" style="scale: 1.3;"></td>
-							                        <td>${ s.dpCategory }</td>
+							                        <td><input type="hidden" name="dpNo" value="${ s.dpNo }">${ s.dpNo }</td>
+							                        <td>${ s.dpCategory }<input type="hidden" name="category" value="${s.dpCategory }"></td>
 							                        <c:choose>
 								                        <c:when test="${empty s.dpTitle }">
-								                        	<td><a href="" class="dpTitle">제목없음</a></td>
+								                        	<td><a href="" id="detailBtn" class="dpTitle">제목없음</a></td>
 								                        </c:when>
 								                        <c:otherwise>
-								                        	<td><a href="" class="dpTitle">${ s.dpTitle }</a></td>
+								                        	<td><a href="" id="detailBtn" class="dpTitle">${ s.dpTitle }</a></td>
 								                        </c:otherwise>
 							                        </c:choose>
 							                        <td>${ s.dpCreate }</td>
@@ -138,25 +140,34 @@
 							                        </td>
                                        				<td><a href="" class="dpTitle">작성하기</a></td>
 							                    </tr>
-							                    <script>
+												<!-- <script>
 													$(document).ready(function(){
-														$(".dpTitle").click(function(){
-								                    		if('${s.dpCategory}' == '연차'){
-																$(".dpTitle").attr("href", "detailVa.si");
-															}else if('${s.dpCategory}' == '외근'){
-																$(".dpTitle").attr("href", "detailOtw.si");
-															}else if('${s.dpCategory}' == '퇴직원'){
-																$(".dpTitle").attr("href", "detailRes.si");
-															}else{
-																$(".dpTitle").attr("href", "detailCo.si");
-															}
+														$("#detailBtn").click(function(){
+															if('${s.dpCategory}')
 														})
-													})
-												</script>
+													}
+											       	function showPopup(){
+											        	if($)
+											        vacation = window.open("vaEnroll.si", "btn", "width=805, height=800");
+											        vacation.moveTo(560,120);
+											        vacation.focus();
+											        };
+										    	</script> -->
 						                    </c:forEach>
 				                		</c:otherwise>
 				                   </c:choose>
-				                   
+		<!-- 	                       <script>
+										$(document).ready(function(){
+											$(".dpTitle").click(function(){
+													console.log('${s.dpCategory}');
+													
+						                			vacation = window.open("detailMy.si", "btn", "width=805, height=800");
+									            	vacation.moveTo(560,120);
+									            	vacation.focus();
+											})
+										})
+									</script> 
+				                    -->
                                 </table>
 
                                 <c:if test="${not empty saveList }">
@@ -250,10 +261,10 @@
 							                        <td>${ r.dpCategory }</td>
 							                        <c:choose>
 								                        <c:when test="${empty r.dpTitle }">
-								                        	<td><a href="" class="dpTitle">제목없음</a></td>
+								                        	<td><a href="" id="detailBtn" class="dpTitle">제목없음</a></td>
 								                        </c:when>
 								                        <c:otherwise>
-								                        	<td><a href="" class="dpTitle">${ r.dpTitle }</a></td>
+								                        	<td><a href="" id="detailBtn" class="dpTitle">${ r.dpTitle }</a></td>
 								                        </c:otherwise>
 							                        </c:choose>
 							                        <td>${ r.dpCreate }</td>

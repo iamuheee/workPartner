@@ -1,5 +1,8 @@
 package com.wp.workpartner.project.model.vo;
 
+import java.util.ArrayList;
+
+import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 
 import lombok.Getter;
@@ -29,5 +32,6 @@ public class ProjectBoard {
 	private ProjectDuty pduty;
 	private ProjectMeeting pmeet; 
 	private File file;
+	private ArrayList<Comment> comment;
 
 }

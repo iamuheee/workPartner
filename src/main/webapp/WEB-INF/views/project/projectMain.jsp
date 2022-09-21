@@ -47,7 +47,7 @@
             .right{
                 float:right;
                 width:27%;
-                height:500px;
+                height:615px;
             }
             .btn-area>button{
                 width:50px;
@@ -73,35 +73,70 @@
                             <hr>
                         </div>
                         <div class="inner-area">
-                            <div class="project-card">
-                                <br>
-                                <span class="project-title">프로젝트명</span><br>
-                                <input type="hidden" value="<%-- ${ 프로젝트 우선순위 } --%>" id="priority">
-                                <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(4)</span>
-                            </div>
-                            <div class="project-card">
-                                <br>
-                                <span class="project-title">프로젝트명</span><br>
-                                <input type="hidden" value="<%-- ${ 프로젝트 우선순위 } --%>" id="priority">
-                                <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(4)</span>
-                            </div>
+			            	<c:forEach var="p" end="4" items="${ plist }">
+				                <div class="project-card" >
+				                    <input type="hidden" class="progress" value="${p.progress}">
+				                    <form id="projectForm"> <input type="hidden" name="projNo" value="${p.projNo}"> </form>
+				                    <button class="manageProj" class="manage" style="margin-left:65%; border:none;background-color:transparent; width:50px; height:30px;">
+				                        <i class="fa fa-cog" aria-hidden="true"></i>
+				                    </button>
+				                    <br>
+				                    <div class="card-inner">
+					                    <span class="project-title">${p.projTitle}</span><br>
+					                    <input type="hidden" value="${p.progress}" id="priority">
+					                    <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(${p.mlist.size()})</span>
+				                	</div>
+				                </div>
+			                </c:forEach>
                         </div>
+                        <script>
+	                        $(function(){
+	                            $(".project-card").each(function(){
+	                                switch( $(this).children(".progress").val() ){
+	                                    case '준비' : $(this).css("border-left", "10px solid gold"); break;
+	                                    case '진행' : $(this).css("border-left", "10px solid green"); break;
+	                                    case '지연' : $(this).css("border-left", "10px solid orchid"); break;
+	                                    case '완료' : $(this).css("border-left", "10px solid lightgray"); break;
+	                                }
+	                            })
+	                        })
+	                        
+							$(function(){
+								// 프로젝트 관리 버튼 (톱니바퀴) 클릭 시 해당 프로젝트의 관리 페이지로 가는 버튼
+								// 단, 해당 사원이 선택한 프로젝트의 관리자 이상이 아니면 접근 불가
+								$(document).on("click", ".manageProj", function(){
+									let form = $(this).siblings("form");
+									$.ajax({
+										url:"validate.pr",
+										data:{
+											empNo:${loginUser.empNo},
+											projNo:$(this).siblings("form").children("input").val()
+										},
+										success:function(result){
+											if(result == "Y"){
+												form.attr("action", "manage.pr");
+												form.submit();
+											}else{
+												alert("접근 권한이 없습니다.");
+											}
+										},
+										error:function(){
+											console.log("권한 체크하는 AJAX 통신 실패");
+										}
+									})
+								})            
+								        	
+								// 카드 영역을 클릭하면 해당 프로젝트의 업무공유방으로 이동
+								$(document).on("click", ".card-inner", function(){
+									let form = $(this).siblings("form");
+									form.attr("action", "proom.pr");
+									form.submit();
+								})
+							})
+              
+						</script>
                     </div>
                 </div>
-
-                <script>
-                    // 프로젝트 진행 상황에 따라 색깔이 바뀌도록하는 함수
-                    $(function(){
-                        $(".project-card").each(function(){
-                            switch( $(this).children("#priority").val() ){
-                                case 1 : $(this).css("border-left", "10px solid red");
-                                case 2 : $(this).css("border-left", "10px solid orange");
-                                case 3 : $(this).css("border-left", "10px solid blue");
-                                case 4 : $(this).css("border-left", "10px solid lightgray");
-                            }
-                        })
-                    })
-                </script>
 
                 <br>                
                 <div class="left-bottom card shadow-sm border-1 rounded-lg">
@@ -124,25 +159,41 @@
                     <hr>
                 </div>
                 <div class="inner-area">
-                    <div class="invitation">
-                        <span style="font-weight:bold; line-height: 30px;">프로젝트명</span>
-                        <span style="font-size:10px;">일반 멤버</span>
-                        <div class="btn-area" align="right" style="float:right">
-                            <button class="btn btn-sm btn-primary">수락</button>
-                            <button class="btn btn-sm btn-secondary">거절</button>
-                        </div>
-                    </div>
-                    <div class="invitation">
-                        <span style="font-weight:bold; line-height: 30px;">프로젝트명</span>
-                        <span style="font-size:10px;">관리자</span>
-                        <div class="btn-area" align="right" style="float:right">
-                            <button class="btn btn-sm btn-primary">수락</button>
-                            <button class="btn btn-sm btn-secondary">거절</button>
-                        </div>
-                    </div>
+                   	<c:forEach var="i" items="${ilist}">
+	                    <div class="invitation">
+	                        <span style="font-weight:bold; line-height: 30px;">${i.projTitle}</span>
+	                        <span style="font-size:10px;">${i.memRole}</span>
+	                        <div class="btn-area" align="right" style="float:right">
+	                        	<input type="hidden" id="projNo" value="${i.projNo}">
+	                            <button class="btn btn-sm btn-primary accept" value="수락">수락</button>
+	                            <button class="btn btn-sm btn-secondary accept" value="거절">거절</button>
+	                        </div>
+	                    </div>
+					</c:forEach>
                 </div>
+                
+                <script>
+                	$(".accept").click(function(){
+                		$.ajax({
+                			url:"yesno.pr",
+                			data:{
+                				projNo:$(this).siblings("#projNo").val(),
+                				memNo:${loginUser.empNo},
+                				answer:$(this).val()
+                			},
+                			success:function(result){
+                				alert(result);
+                				location.href();
+                			},
+                			error:function(){
+                				console.log("수락거절오류");
+                			}
+                		})
+                	})
+                </script>
             </div>
             </div>
+               <br><br><br>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>

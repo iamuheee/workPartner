@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString
 public class ProjectMember {
 	private String projNo;
+	private String projTitle;
 	private String memNo;
 	private String memName;
 	private String memRole;

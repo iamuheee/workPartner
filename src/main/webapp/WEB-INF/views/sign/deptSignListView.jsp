@@ -44,10 +44,16 @@ table {
 #layoutSidenav_content {
 	font-family: 'Noto Sans KR', sans-serif;
 }
-.mainOuter{
+/* .mainOuter{
 	margin-top:0 !important;
-}
+} */
+.dpTitle{
+			text-decoration-line: none;
+			color: #212529;
+		}
 </style>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"/>
@@ -84,35 +90,94 @@ table {
                                 <table class="endSignList" width="100%">
 
                                     <tr align="center">
-                                        <th class="endNum" width="5%">번호</th>
-                                        <th class="endNum" width="7%">서식</th>
-                                        <th class="endTitle" width="30%">제목</th>
-                                        <th width="10%">기안자</th>
-                                        <th width="10%">기안일</th>
-                                        <th width="10%">현재결재자</th>
-                                        <th width="10%">최종결재자</th>
+                                        <th class="endNum" width="8%">문서번호</th>
+										<th class="endNum" width="8%">서식</th>
+										<th class="endCreate" width="10%">첨부파일</th>
+										<th class="endTitle" width="20%">제목</th>
+										<th width="12%">기안자</th>
+										<th width="10%">기안일</th>
+										<th width="14%">현재결재자</th>
+										<th width="14%">최종결재자</th>
                                     </tr>
 
-                                    <tr align="center">
-                                        <td>1</td>
-                                        <td>업무협조</td>
-                                        <td>여기는 제목이 나타나는 곳</td>
-                                        <td>김범진</td>
-                                        <td>2022-09-01</td>
-                                        <td>강보람</td>
-                                        <td>김종군</td>
-                                    </tr>
-
-                                </table>
-                                <ul class="pagination">
-                                    <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">다음</a></li>
-                                </ul>
+                                    <c:choose>
+	                		<c:when test="${empty deptSignList }">
+	                			<tr>
+	                				<td colspan="8" align="center">현재 게시글이 없습니다.</td>
+	                			</tr>
+	                		</c:when>
+	                		<c:otherwise>
+	                			<c:forEach var="d" items="${ deptSignList }">
+				                    <tr align="center">
+				                   	    <td>${ d.dpNo }</td>
+				                        <td>${ d.dpCategory }</td>
+				                        <td>
+					                        <c:if test="${ not empty d.dpOrigin }">
+					                       		<span class="material-icons" style="vertical-align:middle; font-size:17px; color:#878787;">
+												attachment
+												</span>
+					                        </c:if>
+				                        </td>
+				                        <c:choose>
+					                        <c:when test="${empty d.dpTitle }">
+					                        	<td><a href="" class="dpTitle">제목없음</a></td>
+					                        </c:when>
+					                        <c:otherwise>
+					                        	<td><a href="" class="dpTitle">${ d.dpTitle }</a></td>
+					                        </c:otherwise>
+				                        </c:choose>
+				                        <td>${ d.empNo}(${d.signDeptName})</td>
+				                        <td>${ d.dpCreate }</td>
+				                        <td>${ loginUser.empName }(${ loginUser.depCd }) </td>
+				                        <td>${ d.signEmpName }(${ d.signEmpDept })</td>
+				                    </tr>
+				                    <script>
+										$(document).ready(function(){
+											$(".dpTitle").click(function(){
+					                    		if('${s.dpCategory}' == '연차'){
+													$(".dpTitle").attr("href", "detailVa.si");
+												}else if('${s.dpCategory}' == '외근'){
+													$(".dpTitle").attr("href", "detailOtw.si");
+												}else if('${s.dpCategory}' == '퇴직원'){
+													$(".dpTitle").attr("href", "detailRes.si");
+												}else{
+													$(".dpTitle").attr("href", "detailCo.si");
+												}
+											})
+										})
+									</script>
+			                    </c:forEach>
+	                		</c:otherwise>
+	                   </c:choose>
+					
+					</table>
+					<c:if test="${not empty deptSignList }">
+                        <div id="pagingArea">
+			                <ul class="pagination">
+			                	<c:choose>
+			                		<c:when test="${ pi.currentPage eq 1 }">
+			                    		<li class="page-item disabled"><a class="page-link">이전</a></li>
+			                    	</c:when>
+			                    	<c:otherwise>
+			                    		<li class="page-item"><a class="page-link" href="deptSi.si?empNo=${ loginUser.empNo }&cpage=${ pi.currentPage-1 }">이전</a></li>
+			                    	</c:otherwise>
+			                    </c:choose>
+			                    
+			                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+			                  	  <li class="page-item"><a class="page-link" href="deptSi.si?empNo=${ loginUser.empNo }&cpage=${ p }">${ p }</a></li>
+			                    </c:forEach>
+			                    
+			                    <c:choose>
+			                    	<c:when test="${ pi.currentPage eq pi.maxPage }">
+				                	    <li class="page-item disabled"><a class="page-link">다음</a></li>
+				                	</c:when>
+				                	<c:otherwise>
+				                    	<li class="page-item"><a class="page-link" href="deptSi.si?empNo=${ loginUser.empNo }&cpage=${ pi.currentPage+1 }">다음</a></li>
+				                	</c:otherwise>    
+			                    </c:choose>
+			                </ul>
+		            	</div>
+	                </c:if>
                             </div>
                         </div>
                     </c:when>
@@ -147,41 +212,99 @@ table {
                                 <table class="endSignList" width="100%">
 
                                     <tr align="center">
-                                        <th width="5%">번호</th>
-                                        <th class="endNum" width="5%">서식</th>
-                                        <th class="endTitle" width="30%">제목</th>
-                                        <th width="5%">기안자</th>
-                                        <th width="10%">나의 결재일</th>
-                                        <th width="10%">최종결재자</th>
+										<th class="endNum" width="10%">문서번호</th>
+										<th class="endNum" width="10%">서식</th>
+										<th class="endCreate" width="10%">첨부파일</th>
+										<th class="endTitle" width="20%">제목</th>
+										<th width="13%">기안자</th>
+										<th width="12%">나의 결재일</th>
+										<th width="15%">최종결재자</th>
                                     </tr>
 
-                                    <tr align="center">
-                                        <td>1</td>
-                                        <td>업무협조</td>
-                                        <td>여기는 제목이 나타나는 곳</td>
-                                        <td>마케팅</td>
-                                        <td>2022-09-01</td>
-                                        <td>강보람</td>
-                                    </tr>
-
-                                </table>
-                                <ul class="pagination">
-                                    <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">다음</a></li>
-                                </ul>
+                                    <c:choose>
+	                		<c:when test="${empty endSignList }">
+	                			<tr>
+	                				<td colspan="7" align="center">현재 게시글이 없습니다.</td>
+	                			</tr>
+	                		</c:when>
+	                		<c:otherwise>
+	                			<c:forEach var="d" items="${ endSignList }">
+				                    <tr align="center">
+				                   	    <td>${ d.dpNo }</td>
+				                        <td>${ d.dpCategory }</td>
+				                        <td>
+					                        <c:if test="${ not empty d.dpOrigin }">
+					                       		<span class="material-icons" style="vertical-align:middle; font-size:17px; color:#878787;">
+												attachment
+												</span>
+					                        </c:if>
+				                        </td>
+				                        <c:choose>
+					                        <c:when test="${empty d.dpTitle }">
+					                        	<td><a href="" class="dpTitle">제목없음</a></td>
+					                        </c:when>
+					                        <c:otherwise>
+					                        	<td><a href="" class="dpTitle">${ d.dpTitle }</a></td>
+					                        </c:otherwise>
+				                        </c:choose>
+				                        <td>${ d.empNo}(${d.signDeptName})</td>
+				                        <td>${ d.dpCreate }</td>
+				                        <td>${ loginUser.empName }(${ loginUser.depCd }) </td>
+				                        <td>${ d.signEmpName }(${ d.signEmpDept })</td>
+				                    </tr>
+				                    <script>
+										$(document).ready(function(){
+											$(".dpTitle").click(function(){
+					                    		if('${s.dpCategory}' == '연차'){
+													$(".dpTitle").attr("href", "detailVa.si");
+												}else if('${s.dpCategory}' == '외근'){
+													$(".dpTitle").attr("href", "detailOtw.si");
+												}else if('${s.dpCategory}' == '퇴직원'){
+													$(".dpTitle").attr("href", "detailRes.si");
+												}else{
+													$(".dpTitle").attr("href", "detailCo.si");
+												}
+											})
+										})
+									</script>
+			                    </c:forEach>
+	                		</c:otherwise>
+	                   </c:choose>
+					
+					</table>
+					<c:if test="${not empty endSignList }">
+                        <div id="pagingArea">
+			                <ul class="pagination">
+			                	<c:choose>
+			                		<c:when test="${ pi.currentPage eq 1 }">
+			                    		<li class="page-item disabled"><a class="page-link">이전</a></li>
+			                    	</c:when>
+			                    	<c:otherwise>
+			                    		<li class="page-item"><a class="page-link" href="deptEndSi.si?empNo=${ loginUser.empNo }&cpage=${ pi.currentPage-1 }">이전</a></li>
+			                    	</c:otherwise>
+			                    </c:choose>
+			                    
+			                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+			                  	  <li class="page-item"><a class="page-link" href="deptEndSi.si?empNo=${ loginUser.empNo }&cpage=${ p }">${ p }</a></li>
+			                    </c:forEach>
+			                    
+			                    <c:choose>
+			                    	<c:when test="${ pi.currentPage eq pi.maxPage }">
+				                	    <li class="page-item disabled"><a class="page-link">다음</a></li>
+				                	</c:when>
+				                	<c:otherwise>
+				                    	<li class="page-item"><a class="page-link" href="deptEndSi.si?empNo=${ loginUser.empNo }&cpage=${ pi.currentPage+1 }">다음</a></li>
+				                	</c:otherwise>    
+			                    </c:choose>
+			                </ul>
+		            	</div>
+	                </c:if>
                             </div>
                         </div>
 
                     </c:otherwise>
                 </c:choose>
             </main>
-
-           
         </div>
     </div>
 </body>

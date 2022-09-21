@@ -104,35 +104,55 @@ public class SignServiceImpl implements SignService {
 	public ArrayList<Dtpaper> selectOthSignList(PageInfo pi, String empNo) {
 		return sDao.selectOthSignList(sqlSession,pi, empNo);
 	}
+//	타부서 결재완료
+	@Override
+	public int selectEndOthSignListCount(String empNo) {
+		return sDao.selectEndOthSignListCount(sqlSession, empNo);
+	}
+	@Override
+	public ArrayList<Dtpaper> selectEndOthSignList(PageInfo pi, String empNo) {
+		return sDao.selectEndOthSignList(sqlSession, pi, empNo);
+	}
+	
 //	내부서 결재함
 	@Override
-	public int selectSignListCount(String empNo) {
-		return 0;
+	public int selectDeptSignListCount(String empNo) {
+		return sDao.selectDeptSignListCount(sqlSession, empNo);
 	}
 	@Override
-	public ArrayList<Dtpaper> selectSignList(PageInfo pi, String empNo) {
-		return null;
+	public ArrayList<Dtpaper> selectDeptSignList(PageInfo pi, String empNo) {
+		return sDao.selectDeptSignList(sqlSession, pi, empNo);
+	}
+	
+//	내부서 결재완료
+	@Override
+	public int selectEndSignListCount(String empNo) {
+		return sDao.selectEndSignListCount(sqlSession, empNo);
+	}
+	@Override
+	public ArrayList<Dtpaper> selectEndSignList(PageInfo pi, String empNo) {
+		return sDao.selectEndSignList(sqlSession, pi, empNo);
+	}
+	
+	@Override
+	public SelectVacation selectVa(int dpNo) {
+		return sDao.selectVa(sqlSession, dpNo);
+	}
+	@Override
+	public SelectOtwork selectOw(int dpNo) {
+		return sDao.selectOw(sqlSession, dpNo);
+	}
+	@Override
+	public SelectReSign selectRe(int dpNo) {
+		return sDao.selectRe(sqlSession, dpNo);
+	}
+	@Override
+	public SelectCooperation selectCo(int dpNo) {
+		return sDao.selectCo(sqlSession, dpNo);
 	}
 
-	@Override
-	public SelectCooperation selectSignCooperation(int dpNo, String empNo) {
-		return null;
-	}
 
-	@Override
-	public SelectReSign selectSignResign(int dpNo, String empNo) {
-		return null;
-	}
 
-	@Override
-	public SelectVacation selectSignVacation(int dpNo, String empNo) {
-		return null;
-	}
-
-	@Override
-	public SelectOtwork selectSignOtwork(int dpNo, String empNo) {
-		return null;
-	}
 
 	@Override
 	public int updateCooperation(Dtpaper d, Cooperation c) {
@@ -175,24 +195,30 @@ public class SignServiceImpl implements SignService {
 	}
 
 	@Override
-	public SelectCooperation selectCooperation(int dpNo) {
+	public SelectCooperation selectSignCooperation(int dpNo) {
 		return null;
 	}
 
 	@Override
-	public SelectReSign selectResign(int dpNo) {
+	public SelectReSign selectSignResign(int dpNo) {
 		return null;
 	}
 
 	@Override
-	public SelectVacation selectVacation(int dpNo) {
+	public SelectVacation selectSignVacation(int dpNo) {
 		return null;
 	}
 
 	@Override
-	public SelectOtwork selectOtwork(int dpNo) {
+	public SelectOtwork selectSignOtwork(int dpNo) {
 		return null;
 	}
+	@Override
+	public ArrayList<Sign> selectSignList(int dpNo) {
+		return sDao.selectSignList(sqlSession, dpNo);
+	}
+	
+
 
 	
 	

@@ -133,59 +133,65 @@
         }
     </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-    $(document).ready(function(){
 
-        $( "#selectVacation" ).change(function() {
-            console.log($("#selectVacation").val());
-
-            if($("#selectVacation").val() == "연차"){
-                $("#startTime").hide();
-                $("#endTime").hide();
-            }else{
-                $("#startTime").show();
-                $("#endTime").show();
-            }
-
-        });
-    });
-</script>
 </head>
 <!-- onload="window.resizeTo(620,800)" -->
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-    <section class="mainTitle">
-        <form action="updatePaper.bo" name="updateForm" style="float: left">
-            <a class="insertBtn" onclick="updateCheck();">기안서 재작성</a>
-        </form>
-        <form action="updateSign.me" style="float: left">
-            <a class="insertBtn" id="btn-modal">결재선 변경</a>
-        </form>
-        <form action="deletePaper.bo" name="deleteForm">
+
+<form action="" method="post" name="updateForm" id="updateForm" 
+		enctype="multipart/form-data"> 
+	<input type="hidden" name="dpCategory" value="${ paperName }">
+		
+	<section class="mainTitle">
+			<a class="insertBtn" onclick="updateCheck();">기안서 재작성</a>
             <a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
-        </form>
-        <hr>
-    </section>
+		<hr>
+	</section>
     <script>
-        function updateCheck() {
-            if (confirm("다시 기안하시겠습니까?") == true){    //확인
-                document.updateForm.submit();
-            }else{   //취소
-                return false;
-            }
-            }
-    </script>
-    <script>
-        function deleteCheck() {
-            if (confirm("정말 삭제하시겠습니까??") == true){    //확인
-                document.deleteForm.submit();
-            }else{   //취소
-                return false;
-            }
-            }
-    </script>
+		function deleteCheck() {
+			if (confirm("정말 삭제하시겠습니까?") == true) { //확인
+				
+				if('${paperName}' == '연차'){
+					document.updateForm.action = "deleteVa.si";
+				}else if('${paperName}' == '외근'){
+					document.updateForm.action = "deleteOw.si";
+				}else if('${paperName}' == '업무협조'){
+					document.updateForm.action = "deleteCo.si";
+				}else {
+					document.updateForm.action = "deleteRe.si";
+				}
+				document.updateForm.submit();
+			} else { //취소
+				return false;
+			}
+		}
+	</script>
+	<script>
+		function updateCheck() {
+			if (confirm("수정하시겠습니까?") == true) { //확인
+				
+				if('${paperName}' == '연차'){
+					document.updateForm.action = "updateVa.si";
+				}else if('${paperName}' == '외근'){
+					document.updateForm.action = "updateOw.si";
+				}else if('${paperName}' == '업무협조'){
+					document.updateForm.action = "updateCo.si";
+				}else {
+					document.updateForm.action = "updateRe.si";
+				}
+				document.updateForm.submit();
+
+			} else { //취소
+				return false;
+			}
+		}
+	</script>
     <section>
         <div>
-            <h1 class="dtpaperName">XX 신청서 - <span style="font-weight:lighter;">김종군(영업부)</span></h1>
+        	<h3 class="dtpaperName">
+				<span>${ paperName }</span> 신청서 - <span
+					style="font-weight: lighter;"><input type="hidden" name="empNo" value="${ loginUser.empNo }">${ loginUser.empName }(${ loginUser.depCd })</span>
+			</h3>
             <hr>
         </div>
     </section>
@@ -193,14 +199,16 @@
         <div>
             <h3>결재선</h3>
             <table align="center">
-                <tr>
-                    <th width="100">결재</th>
-                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><span>김종군(마케팅부)</span></td>
-                    <th>결재</th>
-                    <td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"></td>
-                    <th>결재</th>
-                    <td></td>
-                </tr>
+            	<c:forEach var="s" items="${ signList }">
+            		<tr>
+						<td width="80px" style="border:0.5px solid #878787; background: #f1f1f1;">
+							결재
+						 </td>
+						<td width="80px" style="border:0.5px solid #878787">
+						   ${ s.signEmpNo }
+						</td>
+					</tr>
+            	</c:forEach>
             </table>
         </div>
     </section>
@@ -211,11 +219,20 @@
                 <tr class="titleSection">
                     <th style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);">제목</th>
                     <td align="left" style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);"><span
-                            style="margin-left:10px;">외근신청서 결재 부탁드립니다.</span></td>
+                            style="margin-left:10px;">${ v.dpTitle }</span></td>
                 </tr>
                 <tr style="border-top:0.5px solid rgba(143, 143, 143, 0.547);">
                     <th>첨부파일</th>
-                    <td align="left"><input type="file" style="margin-left:10px; border:0;"></td>
+                    <td align="left">
+	                    <c:choose>
+	                   		<c:when test="${ empty v.origin }">
+	                   			첨부파일이 없습니다.
+	                       	</c:when>
+	                       	<c:otherwise>
+	                       		<a href="${ v.change }" download="${ v.origin }">${ v.origin }</a>
+	                       	</c:otherwise>
+	                    </c:choose>
+                    </td>
                 </tr>
             </table>
         </div>

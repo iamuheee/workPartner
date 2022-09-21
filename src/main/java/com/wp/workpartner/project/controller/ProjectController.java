@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.common.template.FileUpload;
 import com.wp.workpartner.employee.model.vo.Employee;
@@ -33,8 +34,11 @@ public class ProjectController {
 	@RequestMapping("main.pr")
 	public ModelAndView selectProjectMain(ModelAndView mv, HttpSession session) {
 		// 해당 사원에 맞는 화면 정보 불러옴
-		Employee loginUser = (Employee)session.getAttribute("loginUser");
 		
+		Employee loginUser = (Employee)session.getAttribute("loginUser");
+		mv.addObject("plist", pService.selectProjectList(loginUser.getEmpNo()));
+		System.out.println("ilist : " + pService.selectMyInvation(loginUser.getEmpNo()));
+		mv.addObject("ilist", pService.selectMyInvation(loginUser.getEmpNo()));
 		mv.setViewName("project/projectMain");
 		return mv;
 	}
@@ -191,6 +195,7 @@ public class ProjectController {
 		}
 	}
 	
+	
 	@RequestMapping("newduty.pr")
 	public String insertDutyForm(ProjectBoard pb, Model m) {
 		m.addAttribute("pb", pb);
@@ -210,8 +215,7 @@ public class ProjectController {
 		
 		if( result1 * result2 > 0) {
 			session.setAttribute("alertMsg", "프로젝트 업무를 성공적으로 등록했습니다.");
-			redirect.addFlashAttribute("projNo", pb.getProjNo());
-			return "redirect:proom.pr";
+			return "redirect:proom.pr?projNo=" + pb.getProjNo();
 		}else {
 			m.addAttribute("errorMsg", "프로젝트 업무 등록에 실패했습니다.");
 			return "common/error";
@@ -226,13 +230,133 @@ public class ProjectController {
 		return mv;
 	}
 	
+	
 	@ResponseBody
 	@RequestMapping(value="dlist.pr", produces="application/json; charset=utf-8")
 	public String selectDutyList(Project p) {
 		ArrayList<ProjectBoard> dlist = pService.selectDutyList(p);
-		System.out.println(dlist);
 		return new Gson().toJson(dlist);
+	}
+	
+	
+	@RequestMapping("editd.pr")
+	public ModelAndView editDutyForm(ModelAndView mv, ProjectBoard pb) {
+		// pboardNo가 넘어옴 -> 해당 게시글 번화의 정보 조회해서 수정할 수 있도록
+		// 첨부파일 있는 게시글인지 확인하고, 있으면 첨부파일 정보도 가져와야 함
+		pb = pService.selectDuty(pb);
+		if(pb.getPduty() != null) {
+			mv.addObject("pb", pb).setViewName("project/projectDutyUpdateForm");
+		}else {
+			mv.addObject("errorMsg", "수정 페이지 이동에 실패했습니다.")
+			  .setViewName("common/error");
+		}
+		return mv;
+	}
+	
+	
+	@RequestMapping("updated.pr")
+	public String updateDutyForm(HttpSession session, Model m, ProjectBoard pb, File f, ProjectDuty pd, MultipartFile upfile) {
+		pb.setPduty(pd);
+		int result1 = pService.updateDuty(pb);
+		int result2 = 1;
+		if( upfile.getOriginalFilename().length() > 0 ) {
+			File newFile = File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/"));
+			newFile.setRefNo( Integer.parseInt(pb.getPboardNo()) );
+			if(f.getFilePath() != null) {
+				result2 *= pService.updateFile(newFile);
+			}else {
+				result2 *= pService.insertFileWhenUpdate(newFile);
+			}
+		}
+		if( result1 * result2 > 0) {
+			session.setAttribute("alertMsg", "프로젝트 업무를 성공적으로 수정했습니다.");
+			return "redirect:duty.pr?projNo=" + pb.getProjNo();
+		}else {
+			m.addAttribute("errorMsg", "프로젝트 업무 수정에 실패했습니다.");
+			return "common/error";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="deleted.pr", produces="application/html; charset=utf-8")
+	public String deleteDuty(ProjectBoard pb) {
+		int result = pService.deleteBoard(pb);
+		if(result > 1) {
+			return "해당 프로젝트 업무를 성공적으로 삭제했습니다.";
+		}else {
+			return "해당 프로젝트 업무 삭제에 실패했습니다.";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="insertc.pr", produces="application/html; charset=utf-8")
+	public String insertComment(Comment c) {
+		if( pService.insertComment(c) > 0) {
+			return "댓글을 성공적으로 등록했습니다.";
+		}else {
+			return "댓글 등록에 실패했습니다.";
+		}
+	}
 		
+	
+	@ResponseBody
+	@RequestMapping(value="dclist.pr", produces="application/json; charset=utf-8")
+	public String selectDutyCommentList(Comment c) {
+		ArrayList<Comment> dclist = pService.selectCommentList(c);
+		return new Gson().toJson(dclist);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="deletec.pr", produces="application/html; charset=utf-8")
+	public String deleteComment(Comment c) {
+		if( pService.deleteComment(c) > 0 ) {
+			return "댓글을 성공적으로 삭제했습니다";
+		}else {
+			return "댓글 삭제에 실패했습니다.";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="validateme.pr", produces="application/html; charset=utf-8")
+	public String validateInchargeMember(Project p) {
+		int result = pService.validateInchargeMember(p);
+		if(result > 0) {
+			return "성공";
+		}else {
+			return "실패";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="yesno.pr", produces="application/html; charset=utf-8")
+	public String answerInvitaion(ProjectMember m, String answer) {
+		int result = pService.answerInvitaion(m, answer);
+		if(result > 0) {
+			return "성공적으로 반영되었습니다!";
+		}else {
+			return "초대 수락/거절에 실패했습니다.";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="wlist.pr", produces="application/json; charset=utf-8")
+	public String selectWaitingMemberList(ProjectMember m) {
+		ArrayList<ProjectMember> wlist = pService.selectWaitingMemberList(m);
+		return new Gson().toJson(wlist);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="delwmem.pr", produces="application/html; charset=utf-8")
+	public String deleteWaitingMember(ProjectMember m) {
+		if( pService.deleteWaitingMember(m) > 0) {
+			return "성공적으로 멤버 초대를 취소했습니다.";
+		}else {
+			return "멤버 초대에 실패했습니다.";
+		}
 	}
 	
 }

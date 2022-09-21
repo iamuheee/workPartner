@@ -49,6 +49,18 @@
 		<result column="nt_file" property="noticeFile"/>
 	</resultMap>
 	
+	<resultMap id="fileResult" type="File">
+		<result column="file_no" property="fileNo"/>
+		<result column="file_ref_no" property="refNo"/>
+		<result column="file_category" property="fileCategory"/>
+		<result column="file_origin_name" property="fileOriginName"/>
+		<result column="file_change_name" property="fileChangeName"/>
+		<result column="file_path" property="filePath"/>
+		<result column="file_upload_date" property="fileUploadDate"/>
+		<result column="file_level" property="fileLevel"/>
+		<result column="file_status" property="fileStatus"/>		
+	</resultMap>
+	
 	<!-- 추가관리자 조회  -->
 	<select id="selectNtAdminY" resultMap="empResult">
 		  select 
@@ -261,6 +273,185 @@
                		</otherwise>
                </choose>
 	</select>
+	
+	<!-- summerNote img 업로드 -->
+	<insert id="insertSummernote">
+		insert
+		  into  tb_file
+		     (
+		    	file_no
+		      , file_ref_no
+		      , file_category	
+		      , file_origin_name
+		      , file_change_name
+		      , file_path		      
+		   	 )		    
+		values
+		  	 (
+		  	 	SEQ_FILENO.nextval
+		  	  , 0
+		  	  , 4
+		  	  , #{fileOriginName}
+		  	  , #{fileChangeName}
+		  	  , #{filePath}		  	
+		  	 )  	
+	</insert>
+	
+	<!-- notice insert  -->
+	<insert id="insertNotice">
+		insert
+		  into tb_notice
+		  	(
+ 	            nt_no
+              , nt_title
+              , nt_content
+              , emp_no
+              , emp_name              
+              , nt_important
+              , nt_top             
+              , nt_file 	
+		  	)
+		 values
+		 	(
+		 		SEQ_NTNO.NEXTVAL
+		 	  , #{noticeTitle}
+		 	  , #{noticeContent}
+		 	  , #{empNo}
+		 	  , #{empName}
+		 	  , #{noticeImportant}
+		 	  , #{noticeTop}
+		 	  , #{noticeFile}	
+		 	) 		
+	</insert>
+	
+	<!-- insert file  -->
+	<insert id="insertFileNotice">
+		insert
+		  into  tb_file
+		     (
+		    	file_no
+		      , file_ref_no
+		      , file_category	
+		      , file_origin_name
+		      , file_change_name
+		      , file_path		      
+		   	 )		    
+		values
+		  	 (
+		  	 	SEQ_FILENO.nextval
+		  	  , SEQ_NTNO.CURRVAL
+		  	  , 4
+		  	  , #{fileOriginName}
+		  	  , #{fileChangeName}
+		  	  , #{filePath}		  	
+		  	 )  
+	</insert>
+	
+	<!-- 공지사항 상세보기 > 조회수 증가  -->
+	<update id="increaseCount">
+		update
+				tb_notice
+		   set  nt_count = nt_count + 1
+		 where  nt_no = #{noticeNo} 
+	</update>
+	
+	<!-- 공지사항 상세조회 -->
+	<select id="selectDetailNotice" resultMap="noticeResult">
+		   select  nt_no
+                 , nt_title
+                 , nt_content
+                 , emp_no
+                 , emp_name
+                 , nt_count
+                 , nt_important
+                 , nt_top
+                 , to_char(nt_create_date, 'YYYY-MM-DD') AS "nt_create_date"
+                 , nt_file
+             from  tb_notice   
+			where  nt_status = 'Y'
+			  and  nt_no = #{noticeNo}
+	</select>
+	
+	<!-- 등록된 공지사항의 파일  -->
+	<select id="selectFileDetail" resultMap="fileResult">
+		select  file_no
+              , file_origin_name
+              , file_change_name
+              , file_path                     
+         from tb_file
+         where file_ref_no = #{noticeNo}
+         and file_category = 4	
+         and file_status = 'Y'
+	</select>
+	
+	<!-- 공지사항 삭제  -->
+	<update id="deleteNotice">
+		update 
+			   tb_notice
+		   set nt_status = 'N'
+		 where nt_no = #{noticeNo}  	
+	</update>
+	
+	<!-- 공지사항 수정하기 -->
+	<update id="updateNotice">
+		 update 
+				 tb_notice
+		    set  nt_title = #{noticeTitle}
+               , nt_content = #{noticeContent}
+               , nt_important = #{noticeImportant}
+               , nt_top = #{noticeTop}
+               , nt_modify_date = sysdate
+               , nt_file = #{noticeFile}  
+		  where  nt_no = ${noticeNo} 		
+	</update>
+	
+	<!-- 새로운 첨부파일 추가에 앞서서 기존의 파일들 file_status='N' -->
+	<update id="updateFileN">
+		 update
+		        tb_file
+		    set file_status = 'N'    
+		  where file_ref_no = #{noticeNo}
+		    and file_category = 4
+	</update>
+	
+	<!-- 넘어온 파일번호만 다시 file_status='Y'로 하기 -->	
+	<update id="updateFileY">
+	 	update
+		        tb_file
+		    set file_status = 'Y'    
+		  where file_ref_no = #{refNo}
+		    and file_category = 4  
+		    and file_no = #{fileNo}
+	
+	</update>
+	
+	
+	
+	<!-- 공지사항 수정하기 > 새로운 첨부파일 -->
+	<insert id="updateFileNotice">
+		insert
+		  into  tb_file
+		     (
+		    	file_no
+		      , file_ref_no
+		      , file_category	
+		      , file_origin_name
+		      , file_change_name
+		      , file_path		      
+		   	 )		    
+		values
+		  	 (
+		  	 	SEQ_FILENO.nextval
+		  	  , #{refNo}
+		  	  , 4
+		  	  , #{fileOriginName}
+		  	  , #{fileChangeName}
+		  	  , #{filePath}		  	
+		  	 )  	
+	</insert>
+	
+	
+	
 	
 	
 	

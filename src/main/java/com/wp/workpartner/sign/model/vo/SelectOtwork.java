@@ -21,9 +21,10 @@ public class SelectOtwork {
 	private String dpStatus;
 	private String dpFinal;
 	private String dpCategory;
-	private String dpTemp;
 	private String dpOrigin;
 	private String dpChange;
+	
+	
 	private String otCall;
 	private String otSupervisor;
 	private String otStartdate;
@@ -32,5 +33,6 @@ public class SelectOtwork {
 	private String otContent;
 	private String otTrans;
 	private String otNote;
+	private String otPlace;
 	private ArrayList<Sign> signList;
 }

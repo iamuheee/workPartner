@@ -120,6 +120,7 @@ public class DutyDao {
 	 */
 	public Duty selectDuty(SqlSessionTemplate sqlSession, String dutyNo) {
 		Duty d = sqlSession.selectOne("dutyMapper.selectDuty", dutyNo);
+		System.out.println("selectDuty Dao의 d : " + d);
 		if(d.getFilePath() != null) {
 			d = sqlSession.selectOne("dutyMapper.selectDutyWithFile", dutyNo);
 		}

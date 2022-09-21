@@ -372,7 +372,7 @@
 	                    <td colspan="4">
 	                        
 	                        <!-- 메일내용 -->
-	                        <textarea id="summernote" name="mailContent" id="mailContent" required> </textarea>
+	                        <textarea id="summernote" name="mailContent" required> </textarea>
 	                        
 	                        
 	                    </td>
@@ -438,13 +438,18 @@
             function sendData(data){
                 
                 let count2 = $("#recipientTB tr").length;
-
-                if(count2 < 3){
+					
+                /* if(count2 < 3){
                     $("#recipientTB").append(data); 
                 }else{
                     alert("3명까지만 가능합니다.");                    
                     searchCCEmail.attr("placeholder", "총 3개까지 가능합니다.");
-                }                       
+                }     */    
+                if(count2 + data.length < 4){
+                	 $("#recipientTB").append(data); 
+                }else{
+                	alert("3명까지만 가능합니다.");  
+                }
                
             }
 
@@ -457,12 +462,18 @@
             function sendDataCC(data){
                 let ccCount2 = $("#mailCC tr").length;
 
-                if(ccCount2 < 3){
+                /*if(ccCount2 < 3){
                     $("#mailCC").append(data); 
                 }else{
                     alert("3명까지만 가능합니다.");                    
                     searchCCEmail.attr("placeholder", "총 3개까지 가능합니다.");
-                }              
+                }*/   
+                if(ccCount2 + data.length < 4){
+                    $("#mailCC").append(data); 
+                }else{
+                    alert("3명까지만 가능합니다.");                    
+                    searchCCEmail.attr("placeholder", "총 3개까지 가능합니다.");
+                } 
                
             }
             

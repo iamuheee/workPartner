@@ -12,6 +12,10 @@ import com.wp.workpartner.sign.model.vo.Cooperation;
 import com.wp.workpartner.sign.model.vo.Dtpaper;
 import com.wp.workpartner.sign.model.vo.Otwork;
 import com.wp.workpartner.sign.model.vo.ReSign;
+import com.wp.workpartner.sign.model.vo.SelectCooperation;
+import com.wp.workpartner.sign.model.vo.SelectOtwork;
+import com.wp.workpartner.sign.model.vo.SelectReSign;
+import com.wp.workpartner.sign.model.vo.SelectVacation;
 import com.wp.workpartner.sign.model.vo.Sign;
 import com.wp.workpartner.sign.model.vo.Vacation;
 
@@ -117,5 +121,56 @@ public class SignDao {
 		int offset = (pi.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		return (ArrayList)sqlSession.selectList("signMapper.selectOthSignList", empNo, rowBounds);
+	}
+	
+//	타부서 결재완료
+	public int selectEndOthSignListCount(SqlSessionTemplate sqlSession, String empNo) {
+		return sqlSession.selectOne("signMapper.selectEndOthSignListCount", empNo);
+	}
+	public ArrayList<Dtpaper> selectEndOthSignList(SqlSessionTemplate sqlSession, PageInfo pi, String empNo){
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return (ArrayList)sqlSession.selectList("signMapper.selectEndOthSignList", empNo, rowBounds);
+	}
+	
+//	내부서 결재완료
+	public int selectEndSignListCount(SqlSessionTemplate sqlSession, String empNo) {
+		return sqlSession.selectOne("signMapper.selectEndSignListCount", empNo);
+	}
+	public ArrayList<Dtpaper> selectEndSignList(SqlSessionTemplate sqlSession, PageInfo pi, String empNo){
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return (ArrayList)sqlSession.selectList("signMapper.selectEndSignList", empNo, rowBounds);
+	}
+	
+//	내부서 결재함
+	public ArrayList<Dtpaper> selectDeptSignList(SqlSessionTemplate sqlSession,PageInfo pi, String empNo) {
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return (ArrayList)sqlSession.selectList("signMapper.selectDeptSignList", empNo, rowBounds);
+	}
+	public int selectDeptSignListCount(SqlSessionTemplate sqlSession, String empNo) {
+		return sqlSession.selectOne("signMapper.selectDeptSignListCount", empNo);
+	}
+	
+//  상세보기 결재선 리스트
+	public ArrayList<Sign> selectSignList(SqlSessionTemplate sqlSession, int dpNo){
+		return (ArrayList)sqlSession.selectOne("signMapper.selectSignList", dpNo);
+	}
+	
+	public SelectVacation selectVa(SqlSessionTemplate sqlSession, int dpNo) {
+		return sqlSession.selectOne("signMapper.selectVa", dpNo);
+	}
+	public SelectOtwork selectOw(SqlSessionTemplate sqlSession, int dpNo) {
+		return sqlSession.selectOne("signMapper.selectOw", dpNo);
+	}
+	public SelectReSign selectRe(SqlSessionTemplate sqlSession, int dpNo) {
+		return sqlSession.selectOne("signMapper.selectRe", dpNo);
+	}
+	public SelectCooperation selectCo(SqlSessionTemplate sqlSession, int dpNo) {
+		return sqlSession.selectOne("signMapper.selectCo", dpNo);
 	}
 }

@@ -19,6 +19,5 @@ public class Vacation {
 	private String vaEnd;
 	private String vaCategory;
 	private String vaContent;
-	private int vaUseday; 
 	
 }

@@ -260,7 +260,7 @@
 		     , emp_phone
 		     , emp_extension
 		     , emp_email
-		     , NVL(emp_exemail, '-') as emp_exemail
+		     , NVL(emp_exemail, ' ') as emp_exemail
 		     , emp_enrolldate
 		     , emp_retiredate
 		     , emp_modifydate

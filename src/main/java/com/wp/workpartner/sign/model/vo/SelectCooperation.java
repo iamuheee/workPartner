@@ -22,10 +22,10 @@ public class SelectCooperation {
 	private String dpStatus;
 	private String dpFinal;
 	private String dpCategory;
-	private String dpTemp;
 	private String dpOrigin;
 	private String dpChange;
-	private String depRec;
+	
+	private String cpDept;
 	private String cpRequestor;
 	private String cpRequestDay;
 	private String cpContent;

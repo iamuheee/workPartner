@@ -22,7 +22,6 @@ public class Dtpaper {
 	private String dpStatus;
 	private String dpFinal;
 	private String dpCategory;
-	private String dpTemp;
 	private String dpOrigin;
 	private String dpChange;
 	

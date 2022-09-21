@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
@@ -19,6 +20,10 @@ public class ProjectDao {
 		return sqlSession.insert("projectMapper.insertProject", p);
 	}
 	
+	public int insertLeader(SqlSessionTemplate sqlSession, Project p) {
+		return sqlSession.insert("projectMapper.insertLeader", p);
+	}
+	
 	public ArrayList<Project> selectProjectList(SqlSessionTemplate sqlSession, String empNo){
 		return (ArrayList)sqlSession.selectList("projectMapper.selectProjectList", empNo);
 	}
@@ -29,6 +34,10 @@ public class ProjectDao {
 	
 	public ArrayList<ProjectMember> selectMemberList(SqlSessionTemplate sqlSession, ProjectMember m){
 		return (ArrayList)sqlSession.selectList("projectMapper.selectMemberList2", m);
+	}
+	
+	public ArrayList<ProjectMember> selectMyInvation(SqlSessionTemplate sqlSession, String empNo){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectMyInvation", empNo);
 	}
 	
 	public int validateMember(SqlSessionTemplate sqlSession, Project p) {
@@ -67,11 +76,7 @@ public class ProjectDao {
 		return (ArrayList)sqlSession.selectList("projectMapper.selectProjectBoardList", p);
 	}
 	
-	public ProjectDuty selectProjectDuty(SqlSessionTemplate sqlSession, ProjectBoard pb) {
-		return sqlSession.selectOne("projectMapper.selectProjectDuty", pb);
-	}
-	
-	public ProjectMeeting selectProjectMeeting(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+	public ProjectMeeting selectMeeting(SqlSessionTemplate sqlSession, ProjectBoard pb) {
 		return sqlSession.selectOne("projectMapper.selectProjectMeeting", pb);
 	}
 	
@@ -98,5 +103,66 @@ public class ProjectDao {
 	public File selectFile(SqlSessionTemplate sqlSession, ProjectBoard pb) {
 		return sqlSession.selectOne("projectMapper.selectFile", pb);
 	}
+	
+	public ProjectBoard selectBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.selectOne("projectMapper.selectBoard", pb);
+	}
+	
+	public int updateProjectBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.update("projectMapper.updateProjectBoard", pb);
+	}
+	
+	public int updateProjectDuty(SqlSessionTemplate sqlSession, ProjectDuty pd) {
+		return sqlSession.update("projectMapper.updateProjectDuty", pd);
+	}
+	
+	public int insertFileWhenUpdate(SqlSessionTemplate sqlSession, File f) {
+		return sqlSession.insert("projectMapper.insertFileWhenUpdate", f);
+	}
+	
+	public int updateFile(SqlSessionTemplate sqlSession, File f) {
+		return sqlSession.update("projectMapper.updateFile", f);
+	}
+	
+	public int deleteBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.update("projectMapper.deleteBoard", pb);
+	}
+	
+	public int deleteFile(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.update("projectMapper.deleteFile", pb);
+	}
+	
+	public int insertComment(SqlSessionTemplate sqlSession, Comment c) {
+		return sqlSession.insert("projectMapper.insertComment", c);
+	}
+	
+	public ArrayList<Comment> selectCommentList(SqlSessionTemplate sqlSession, Comment c) {
+		return (ArrayList)sqlSession.selectList("projectMapper.selectCommentList", c);
+	}
+	
+	public int deleteComment(SqlSessionTemplate sqlSession, Comment c) {
+		return sqlSession.delete("projectMapper.deleteComment", c);
+	}
+	
+	public int validateInchargeMember(SqlSessionTemplate sqlSession, Project p) {
+		return sqlSession.selectOne("projectMapper.validateInchargeMember", p);
+	}
+	
+	public int answerYes(SqlSessionTemplate sqlSession, ProjectMember m) {
+		return sqlSession.update("projectMapper.answerYes", m);
+	}
+	
+	public int answerNo(SqlSessionTemplate sqlSession, ProjectMember m) {
+		return sqlSession.update("projectMapper.answerNo", m);
+	}
+	
+	public ArrayList<ProjectMember> selectWaitingMemberList(SqlSessionTemplate sqlSession, ProjectMember m){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectWaitingMemberList", m);
+	}
+	
+	public int deleteWaitingMember(SqlSessionTemplate sqlSession, ProjectMember m) {
+		return sqlSession.delete("projectMapper.deleteWaitingMember", m);
+	}
+	
 
 }

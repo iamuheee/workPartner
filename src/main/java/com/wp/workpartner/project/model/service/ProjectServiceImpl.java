@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.dao.ProjectDao;
@@ -36,7 +37,7 @@ public class ProjectServiceImpl implements ProjectService{
 	
 	@Override
 	public int insertProject(Project p) {
-		return pDao.insertProject(sqlSession, p);
+		return pDao.insertProject(sqlSession, p) * pDao.insertLeader(sqlSession, p);
 	}
 
 
@@ -48,8 +49,14 @@ public class ProjectServiceImpl implements ProjectService{
 		}
 		return plist;
 	}
-
 	
+	
+	@Override
+	public ArrayList<ProjectMember> selectMyInvation(String empNo) {
+		return pDao.selectMyInvation(sqlSession, empNo);
+	}
+
+
 	@Override
 	public int validateMember(Project p) {
 		return pDao.validateMember(sqlSession, p);
@@ -133,8 +140,8 @@ public class ProjectServiceImpl implements ProjectService{
 		ArrayList<ProjectBoard> blist = pDao.selectProjectBoardList(sqlSession, p);
 		for(ProjectBoard pb : blist) {
 			switch( pb.getRefType() ) {
-			case "업무" : pb.setPduty( pDao.selectProjectDuty(sqlSession, pb) ); break;
-			case "회의" : pb.setPmeet( pDao.selectProjectMeeting(sqlSession, pb) ); break;
+			case "업무" : pb.setPduty( pDao.selectDuty(sqlSession, pb) ); break;
+			case "회의" : pb.setPmeet( pDao.selectMeeting(sqlSession, pb) ); break;
 			}
 		}
 		return blist;
@@ -167,6 +174,99 @@ public class ProjectServiceImpl implements ProjectService{
 		}
 		return blist;
 	}
+
+
+	@Override
+	public ProjectBoard selectDuty(ProjectBoard pb) {
+		pb = pDao.selectBoard(sqlSession, pb);
+		pb.setPduty( pDao.selectDuty(sqlSession, pb) );
+		pb.setFile( pDao.selectFile(sqlSession, pb) );
+		return pb;
+	}
+
+
+	@Override
+	public int updateDuty(ProjectBoard pb) {
+		int result1 = pDao.updateProjectBoard(sqlSession, pb);
+		int result2 = pDao.updateProjectDuty(sqlSession, pb.getPduty());
+		return result1 * result2;
+	}
+
+
+	@Override
+	public int insertFileWhenUpdate(File f) {
+		return pDao.insertFileWhenUpdate(sqlSession, f);
+	}
+
+
+	@Override
+	public int updateFile(File f) {
+		return pDao.updateFile(sqlSession, f);
+	}
+
+
+	@Override
+	public int deleteBoard(ProjectBoard pb) {
+		int result1 = pDao.deleteBoard(sqlSession, pb);
+		int result2 = 1 + pDao.deleteFile(sqlSession, pb); // 게시글에 파일이 없을 수도 있으니까
+		System.out.println(result1);
+		System.out.println(result2);
+		return result1 + result2;
+	}
+
+
+	@Override
+	public int insertComment(Comment c) {
+		return pDao.insertComment(sqlSession, c);
+	}
+
+
+	@Override
+	public ArrayList<Comment> selectCommentList(Comment c) {
+		return pDao.selectCommentList(sqlSession, c);
+	}
+
+
+	@Override
+	public int deleteComment(Comment c) {
+		return pDao.deleteComment(sqlSession, c);
+	}
+
+
+	@Override
+	public int validateInchargeMember(Project p) {
+		return pDao.validateInchargeMember(sqlSession, p);
+	}
+
+
+	@Override
+	public int answerInvitaion(ProjectMember m, String answer) {
+		int result;
+		if( answer.equals("참여") ) {
+			// TB_PROJECT_MEM -> MEM_STATUS = '참여'
+			result = pDao.answerYes(sqlSession, m);
+		}else {
+			// TB_PROJECT_MEM -> STATUS = 'NO'
+			result = pDao.answerNo(sqlSession, m);
+		}
+		System.out.println(result);
+		return result;
+	}
+
+
+	@Override
+	public ArrayList<ProjectMember> selectWaitingMemberList(ProjectMember m) {
+		return pDao.selectWaitingMemberList(sqlSession, m);
+	}
+
+
+	@Override
+	public int deleteWaitingMember(ProjectMember m) {
+		return pDao.deleteWaitingMember(sqlSession, m);
+	}
+
+	
+	
 	
 	
 	

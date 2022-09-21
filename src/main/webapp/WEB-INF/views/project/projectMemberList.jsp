@@ -74,6 +74,9 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<a class="addMember filter" style="text-decoration:none;color:black;font-size:small;color:gray;">새로운 멤버 초대</a>
 				<input type="hidden" id="newMemRole">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="filter">||</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a class="waitingMember filter" style="text-decoration:none;color:black;font-size:small;color:gray;">초대 수락 대기중인 멤버 조회</a>
+	            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
                 
            <script>
@@ -88,10 +91,61 @@
     			childWindow = window.open("addressProject.ad","childWindow", "height=700, width=1200, resizable=no, scrollbars=no");
            		
            	})
+           	
+			$(".waitingMember").click(function(){
+	    		$.ajax({
+   					url:"wlist.pr",
+   					data:{
+   						projNo:$("#projNo").val()
+   					},
+   					success:function(wlist){
+   						let html = "";
+   						console.log(wlist);
+   						
+   						for(let i=0; i<wlist.length; i++){
+   							html += '<tr>'
+   								  +		'<td class="memNo"><span>' + wlist[i].memNo + '</span></td>'
+   								  +		'<td class="memRole">' + wlist[i].memRole + '</td>'
+   								  +		'<td class="memName">' + wlist[i].memName + '</td>'
+   								  +		'<td class="department">' + wlist[i].department + '</td>'
+   								  +		'<td class="email">' + wlist[i].email + '</td>'
+   								  +		'<td class="phone">' + wlist[i].phone + '</td>'
+   								  +		'<td class="proNo" style="display:none"><input type="hidden" class="projNo" value="' + wlist[i].projNo + '"></td>'
+   								  +		'<td><button class="btn btn-sm btn-waiting-modal" value="' + wlist[i].memNo + '">초대취소</button></td>'
+   								  + '</tr>'
+   						}
+   						$("#member-list").html(html);
+   					},
+   					error:function(){
+   						console.log("멤버 리스트 조회..실패...")
+   					}
+  				})
+ 			})
+                
+           	// 삭제 버튼 클릭시 해당 멤버 초대 취소하는 모달 띄우기
+           	$(document).on("click", ".btn-waiting-modal", function(){
+           		if( confirm("해당 멤버를 정말로 취소하시겠습니까?") ){
+	           		$.ajax({
+	           			url:"delwmem.pr",
+	           			data:{
+	           				projNo:$(this).parent().siblings(".proNo").children(".projNo").val(),
+	           				memNo:$(this).val()
+	           			},
+	           			success:function(result){
+	           				alert(result);
+	           				$(".waitingMember").click();
+	           			},
+	           			error:function(){
+	           				console.log("멤버 초대 취소 실패")
+	           			}
+	           		})
+           		}
+           	})	
            </script>
                 
                 
             <div class="filter-area" style="padding-left:10px; float:right">
+            	<span class="filter" style="text-decoration:none;color:black;font-size:small;color:gray;" onclick="loadMemberList();">현재 멤버 총원 조회</span>
                 <span class="filter" style="margin-left:20px;">빠른 조회</span>
                 <select id="filterRole" name="memRole" class="filter">
                     <option class="role" value="all" selected>전체</option>
@@ -101,6 +155,8 @@
                 </select>
                 
                 <script>
+
+                
 					 $("#filterRole").change(function(){
 						 if( $(this).val() == 'all' ){
 							 loadMemberList();
@@ -234,6 +290,7 @@
                 </div>
             </div>
         </div>
+        
 
         <script>
         

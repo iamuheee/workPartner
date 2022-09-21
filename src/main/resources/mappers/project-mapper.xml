@@ -16,6 +16,7 @@
 	
 	<resultMap id="projectMemberResult" type="ProjectMember">
 		<result column="PROJ_NO" property="projNo" />
+		<result column="PROJ_TITLE" property="projTitle" />
 		<result column="MEM_NO" property="memNo" />
 		<result column="MEM_NAME" property="memName" />
 		<result column="MEM_ROLE" property="memRole" />
@@ -67,13 +68,25 @@
 		<result column="ATTENDANCE_YN" property="attendanceYN" />
 	</resultMap>
 	
-	<resultMap id="fileResult" type="file">
+	<resultMap id="fileResult" type="File">
 		<result column="FILE_NO" property="fileNo" />
 		<result column="FILE_REF_NO" property="refNo" />
 		<result column="FILE_CATEGORY" property="fileCategory" />
 		<result column="FILE_ORIGIN_NAME" property="fileOriginName" />
 		<result column="FILE_ORIGIN_NAME" property="fileChangeName" />
 		<result column="FILE_PATH" property="filePath" />
+	</resultMap>
+	
+	<resultMap id="commentResult" type="Comment">
+		<result column="COM_NO" property="comNo" />
+		<result column="COME_TYPE" property="comType" />
+		<result column="COM_REF_BNO" property="comRefBno" />
+		<result column="EMP_NO" property="empNo" />
+		<result column="EMP_NAME" property="empName" />
+		<result column="COM_CONTENT" property="comContent" />
+		<result column="COM_CREATE_DATE" property="comCreateDate" />
+		<result column="COM_MODIFY_DATE" property="comModifyDate" />
+		<result column="COM_STATUS" property="comStatus" />
 	</resultMap>
 	
 	<insert id="insertProject">
@@ -92,6 +105,20 @@
 			 )
 	</insert>
 	
+	<insert id="insertLeader">
+		INSERT
+		  INTO TB_PROJECT_MEM
+		VALUES
+		     (
+		     SEQ_PNO.CURRVAL
+		   , #{empNo}
+		   , #{empName}
+		   , '팀장'
+		   , '참여'
+		   , 'Y'
+		     )
+	</insert>
+	
 	<select id="selectProjectList" resultMap="projectResult">
 		SELECT P.PROJ_NO
 			 , PROJ_TITLE
@@ -106,6 +133,8 @@
 		   AND P.STATUS = 'Y'
 		   AND M.STATUS = 'Y'
 		   AND MEM_STATUS = '참여'
+		 ORDER
+		    BY ENROLL_DATE DESC
 	</select>
 
 	<select id="selectMemberList" resultMap="projectMemberResult">
@@ -126,6 +155,18 @@
 		 WHERE PROJ_NO = #{projNo}
 		   AND STATUS = 'Y'
 		   AND MEM_STATUS = '참여'
+	</select>
+	
+	<select id="selectMyInvation" resultMap="projectMemberResult">
+		SELECT P.PROJ_NO
+			 , PROJ_TITLE
+			 , MEM_ROLE
+		  FROM TB_PROJECT_MEM M
+		  JOIN TB_PROJECT P
+		 	ON M.PROJ_NO = P.PROJ_NO
+		 WHERE MEM_NO = #{empNo}
+		   AND MEM_STATUS = '대기'
+		   AND M.STATUS = 'Y'
 	</select>
 	
 	<select id="validateMember" resultType="_int">
@@ -235,17 +276,8 @@
 		  	ON PBOARD_WRITER = EMP_NO
 		 WHERE PROJ_NO = #{projNo}
 		   AND STATUS = 'Y'
-	</select>
-	
-	<select id="selectProjectDuty" resultMap="projectDutyResult">
-		SELECT PBOARD_NO
-		     , PROGRESS
-		     , START_DATE
-		     , END_DATE
-		     , IN_CHARGE
-		     , CALENDAR_YN
-		  FROM TB_PDUTY
-		 WHERE PBOARD_NO = #{pboardNo}
+		 ORDER 
+		 	BY CREATE_DATE DESC
 	</select>
 	
 	<select id="selectProjectMeeting" resultMap="projectMeetingResult">
@@ -309,6 +341,23 @@
 		     )
 	</insert>
 	
+	<insert id="insertFileWhenUpdate">
+		INSERT
+		  INTO TB_FILE
+		VALUES
+		     (
+		       SEQ_FILENO.NEXTVAL
+		     , #{refNo}
+		     , 2
+		     , #{fileOriginName}
+		     , #{fileChangeName}
+		     , #{filePath}
+		     , DEFAULT
+		     , DEFAULT
+		     , DEFAULT
+		     )
+	</insert>
+	
 	<select id="selectDutyBoardList" resultMap="projectBoardResult">
 		SELECT
 			   PROJ_NO
@@ -325,6 +374,8 @@
 		 WHERE PROJ_NO = #{projNo}
 		   AND STATUS = 'Y'
 		   AND REF_TYPE = '업무'
+		 ORDER
+		 	BY CREATE_DATE DESC
 	</select>
 	
 	<select id="selectDuty" resultMap="projectDutyResult">
@@ -343,6 +394,7 @@
 	<select id="selectFile" resultMap="fileResult">
 		SELECT
 		       FILE_NO
+		     , FILE_REF_NO
 		     , FILE_ORIGIN_NAME
 		     , FILE_PATH
 		  FROM TB_FILE
@@ -350,6 +402,150 @@
 		   AND FILE_STATUS = 'Y'
 		   AND FILE_REF_NO = #{pboardNo}
 	</select>
-
+	
+	<select id="selectBoard" resultMap="projectBoardResult">
+		SELECT PBOARD_NO
+			 , PROJ_NO
+			 , PBOARD_WRITER
+			 , TITLE
+			 , CONTENT
+		  FROM TB_PBOARD
+		 WHERE PBOARD_NO = #{pboardNo}
+	</select>
+	
+	<update id="updateProjectBoard">
+		UPDATE TB_PBOARD
+		   SET TITLE = #{title}
+		   	 , CONTENT = #{content}
+		   	 , MODIFY_DATE = DEFAULT
+		 WHERE PBOARD_NO = #{pboardNo}
+	</update>
+	
+	<update id="updateProjectDuty">
+		UPDATE TB_PDUTY
+		   SET PROGRESS = #{progress}
+		     , START_DATE = #{startDate}
+		     , END_DATE = #{endDate}
+		     , IN_CHARGE = #{incharge}
+		     , IN_CHARGE_NAME = #{inchargeName}
+		     , CALENDAR_YN = #{calendarYN}
+		 WHERE PBOARD_NO = #{pboardNo}
+	</update>
+	
+	<update id="updateFile">
+		UPDATE TB_FILE
+		   SET FILE_ORIGIN_NAME = #{fileOriginName}
+		     , FILE_CHANGE_NAME = #{fileChangeName}
+		     , FILE_PATH = #{filePath}
+		     , FILE_UPLOAD_DATE = DEFAULT
+		 WHERE FILE_REF_NO = #{refNo}
+		   AND FILE_CATEGORY = 2
+	</update>
+	
+	<update id="deleteBoard">
+		UPDATE TB_PBOARD
+		   SET STATUS = 'N'
+		 WHERE PBOARD_NO = #{pboardNo}
+	</update>
+	
+	<update id="deleteFile">
+		UPDATE TB_FILE
+		   SET FILE_STATUS = 'N'
+		 WHERE FILE_CATEGORY = 2
+		   AND FILE_REF_NO = #{pboardNo}
+	</update>
+	
+	<insert id="insertComment">
+		INSERT
+		  INTO TB_COMMENT
+		VALUES
+			 (
+			   SEQ_CNO.NEXTVAL
+			 , 2
+			 , #{comRefBno}
+			 , #{empNo}
+			 , #{empId}
+			 , #{empName}
+			 , #{comContent}
+			 , DEFAULT
+			 , DEFAULT
+			 , DEFAULT
+			 )
+	</insert>
+	
+	<select id="selectCommentList" resultMap="commentResult">
+		SELECT
+			   COM_NO
+			 , COM_REF_BNO
+			 , EMP_NO
+			 , EMP_NAME
+			 , COM_CONTENT
+			 , COM_CREATE_DATE
+		  FROM TB_COMMENT
+		 WHERE COM_TYPE = 2
+		   AND COM_REF_BNO = #{comRefBno}
+	</select>
+	
+	<delete id="deleteComment">
+		DELETE
+		  FROM TB_COMMENT
+		 WHERE COM_NO = #{comNo}
+		   AND COM_TYPE = 2
+	</delete>
+	
+	<select id="validateInchargeMember" resultType="_int">
+		SELECT COUNT(*)
+		  FROM TB_PROJECT P
+		  JOIN TB_PROJECT_MEM M
+		 USING (PROJ_NO)
+		 WHERE PROJ_NO = #{projNo}
+		   AND MEM_NO = #{empNo}
+		   AND P.STATUS = 'Y'
+		   AND M.STATUS = 'Y'
+		   AND MEM_STATUS = '참여'
+	</select>
+	
+	<update id="answerYes">
+		UPDATE TB_PROJECT_MEM
+		   SET MEM_STATUS = '참여'
+		 WHERE PROJ_NO = #{projNo}
+		   AND MEM_NO = #{memNo}
+	</update>
+	
+	<update id="answerNo">
+		UPDATE TB_PROJECT_MEM
+		   SET STATUS = 'N'
+		 WHERE PROJ_NO = #{projNo}
+		   AND MEM_NO = #{memNo}
+	</update>
+	
+	<select id="selectWaitingMemberList" resultMap="projectMemberResult">
+		SELECT MEM_NO
+			 , MEM_NAME
+			 , MEM_ROLE
+			 , EMP_PHONE
+			 , EMP_EMAIL
+			 , DEP_NAME
+			 , POS_NAME
+			 , PROJ_NO 
+		  FROM TB_PROJECT_MEM
+		  JOIN TB_EMPLOYEE
+		    ON EMP_NO = MEM_NO
+		  JOIN TB_DEPARTMENT
+		 USING (DEP_CD)
+		  JOIN TB_POSITION
+		 USING (POS_CD)
+		 WHERE PROJ_NO = #{projNo}
+		   AND STATUS = 'Y'
+		   AND MEM_STATUS = '대기'
+	</select>
+	
+	<delete id="deleteWaitingMember">
+		DELETE
+		  FROM TB_PROJECT_MEM
+		 WHERE PROJ_NO = #{projNo}
+		   AND MEM_NO = #{memNo}
+	</delete>
+	
 
 </mapper>
