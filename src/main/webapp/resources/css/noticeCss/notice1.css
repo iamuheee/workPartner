@@ -79,7 +79,7 @@ table tr:hover{
     font-size: 13px;
  }
  .ntContainer div{
-      border: 1px solid  black;        
+    /*   border: 1px solid  black;  */       
  } 
 
 .ntMenu1_1{ grid-area: menu1_1; }

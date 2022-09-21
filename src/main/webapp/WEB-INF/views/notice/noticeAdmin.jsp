@@ -21,6 +21,7 @@
         border: 1px solid #aaacaf;
         border-radius: 0.20rem;
     }
+     .mainOuter{ margin:auto !important;}
 </style>
 </head>
 <body>
