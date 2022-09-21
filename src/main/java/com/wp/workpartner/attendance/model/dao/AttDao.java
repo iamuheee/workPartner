@@ -162,5 +162,37 @@ public class AttDao {
 	
 	}
 
+	public int myAttendanceCount(String date1, String date2, String[] array, SqlSessionTemplate sqlSession, String id) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("date1", date1);
+		map.put("date2", date2);
+		map.put("id", id);
+		map.put("array", array);
+		
+		return sqlSession.selectOne("attendanceMapper.myAttendanceCount", map);
+	}
+
+	public ArrayList<Attendance> myAttendanceList(String date1, String date2, String[] array,
+			SqlSessionTemplate sqlSession, PageInfo pi, String id) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("date1", date1);
+		map.put("date2", date2);
+		map.put("array", array);
+		map.put("id", id);
+		
+//		for (int i = 0; i < array.length; i++) 
+//	 	{   
+//		 System.out.println(array[i]);    
+//	 	}
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("attendanceMapper.myAttendanceList", map, rowBounds);
+	}
+
 
 }

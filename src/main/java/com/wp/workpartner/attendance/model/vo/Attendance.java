@@ -32,4 +32,14 @@ public class Attendance {
 	private String dt;
 	private String empStatus;
 	
+	private String workWeek;
+	private String workMonth;
+	private String weekWorkHours;
+	private String weekPlusWorkHours;
+	private String monthWorkHours;
+	private String monthPlusWorkHours;
+	
+	private String x;
+	private String y;
+	
 }

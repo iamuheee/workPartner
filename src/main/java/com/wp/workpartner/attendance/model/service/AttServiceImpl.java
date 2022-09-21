@@ -112,5 +112,16 @@ public class AttServiceImpl implements AttService{
 	public int deleteHoliday(String holidayCode1, String holidayName1) {
 		return aDao.deleteHoliday(holidayCode1, holidayName1, sqlSession);
 	}
+	
+	// 내 근무내역 조회
+	@Override
+	public int myAttendanceCount(String date1, String date2, String[] array, String id) {
+		return aDao.myAttendanceCount(date1, date2, array, sqlSession, id);
+	}
+	@Override
+	public ArrayList<Attendance> myAttendanceList(String date1, String date2, String[] array, PageInfo pi, String id) {
+		return aDao.myAttendanceList(date1, date2, array, sqlSession, pi, id);
+	}
+
 
 }

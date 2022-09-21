@@ -60,8 +60,21 @@
 			          //textColor: 'black' 
 			        },
 			    ],
-			    event:[
-			      
+			    events:[
+			    	  	
+			    		  <c:forEach var="c" items="${list}">
+			    		  {
+			    			  title:"${c.holName}",
+			    			  start:"${c.holDay}",
+			    			  content: "출석 : 0900, 퇴근 : 1800",
+			    			  color: "#FF0000"
+			    			  
+			    		  },
+			    		  </c:forEach>
+				          {
+				        	  title:'zzz',
+				        	  start:'21000902'
+				          }
 			    ]
 			  });
 			  calendar.render();

@@ -29,24 +29,13 @@ public class AttController {
 	 * @return url
 	 */
 	@RequestMapping("check.att")
-	private String checkAtt() {
+	private String checkAtt(Model model) {
+		
+		ArrayList<Holiday> list = aService.holidayList(); // 공휴일정보 가져오기
+		
+		model.addAttribute("list", list);
+		
 		return "attendance/checkAttendanceView";
-	}
-	
-	/** 내근태현황 이동하는 url
-	 * @return url
-	 */
-	@RequestMapping("my.att")
-	private String myAtt() {
-		return "attendance/myAttendanceView";
-	}
-	
-	/** 내근태이력 이동하는 url
-	 * @return url
-	 */
-	@RequestMapping("myAttHis.att")
-	private String AttHistory() {
-		return "attendance/attendanceHistoryView";
 	}
 	
 	/** 내휴가내역 이동하는 url
@@ -55,6 +44,15 @@ public class AttController {
 	@RequestMapping("myVacation.att")
 	private String myVacation() {
 		return "attendance/vacationView";
+	}
+	
+	/** 내근태현황 이동하는 url
+	 * @return url
+	 */
+	@RequestMapping("myAttHis.att")
+	private String myAtt() {
+		
+		return "attendance/attendanceHistoryView";
 	}
 	
 	/** 전사원근태현황 이동하는 url
@@ -338,6 +336,36 @@ public class AttController {
 		return "attendance/adminAttendanceView";
 	}
 	
-
+	
+	/** 내근태이력 이동하는 url
+	 * @return url
+	 */
+	
+	@RequestMapping(value="my.att", produces="application/json; charset=utf-8")
+	private String AttHistory(@RequestParam(value="cpage",  defaultValue="1")int currentPage, String id, String date1, String date2, String check, Model model) {
+		
+		String[] array = null;
+		
+		if(check == null) {
+			check = "0";
+		}
+		
+		array = check.split(",", 5);
+		
+		int searchCount = aService.myAttendanceCount(date1, date2, array, id);
+		
+		PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
+		
+		ArrayList<Attendance> list = aService.myAttendanceList(date1, date2, array, pi, id);
+		
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		model.addAttribute("date1", date1);
+		model.addAttribute("date2", date2);
+		model.addAttribute("array", array);
+		
+		return "attendance/myAttendanceView";
+		
+	}	
 	
 }

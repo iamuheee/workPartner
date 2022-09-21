@@ -53,6 +53,10 @@ public interface AttService {
 	// 공휴일 삭제
 	int deleteHoliday(String holidayCode1, String holidayName1);
 	
+	// 내 근태 내역 조회
+	int myAttendanceCount(String date1, String date2, String[] array, String id);
+	ArrayList<Attendance> myAttendanceList(String date1, String date2, String[] array, PageInfo pi, String id);
+	
 	
 	
 	
