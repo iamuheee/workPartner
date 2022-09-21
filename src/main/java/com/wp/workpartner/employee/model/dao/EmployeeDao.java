@@ -93,4 +93,8 @@ public class EmployeeDao {
 		map.put("encPwd", encPwd);
 		return sqlSession.update("employeeMapper.updatePwd", map);
 	}
+	
+	public int updateMyInfo(SqlSessionTemplate sqlSession, Employee e) {
+		return sqlSession.update("employeeMapper.updateMyInfo", e);
+	}
 }

@@ -24,8 +24,11 @@ public interface EmployeeService {
 	int selectEmpListCount();
 	ArrayList<Employee> selectEmpList(PageInfo pi);
 	
-	// 사용자 정보 수정 서비스 (update)
+	// (관리자) 사용자 정보 수정 서비스 (update)
 	int updateEmployee(Employee e);
+	
+	// (사용자) 사용자 정보 수정 서비스 (update)
+	int updateMyInfo(Employee e);
 	
 	// 아이디 중복체크 서비스 (select) -- ajax
 	int idCheck(String userId);

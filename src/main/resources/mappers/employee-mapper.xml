@@ -50,10 +50,10 @@
 		     , emp_phone
 		     , emp_extension
 		     , emp_email
-		     , NVL(emp_exemail, '반드시 입력해 주세요!') as emp_exemail
+		     , emp_exemail
 		     , emp_enrolldate
 		     , emp_retiredate
-		     , emp_modifydate
+		     , to_char(emp_modifydate,'YYYY-MM-DD HH24:MI:SS') as emp_modifydate
 		     , emp_status
 		     , emp_profile
 		     , emp_acc_status
@@ -275,7 +275,7 @@
 	  	 where emp_id = #{empId}
 	</select>
 	
-	<!-- 사용자 정보 수정 -->
+	<!-- (관리자)사용자 정보 수정 -->
 	<!-- 작성자 : 박태은 -->
 	<update id="updateEmployee">
 		update
@@ -335,5 +335,16 @@
 		 where emp_id = #{ empId }
 	</update>
 	
+	<!-- (사용자) 사용자 정보 수정 -->
+	<!--  작성자 : 박태은 -->
+	<update id="updateMyInfo">
+		update
+		       tb_employee
+		   set emp_exemail = #{ empExEmail }
+		     , emp_extension = #{ empExtension }
+		     , emp_phone = #{ empPhone }
+		     , emp_modifydate = current_date
+		 where emp_id = #{ empId }
+	</update>
 
 </mapper>

@@ -100,6 +100,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int updatePwd(String empId, String encPwd) {
 		return eDao.updatePwd(sqlSession, empId, encPwd);
 	}
+
+	@Override
+	public int updateMyInfo(Employee e) {
+		return eDao.updateMyInfo(sqlSession, e);
+	}
 	
 	
 

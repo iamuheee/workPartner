@@ -89,7 +89,7 @@
 	}
 
 	.infoTb input {
-        width: 300px;
+        width: 400px;
         height:35px;
         border:1px solid rgba(0,0,0,.125);
 		border-radius: 8px;
@@ -101,6 +101,11 @@
 		border:1px solid rgba(0,0,0,.125);
 		border-radius: 8px;
 		padding-left:10px;
+	}
+
+	#lastModify {
+		font-size:13px;
+		color:gray;
 	}
 
 </style>
@@ -138,6 +143,9 @@
 						<th>
 							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePwd">비밀번호 변경</button>
 						</th>
+					</tr>
+					<tr align="center">
+						<td id="lastModify"><br>마지막 정보 수정일 : ${ loginUser.empModifyDate }</td>
 					</tr>
 				</table>
 			</div> <!-- 왼쪽 영역 끝-->
@@ -185,7 +193,8 @@
 					</table>
 				</div><!-- 인사 정보 끝 -->
 				<br>
-				<form action="개인정보변경요청받아주는서버" method="post">
+				<form action="updateMy.em" method="post">
+					<input type="hidden" name="empId" value="${ loginUser.empId }">	<!-- 로그인한 회원의 id를 숨겨서 같이 보내줌 -->
 				<div class="table-area" style="border: 1px solid rgba(0,0,0,.125);">
 					<table class="infoTb">
 						<tr>
@@ -197,15 +206,24 @@
 						</tr>
 						<tr>
 							<th>외부 이메일</th>
-							<td><input type="email" class="updateInfo" name="empEmail" placeholder="${ loginUser.empExEmail }" required></td>
+							<td>
+								<c:choose>
+									<c:when test="${ empty loginUser.empExEmail }">	<!-- 외부이메일을 입력하지 않은 경우 -->
+										<input type="email" class="updateInfo" name="empExEmail" placeholder="반드시 입력해 주세요. ID/PWD 찾기에 사용됩니다." required>
+									</c:when>
+									<c:otherwise>
+										<input type="email" class="updateInfo" name="empExEmail" value="${ loginUser.empExEmail }" required>
+									</c:otherwise>
+								</c:choose>
+							</td>
 						</tr>
 						<tr>
 							<th>내선번호</th>
-							<td><input type="phone" class="updateInfo " name="empPhone" placeholder="${ loginUser.empExtension }" required></td>
+							<td><input type="phone" class="updateInfo " name="empPhone" value="${ loginUser.empExtension }"></td>
 						</tr>
 						<tr>
 							<th>휴대전화</th>
-							<td><input type="phone" class="updateInfo" name="empExtension" placeholder="${ loginUser.empPhone }" required></td>
+							<td><input type="phone" class="updateInfo" name="empExtension" value="${ loginUser.empPhone }"></td>
 						</tr>
 					</table>
 				</div><!-- 연락처 정보 끝 -->

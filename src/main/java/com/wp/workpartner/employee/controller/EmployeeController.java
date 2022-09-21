@@ -407,16 +407,32 @@ public class EmployeeController {
 			if(result > 0) {	// 비밀번호 변경 성공
 				session.setAttribute("loginUser", eService.loginEmployee(e));
 				session.setAttribute("alertMsg", "비밀번호 변경에 성공했습니다.");
-				return "redirect:mypage.em";
 				
 			}else {	// 변경 실패
 				session.setAttribute("alertMsg", "비밀번호 변경에 실패했습니다.");
-				return "redirect:mypage.em";
 			}
 			
 		}else {	// 1_2) 사용자가 입력한 현재 비밀번호가 로그인한 회원의 비밀번호와 일치하지 않을 경우
 			session.setAttribute("alertMsg", "현재 비밀번호를 잘못 입력하셨습니다.");
-			return "redirect:mypage.em";
 		}
+		
+		return "redirect:mypage.em";
+	}
+	
+	@RequestMapping("updateMy.em")
+	public String updateMyInfo(Employee e, HttpSession session) {
+		System.out.println(e);
+		
+		int result = eService.updateMyInfo(e);
+		System.out.println(result);
+		
+		if(result > 0) {	// 정보 변경 성공 시
+			session.setAttribute("loginUser", eService.loginEmployee(e));
+			session.setAttribute("alertMsg", "내 정보 변경에 성공했습니다.");
+		}else {	// 정보 변경 실패 시
+			session.setAttribute("alertMsg", "내 정보 변경에 실패했습니다.");
+		}
+		
+		return "redirect:mypage.em";
 	}
 }
