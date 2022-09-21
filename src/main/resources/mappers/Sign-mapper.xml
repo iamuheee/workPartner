@@ -2,22 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="signMapper">
 
-	<resultMap id="SelectVacationResult" type="SelectVacation">
-		<result column="dp_no" property="dpNo"/>
-		<result column="emp_no" property="empNo"/>
-		<result column="dp_title" property="dpTitle"/>
-		<result column="dp_create" property="dpCreate"/>
-		<result column="dp_modify" property="dpModify"/>
-		<result column="dp_status" property="dpStatus"/>
-		<result column="dp_final" property="dpFinal"/>
-		<result column="dp_category" property="dpCategory"/>
-		<result column="dp_origin" property="dpOrigin"/>
-		<result column="dp_change" property="dpChange"/>
-		<result column="va_start" property="vaStart"/>
-		<result column="va_end" property="vaEnd"/>
-		<result column="va_category" property="vaCategory"/>
-		<result column="va_content" property="vaContent"/>
-	</resultMap>
+	
 	
 	<resultMap id="SelectListResult" type="Dtpaper">
 		<result column="dp_no" property="dpNo"/>
@@ -59,6 +44,87 @@
 		<result column="si_asign" property="siAsign"/>
 		<result column="si_rep" property="siRep"/>
 	</resultMap>
+	
+	<resultMap id="SelectVacationResult" type="SelectVacation">
+		<result column="dp_no" property="dpNo"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="dp_title" property="dpTitle"/>
+		<result column="dp_create" property="dpCreate"/>
+		<result column="dp_modify" property="dpModify"/>
+		<result column="dp_status" property="dpStatus"/>
+		<result column="dp_final" property="dpFinal"/>
+		<result column="dp_category" property="dpCategory"/>
+		<result column="dp_origin" property="dpOrigin"/>
+		<result column="dp_change" property="dpChange"/>
+		<result column="va_start" property="vaStart"/>
+		<result column="va_end" property="vaEnd"/>
+		<result column="va_category" property="vaCategory"/>
+		<result column="va_content" property="vaContent"/>
+	</resultMap>
+	
+	<resultMap id="SelectOutworkResult" type="SelectOtwork">
+		<result column="dp_no" property="dpNo"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="dp_title" property="dpTitle"/>
+		<result column="dp_create" property="dpCreate"/>
+		<result column="dp_modify" property="dpModify"/>
+		<result column="dp_status" property="dpStatus"/>
+		<result column="dp_final" property="dpFinal"/>
+		<result column="dp_category" property="dpCategory"/>
+		<result column="dp_origin" property="dpOrigin"/>
+		<result column="dp_change" property="dpChange"/>
+		<result column="ot_call" property="otCall"/>
+		<result column="ot_supervisor" property="otSupervisor"/>
+		<result column="ot_startdate" property="otStartdate"/>
+		<result column="ot_enddate" property="otEnddate"/>
+		<result column="ot_customer" property="otCustomer"/>
+		<result column="ot_content" property="otContent"/>
+		<result column="ot_trans" property="otTrans"/>
+		<result column="ot_note" property="otNote"/>
+		<result column="ot_place" property="otPlace"/>
+		
+	
+	</resultMap>
+	
+	<resultMap id="SelectReSignEmpResult" type="SelectReSign">
+		<result column="dp_no" property="dpNo"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="dp_title" property="dpTitle"/>
+		<result column="dp_create" property="dpCreate"/>
+		<result column="dp_modify" property="dpModify"/>
+		<result column="dp_status" property="dpStatus"/>
+		<result column="dp_final" property="dpFinal"/>
+		<result column="dp_category" property="dpCategory"/>
+		<result column="dp_origin" property="dpOrigin"/>
+		<result column="dp_change" property="dpChange"/>
+		<result column="res_redate" property="resRedate"/>
+		<result column="res_account" property="resAccount"/>
+		<result column="res_bank" property="resBank"/>
+		<result column="res_content" property="resContent"/>
+		<result column="res_mem" property="resMem"/>
+		<result column="res_dept" property="resDept"/>
+		<result column="res_email" property="resEmail"/>
+		<result column="res_nextmem" property="resNextMem"/>
+		<result column="res_tamem" property="resTaMem"/>
+	</resultMap>
+	
+	<resultMap id="SelectCooperationResult" type="SelectCooperation">
+		<result column="dp_no" property="dpNo"/>
+		<result column="emp_no" property="empNo"/>
+		<result column="dp_title" property="dpTitle"/>
+		<result column="dp_create" property="dpCreate"/>
+		<result column="dp_modify" property="dpModify"/>
+		<result column="dp_status" property="dpStatus"/>
+		<result column="dp_final" property="dpFinal"/>
+		<result column="dp_category" property="dpCategory"/>
+		<result column="dp_origin" property="dpOrigin"/>
+		<result column="dp_change" property="dpChange"/>
+		<result column="cp_dept" property="cpDept"/>
+		<result column="cp_requestor" property="cpRequestor"/>
+		<result column="cp_requestday" property="cpRequestDay"/>
+		<result column="cp_content" property="cpContent"/>
+	</resultMap>
+	
 	 <!-- 연차 기안서 -->
 	<insert id="insertDtpaper">
 		
@@ -749,7 +815,7 @@
 	<!-- 연차 상세보기 -->
 	<select id="selectVa" resultMap="SelectVacationResult">
 		select 
-		       dp_no
+		       d.dp_no
 		      ,emp_no
 		      ,dp_title
 		      ,dp_create
@@ -765,6 +831,76 @@
 		      ,va_content
 		  from tb_dtpaper d
 		  join tb_vacation v on (d.dp_no = v.dp_no)
+		 where dp_no = #{dpNo}
+	</select>
+	<select id="selectOw" resultMap="SelectOutworkResult">
+		select 
+		       d.dp_no
+		      ,emp_no
+		      ,dp_title
+		      ,dp_create
+		      ,dp_modify
+		      ,dp_status
+		      ,dp_final
+		      ,dp_category
+		      ,dp_origin
+		      ,dp_change
+		      ,ot_call
+		      ,ot_supervisor
+		      ,ot_startdate
+		      ,ot_enddate
+		      ,ot_customer
+		      ,ot_content
+		      ,ot_trans
+		      ,ot_note
+		      ,ot_place
+		  from tb_dtpaper d
+		  join tb_otwork o on (d.dp_no = o.dp_no)
+		 where dp_no = #{dpNo}
+	</select>
+	<select id="selectRe" resultMap="SelectReSignEmpResult">
+		select 
+		       d.dp_no
+		      ,emp_no
+		      ,dp_title
+		      ,dp_create
+		      ,dp_modify
+		      ,dp_status
+		      ,dp_final
+		      ,dp_category
+		      ,dp_origin
+		      ,dp_change
+		      ,res_redate
+		      ,res_account
+		      ,res_bank
+		      ,res_content
+		      ,res_mem
+		      ,res_dept
+		      ,res_email
+		      ,res_nextmem
+		      ,res_tamem
+		  from tb_dtpaper d
+		  join tb_resign r on (d.dp_no = r.dp_no)
+		 where dp_no = #{dpNo}
+	</select>
+	<select id="selectCo" resultMap="SelectCooperationResult">
+		select 
+		       d.dp_no
+		      ,emp_no
+		      ,dp_title
+		      ,dp_create
+		      ,dp_modify
+		      ,dp_status
+		      ,dp_final
+		      ,dp_category
+		      ,dp_origin
+		      ,dp_change
+		      ,cp_dept
+		      ,cp_requestor
+		      ,cp_requestday
+		      ,cp_content
+		  from tb_dtpaper d
+		  join tb_coop c on (d.dp_no = c.dp_no)
 		 where dp_no = #{dpNo}
 	</select>
 </mapper>

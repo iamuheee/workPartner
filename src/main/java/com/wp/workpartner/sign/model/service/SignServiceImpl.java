@@ -134,28 +134,25 @@ public class SignServiceImpl implements SignService {
 		return sDao.selectEndSignList(sqlSession, pi, empNo);
 	}
 	
-	
-	
-	
-	@Override
-	public SelectCooperation selectCo(int dpNo) {
-		return null;
-	}
-
-	@Override
-	public SelectReSign selectRe(int dpNo) {
-		return null;
-	}
-
 	@Override
 	public SelectVacation selectVa(int dpNo) {
-		return null;
+		return sDao.selectVa(sqlSession, dpNo);
 	}
-
 	@Override
 	public SelectOtwork selectOw(int dpNo) {
-		return null;
+		return sDao.selectOw(sqlSession, dpNo);
 	}
+	@Override
+	public SelectReSign selectRe(int dpNo) {
+		return sDao.selectRe(sqlSession, dpNo);
+	}
+	@Override
+	public SelectCooperation selectCo(int dpNo) {
+		return sDao.selectCo(sqlSession, dpNo);
+	}
+
+
+
 
 	@Override
 	public int updateCooperation(Dtpaper d, Cooperation c) {

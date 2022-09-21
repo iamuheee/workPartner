@@ -20,6 +20,9 @@ import com.wp.workpartner.sign.model.vo.Cooperation;
 import com.wp.workpartner.sign.model.vo.Dtpaper;
 import com.wp.workpartner.sign.model.vo.Otwork;
 import com.wp.workpartner.sign.model.vo.ReSign;
+import com.wp.workpartner.sign.model.vo.SelectCooperation;
+import com.wp.workpartner.sign.model.vo.SelectOtwork;
+import com.wp.workpartner.sign.model.vo.SelectReSign;
 import com.wp.workpartner.sign.model.vo.SelectVacation;
 import com.wp.workpartner.sign.model.vo.Sign;
 import com.wp.workpartner.sign.model.vo.Vacation;
@@ -418,17 +421,43 @@ public class SignController {
 		return "sign/signAddressAdmin";
 	}
 //	기안서 상세보기
-	@RequestMapping("selectVa.si")
-	public ModelAndView selectVacation(ModelAndView mv, Model model, int dpNo) {
-		model.addAttribute("flag", "연차");
+	@RequestMapping("detailMy.si")
+	public ModelAndView selectDetailView(ModelAndView mv, Model model, int dpNo, String category) {
 		System.out.println(dpNo);
 		ArrayList<Sign> signList = sService.selectSignList(dpNo);
-		SelectVacation selectVa = sService.selectVa(dpNo);
-		mv.addObject("signList", signList)
-		.addObject("v", selectVa)
-		.setViewName("sign/vacationDetailView");
-		System.out.println(signList);
-		System.out.println(selectVa);
+		if(category.equals("연차")) {
+			model.addAttribute("flag", "연차");
+			SelectVacation selectVa = sService.selectVa(dpNo);
+			mv.addObject("signList", signList)
+			.addObject("v", selectVa)
+			.setViewName("sign/vacationDetailView");
+			System.out.println(signList);
+			System.out.println(selectVa);
+		}else if(category.equals("외근")) {
+			model.addAttribute("flag", "외근");
+			SelectOtwork selectOw = sService.selectOw(dpNo);
+			mv.addObject("signList", signList)
+			.addObject("o", selectOw)
+			.setViewName("sign/outworkDetailView");
+			System.out.println(signList);
+			System.out.println(selectOw);
+		}else if(category.equals("퇴직원")) {
+			model.addAttribute("flag", "퇴직원");
+			SelectReSign selectRe = sService.selectRe(dpNo);
+			mv.addObject("signList", signList)
+			.addObject("r", selectRe)
+			.setViewName("sign/reSingEmpDetailView");
+			System.out.println(signList);
+			System.out.println(selectRe);
+		}else {
+			model.addAttribute("flag", "외근");
+			SelectCooperation selectCo = sService.selectCo(dpNo);
+			mv.addObject("signList", signList)
+			.addObject("c", selectCo)
+			.setViewName("sign/cooperationDetailView");
+			System.out.println(signList);
+			System.out.println(selectCo);
+		}
 		return mv;
 	}
 

@@ -22,13 +22,17 @@ public class SelectReSign {
 	private String dpStatus;
 	private String dpFinal;
 	private String dpCategory;
-	private String dpTemp;
 	private String dpOrigin;
 	private String dpChange;
-	private String resMem;
+	
 	private String resRedate;
 	private String resAccount;
 	private String resBank;
 	private String resContent;
+	private String resMem;
+	private String resDept;
+	private String resEmail;
+	private String resNextMem;
+	private String resTaMem;
 	private ArrayList<Sign> signList;
 }

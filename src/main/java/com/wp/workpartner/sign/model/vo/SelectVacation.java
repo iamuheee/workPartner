@@ -24,6 +24,7 @@ public class SelectVacation {
 	private String dpCategory;
 	private String dpOrigin;
 	private String dpChange;
+	
 	private String vaStart;
 	private String vaEnd;
 	private String vaCategory;
