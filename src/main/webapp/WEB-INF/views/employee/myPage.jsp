@@ -13,7 +13,7 @@
         padding:10px;
         margin:auto;
         position:relative;
-            }
+	}
 
 	#mypage-body {
 		/* border:1px solid red; */
@@ -23,10 +23,6 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-	}
-
-	#mypage-body {
-		/* border:1px solid grey; */
 	}
 
 	#mypage-left{
@@ -48,8 +44,8 @@
 	}
 
 	#profileImg{
-        width:200px;
-        height:200px;
+        width:210px;
+        height:210px;
         border:1px solid lightgray;
         border-radius: 50%;
     }
@@ -89,7 +85,7 @@
 	}
 
 	.infoTb input {
-        width: 300px;
+        width: 400px;
         height:35px;
         border:1px solid rgba(0,0,0,.125);
 		border-radius: 8px;
@@ -101,6 +97,15 @@
 		border:1px solid rgba(0,0,0,.125);
 		border-radius: 8px;
 		padding-left:10px;
+	}
+
+	#lastModify {
+		font-size:13px;
+		color:gray;
+	}
+	
+	#checkResult {
+		font-size:14px;
 	}
 
 </style>
@@ -138,6 +143,9 @@
 						<th>
 							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePwd">비밀번호 변경</button>
 						</th>
+					</tr>
+					<tr align="center">
+						<td id="lastModify"><br>마지막 정보 수정일 : ${ loginUser.empModifyDate }</td>
 					</tr>
 				</table>
 			</div> <!-- 왼쪽 영역 끝-->
@@ -185,7 +193,8 @@
 					</table>
 				</div><!-- 인사 정보 끝 -->
 				<br>
-				<form action="개인정보변경요청받아주는서버" method="post">
+				<form action="updateMy.em" method="post">
+					<input type="hidden" name="empId" value="${ loginUser.empId }">	<!-- 로그인한 회원의 id를 숨겨서 같이 보내줌 -->
 				<div class="table-area" style="border: 1px solid rgba(0,0,0,.125);">
 					<table class="infoTb">
 						<tr>
@@ -197,15 +206,24 @@
 						</tr>
 						<tr>
 							<th>외부 이메일</th>
-							<td><input type="email" class="updateInfo" name="empEmail" placeholder="${ loginUser.empExEmail }" required></td>
+							<td>
+								<c:choose>
+									<c:when test="${ empty loginUser.empExEmail }">	<!-- 외부이메일을 입력하지 않은 경우 -->
+										<input type="email" class="updateInfo" name="empExEmail" placeholder="반드시 입력해 주세요. ID/PWD 찾기에 사용됩니다." required>
+									</c:when>
+									<c:otherwise>
+										<input type="email" class="updateInfo" name="empExEmail" value="${ loginUser.empExEmail }" required>
+									</c:otherwise>
+								</c:choose>
+							</td>
 						</tr>
 						<tr>
 							<th>내선번호</th>
-							<td><input type="phone" class="updateInfo " name="empPhone" placeholder="${ loginUser.empExtension }" required></td>
+							<td><input type="phone" class="updateInfo " name="empPhone" value="${ loginUser.empExtension }"></td>
 						</tr>
 						<tr>
 							<th>휴대전화</th>
-							<td><input type="phone" class="updateInfo" name="empExtension" placeholder="${ loginUser.empPhone }" required></td>
+							<td><input type="phone" class="updateInfo" name="empExtension" value="${ loginUser.empPhone }"></td>
 						</tr>
 					</table>
 				</div><!-- 연락처 정보 끝 -->
@@ -216,7 +234,7 @@
 					</div>
 				</div> <!-- 버튼 영역 끝 -->
 				</form>
-				
+				<br><br>
 			</div> <!-- 오른쪽 영역 끝 -->
 		</div>
 
@@ -230,7 +248,8 @@
 						<button type="button" class="close" data-dismiss="modal">&times;</button> 
 					</div>
 
-					<form action="비밀번호변경요청받아주는서버" method="post">
+					<form action="updatePwd.em" method="post">
+					<input type="hidden" name="empId" value="${ loginUser.empId }">	<!-- 로그인한 회원의 id를 숨겨서 같이 보내줌 -->
 						<!-- Modal Body -->
 						<div class="modal-body">
 							<table>
@@ -249,7 +268,8 @@
 								<tr>
 									<th>비밀번호 확인</th>
 									<td>
-										<input type="password" id="checkPwd" name="checkPwd">
+										<input type="password" id="checkPwd" name="checkPwd"><br>
+										<span id="checkResult"></span>
 									</td>
 								</tr>
 							</table>
@@ -257,7 +277,7 @@
 						
 						<!-- Modal footer -->
 						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary">변경</button>
+							<button type="submit" class="btn btn-primary" id="updatePwdBtn">변경</button>
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 						</div>
 					</form>
@@ -300,9 +320,35 @@
 				})
 				})
 			})
+			
+			/* 변경할 비밀번호의 유효성 검사 */
+			$(function(){
+				const $pwdInput = $("#changePwd input[name=updatePwd]");	// 입력한 새 비밀번호 input 요소
+				const $checkInput = $("#changePwd input[name=checkPwd]");	// 입력한 확인용 비밀번호 input 요소
+				
+				$checkInput.keyup(function(){	// 비밀번호 확인 input에 keyup 발생할 때 실행할 함수
+					
+					if($pwdInput.val() == $checkInput.val()){	// 두 값이 일치하면
+						$("#checkResult").show();
+						$("#checkResult").css("color", "blue").text("비밀번호가 일치합니다.");
+						$("#updatePwdBtn").removeAttr("disabled");
+						
+					}else {	// 두 값이 일치하지 않으면
+						$("#checkResult").show();
+						$("#checkResult").css("color", "red").text("비밀번호가 일치하지 않습니다.");
+						$("#updatePwdBtn").attr("disabled", true);
+						
+						if(!$checkInput.val()){
+							$("#checkResult").hide();
+						}
+					}
+				})
+			})
+			
+			
 		</script>
 	
-	</div>
+	
 
 </body>
 </html>

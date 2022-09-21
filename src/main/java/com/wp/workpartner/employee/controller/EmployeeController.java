@@ -1,5 +1,6 @@
 package com.wp.workpartner.employee.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -365,9 +366,73 @@ public class EmployeeController {
 				
 				if(!originalFile.equals("")) {	// 기존 프로필 이미지가 있었을 경우 찾아서 제거함
 					new java.io.File( session.getServletContext().getRealPath(originalFile) ).delete();
+					// File 클래스가 또 있어서 노파심에 작성함
 				}
 			}
 		}
 	}
 	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 21.
+	 * @method	: 마이페이지 - 비밀번호 변경 요청 처리 
+	 * @param	: loginUser(empId, empPwd), updatePwd
+	 * @return	: loginUser, mypage.em
+	 */
+	@RequestMapping("updatePwd.em")
+	public String updatePwd(Employee e, String updatePwd, HttpSession session) {	// e로 사용자가 입력한 '현재 비밀번호'도 받아옴
+		
+		// 비밀번호 변경 서비스 실행
+		// 성공 session 덮어 씌우기 ==> alert로 성공 알림, 마이페이지 재요청
+		
+		// 실패 시 alert 띄우고 마이 페이지
+		
+		Employee loginUser = (Employee)session.getAttribute("loginUser");
+		// 현재 loginUser에 담긴 값을 Employee 타입 객체에 담음
+		
+		System.out.println("e : " + e);
+		System.out.println("loginUser : " + loginUser);
+		
+		//현재 비밀번호가 로그인한 회원의 비밀번호와 일치할 경우에만 비밀번호 변경 서비스 호출
+		if(bcryptPasswordEncoder.matches(e.getEmpPwd(), loginUser.getEmpPwd())) {
+			// 비밀번호 암호화 처리
+			String encPwd = bcryptPasswordEncoder.encode(updatePwd);
+			
+			// 비밀번호 변경 서비스 실행
+			int result = eService.updatePwd(e.getEmpId(), encPwd);
+			
+			System.out.println(encPwd);
+			System.out.println(result);
+			
+			if(result > 0) {	// 비밀번호 변경 성공
+				session.setAttribute("loginUser", eService.loginEmployee(e));
+				session.setAttribute("alertMsg", "비밀번호 변경에 성공했습니다.");
+				
+			}else {	// 변경 실패
+				session.setAttribute("alertMsg", "비밀번호 변경에 실패했습니다.");
+			}
+			
+		}else {	// 1_2) 사용자가 입력한 현재 비밀번호가 로그인한 회원의 비밀번호와 일치하지 않을 경우
+			session.setAttribute("alertMsg", "현재 비밀번호를 잘못 입력하셨습니다.");
+		}
+		
+		return "redirect:mypage.em";
+	}
+	
+	@RequestMapping("updateMy.em")
+	public String updateMyInfo(Employee e, HttpSession session) {
+		System.out.println(e);
+		
+		int result = eService.updateMyInfo(e);
+		System.out.println(result);
+		
+		if(result > 0) {	// 정보 변경 성공 시
+			session.setAttribute("loginUser", eService.loginEmployee(e));
+			session.setAttribute("alertMsg", "내 정보 변경에 성공했습니다.");
+		}else {	// 정보 변경 실패 시
+			session.setAttribute("alertMsg", "내 정보 변경에 실패했습니다.");
+		}
+		
+		return "redirect:mypage.em";
+	}
 }
