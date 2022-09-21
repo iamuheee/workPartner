@@ -342,4 +342,21 @@ public class ProjectController {
 		}
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="wlist.pr", produces="application/json; charset=utf-8")
+	public String selectWaitingMemberList(ProjectMember m) {
+		ArrayList<ProjectMember> wlist = pService.selectWaitingMemberList(m);
+		return new Gson().toJson(wlist);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="delwmem.pr", produces="application/html; charset=utf-8")
+	public String deleteWaitingMember(ProjectMember m) {
+		if( pService.deleteWaitingMember(m) > 0) {
+			return "성공적으로 멤버 초대를 취소했습니다.";
+		}else {
+			return "멤버 초대에 실패했습니다.";
+		}
+	}
+	
 }

@@ -65,5 +65,9 @@ public interface ProjectService {
 	
 	int answerInvitaion(ProjectMember m, String answer);
 	
+	ArrayList<ProjectMember> selectWaitingMemberList(ProjectMember m);
+	
+	int deleteWaitingMember(ProjectMember m);
+	
 	
 }

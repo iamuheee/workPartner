@@ -156,5 +156,13 @@ public class ProjectDao {
 		return sqlSession.update("projectMapper.answerNo", m);
 	}
 	
+	public ArrayList<ProjectMember> selectWaitingMemberList(SqlSessionTemplate sqlSession, ProjectMember m){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectWaitingMemberList", m);
+	}
+	
+	public int deleteWaitingMember(SqlSessionTemplate sqlSession, ProjectMember m) {
+		return sqlSession.delete("projectMapper.deleteWaitingMember", m);
+	}
+	
 
 }

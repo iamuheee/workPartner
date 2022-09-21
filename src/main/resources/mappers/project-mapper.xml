@@ -519,5 +519,33 @@
 		   AND MEM_NO = #{memNo}
 	</update>
 	
+	<select id="selectWaitingMemberList" resultMap="projectMemberResult">
+		SELECT MEM_NO
+			 , MEM_NAME
+			 , MEM_ROLE
+			 , EMP_PHONE
+			 , EMP_EMAIL
+			 , DEP_NAME
+			 , POS_NAME
+			 , PROJ_NO 
+		  FROM TB_PROJECT_MEM
+		  JOIN TB_EMPLOYEE
+		    ON EMP_NO = MEM_NO
+		  JOIN TB_DEPARTMENT
+		 USING (DEP_CD)
+		  JOIN TB_POSITION
+		 USING (POS_CD)
+		 WHERE PROJ_NO = #{projNo}
+		   AND STATUS = 'Y'
+		   AND MEM_STATUS = '대기'
+	</select>
+	
+	<delete id="deleteWaitingMember">
+		DELETE
+		  FROM TB_PROJECT_MEM
+		 WHERE PROJ_NO = #{projNo}
+		   AND MEM_NO = #{memNo}
+	</delete>
+	
 
 </mapper>

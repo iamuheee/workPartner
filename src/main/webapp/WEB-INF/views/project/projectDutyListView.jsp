@@ -189,6 +189,7 @@
 		                              +			'<div class="content"><p style="white-space:pre-line">' + dlist[i].content +'</p></div>';
 							if( dlist[i].file != null){
 		                         html +=		' <div class="content-file" align="center">'
+		                         	  +				'<img src="' + dlist[i].file.filePath + '" width="150px" ><br>'
 		                              +				'<span>다운로드 <i class="fa fa-download" aria-hidden="true"></i> &nbsp; </span>'
 		                              +				'<a href="' + dlist[i].file.filePath + '">' + dlist[i].file.fileOriginName + '</a>'
 		                              +			'</div>';      

@@ -253,6 +253,19 @@ public class ProjectServiceImpl implements ProjectService{
 		return result;
 	}
 
+
+	@Override
+	public ArrayList<ProjectMember> selectWaitingMemberList(ProjectMember m) {
+		return pDao.selectWaitingMemberList(sqlSession, m);
+	}
+
+
+	@Override
+	public int deleteWaitingMember(ProjectMember m) {
+		return pDao.deleteWaitingMember(sqlSession, m);
+	}
+
+	
 	
 	
 	
