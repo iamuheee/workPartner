@@ -196,14 +196,13 @@
 								html += 	'</div>'
 									  +		'<div class="card-comment">'
 									  +			'<input type="hidden" class="pboardNo" value="' + dlist[i].pboardNo + '">'
-									  +			'<table class="table-comment">'
+									  +			'<table class="table-comment" style="table-layout:fixed; width:100%;">'
 									  +			'</table>'
 									  +		'</div>'
-									  +		'<div class="write-comment" action="" method="post">'
-									  +			'<input type="hidden" name="comRefBno" value="글번호">'
-									  +			'<input type="hidden" name="comType" value="2">'
+									  +		'<div class="write-comment">'
+									  +			'<input type="hidden" name="comRefBno" value="' + dlist[i].pboardNo + '">'
 									  +			'<textarea name="comContent" class="form-control" style="width:90%; height:80px; margin:20px; float:left; resize:none"></textarea>'
-									  +			'<button class="btn btn-sm btn-primary" onclick="insertComment();" style="float:left; height:80px; width:5%; margin-top:20px;">댓글<br>작성</button>'
+									  +			'<button class="btn btn-sm btn-primary insertComment" style="float:left; height:80px; width:5%; margin-top:20px;">댓글<br>작성</button>'
 									  +		'</div>'
 		                              +	'</div><br><br>';
             				}
@@ -223,7 +222,6 @@
             			$.ajax({
 	            			url:"dclist.pr",
 	            			data:{
-	            				comType:"2",
 	            				comRefBno:$(this).siblings("input").val()
 	            			},
 	            			success:function(dclist){
@@ -234,10 +232,10 @@
 	            					for(let i=0; i<dclist.length; i++){
 										comment += '<tr width="100%" height="10px;">'
 										   		 +		'<th width="8%" style="padding-left:20px;">' + dclist[i].empName + '</th>'
-										   		 +		'<td width="72%;" style="padding:20px; white-space:pre-line;">' + dclist[i].comContent + '</td>'
+										   		 +		'<td width="72%;" style="padding:20px; white-space:pre-line; overflow:ellipsis;">' + dclist[i].comContent + '</td>'
 										   		 +		'<td width="10%;" style="color:gray;">' + dclist[i].comCreateDate + '</td>'
-										   		 +		'<td style="display:none">' + dclist[i].comNo + '</td>'
-										   		 +		'<td><a width="5%" href="">삭제</a></td>'
+										   		 +		'<td style="display:none" class="comNo">' + dclist[i].comNo + '</td>'
+										   		 +		'<td><a width="5%" class="deleteComment">삭제</a></td>'
 										   		 + '</tr>'
 										parent.html(comment);
 	            					}
@@ -295,14 +293,19 @@
 				    }) 
 				})
 				
-				function insertComment(){
-				    // 댓글 작성하고 댓글 리스트 새로 불러오는 ajax
-				    $.ajax({
-				        url:"",
+			    // 댓글 작성하고 댓글 리스트 새로 불러오는 ajax
+			    $(document).on("click", ".insertComment", function(){
+			    	$(this).siblings("input[name=comRefBno]").val();
+			    	$(this).siblings("input[name=conContent]").val();
+			    	console.log('접근됨');
+			    	  $.ajax({
+				        url:"insertc.pr",
 				        data:{
-				            comRefBno:$("input[name=comRefBno]").val(),
-				            comType:$("input[name=comType]").val(),
-				            comContent:$("input[name=conContent]").val()
+				            comRefBno:$(this).siblings("input[name=comRefBno]").val(),
+				            comContent:$(this).siblings("textarea[name=comContent]").val(),
+				            empNo:"${loginUser.empNo}",
+				            empId:"${loginUser.empId}",
+				            empName:"${loginUser.empName}"
 				        },
 				        success:function(alertMsg){
 							alert(alertMsg);
@@ -310,10 +313,28 @@
 				        	loadCommentList();
 				        },
 				        error:function(){
-				            
+				            console.log("댓글작성실패~")
 				        }
 				    })
-				}
+			    })
+				    
+				
+			    // 댓글 삭제하고 다시 불러오는 ajax
+			    $(document).on("click", ".deleteComment", function(){
+			    	console.log(  );
+			    	$.ajax({
+			    		url:"deletec.pr",
+			    		data:{
+			    			comNo:$(this).parent().siblings(".comNo").text()
+			    		},
+			    		success:function(result){
+			    			loadCommentList();
+			    			alert(result);
+			    		}
+			    	})
+			    })
+				    
+				    
 			</script>
 
 

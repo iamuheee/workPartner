@@ -1,7 +1,6 @@
 package com.wp.workpartner.project.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.common.template.FileUpload;
 import com.wp.workpartner.employee.model.vo.Employee;
@@ -256,9 +256,6 @@ public class ProjectController {
 		pb.setPduty(pd);
 		int result1 = pService.updateDuty(pb);
 		int result2 = 1;
-		
-		// 파일 업로드 있는 경우 : 기존 파일이 있는/없는 경우 
-		
 		if( upfile.getOriginalFilename().length() > 0 ) {
 			File newFile = File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/"));
 			newFile.setRefNo( Integer.parseInt(pb.getPboardNo()) );
@@ -277,17 +274,45 @@ public class ProjectController {
 		}
 	}
 	
+	
 	@ResponseBody
 	@RequestMapping(value="deleted.pr", produces="application/html; charset=utf-8")
 	public String deleteDuty(ProjectBoard pb) {
 		int result = pService.deleteBoard(pb);
 		if(result > 1) {
 			return "해당 프로젝트 업무를 성공적으로 삭제했습니다.";
-			
 		}else {
 			return "해당 프로젝트 업무 삭제에 실패했습니다.";
 		}
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping(value="insertc.pr", produces="application/html; charset=utf-8")
+	public String insertComment(Comment c) {
+		if( pService.insertComment(c) > 0) {
+			return "댓글을 성공적으로 등록했습니다.";
+		}else {
+			return "댓글 등록에 실패했습니다.";
+		}
+	}
+		
+	
+	@ResponseBody
+	@RequestMapping(value="dclist.pr", produces="application/json; charset=utf-8")
+	public String selectDutyCommentList(Comment c) {
+		ArrayList<Comment> dclist = pService.selectCommentList(c);
+		return new Gson().toJson(dclist);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="deletec.pr", produces="application/html; charset=utf-8")
+	public String deleteComment(Comment c) {
+		if( pService.deleteComment(c) > 0 ) {
+			return "댓글을 성공적으로 삭제했습니다";
+		}else {
+			return "댓글 삭제에 실패했습니다.";
+		}
+	}
 	
 }

@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.dao.ProjectDao;
@@ -205,6 +206,24 @@ public class ProjectServiceImpl implements ProjectService{
 		System.out.println(result1);
 		System.out.println(result2);
 		return result1 + result2;
+	}
+
+
+	@Override
+	public int insertComment(Comment c) {
+		return pDao.insertComment(sqlSession, c);
+	}
+
+
+	@Override
+	public ArrayList<Comment> selectCommentList(Comment c) {
+		return pDao.selectCommentList(sqlSession, c);
+	}
+
+
+	@Override
+	public int deleteComment(Comment c) {
+		return pDao.deleteComment(sqlSession, c);
 	}
 
 	

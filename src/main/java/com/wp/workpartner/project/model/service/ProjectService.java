@@ -2,6 +2,7 @@ package com.wp.workpartner.project.model.service;
 
 import java.util.ArrayList;
 
+import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.vo.Project;
@@ -52,6 +53,11 @@ public interface ProjectService {
 	
 	int deleteBoard(ProjectBoard pb);
 	
+	int insertComment(Comment c);
+	
+	ArrayList<Comment> selectCommentList(Comment c);
+	
+	int deleteComment(Comment c);
 	
 	
 }

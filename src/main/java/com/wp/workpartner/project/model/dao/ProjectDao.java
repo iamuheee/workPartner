@@ -96,10 +96,6 @@ public class ProjectDao {
 		return sqlSession.selectOne("projectMapper.selectFile", pb);
 	}
 	
-	public ArrayList<Comment> selectComment(SqlSessionTemplate sqlSession, ProjectBoard pb) {
-		return (ArrayList)sqlSession.selectList("projectMapper.selectComment", pb);
-	}
-	
 	public ProjectBoard selectBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
 		return sqlSession.selectOne("projectMapper.selectBoard", pb);
 	}
@@ -127,5 +123,18 @@ public class ProjectDao {
 	public int deleteFile(SqlSessionTemplate sqlSession, ProjectBoard pb) {
 		return sqlSession.update("projectMapper.deleteFile", pb);
 	}
+	
+	public int insertComment(SqlSessionTemplate sqlSession, Comment c) {
+		return sqlSession.insert("projectMapper.insertComment", c);
+	}
+	
+	public ArrayList<Comment> selectCommentList(SqlSessionTemplate sqlSession, Comment c) {
+		return (ArrayList)sqlSession.selectList("projectMapper.selectCommentList", c);
+	}
+	
+	public int deleteComment(SqlSessionTemplate sqlSession, Comment c) {
+		return sqlSession.delete("projectMapper.deleteComment", c);
+	}
+	
 
 }

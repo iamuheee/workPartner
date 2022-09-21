@@ -67,13 +67,25 @@
 		<result column="ATTENDANCE_YN" property="attendanceYN" />
 	</resultMap>
 	
-	<resultMap id="fileResult" type="file">
+	<resultMap id="fileResult" type="File">
 		<result column="FILE_NO" property="fileNo" />
 		<result column="FILE_REF_NO" property="refNo" />
 		<result column="FILE_CATEGORY" property="fileCategory" />
 		<result column="FILE_ORIGIN_NAME" property="fileOriginName" />
 		<result column="FILE_ORIGIN_NAME" property="fileChangeName" />
 		<result column="FILE_PATH" property="filePath" />
+	</resultMap>
+	
+	<resultMap id="commentResult" type="Comment">
+		<result column="COM_NO" property="comNo" />
+		<result column="COME_TYPE" property="comType" />
+		<result column="COM_REF_BNO" property="comRefBno" />
+		<result column="EMP_NO" property="empNo" />
+		<result column="EMP_NAME" property="empName" />
+		<result column="COM_CONTENT" property="comContent" />
+		<result column="COM_CREATE_DATE" property="comCreateDate" />
+		<result column="COM_MODIFY_DATE" property="comModifyDate" />
+		<result column="COM_STATUS" property="comStatus" />
 	</resultMap>
 	
 	<insert id="insertProject">
@@ -413,6 +425,44 @@
 		 WHERE FILE_CATEGORY = 2
 		   AND FILE_REF_NO = #{pboardNo}
 	</update>
-
+	
+	<insert id="insertComment">
+		INSERT
+		  INTO TB_COMMENT
+		VALUES
+			 (
+			   SEQ_CNO.NEXTVAL
+			 , 2
+			 , #{comRefBno}
+			 , #{empNo}
+			 , #{empId}
+			 , #{empName}
+			 , #{comContent}
+			 , DEFAULT
+			 , DEFAULT
+			 , DEFAULT
+			 )
+	</insert>
+	
+	<select id="selectCommentList" resultMap="commentResult">
+		SELECT
+			   COM_NO
+			 , COM_REF_BNO
+			 , EMP_NO
+			 , EMP_NAME
+			 , COM_CONTENT
+			 , COM_CREATE_DATE
+		  FROM TB_COMMENT
+		 WHERE COM_TYPE = 2
+		   AND COM_REF_BNO = #{comRefBno}
+	</select>
+	
+	<delete id="deleteComment">
+		DELETE
+		  FROM TB_COMMENT
+		 WHERE COM_NO = #{comNo}
+		   AND COM_TYPE = 2
+	</delete>
+	
 
 </mapper>
