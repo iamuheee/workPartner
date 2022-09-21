@@ -33,6 +33,12 @@
 		<result column="POS_NAME" property="posName"/>
 	</resultMap>
 	
+	<resultMap id="holidayResult" type="Holiday">
+		<result column="hol1_day" property="holDay"/>
+		<result column="hol1_name" property="holName"/>
+	</resultMap>
+	
+	
 	<!-- 전사원 근태현황 조회 리스트개수 -->
 	<select id="selectSearchCount" resultType="_int">
 		select count(*)
@@ -252,6 +258,8 @@
 				dep_cd
 			  , dep_name
 			from tb_department 
+			order 
+			   by dep_cd 
 	</select>
 	
 	<select id="positionList" resultMap="positionResult">
@@ -259,6 +267,8 @@
 				pos_cd
 			  ,	pos_name
 		   from tb_position
+		   order 
+			   by pos_cd
 	</select>
 	
 	<insert id="insertPosition">
@@ -274,5 +284,89 @@
 				  , #{positionName}
 				)	
 	</insert>
+	
+	<insert id="insertDepartment">
+		insert 
+			into tb_department
+				(
+					dep_cd
+				  , dep_name
+				)
+				values
+				(
+					#{departmentCode}
+				  , #{departmentName}
+				)	
+	</insert>
+	
+	<update id="updatePosition">
+		update tb_position
+			set 
+				pos_cd = #{positionCode2}
+			   ,pos_name = #{positionName2}
+			where pos_cd = #{positionCode1}
+			  and pos_name = #{positionName1}
+	</update>
+	
+	<delete id="deletePosition">
+		delete 
+			from tb_position
+		   where pos_cd = #{positionCode1}
+	</delete>
+	
+	
+	<update id="updateDepartment">
+		update tb_department
+			set 
+				dep_cd = #{departmentCode2}
+			   ,dep_name = #{departmentName2}
+			where dep_cd = #{departmentCode1}
+			  and dep_name = #{departmentName1}
+	</update>
+	
+	<delete id="deleteDepartment">
+		delete 
+			from tb_department
+		   where dep_cd = #{departmentCode1}
+	</delete>
+	
+	
+	<select id="holidayList" resultMap="holidayResult">
+		select 
+				hol1_day
+			  , hol1_name
+			from tb_holiday1 
+			order 
+			   by hol1_day 
+	</select>
+	
+	<insert id="insertHoliday">
+		insert 
+			into tb_holiday1
+				(
+					hol1_day
+				  , hol1_name
+				)
+				values
+				(
+					#{holidayCode}
+				  , #{holidayName}
+				)	
+	</insert>
+	
+	<update id="updateHoliday">
+		update tb_holiday1
+			set 
+				hol1_day = #{holidayCode2}
+			   ,hol1_name = #{holidayName2}
+			where hol1_day = #{holidayCode1}
+			  and hol1_name = #{holidayName1}
+	</update>
+	
+	<delete id="deleteHoliday">
+		delete 
+			from tb_holiday1
+		   where hol1_day = #{holidayCode1}
+	</delete>
 	
 </mapper>

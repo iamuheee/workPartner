@@ -9,13 +9,12 @@ import org.springframework.stereotype.Repository;
 
 import com.wp.workpartner.attendance.model.vo.Attendance;
 import com.wp.workpartner.attendance.model.vo.Department;
+import com.wp.workpartner.attendance.model.vo.Holiday;
 import com.wp.workpartner.attendance.model.vo.Position;
 import com.wp.workpartner.common.model.vo.PageInfo;
 
 @Repository
 public class AttDao {
-	
-	// 전사원근태현황조회
 	
 	public int selectSearchCount(String date1, String date2, String condition, String keyword, SqlSessionTemplate sqlSession) {
 		
@@ -24,8 +23,6 @@ public class AttDao {
 		map.put("date2", date2);
 		map.put("condition", condition);
 		map.put("keyword", keyword);
-		
-		System.out.println(map);
 		
 		return sqlSession.selectOne("attendanceMapper.selectSearchCount", map);
 	}
@@ -73,6 +70,96 @@ public class AttDao {
 		map.put("positionName", positionName);
 		
 		return sqlSession.insert("attendanceMapper.insertPosition", map);
+	}
+
+	public int insertDepartment(String departmentCode, String departmentName, SqlSessionTemplate sqlSession) {
+
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("departmentCode", departmentCode);
+		map.put("departmentName", departmentName);
+		
+		return sqlSession.insert("attendanceMapper.insertDepartment", map);
+		
+	}
+
+	public int updatePosition(String positionCode1, String positionName1, String positionCode2, String positionName2,
+			SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("positionCode1", positionCode1);
+		map.put("positionName1", positionName1);
+		map.put("positionCode2", positionCode2);
+		map.put("positionName2", positionName2);
+		
+		return sqlSession.update("attendanceMapper.updatePosition", map);
+	}
+
+	public int deletePosition(String positionCode1, String positionName1, SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("positionCode1", positionCode1);
+		map.put("positionName1", positionName1);
+		
+		return sqlSession.delete("attendanceMapper.deletePosition", map);
+	
+	}
+
+	public int updateDepartment(String departmentCode1, String departmentName1, String departmentCode2,
+			String departmentName2, SqlSessionTemplate sqlSession) {
+
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("departmentCode1", departmentCode1);
+		map.put("departmentName1", departmentName1);
+		map.put("departmentCode2", departmentCode2);
+		map.put("departmentName2", departmentName2);
+		
+		return sqlSession.update("attendanceMapper.updateDepartment", map);
+		
+	}
+
+	public int deleteDepartment(String departmentCode1, String departmentName1, SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("departmentCode1", departmentCode1);
+		map.put("departmentName1", departmentName1);
+		
+		return sqlSession.delete("attendanceMapper.deleteDepartment", map);
+	}
+
+	public ArrayList<Holiday> holidayList(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.holidayList");
+	}
+	
+	
+	public int insertHoliday(String holidayCode, String holidayName, SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("holidayCode", holidayCode);
+		map.put("holidayName", holidayName);
+		
+		return sqlSession.insert("attendanceMapper.insertHoliday", map);
+	}
+	
+	public int updateHoliday(String holidayCode1, String holidayName1, String holidayCode2, String holidayName2,
+			SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("holidayCode1", holidayCode1);
+		map.put("holidayName1", holidayName1);
+		map.put("holidayCode2", holidayCode2);
+		map.put("holidayName2", holidayName2);
+		
+		return sqlSession.update("attendanceMapper.updateHoliday", map);
+	}
+
+	public int deleteHoliday(String holidayCode1, String holidayName1, SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("holidayCode1", holidayCode1);
+		map.put("holidayName1", holidayName1);
+		
+		return sqlSession.delete("attendanceMapper.deleteHoliday", map);
+	
 	}
 
 

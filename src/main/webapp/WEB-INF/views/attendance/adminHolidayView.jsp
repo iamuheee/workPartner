@@ -23,6 +23,10 @@
 	tr, th{
 		padding:15px;
 	}
+	tbody tr{
+		cursor : pointer;
+	}
+	
 </style>
 </head>
 <body>
@@ -45,27 +49,29 @@
 		  
 		  		<br>
 		  		<div style="height: 90%; width:90%">
-					<button data-toggle="modal" data-target="#positionInsert" class="btn btn-sm btn-primary" style="width:50px; height:30px; font-size:15px; float:right" >등록</button>
+					<button data-toggle="modal" data-target="#holidayInsert" class="btn btn-sm btn-primary" style="width:50px; height:30px; font-size:15px; float:right" >등록</button>
 
 					<br><br>
 
-					<table class="table table-hover" style="text-align:center">
+					<table class="table table-hover" style="text-align:center" id="updateHoliday">
 						<thead>
 							<tr>                            
-								<th>공휴일코드</th>
-								<th>공휴일명</th>
+								<th>날짜</th>
+								<th>공휴일명</th>			
 							</tr>
 						</thead>
 						<tbody>
 					  	<c:choose>
-						  	<c:when test="${ empty list2 }">
-						  		<td colspan="2">조회된 직위가 없습니다.</td>
+						  	<c:when test="${ empty list }">
+						  		<tr>
+						  			<td colspan="2">조회된 공휴일이 없습니다.</td>
+						  		<tr>
 							</c:when>
 							<c:otherwise>
-								<c:forEach var="p" items="${list2}">
-								  <tr>
-									  <td>${p.posCd}</td>
-								  	  <td>${p.posName}</td>
+								<c:forEach var="h" items="${list}">
+								  <tr data-target="#holidayUpdate" data-toggle="modal">
+									  <td class="no">${h.holDay}</td>
+								  	  <td class="name">${h.holName}</td>
 							  	  </tr>
 							 	</c:forEach>
 							</c:otherwise> 
@@ -83,33 +89,33 @@
 	</div>	
 	<br><br><br><br><br><br><br><br><br><br><br><br><br>
 	
-	
-       <!-- ====================================================  Modal ================================================================ -->
+        
+        <!-- ====================================================  Modal ================================================================ -->
 
-        <!-- 서명등록 -->
-        <div class="modal fade" id="positionInsert" tabindex="-1">
+        <!-- 공휴일등록 -->
+        <div class="modal fade" id="holidayInsert" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">직위등록</h5>
+                        <h5 class="modal-title">공휴일 등록</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">                          
-                         <form action="" method="get">                                              
+                         <form action="insert.hol" method="get">                                              
                             <div align="center">
                                 <table>    
                                 	<tr>                                    
-                                        <th>직위코드</th>                                                                      
+                                        <th>날짜</th>                                                                      
                                         <td>
-                                           	<input type="text" name="positionCode" style="text-align:center" required>                                    
+                                           	<input type="text" name="holidayCode" style="text-align:center" required>                                    
                                         </td>                                                                             
                                     </tr>                                                             
                                     <tr>                                    
-                                        <th>직위명</th>                                                                      
+                                        <th>공휴일명</th>                                                                      
                                         <td>
-                                           	<input type="text" name="positionName" style="text-align:center" required>                                    
+                                           	<input type="text" name="holidayName" style="text-align:center" required>                                    
                                         </td>                                                                             
                                     </tr>                               
                                    
@@ -128,6 +134,125 @@
                 </div>
             </div>
         </div>
+        
+        <!-- ====================================================  Modal ================================================================ -->
+
+        <!-- 공휴일수정 및 삭제 -->
+        <div class="modal fade" id="holidayUpdate" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">공휴일 수정/삭제</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">                          
+                         <form action="" method="get">                                              
+                            <div align="center">
+                                <table>    
+                                	<tr>                                    
+                                        <th>날짜</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="hCodeText" name="holidayCode1" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>                                                             
+                                    <tr>                                    
+                                        <th>공휴일명</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="hNameText" name="holidayName1" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>  
+                                    <tr><td colspan="2">--------------------------------------------------------------------------</td></tr>
+                                    <tr>                                    
+                                        <th>수정할 날짜</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="hCodeText1" name="holidayCode2" style="text-align:center">                                    
+                                        </td>                                                                            
+                                    </tr>                                                             
+                                    <tr>                                    
+                                        <th>수정할 공휴일명</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="hNameText1" name="holidayName2" style="text-align:center">                                    
+                                        </td>                                                                             
+                                    </tr>                             
+                                   
+                                     
+                                </table>
+                            </div>
+                            <br>
+                            <div align="center">
+                                <button type="button" class="btn btn-sm btn-warning" id="hUpdatebutton">수정</button>
+                                <button type="submit" class="btn btn-sm btn-secondary" id="hDeletebutton" style="background-color:red; color:white">삭제</button>
+                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
+                            </div>
+                            
+                            <br>
+                            
+                       </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+        <script>
+        
+	     // 공휴일 테이블 클릭시 수정 및 삭제 모달창
+			
+			$(function(){
+				$("#updateHoliday>tbody>tr").click(function(){
+					
+					if($(this).attr('data-click-state') == 1) {
+
+						$(this).attr('data-click-state', 0)
+
+					} else {
+
+						$(this).attr('data-click-state', 1)
+					}
+					
+					console.log()
+					$("#hCodeText").val(($(this).children(".no").text()));
+					$("#hNameText").val(($(this).children(".name").text()));
+					
+				})
+							
+			})
+	     
+	     
+			$(function(){
+				
+				$("#hUpdatebutton").on('click', function(){
+					
+					var a = $("#hCodeText").val();
+					var b = $("#hNameText").val();
+					var c = $("#hCodeText1").val();
+					var d = $("#hNameText1").val();
+					
+					location.href="update.hol?holidayCode1=" + a + "&holidayName1=" + b + "&holidayCode2=" + c + "&holidayName2=" + d
+				})
+				
+			})
+			
+			
+			$(function(){
+				
+				$("#hDeletebutton").on('click', function(){
+					
+					var a = $("#hCodeText").val();
+					var b = $("#hNameText").val();
+					var c = $("#hCodeText1").val();
+					var d = $("#hNameText1").val();
+					
+					location.href="delete.hol?holidayCode1=" + a + "&holidayName1=" + b
+				})
+				
+			})
+	     
+	     
+	     
+        </script>
         
 	
 </body>

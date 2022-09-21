@@ -52,6 +52,7 @@
 		<typeAlias type="com.wp.workpartner.attendance.model.vo.Attendance" alias="Attendance"/>
 		<typeAlias type="com.wp.workpartner.attendance.model.vo.Department" alias="AttDepartment"/>
 		<typeAlias type="com.wp.workpartner.attendance.model.vo.Position" alias="AttPosition"/>
+		<typeAlias type="com.wp.workpartner.attendance.model.vo.Holiday" alias="Holiday"/>
 
 		<typeAlias type="com.wp.workpartner.project.model.vo.Project" alias="Project"/>
 		<typeAlias type="com.wp.workpartner.project.model.vo.ProjectMember" alias="ProjectMember"/>
