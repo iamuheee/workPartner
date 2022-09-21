@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Login - SB Admin</title>
+        <title>WorkPartner!</title>
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://use.fontawesome.com/95b5cbecad.js"></script>
@@ -84,7 +84,8 @@
 			
             <form action="insert.pr" method="post" class="inner-area">
 				<input type="hidden" name="empNo" value="${loginUser.empNo}">
-
+				<input type="hidden" name="empName" value="${loginUser.empName}">
+				
                 <span class="title">프로젝트 제목</span> <br><br>
                 <input type="text" name="projTitle" class="form-control" required>
                 <br><hr><br>

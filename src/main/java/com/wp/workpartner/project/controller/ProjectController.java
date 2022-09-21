@@ -34,8 +34,11 @@ public class ProjectController {
 	@RequestMapping("main.pr")
 	public ModelAndView selectProjectMain(ModelAndView mv, HttpSession session) {
 		// 해당 사원에 맞는 화면 정보 불러옴
-		Employee loginUser = (Employee)session.getAttribute("loginUser");
 		
+		Employee loginUser = (Employee)session.getAttribute("loginUser");
+		mv.addObject("plist", pService.selectProjectList(loginUser.getEmpNo()));
+		System.out.println("ilist : " + pService.selectMyInvation(loginUser.getEmpNo()));
+		mv.addObject("ilist", pService.selectMyInvation(loginUser.getEmpNo()));
 		mv.setViewName("project/projectMain");
 		return mv;
 	}
@@ -324,6 +327,18 @@ public class ProjectController {
 			return "성공";
 		}else {
 			return "실패";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="yesno.pr", produces="application/html; charset=utf-8")
+	public String answerInvitaion(ProjectMember m, String answer) {
+		int result = pService.answerInvitaion(m, answer);
+		if(result > 0) {
+			return "성공적으로 반영되었습니다!";
+		}else {
+			return "초대 수락/거절에 실패했습니다.";
 		}
 	}
 	

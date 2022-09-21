@@ -15,6 +15,8 @@ public interface ProjectService {
 	
 	ArrayList<Project> selectProjectList(String empNo);
 	
+	ArrayList<ProjectMember> selectMyInvation(String empNo);
+	
 	int validateMember(Project p);
 	
 	Project selectProject(String projNo);
@@ -60,6 +62,8 @@ public interface ProjectService {
 	int deleteComment(Comment c);
 	
 	int validateInchargeMember(Project p);
+	
+	int answerInvitaion(ProjectMember m, String answer);
 	
 	
 }

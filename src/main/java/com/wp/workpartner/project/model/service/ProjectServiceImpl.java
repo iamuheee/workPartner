@@ -37,7 +37,7 @@ public class ProjectServiceImpl implements ProjectService{
 	
 	@Override
 	public int insertProject(Project p) {
-		return pDao.insertProject(sqlSession, p);
+		return pDao.insertProject(sqlSession, p) * pDao.insertLeader(sqlSession, p);
 	}
 
 
@@ -49,8 +49,14 @@ public class ProjectServiceImpl implements ProjectService{
 		}
 		return plist;
 	}
-
 	
+	
+	@Override
+	public ArrayList<ProjectMember> selectMyInvation(String empNo) {
+		return pDao.selectMyInvation(sqlSession, empNo);
+	}
+
+
 	@Override
 	public int validateMember(Project p) {
 		return pDao.validateMember(sqlSession, p);
@@ -230,6 +236,21 @@ public class ProjectServiceImpl implements ProjectService{
 	@Override
 	public int validateInchargeMember(Project p) {
 		return pDao.validateInchargeMember(sqlSession, p);
+	}
+
+
+	@Override
+	public int answerInvitaion(ProjectMember m, String answer) {
+		int result;
+		if( answer.equals("참여") ) {
+			// TB_PROJECT_MEM -> MEM_STATUS = '참여'
+			result = pDao.answerYes(sqlSession, m);
+		}else {
+			// TB_PROJECT_MEM -> STATUS = 'NO'
+			result = pDao.answerNo(sqlSession, m);
+		}
+		System.out.println(result);
+		return result;
 	}
 
 	
