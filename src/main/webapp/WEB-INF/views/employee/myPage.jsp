@@ -107,6 +107,10 @@
 		font-size:13px;
 		color:gray;
 	}
+	
+	#checkResult {
+		font-size:14px;
+	}
 
 </style>
 </head>
@@ -268,7 +272,8 @@
 								<tr>
 									<th>비밀번호 확인</th>
 									<td>
-										<input type="password" id="checkPwd" name="checkPwd">
+										<input type="password" id="checkPwd" name="checkPwd"><br>
+										<span id="checkResult"></span>
 									</td>
 								</tr>
 							</table>
@@ -276,7 +281,7 @@
 						
 						<!-- Modal footer -->
 						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary">변경</button>
+							<button type="submit" class="btn btn-primary" id="updatePwdBtn">변경</button>
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 						</div>
 					</form>
@@ -319,9 +324,35 @@
 				})
 				})
 			})
+			
+			/* 변경할 비밀번호의 유효성 검사 */
+			$(function(){
+				const $pwdInput = $("#changePwd input[name=updatePwd]");	// 입력한 새 비밀번호 input 요소
+				const $checkInput = $("#changePwd input[name=checkPwd]");	// 입력한 확인용 비밀번호 input 요소
+				
+				$checkInput.keyup(function(){	// 비밀번호 확인 input에 keyup 발생할 때 실행할 함수
+					
+					if($pwdInput.val() == $checkInput.val()){	// 두 값이 일치하면
+						$("#checkResult").show();
+						$("#checkResult").css("color", "blue").text("비밀번호가 일치합니다.");
+						$("#updatePwdBtn").removeAttr("disabled");
+						
+					}else {	// 두 값이 일치하지 않으면
+						$("#checkResult").show();
+						$("#checkResult").css("color", "red").text("비밀번호가 일치하지 않습니다.");
+						$("#updatePwdBtn").attr("disabled", true);
+						
+						if(!$checkInput.val()){
+							$("#checkResult").hide();
+						}
+					}
+				})
+			})
+			
+			
 		</script>
 	
-	</div>
+	
 
 </body>
 </html>
