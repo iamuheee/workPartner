@@ -39,7 +39,7 @@ table tr:hover{
     font-size: 13px;
  }
  .ntContainer div{
-     /*  border: 1px solid  black;   */      
+       border: none;        
  } 
 
 .ntMenu1_1{ grid-area: menu1_1; }
@@ -90,12 +90,12 @@ table tr:hover{
             	
             	<!-- 글작성은 관리자 모두  -->
             	<c:choose>
-            		<c:when test="${loginUser.empNtAdmin eq 'A' }">
+            		<c:when test="${loginUser.empNtAdmin eq 'A' or loginUser.empNtAdmin eq 'Y'}">
             			<a class="btn btn-sm btn-primary" href="insertNtForm.nt">새 게시글</a>   
             		</c:when>   
-            		<c:when test="${ loginUser.empNtAdmin eq 'Y' }">
+            		<%-- <c:when test="${ loginUser.empNtAdmin eq 'Y' }">
             			<a class="btn btn-sm btn-primary" href="insertNtForm.nt">새 게시글</a>   
-            		</c:when>         		
+            		</c:when> --%>         		
             	</c:choose> 
             	                               
             </div>
