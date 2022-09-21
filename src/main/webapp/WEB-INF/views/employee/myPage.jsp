@@ -13,7 +13,7 @@
         padding:10px;
         margin:auto;
         position:relative;
-            }
+	}
 
 	#mypage-body {
 		/* border:1px solid red; */
@@ -23,10 +23,6 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-	}
-
-	#mypage-body {
-		/* border:1px solid grey; */
 	}
 
 	#mypage-left{
@@ -238,7 +234,7 @@
 					</div>
 				</div> <!-- 버튼 영역 끝 -->
 				</form>
-				
+				<br><br>
 			</div> <!-- 오른쪽 영역 끝 -->
 		</div>
 
