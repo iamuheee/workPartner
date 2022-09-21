@@ -292,8 +292,7 @@ input[type=text] {
 		</script>
 		<c:remove var="alertSignMsg" scope="session" />
 	</c:if>
-	<form action="" method="post" name="insertForm" id="insertForm" style="float: left"
-		enctype="multipart/form-data"> 
+	<form action="" method="post" name="insertForm" id="insertForm" enctype="multipart/form-data"> 
 	<input type="hidden" name="dpCategory" value="${ paperName }">
 		
 	<section class="mainTitle">

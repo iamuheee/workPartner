@@ -37,14 +37,20 @@ public interface SignService {
 //	타부터 결재리스트
 	int selectOthSignListCount(String empNo);
 	ArrayList<Dtpaper> selectOthSignList(PageInfo pi, String empNo);
-//  결재 할 리스트
-	int selectSignListCount(String empNo);
-	ArrayList<Dtpaper> selectSignList(PageInfo pi, String empNo);
+//	타부서 결재완료
+	int selectEndOthSignListCount(String empNo);
+	ArrayList<Dtpaper> selectEndOthSignList(PageInfo pi, String empNo);
+//  결재 리스트
+	int selectDeptSignListCount(String empNo);
+	ArrayList<Dtpaper> selectDeptSignList(PageInfo pi, String empNo);
+//	내부서 결재완료
+	int selectEndSignListCount(String empNo);
+	ArrayList<Dtpaper> selectEndSignList(PageInfo pi, String empNo);
 //  결재 할 기안서 상세조회
-	SelectCooperation selectSignCooperation(int dpNo, String empNo); 
-	SelectReSign selectSignResign(int dpNo, String empNo); 
-	SelectVacation selectSignVacation(int dpNo, String empNo); 
-	SelectOtwork selectSignOtwork(int dpNo, String empNo);
+	SelectCooperation selectSignCooperation(int dpNo); 
+	SelectReSign selectSignResign(int dpNo); 
+	SelectVacation selectSignVacation(int dpNo); 
+	SelectOtwork selectSignOtwork(int dpNo);
 //  기안서 수정하기
 	int updateCooperation(Dtpaper d, Cooperation c);
 	int updateVacation(Dtpaper d, Vacation v);
@@ -56,9 +62,10 @@ public interface SignService {
 	int deleteOtwork(int dpNo);
 	int deleteReSignEmp(int dpNo);
 //  기안서 상세조회
-	SelectCooperation selectCooperation(int dpNo); 
-	SelectReSign selectResign(int dpNo); 
-	SelectVacation selectVacation(int dpNo); 
-	SelectOtwork selectOtwork(int dpNo); 
-//  
+	SelectCooperation selectCo(int dpNo); 
+	SelectReSign selectRe(int dpNo); 
+	SelectVacation selectVa(int dpNo); 
+	SelectOtwork selectOw(int dpNo); 
+//  기안서 결재선
+	ArrayList<Sign> selectSignList(int dpNo);
 }

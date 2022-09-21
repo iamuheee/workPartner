@@ -64,7 +64,7 @@
                         <div class="container-fluid px-4" style="margin-top: 30px;">
                             <div style="margin-bottom: 50px; line-height: 10px;">
                                 <ol class="breadcrumb mb-4" style="font-size:18px; width: 100%;">
-                                    <li>기안서 >&nbsp</a> <input type="hidden" name="dpNo" value="${ dpNo }"></li>
+                                    <li>기안서 >&nbsp</a></li>
                                     <li><b>임시저장</b></li>
                                 </ol>
                                 <hr>
@@ -122,10 +122,10 @@
 							                        <td>${ s.dpCategory }</td>
 							                        <c:choose>
 								                        <c:when test="${empty s.dpTitle }">
-								                        	<td><a href="" class="dpTitle">제목없음</a></td>
+								                        	<td><a href="" id="detailBtn" class="dpTitle">제목없음</a></td>
 								                        </c:when>
 								                        <c:otherwise>
-								                        	<td><a href="" class="dpTitle">${ s.dpTitle }</a></td>
+								                        	<td><a href="" id="detailBtn" class="dpTitle">${ s.dpTitle }</a></td>
 								                        </c:otherwise>
 							                        </c:choose>
 							                        <td>${ s.dpCreate }</td>
@@ -250,10 +250,10 @@
 							                        <td>${ r.dpCategory }</td>
 							                        <c:choose>
 								                        <c:when test="${empty r.dpTitle }">
-								                        	<td><a href="" class="dpTitle">제목없음</a></td>
+								                        	<td><a href="" id="detailBtn" class="dpTitle">제목없음</a></td>
 								                        </c:when>
 								                        <c:otherwise>
-								                        	<td><a href="" class="dpTitle">${ r.dpTitle }</a></td>
+								                        	<td><a href="" id="detailBtn" class="dpTitle">${ r.dpTitle }</a></td>
 								                        </c:otherwise>
 							                        </c:choose>
 							                        <td>${ r.dpCreate }</td>

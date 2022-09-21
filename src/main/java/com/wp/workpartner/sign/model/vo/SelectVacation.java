@@ -22,13 +22,11 @@ public class SelectVacation {
 	private String dpStatus;
 	private String dpFinal;
 	private String dpCategory;
-	private String dpTemp;
 	private String dpOrigin;
 	private String dpChange;
 	private String vaStart;
 	private String vaEnd;
 	private String vaCategory;
 	private String vaContent;
-	private int vaUseday; 
 	private ArrayList<Sign> signList;
 }

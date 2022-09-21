@@ -20,6 +20,7 @@ import com.wp.workpartner.sign.model.vo.Cooperation;
 import com.wp.workpartner.sign.model.vo.Dtpaper;
 import com.wp.workpartner.sign.model.vo.Otwork;
 import com.wp.workpartner.sign.model.vo.ReSign;
+import com.wp.workpartner.sign.model.vo.SelectVacation;
 import com.wp.workpartner.sign.model.vo.Sign;
 import com.wp.workpartner.sign.model.vo.Vacation;
 
@@ -375,20 +376,41 @@ public class SignController {
 		return mv;
 	}
 	@RequestMapping("othEndSi.si")
-	public String selectOtherSignEndList(Model model) {
+	public ModelAndView selectEndOtherSignList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo) {
 		model.addAttribute("flag", "otherEndSign");
-		return "sign/otherDeptSignListView";
+		int endOthSignListCount = sService.selectEndOthSignListCount(empNo);
+		PageInfo pi = Pagination.getPageInfo(endOthSignListCount, currentPage, 5, 15);
+		ArrayList<Dtpaper> endOthSignList = sService.selectEndOthSignList(pi, empNo);
+		mv.addObject("pi",pi)
+		.addObject("endOthSignList", endOthSignList)
+		.setViewName("sign/otherDeptSignListView");
+		System.out.println(endOthSignList);
+		return mv;
 	}
 //	내 부서 결재함
 	@RequestMapping("deptSi.si")
-	public String selectDeptSignList(Model model){
+	public ModelAndView selectDeptSignList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo){
 		model.addAttribute("flag", "deptSign");
-		return "sign/deptSignListView";
+		int deptSignListCount = sService.selectDeptSignListCount(empNo);
+		PageInfo pi = Pagination.getPageInfo(deptSignListCount, currentPage, 5, 15);
+		ArrayList<Dtpaper> deptSignList = sService.selectDeptSignList(pi, empNo);
+		mv.addObject("pi",pi)
+		.addObject("deptSignList", deptSignList)
+		.setViewName("sign/deptSignListView");
+		System.out.println(deptSignList);
+		return mv;
 	}
 	@RequestMapping("deptEndSi.si")
-	public String selectDeptSignEndList(Model model) {
+	public ModelAndView selectEndSignList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo) {
 		model.addAttribute("flag", "deptEndSign");
-		return "sign/deptSignListView";
+		int endSignListCount = sService.selectEndSignListCount(empNo);
+		PageInfo pi = Pagination.getPageInfo(endSignListCount, currentPage, 5, 15);
+		ArrayList<Dtpaper> endSignList = sService.selectEndSignList(pi, empNo);
+		mv.addObject("pi",pi)
+		.addObject("endSignList", endSignList)
+		.setViewName("sign/deptSignListView");
+		System.out.println(endSignList);
+		return mv;
 	}
 //	결재자주소록
 	@RequestMapping("addressAdmin.si")
@@ -396,8 +418,19 @@ public class SignController {
 		return "sign/signAddressAdmin";
 	}
 //	기안서 상세보기
-//	@RequestMapping("selectVa.si")
-//	public ModelAndView selectVacation()
+	@RequestMapping("selectVa.si")
+	public ModelAndView selectVacation(ModelAndView mv, Model model, int dpNo) {
+		model.addAttribute("flag", "연차");
+		System.out.println(dpNo);
+		ArrayList<Sign> signList = sService.selectSignList(dpNo);
+		SelectVacation selectVa = sService.selectVa(dpNo);
+		mv.addObject("signList", signList)
+		.addObject("v", selectVa)
+		.setViewName("sign/vacationDetailView");
+		System.out.println(signList);
+		System.out.println(selectVa);
+		return mv;
+	}
 
 }
 	

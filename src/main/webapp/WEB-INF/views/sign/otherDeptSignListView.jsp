@@ -44,10 +44,16 @@ table {
 #layoutSidenav_content {
 	font-family: 'Noto Sans KR', sans-serif;
 }
-.mainOuter{
+/* .mainOuter{
 	margin-top:0 !important;
-}
+} */
+.dpTitle{
+			text-decoration-line: none;
+			color: #212529;
+		}
 </style>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp" />
@@ -103,7 +109,7 @@ table {
 						<c:choose>
 	                		<c:when test="${empty othSignList }">
 	                			<tr>
-	                				<td colspan="8" align="center">현재 게시글이 없습니다.</td>
+	                				<td colspan="9" align="center">현재 게시글이 없습니다.</td>
 	                			</tr>
 	                		</c:when>
 	                		<c:otherwise>
@@ -152,16 +158,33 @@ table {
 	                   </c:choose>
 					
 					</table>
-					<ul class="pagination"
-						style="margin-top: 10px; margin-right: auto; margin-left: auto; width: 400px">
-						<li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-						<li class="page-item"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
-						<li class="page-item"><a class="page-link" href="#">4</a></li>
-						<li class="page-item"><a class="page-link" href="#">5</a></li>
-						<li class="page-item"><a class="page-link" href="#">다음</a></li>
-					</ul>
+					<c:if test="${not empty othSignList }">
+                        <div id="pagingArea">
+			                <ul class="pagination">
+			                	<c:choose>
+			                		<c:when test="${ pi.currentPage eq 1 }">
+			                    		<li class="page-item disabled"><a class="page-link">이전</a></li>
+			                    	</c:when>
+			                    	<c:otherwise>
+			                    		<li class="page-item"><a class="page-link" href="othSi.si?empNo=${ loginUser.empNo }&cpage=${ pi.currentPage-1 }">이전</a></li>
+			                    	</c:otherwise>
+			                    </c:choose>
+			                    
+			                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+			                  	  <li class="page-item"><a class="page-link" href="othSi.si?empNo=${ loginUser.empNo }&cpage=${ p }">${ p }</a></li>
+			                    </c:forEach>
+			                    
+			                    <c:choose>
+			                    	<c:when test="${ pi.currentPage eq pi.maxPage }">
+				                	    <li class="page-item disabled"><a class="page-link">다음</a></li>
+				                	</c:when>
+				                	<c:otherwise>
+				                    	<li class="page-item"><a class="page-link" href="othSi.si?empNo=${ loginUser.empNo }&cpage=${ pi.currentPage+1 }">다음</a></li>
+				                	</c:otherwise>    
+			                    </c:choose>
+			                </ul>
+		            	</div>
+	                </c:if>
 				</div>
 			</div>
 		</c:when>
@@ -203,36 +226,94 @@ table {
 					<table class="endSignList" width="100%">
 
 						<tr align="center">
-							<th width="5%">번호</th>
-							<th class="endNum" width="5%">서식</th>
-							<th class="endTitle" width="30%">제목</th>
+							<th class="endNum" width="10%">문서번호</th>
+							<th class="endNum" width="10%">서식</th>
 							<th class="endCreate" width="10%">요청부서</th>
-							<th width="5%">기안자</th>
-							<th width="10%">나의 결재일</th>
-							<th width="10%">최종결재자</th>
+							<th class="endCreate" width="10%">첨부파일</th>
+							<th class="endTitle" width="20%">제목</th>
+							<th width="13%">기안자</th>
+							<th width="12%">나의 결재일</th>
+							<th width="15%">최종결재자</th>
 						</tr>
 
-						<tr align="center">
-							<td>1</td>
-							<td>업무협조</td>
-							<td>여기는 제목이 나타나는 곳</td>
-							<td>마케팅</td>
-							<td>김범진</td>
-							<td>2022-09-01</td>
-							<td>강보람(인사)</td>
-						</tr>
-
+						<c:choose>
+	                		<c:when test="${empty endOthSignList }">
+	                			<tr>
+	                				<td colspan="8" align="center">현재 게시글이 없습니다.</td>
+	                			</tr>
+	                		</c:when>
+	                		<c:otherwise>
+	                			<c:forEach var="e" items="${ endOthSignList }">
+				                    <tr align="center">
+				                   	    <td>${ e.dpNo }</td>
+				                        <td>${ e.dpCategory }</td>
+				                        <td>${ e.signDeptName }</td>
+				                        <td>
+					                        <c:if test="${ not empty e.dpOrigin }">
+					                       		<span class="material-icons" style="vertical-align:middle; font-size:17px; color:#878787;">
+												attachment
+												</span>
+					                        </c:if>
+				                        </td>
+				                        <c:choose>
+					                        <c:when test="${empty e.dpTitle }">
+					                        	<td><a href="" class="dpTitle">제목없음</a></td>
+					                        </c:when>
+					                        <c:otherwise>
+					                        	<td><a href="" class="dpTitle">${ e.dpTitle }</a></td>
+					                        </c:otherwise>
+				                        </c:choose>
+				                        <td>${ e.empNo}(${e.signDeptName})</td>
+				                        <td>${ e.dpCreate }</td>
+				                        <td>${ e.signEmpName }(${ e.signEmpDept })</td>
+				                    </tr>
+				                    <script>
+										$(document).ready(function(){
+											$(".dpTitle").click(function(){
+					                    		if('${s.dpCategory}' == '연차'){
+													$(".dpTitle").attr("href", "detailVa.si");
+												}else if('${s.dpCategory}' == '외근'){
+													$(".dpTitle").attr("href", "detailOtw.si");
+												}else if('${s.dpCategory}' == '퇴직원'){
+													$(".dpTitle").attr("href", "detailRes.si");
+												}else{
+													$(".dpTitle").attr("href", "detailCo.si");
+												}
+											})
+										})
+									</script>
+			                    </c:forEach>
+	                		</c:otherwise>
+	                   </c:choose>
+					
 					</table>
-					<ul class="pagination"
-						style="margin-top: 10px; margin-right: auto; margin-left: auto; width: 400px">
-						<li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-						<li class="page-item"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
-						<li class="page-item"><a class="page-link" href="#">4</a></li>
-						<li class="page-item"><a class="page-link" href="#">5</a></li>
-						<li class="page-item"><a class="page-link" href="#">다음</a></li>
-					</ul>
+					<c:if test="${not empty endOthSignList }">
+                        <div id="pagingArea">
+			                <ul class="pagination">
+			                	<c:choose>
+			                		<c:when test="${ pi.currentPage eq 1 }">
+			                    		<li class="page-item disabled"><a class="page-link">이전</a></li>
+			                    	</c:when>
+			                    	<c:otherwise>
+			                    		<li class="page-item"><a class="page-link" href="othSi.si?empNo=${ loginUser.empNo }&cpage=${ pi.currentPage-1 }">이전</a></li>
+			                    	</c:otherwise>
+			                    </c:choose>
+			                    
+			                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+			                  	  <li class="page-item"><a class="page-link" href="othSi.si?empNo=${ loginUser.empNo }&cpage=${ p }">${ p }</a></li>
+			                    </c:forEach>
+			                    
+			                    <c:choose>
+			                    	<c:when test="${ pi.currentPage eq pi.maxPage }">
+				                	    <li class="page-item disabled"><a class="page-link">다음</a></li>
+				                	</c:when>
+				                	<c:otherwise>
+				                    	<li class="page-item"><a class="page-link" href="othSi.si?empNo=${ loginUser.empNo }&cpage=${ pi.currentPage+1 }">다음</a></li>
+				                	</c:otherwise>    
+			                    </c:choose>
+			                </ul>
+		            	</div>
+	                </c:if>
 				</div>
 			</div>
 
