@@ -163,14 +163,7 @@
             font-size: 16px;
         }
 
-        .otworkPaper input[type=datetime-local] {
-            text-align: center;
-            width: 40%;
-            vertical-align: middle;
-        }
-        input[type=file]{
-            margin-bottom:4px;
-        }
+      
 	</style>
 </head>
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;" >

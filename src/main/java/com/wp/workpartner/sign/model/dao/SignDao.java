@@ -157,20 +157,20 @@ public class SignDao {
 	}
 	
 //  상세보기 결재선 리스트
-	public ArrayList<Sign> selectSignList(SqlSessionTemplate sqlSession, int dpNo){
-		return (ArrayList)sqlSession.selectOne("signMapper.selectSignList", dpNo);
+	public ArrayList<Sign> selectSignList(SqlSessionTemplate sqlSession, int no){
+		return (ArrayList)sqlSession.selectList("signMapper.selectSignList", no);
 	}
 	
-	public SelectVacation selectVa(SqlSessionTemplate sqlSession, int dpNo) {
-		return sqlSession.selectOne("signMapper.selectVa", dpNo);
+	public SelectVacation selectVa(SqlSessionTemplate sqlSession, int no) {
+		return sqlSession.selectOne("signMapper.selectVa", no);
 	}
-	public SelectOtwork selectOw(SqlSessionTemplate sqlSession, int dpNo) {
-		return sqlSession.selectOne("signMapper.selectOw", dpNo);
+	public SelectOtwork selectOw(SqlSessionTemplate sqlSession, int no) {
+		return sqlSession.selectOne("signMapper.selectOw", no);
 	}
-	public SelectReSign selectRe(SqlSessionTemplate sqlSession, int dpNo) {
-		return sqlSession.selectOne("signMapper.selectRe", dpNo);
+	public SelectReSign selectRe(SqlSessionTemplate sqlSession, int no) {
+		return sqlSession.selectOne("signMapper.selectRe", no);
 	}
-	public SelectCooperation selectCo(SqlSessionTemplate sqlSession, int dpNo) {
-		return sqlSession.selectOne("signMapper.selectCo", dpNo);
+	public SelectCooperation selectCo(SqlSessionTemplate sqlSession, int no) {
+		return sqlSession.selectOne("signMapper.selectCo", no);
 	}
 }

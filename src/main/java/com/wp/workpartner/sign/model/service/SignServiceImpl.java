@@ -135,20 +135,20 @@ public class SignServiceImpl implements SignService {
 	}
 	
 	@Override
-	public SelectVacation selectVa(int dpNo) {
-		return sDao.selectVa(sqlSession, dpNo);
+	public SelectVacation selectVa(int no) {
+		return sDao.selectVa(sqlSession, no);
 	}
 	@Override
-	public SelectOtwork selectOw(int dpNo) {
-		return sDao.selectOw(sqlSession, dpNo);
+	public SelectOtwork selectOw(int no) {
+		return sDao.selectOw(sqlSession, no);
 	}
 	@Override
-	public SelectReSign selectRe(int dpNo) {
-		return sDao.selectRe(sqlSession, dpNo);
+	public SelectReSign selectRe(int no) {
+		return sDao.selectRe(sqlSession, no);
 	}
 	@Override
-	public SelectCooperation selectCo(int dpNo) {
-		return sDao.selectCo(sqlSession, dpNo);
+	public SelectCooperation selectCo(int no) {
+		return sDao.selectCo(sqlSession, no);
 	}
 
 
@@ -214,8 +214,8 @@ public class SignServiceImpl implements SignService {
 		return null;
 	}
 	@Override
-	public ArrayList<Sign> selectSignList(int dpNo) {
-		return sDao.selectSignList(sqlSession, dpNo);
+	public ArrayList<Sign> selectSignList(int no) {
+		return sDao.selectSignList(sqlSession, no);
 	}
 	
 

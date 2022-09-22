@@ -129,21 +129,6 @@ table {
 				                        <td>${ p.dpCreate }</td>
 				                        <td>${ p.signEmpName }</td>
 				                    </tr>
-				                    <script>
-										$(document).ready(function(){
-											$(".dpTitle").click(function(){
-					                    		if('${s.dpCategory}' == '연차'){
-													$(".dpTitle").attr("href", "detailVa.si");
-												}else if('${s.dpCategory}' == '외근'){
-													$(".dpTitle").attr("href", "detailOtw.si");
-												}else if('${s.dpCategory}' == '퇴직원'){
-													$(".dpTitle").attr("href", "detailRes.si");
-												}else{
-													$(".dpTitle").attr("href", "detailCo.si");
-												}
-											})
-										})
-									</script>
 			                    </c:forEach>
 	                		</c:otherwise>
 	                   </c:choose>
@@ -254,21 +239,6 @@ table {
 				                        <td>${ e.signEmpName }</td>
 				                        <td>${ e.lastSigndate } </td>
 				                    </tr>
-				                    <script>
-										$(document).ready(function(){
-											$(".dpTitle").click(function(){
-					                    		if('${s.dpCategory}' == '연차'){
-													$(".dpTitle").attr("href", "detailVa.si");
-												}else if('${s.dpCategory}' == '외근'){
-													$(".dpTitle").attr("href", "detailOtw.si");
-												}else if('${s.dpCategory}' == '퇴직원'){
-													$(".dpTitle").attr("href", "detailRes.si");
-												}else{
-													$(".dpTitle").attr("href", "detailCo.si");
-												}
-											})
-										})
-									</script>
 			                    </c:forEach>
 	                		</c:otherwise>
 	                   </c:choose>
@@ -305,6 +275,16 @@ table {
 			</div>
 		</c:otherwise>
 	</c:choose>
+	<script>   
+						$(document).ready(function(){
+							$(".dpTitle").click(function(){
+		                			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(0).text() + "&ct=" + $(this).parents().parents().children().eq(1).text(), "btn", "width=805, height=800");
+		                			console.log($(this).parent().siblings(".a").val("input[type=hidden]"));
+					            	vacation.moveTo(560,120);
+					            	vacation.focus();
+							})
+						})
+				    </script> 
 	</main>
 
 	</div>

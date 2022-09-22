@@ -26,7 +26,9 @@ public class SelectVacation {
 	private String dpChange;
 	
 	private String vaStart;
+	private String vaStartTime;
 	private String vaEnd;
+	private String vaEndTime;
 	private String vaCategory;
 	private String vaContent;
 	private ArrayList<Sign> signList;
