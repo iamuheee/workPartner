@@ -137,7 +137,7 @@ public class BookController {
 		// bkPerson, bkDate, bkStart, bkEnd, bkModify(내가 직접 넣어줘야 함)
 		
 		int result = bService.updateBook(b);
-		System.out.println(result);
+//		System.out.println(result);
 		
 		if(result > 0) {
 			session.setAttribute("alertMsg", "회의실 예약 일정 변경에 성공했습니다.");
@@ -158,16 +158,22 @@ public class BookController {
 	@ResponseBody
 	@RequestMapping("delete.bk")
 	public String ajaxDeleteBook(String bkNo) {
-		System.out.println("bkNo : " + bkNo);
+//		System.out.println("bkNo : " + bkNo);
 		int result = bService.deleteBook(bkNo);
-		System.out.println(result);
+//		System.out.println(result);
 		
 		return (result > 0) ? "success" : "fail";
 	}
 	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 22.
+	 * @method	: (ajax) 풀캘린더 스케쥴에 띄울 회의실 목록 및 회의실별 예약 목록 조회 요청 처리
+	 * @return	: room, book
+	 */
 	@ResponseBody
 	@RequestMapping(value="calendar.bk", produces="application/json; charset=UTF-8")
-	public String getBookCal() {
+	public String ajaxGetBookCal() {
 		// event용 data에 담을 예약 내역과 resource용 data에 담을 회의실 목록을 함께 가져가야 함
 		// event == 캘린더에 띄울 하나하나의 이벤트 객체
 		// resource == 각각의 회의실 정보를 담은 객체
@@ -180,4 +186,117 @@ public class BookController {
 		
 		return new Gson().toJson(map);
 	}
+	
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 22.
+	 * @method	: (ajax) 관리자용 회의실 예약 이력 조회 요청 처리
+	 * @return	: list, pi
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectAll.bk", produces="application/json; charset=UTF-8")
+	public String ajaxSelectAll(@RequestParam(value="cpage", defaultValue="1") int currentPage) {
+		int listCount = bService.selectAllListCount();
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		
+		ArrayList<Book> list = bService.selectAllList(pi);
+		
+//		System.out.println(pi);
+//		System.out.println(list);
+		
+		HashMap<String, Object> result = new HashMap<>();
+		result.put("pi", pi);
+		result.put("list", list);
+		
+		return new Gson().toJson(result);
+	}
+
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 22.
+	 * @method	: (ajax) 회의실별 예약 목록 조회 요청 처리 
+	 * @param	: cpage, rmNo
+	 * @return	: list, pi
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectByRoom.bk", produces="application/json; charset=UTF-8")
+	public String ajaxSelectByRoom(@RequestParam(value="cpage", defaultValue="1") int currentPage, String rmNo) {
+//		System.out.println("rmNo : " + rmNo);
+//		System.out.println("cpage : " + currentPage);
+		
+		int listCount = bService.selectByRoomListCount(rmNo);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		ArrayList list = bService.selectByRoomList(rmNo, pi);
+		
+//		System.out.println(pi);
+//		System.out.println(list);
+		
+		HashMap<String, Object> result = new HashMap<>();
+		result.put("pi", pi);
+		result.put("list", list);
+		
+		return new Gson().toJson(result);
+	}
+	
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 22.
+	 * @method	: (ajax) 기간별 회의실 예약 목록 요청 처리
+	 * @param	: cpage, start(시작 날짜), end(종료 날짜)
+	 * @return	: list, pi
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectByDate.bk", produces="application/json; charset=UTF-8")
+	public String ajaxSelectByDate(@RequestParam(value="cpage", defaultValue="1") int currentPage, String start, String end) {
+//		System.out.println("start : " + start);
+//		System.out.println("end : " + end);
+//		System.out.println("cpage : " + currentPage);
+		
+		int listCount = bService.selectByDateListCount(start, end);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		ArrayList list = bService.selectByDateList(start, end, pi);
+		
+//		System.out.println(pi);
+//		System.out.println(list);
+		
+		HashMap<String, Object> result = new HashMap<>();
+		result.put("pi", pi);
+		result.put("list", list);
+		
+		return new Gson().toJson(result);
+	}
+	
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 22.
+	 * @method	: 회의실별, 날짜별 예약 목록 조회 요청 
+	 * @param	: cpage, rmNo, start, end
+	 * @return	: list, pi
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectByRD.bk", produces="application/json; charset=UTF-8")
+	public String ajaxSelectByRoomAndDate(@RequestParam(value="cpage", defaultValue="1") int currentPage, String rmNo, String start, String end) {
+//		System.out.println("rmNo : " + rmNo);
+//		System.out.println("start : " + start);
+//		System.out.println("end : " + end);
+//		System.out.println("cpage : " + currentPage);
+		
+		int listCount = bService.selectByRoomAndDateListCount(rmNo, start, end);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		ArrayList list = bService.selectByRoomAndDateList(rmNo, start, end, pi);
+		
+//		System.out.println(pi);
+//		System.out.println(list);
+		
+		HashMap<String, Object> result = new HashMap<>();
+		result.put("pi", pi);
+		result.put("list", list);
+		
+		return new Gson().toJson(result);
+	}
+	
+	
 }

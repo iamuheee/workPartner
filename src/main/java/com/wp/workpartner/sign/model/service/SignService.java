@@ -62,10 +62,10 @@ public interface SignService {
 	int deleteOtwork(int dpNo);
 	int deleteReSignEmp(int dpNo);
 //  기안서 상세조회
-	SelectCooperation selectCo(int dpNo); 
-	SelectReSign selectRe(int dpNo); 
-	SelectVacation selectVa(int dpNo); 
-	SelectOtwork selectOw(int dpNo); 
+	SelectCooperation selectCo(int no); 
+	SelectReSign selectRe(int no); 
+	SelectVacation selectVa(int no); 
+	SelectOtwork selectOw(int no); 
 //  기안서 결재선
-	ArrayList<Sign> selectSignList(int dpNo);
+	ArrayList<Sign> selectSignList(int no);
 }

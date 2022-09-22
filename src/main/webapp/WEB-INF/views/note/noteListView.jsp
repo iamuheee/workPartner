@@ -32,7 +32,7 @@
                         <table>
                             <tr> 
                                 <td style="color: red;">●</td>          
-                                <td colspan="2" rowspan="2"><img id="profileImg" src="${pageContext.request.contextPath}/resources/profile_images/defaultProfile.png"></td>                        
+                                <td colspan="2" rowspan="2"><img id="profileImg" src=""></td>                        
                                 <td colspan="2" class="fontsize15">인사부 김인사님의 쪽지</td>
                                 <td width="150px">2022.05.02 AM10:30</td>                    
                                 <td><sapn class="deleteNote">X</sapn></td>
@@ -72,7 +72,7 @@
                             <table>
                                 <tr> 
                                     <td style="color: red;">●</td>          
-                                    <td colspan="2" rowspan="2"><img id="profileImg" src="${pageContext.request.contextPath}/resources/profile_images/defaultProfile.png"></td>                        
+                                    <td colspan="2" rowspan="2"><img id="profileImg" ></td>                        
                                     <td colspan="2" class="fontsize15">인사부 김인사님의 쪽지</td>
                                     <td width="150px">2022.05.02 AM10:30</td>                    
                                     <td><sapn class="deleteNote">X</sapn></td>

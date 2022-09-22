@@ -12,13 +12,17 @@ import lombok.ToString;
 @Getter
 @ToString
 public class NoticeComment {
-	 private String nCommetNo;
+	 private String nCommentNo;
 	 private String noticeNo;
 	 private String empNo;
 	 private String empId;
 	 private String nCommentContent;
-	 private Date createDate;
-	 private Date modifyDate;
+	 private String createDate;
+	 private String modifyDate;
 	 private String nCommentParentNo;
 	 private String nCommentStatus;
+	 
+	 // level
+	 private int level;
+	 private String empProfile;
 }

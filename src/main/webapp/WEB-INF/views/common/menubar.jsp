@@ -315,7 +315,7 @@
 	                               <nav class="sb-sidenav-menu-nested nav">
 	                                   <a class="nav-link nav-choice" href="mypage.em">마이페이지</a>
 	                                   <a class="nav-link nav-choice" href="list.nt">공지사항</a>
-	                                   <a class="nav-link nav-choice" href="">쪽지함</a>
+	                                   <a class="nav-link nav-choice" href="listNote.ne">쪽지함</a>
 	                               </nav>
 	                           </div>
 	
@@ -497,7 +497,7 @@
 	                                       <nav class="sb-sidenav-menu-nested nav">
 	                                       	   <a class="btn btn-sm btn-primary btn-size" href="enrollForm.ro" style="margin:10px;">+ 회의실 등록</a>
 	                                           <a class="nav-link nav-choice" href="list.ro">회의실 관리</a>
-	                                           <a class="nav-link nav-choice" href="">예약 이력 조회</a>
+	                                           <a class="nav-link nav-choice" href="historyList.bk">예약 이력 조회</a>
 	                                       </nav>
 	                                   </div>                                                                    
 	                               </nav>

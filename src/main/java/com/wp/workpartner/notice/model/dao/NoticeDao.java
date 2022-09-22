@@ -11,6 +11,7 @@ import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.notice.model.vo.Notice;
+import com.wp.workpartner.notice.model.vo.NoticeComment;
 
 @Repository
 public class NoticeDao {
@@ -93,5 +94,25 @@ public class NoticeDao {
 	
 	public int updateFileY(SqlSessionTemplate sqlSession, File file) {
 		return sqlSession.update("noticeMapper.updateFileY", file);
+	}
+	
+	public ArrayList<NoticeComment> selectReplyList(SqlSessionTemplate sqlSession, String noticeNo){
+		return (ArrayList)sqlSession.selectList("noticeMapper.selectReplyList", noticeNo);
+	}
+	
+	public int InsertCommentParent(SqlSessionTemplate sqlSession, NoticeComment nComm) {
+		return sqlSession.insert("noticeMapper.InsertCommentParent", nComm);
+	}
+	
+	public int updateComment(SqlSessionTemplate sqlSession, NoticeComment nComm) {
+		return sqlSession.update("noticeMapper.updateComment", nComm);
+	}
+	
+	public int deleteComment(SqlSessionTemplate sqlSession, String comNo) {
+		return sqlSession.update("noticeMapper.deleteComment", comNo);
+	}
+	
+	public ArrayList<Notice> selectTopMainList(SqlSessionTemplate sqlSession){
+		return (ArrayList)sqlSession.selectList("noticeMapper.selectTopMainList");
 	}
 }

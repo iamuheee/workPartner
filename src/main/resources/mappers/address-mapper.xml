@@ -189,7 +189,7 @@
 		        , emp_exEmail
 		        , emp_enrollDate		  
 		        , emp_status
-		        , emp_profile      
+		        , NVL(emp_profile, 'resources/profile_images/defaultProfile.png') as "emp_profile"    
 		        , emp_nt_admin
 		        , dep_name as dep_cd
 		        , pos_name as pos_cd   

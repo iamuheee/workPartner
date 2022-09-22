@@ -270,7 +270,6 @@ table {
 			                    </c:forEach>
 	                		</c:otherwise>
 	                   </c:choose>
-					
 					</table>
 					<c:if test="${not empty endSignList }">
                         <div id="pagingArea">

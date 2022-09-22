@@ -422,36 +422,36 @@ public class SignController {
 	}
 //	기안서 상세보기
 	@RequestMapping("detailMy.si")
-	public ModelAndView selectDetailView(ModelAndView mv, Model model, int dpNo, String category) {
-		System.out.println(dpNo);
-		ArrayList<Sign> signList = sService.selectSignList(dpNo);
-		if(category.equals("연차")) {
+	public ModelAndView selectDetailView(ModelAndView mv, Model model, int no, String ct) {
+		System.out.println(no);
+		ArrayList<Sign> signList = sService.selectSignList(no);
+		if(ct.equals("연차")) {
 			model.addAttribute("flag", "연차");
-			SelectVacation selectVa = sService.selectVa(dpNo);
+			SelectVacation selectVa = sService.selectVa(no);
 			mv.addObject("signList", signList)
 			.addObject("v", selectVa)
 			.setViewName("sign/vacationDetailView");
 			System.out.println(signList);
 			System.out.println(selectVa);
-		}else if(category.equals("외근")) {
+		}else if(ct.equals("외근")) {
 			model.addAttribute("flag", "외근");
-			SelectOtwork selectOw = sService.selectOw(dpNo);
+			SelectOtwork selectOw = sService.selectOw(no);
 			mv.addObject("signList", signList)
 			.addObject("o", selectOw)
 			.setViewName("sign/outworkDetailView");
 			System.out.println(signList);
 			System.out.println(selectOw);
-		}else if(category.equals("퇴직원")) {
+		}else if(ct.equals("퇴직원")) {
 			model.addAttribute("flag", "퇴직원");
-			SelectReSign selectRe = sService.selectRe(dpNo);
+			SelectReSign selectRe = sService.selectRe(no);
 			mv.addObject("signList", signList)
 			.addObject("r", selectRe)
-			.setViewName("sign/reSingEmpDetailView");
+			.setViewName("sign/reSignEmpDetailView");
 			System.out.println(signList);
 			System.out.println(selectRe);
 		}else {
 			model.addAttribute("flag", "외근");
-			SelectCooperation selectCo = sService.selectCo(dpNo);
+			SelectCooperation selectCo = sService.selectCo(no);
 			mv.addObject("signList", signList)
 			.addObject("c", selectCo)
 			.setViewName("sign/cooperationDetailView");

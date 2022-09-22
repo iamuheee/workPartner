@@ -335,7 +335,7 @@
 									<span class="material-symbols-outlined">keyboard_voice</span>
 									<span class="header-title">공지사항</span>
 								</div>
-								<a href="" class="read-more">더보기 +</a>
+								<a href="list.nt" class="read-more">더보기 +</a>
 							</div>
 						</div>
 						<!-- 각 영역 테이블 자리 -->
@@ -348,27 +348,11 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>공지사항입니다5</td>
-										<td align="center">2022-09-05</td>
-									</tr>
-									<tr>
-										<td>공지사항입니다5</td>
-										<td align="center">2022-09-05</td>
-									</tr>
-									<tr>
-										<td>공지사항입니다5</td>
-										<td align="center">2022-09-05</td>
-									</tr>
-									<tr>
-										<td>공지사항입니다5</td>
-										<td align="center">2022-09-05</td>
-									</tr>
-									<tr>
-										<td>공지사항입니다5</td>
-										<td align="center">2022-09-05</td>
-									</tr>
-
+									<!--
+										
+										공지사항 올 자리 (최신 순서 top 5)	
+										
+									  -->
 								</tbody>
 							</table>
 						</div>
@@ -418,6 +402,8 @@
 						</div>
 					</div>
 					<!-- 전자결재 박스 끝 -->
+					
+					
 
 					<!-- 메일 박스-->
 					<div class="card mb-4">
@@ -427,7 +413,7 @@
 								<div class="card-title">
 									<span class="material-symbols-outlined">mail</span>  <span	class="header-title">메일</span>
 								</div>
-								<a href="" class="read-more">더보기 +</a>
+								<a href="receiveList.ma" class="read-more">더보기 +</a>
 							</div>
 						</div>
 						<!-- 각 영역 테이블 자리 -->
@@ -435,42 +421,21 @@
 							<table id="mailList" class="table table-sm table-hover">
 								<thead>
 									<tr align="center">
-										<th scope="col" width="60%">제목</th>
+										<th scope="col" width="50%">제목</th>
 										<th scope="col" width="20%">보낸사람</th>
-										<th scope="col" width="20%">날짜</th>
+										<th scope="col" width="30%">날짜</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>이메일입니다4</td>
-										<td align="center">김곰돌</td>
-										<td align="center">2022-09-05</td>
-									</tr>
-									<tr>
-										<td>이메일입니다4</td>
-										<td align="center">김곰돌</td>
-										<td align="center">2022-09-05</td>
-									</tr>
-									<tr>
-										<td>이메일입니다4</td>
-										<td align="center">김곰돌</td>
-										<td align="center">2022-09-05</td>
-									</tr>
-									<tr>
-										<td>이메일입니다4</td>
-										<td align="center">김곰돌</td>
-										<td align="center">2022-09-05</td>
-									</tr>
-									<tr>
-										<td>이메일입니다4</td>
-										<td align="center">김곰돌</td>
-										<td align="center">2022-09-05</td>
-									</tr>
+									<!-- 
+										이메일 올 자리
+									 -->
 								</tbody>
 							</table>
 						</div>
 					</div>
 					<!-- 메일 박스 끝 -->
+					
 
 				</div>
 				<!-- 가운데 영역 끝-->
@@ -585,6 +550,10 @@
 			
 			<script>
 				$(function(){
+					
+					// 10초간격마다 topBoardList함수호출 => 빈번한 요청은 과부화가 생길수있으니 완성전까지 주석처리
+		    		//setInterval( topBoardList, 10000);
+					
 					let x = "";
 					let y = "";
 					
@@ -619,8 +588,90 @@
 						},error:function(){
 							console.log("메인페이지 시간 ajax 통신 실패");
 						}
-    				})
+    				});
+					
+					
+					/*  ============================================================================  */
+					
+					// 공지사항 조회
+					selectNoticeTopList();
+					
+					$(document).on("click", "#noticeList tr", function(){
+		           		location.href = 'detail.nt?no=' + $(this).children(".noticeNo").val();
+		            });  
+					
+					// email 조회
+					selectEmailTopList();	
+					
+					 $("#mailList").on("click", "tr", function(){	         	
+				        	location.href = 'detail.ma?no=' + $(this).find(".emailNo").val()+'&mailEmail=' +$(this).find(".mailEmail").val();
+				     });
+					
 				})
+				
+				
+				/* ===================================== 공지사항 & 이메일 ==========================================  */
+				// 공지사항 조회
+				function selectNoticeTopList(){
+					
+					$.ajax({
+						url:"topMainList.nt",
+						success:function(list){
+						    let value = "";
+							for(let i=0; i<list.length; i++){
+								
+								value += '<tr>'
+										+   '<input type="hidden" class="noticeNo" value="'+ list[i].noticeNo + '">'
+									    +	'<td>'+ list[i].noticeTitle + ' <span style="color: red;">';
+								if(list[i].noticeImportant == 'I'){
+								 value  += 		'!';
+								}	    
+								value+=    	'</td>'
+										+	'<td align="center">'+ list[i].noticeCreateDate +'</td>'
+										+'</tr>';
+								
+							}
+							
+							$("#noticeList tbody").html(value);							
+						}, 
+						error:function(){
+							console.log("메인페이지 공지사항 조회용 ajax 실패");
+						}				
+						
+					})
+				}
+				
+				// 이메일 조회
+				function selectEmailTopList(){
+					
+					console.log("${loginUser.empEmail}");
+					$.ajax({
+						url:"selectMainTopEmail.ma",
+						data :{email:"${loginUser.empEmail}"},
+						success:function(list){
+							let value = "";
+							
+							if(list.length == 0){
+								value += '<tr>'
+										+	'<td colspan="3">받은 이메일이 없습니다.</td>'
+										+'</tr>';
+							}
+							for(let e=0; e<list.length; e++){
+								value += '<tr>'
+										+   '<input type="hidden" class="emailNo" value="'+ list[e].mailNo + '">'
+										+   '<input type="hidden" class="mailEmail" value="'+ list[e].mailEmail + '">'
+										+	'<td>'+ list[e].mailTitle +'</td>'
+										+	'<td align="center">'+ list[e].mailSenderName  +'</td>'
+										+	'<td align="center">'+ list[e].mailCreateDate +'</td>'
+										+'</tr>';
+							};
+						
+							$("#mailList tbody").html(value);
+						}					
+					})
+				}
+				
+				
 			</script>
 </body>
 </html>

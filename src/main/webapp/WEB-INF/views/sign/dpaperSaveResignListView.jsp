@@ -102,7 +102,7 @@
                                         <th width="5%"><input type="checkbox" style="scale: 1.3;"></th>
                                         <th class="endNum" width="10%">문서번호</th>
                                         <th class="endNum" width="10%">서식</th>
-                                        <th class="endTitle" width="40%">제목</th>
+                                        <th class="endTitle" width="30%">제목</th>
                                         <th class="endCreate" width="15%">임시저장일</th>
                                         <th width="15%">첨부파일</th>
                                         <th width="15%">이어서 작성하기</th>
@@ -117,11 +117,10 @@
 				                		</c:when>
 				                		<c:otherwise>
 				                			<c:forEach var="s" items="${ saveList }">
-				                			
 							                    <tr align="center">
 							                   	    <td><input type="checkbox" style="scale: 1.3;"></td>
-							                        <td><input type="hidden" name="dpNo" value="${ s.dpNo }">${ s.dpNo }</td>
-							                        <td>${ s.dpCategory }<input type="hidden" name="category" value="${s.dpCategory }"></td>
+							                        <td class='a'>${ s.dpNo }</td>
+							                        <td>${ s.dpCategory }</td>
 							                        <c:choose>
 								                        <c:when test="${empty s.dpTitle }">
 								                        	<td><a href="" id="detailBtn" class="dpTitle">제목없음</a></td>
@@ -156,18 +155,8 @@
 						                    </c:forEach>
 				                		</c:otherwise>
 				                   </c:choose>
-		<!-- 	                       <script>
-										$(document).ready(function(){
-											$(".dpTitle").click(function(){
-													console.log('${s.dpCategory}');
-													
-						                			vacation = window.open("detailMy.si", "btn", "width=805, height=800");
-									            	vacation.moveTo(560,120);
-									            	vacation.focus();
-											})
-										})
-									</script> 
-				                    -->
+		 	                    
+				                    
                                 </table>
 
                                 <c:if test="${not empty saveList }">
@@ -242,11 +231,12 @@
 
                                     <tr align="center">
                                         <th width="5%"><input type="checkbox" style="scale: 1.3;"></th>
+                                        <th class="endNum" width="10%">문서번호</th>
                                         <th class="endNum" width="10%">서식</th>
                                         <th class="endTitle" width="30%">제목</th>
-                                        <th class="endCreate" width="10%">기안일</th>
-                                        <th width="10%">첨부파일</th>
-                                        <th width="10%">재작성</th>
+                                        <th class="endCreate" width="15%">기안일</th>
+                                        <th width="15%">첨부파일</th>
+                                        <th width="15%">재작성</th>
                                     </tr>
 										<c:choose>
 				                		<c:when test="${empty reSignList }">
@@ -258,6 +248,7 @@
 				                			<c:forEach var="r" items="${ reSignList }">
 							                    <tr align="center">
 							                   	    <td><input type="checkbox" style="scale: 1.3;"></td>
+							                        <td>${ r.dpNo }</td>
 							                        <td>${ r.dpCategory }</td>
 							                        <c:choose>
 								                        <c:when test="${empty r.dpTitle }">
@@ -329,6 +320,16 @@
                         </div>
                     </c:otherwise>
                 </c:choose>
+		            <script>   
+						$(document).ready(function(){
+							$(".dpTitle").click(function(){
+		                			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(1).text() + "&ct=" + $(this).parents().parents().children().eq(2).text(), "btn", "width=815, height=800");
+		                			console.log($(this).parent().siblings(".a").val("input[type=hidden]"));
+					            	vacation.moveTo(560,120);
+					            	vacation.focus();
+							})
+						})
+				    </script> 
             </main>
         
         </div>

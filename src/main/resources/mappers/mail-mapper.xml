@@ -1054,6 +1054,38 @@
 		      </if>		       
 	</select>
 	
+	<select id="mainTopEmailList" resultMap="mailResult">
+		 select *    
+           from  (  
+                    select  
+	                        mail_no,
+	                        mail_title, 
+	                        to_char(mail_create_date, 'YYYY-MM-DD HH24:MI:SS') AS "mail_create_date", 		       
+	                        mail_sender_name,  
+	                        mail_email
+	                   from tb_mail
+	                   join tb_mail_status using(mail_no)
+	                   where 
+	                        (
+	                            (
+	                             mail_email = #{email}
+	                             and mail_status = 'Y'
+	                             and mail_category = 'R'
+	                             ) 
+	                            or 			       
+	                            (
+	                             mail_email = #{email}
+	                             and mail_status = 'Y'
+	                             and mail_category = 'C'
+	                            )				         
+	                        )		 		       
+	                   order 
+	                      by  		    
+	                         mail_create_date desc)
+           where rownum between 1 and 5   
+	
+	</select>
+	
 	
 	
 

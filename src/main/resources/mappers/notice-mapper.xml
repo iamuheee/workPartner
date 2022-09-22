@@ -23,15 +23,17 @@
 	</resultMap>
 	
 	<resultMap id="noticeCommentResult" type="NoticeComment">
-		<result column="ncom_no" property="nCommetNo"/>
+		<result column="ncom_no" property="nCommentNo"/>
 		<result column="nt_no" property="noticeNo"/>
 		<result column="emp_no" property="empNo"/>
 		<result column="emp_id" property="empId"/>
+		<result column="emp_profile" property="empProfile" />
 		<result column="ncom_content" property="nCommentContent"/>
 		<result column="ncom_create_date" property="createDate"/>
 		<result column="ncom_modify_date" property="modifyDate"/>
 		<result column="ncom_parent_no" property="nCommentParentNo"/>
 		<result column="ncom_status" property="nCommentStatus"/>
+		<result column="level" property="level"/>
 	</resultMap>
 	
 	<resultMap id="noticeResult" type="Notice">
@@ -450,6 +452,80 @@
 		  	 )  	
 	</insert>
 	
+	<select id="selectReplyList" resultMap="noticeCommentResult">
+		select
+		         ncom_no 
+		       , nt_no
+		       , nc.emp_no
+		       , NVL(emp_profile, 'resources/profile_images/defaultProfile.png') as "emp_profile"
+		       , nc.emp_id
+		       , ncom_content
+		       , to_char(ncom_create_date, 'YYYY-MM-DD') AS "ncom_create_date"
+		       , ncom_parent_no
+		       , level   
+		       , ncom_status
+		    from tb_notice_comment nc
+		    join tb_employee e on(e.emp_no = nc.emp_no)
+		   where nt_no = #{noticeNo}
+		     
+		   start with ncom_parent_no = 0
+		 connect 
+		      by prior ncom_no = ncom_parent_no 
+		order siblings by ncom_create_date asc		
+	</select>
+	
+	<insert id="InsertCommentParent">
+		  insert 
+		    into  tb_notice_comment
+		        (
+		            ncom_no
+		          , nt_no
+		          , emp_no
+		          , emp_id
+		          , ncom_content
+		          , ncom_parent_no
+		        )
+		   values
+		        (
+		            SEQ_NCOMNO.nextval
+		          , #{noticeNo}
+		          , #{empNo}
+		          , #{empId}
+		          , #{nCommentContent}
+		          , #{nCommentParentNo}
+		        )	
+	</insert>
+	
+	
+	<!--  댓글 수정 -->
+	<update id="updateComment">
+		update 
+				tb_notice_comment
+		   set  ncom_content = #{nCommentContent}	
+		 where  ncom_no = #{nCommentNo}		
+	</update>
+	
+	<!-- 댓글 삭제 -->
+	<update id="deleteComment">
+		update 
+				tb_notice_comment
+		   set  ncom_status = 'N'
+		 where  ncom_no = #{comNo}		
+	</update>
+	
+	<select id="selectTopMainList" resultMap="noticeResult">
+		 select *    
+           from  (  select nt_no
+                         , nt_title 
+                         , nt_important                
+                         , to_char(nt_create_date, 'YYYY-MM-DD') AS "nt_create_date"               
+                     from  tb_notice             
+                    where  nt_status = 'Y'  
+                    order 
+                       by nt_create_date desc)
+          where rownum between 1 and 5   
+	
+	</select>
 	
 	
 	

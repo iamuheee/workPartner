@@ -17,7 +17,7 @@
             color: black;
             font-weight: bold;
             margin-left: 10px;
-            border-right: 0.5px solid rgba(143, 143, 143, 0.547);
+            border-right: 0.5px solid #878787;
             padding-right: 15px;
         }
 
@@ -50,7 +50,7 @@
         table {
             font-size: 16px;
             border-spacing: 0px;
-            border: 0.5px solid rgba(143, 143, 143, 0.547);
+            border: 0.5px solid #878787;
         }
 
         tr {
@@ -67,7 +67,6 @@
 
         th,
         td {
-            border-right: 0.5px solid rgba(143, 143, 143, 0.547);
         }
 
         .signSelect tr {
@@ -82,7 +81,7 @@
         }
 
         .signSelect td {
-            width: 150px;
+            width: 125px;
             border: 0;
 
         }
@@ -100,7 +99,7 @@
 
         .titleSection th,
         td {
-            border-bottom: 0.5px solid rgba(143, 143, 143, 0.547);
+            border-bottom: 0.5px solid #878787;
         }
 
         .plusVa {
@@ -129,7 +128,7 @@
         input,
         select,
         textarea {
-            border: 0.5px solid rgba(143, 143, 143, 0.547)
+            border: 0.5px solid #878787;
         }
     </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -198,17 +197,41 @@
     <section class="signSelect">
         <div>
             <h3>결재선</h3>
-            <table align="center">
-            	<c:forEach var="s" items="${ signList }">
+            <table align="center" style="border:0;">
             		<tr>
-						<td width="80px" style="border:0.5px solid #878787; background: #f1f1f1;">
-							결재
-						 </td>
-						<td width="80px" style="border:0.5px solid #878787">
-						   ${ s.signEmpNo }
-						</td>
+            			<c:choose>
+            				<c:when test="${empty signList }">
+            					<td style="border:0.5px solid #878787; background: #f1f1f1;">
+									결재선
+								 </td>
+								<td style="border:0.5px solid #878787">
+								   
+								</td>
+								<td style="border:0.5px solid #878787; background: #f1f1f1;">
+									결재선
+								 </td>
+								<td style="border:0.5px solid #878787">
+								   
+								</td>
+								<td style="border:0.5px solid #878787; background: #f1f1f1;">
+									결재선
+								 </td>
+								<td style="border:0.5px solid #878787">
+								  
+								</td>
+            				</c:when>
+            				<c:otherwise>
+				            	<c:forEach var="s" items="${ signList }">
+								<td style="border:0.5px solid #878787; background: #f1f1f1;">
+									결재선
+								 </td>
+								<td style="border:0.5px solid #878787">
+								   ${ s.signEmpNo }
+								</td>
+				            	</c:forEach>
+				            </c:otherwise>
+            			</c:choose>
 					</tr>
-            	</c:forEach>
             </table>
         </div>
     </section>
@@ -217,19 +240,19 @@
         <div>
             <table align="center">
                 <tr class="titleSection">
-                    <th style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);">제목</th>
-                    <td align="left" style="border-bottom:0.5px solid rgba(143, 143, 143, 0.547);"><span
+                    <th style="border-bottom:0.5px solid #878787;">제목</th>
+                    <td align="left" style="border-bottom:0.5px solid #878787;"><span
                             style="margin-left:10px;">${ v.dpTitle }</span></td>
                 </tr>
-                <tr style="border-top:0.5px solid rgba(143, 143, 143, 0.547);">
+                <tr style="border-top:0.5px solid #878787;">
                     <th>첨부파일</th>
                     <td align="left">
 	                    <c:choose>
-	                   		<c:when test="${ empty v.origin }">
-	                   			첨부파일이 없습니다.
+	                   		<c:when test="${ empty v.dpOrigin }">
+	                   			<span style="margin-left:10px">첨부파일이 없습니다.</span>
 	                       	</c:when>
 	                       	<c:otherwise>
-	                       		<a href="${ v.change }" download="${ v.origin }">${ v.origin }</a>
+	                       		<a href="${ v.dpChange }" download="${ v.dpOrigin }">${ v.dpOrigin }</a>
 	                       	</c:otherwise>
 	                    </c:choose>
                     </td>

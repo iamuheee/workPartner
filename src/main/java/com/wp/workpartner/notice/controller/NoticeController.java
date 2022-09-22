@@ -22,12 +22,20 @@ import com.wp.workpartner.common.template.Pagination;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.notice.model.service.NoticeService;
 import com.wp.workpartner.notice.model.vo.Notice;
+import com.wp.workpartner.notice.model.vo.NoticeComment;
 
 @Controller
 public class NoticeController {
 
 	@Autowired
 	private NoticeService ntService;
+	
+	// 쪽지연결
+	@RequestMapping("listNote.ne")
+	public String listNote() {
+		return "note/noteListView";
+	}
+	
 	
 	//공지사항게시판 조회
 	@RequestMapping("list.nt")
@@ -438,6 +446,94 @@ public class NoticeController {
 		
 		
 	}
+	
+	/** 댓글 조회
+	 * @param noticeNo 공지사항 번호
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="replyList.nt", produces="applicaton/json; charset=utf-8")
+	public String ajaxSelectReplyList(String noticeNo) {
+		
+		ArrayList<NoticeComment> list = ntService.selectReplyList(noticeNo);		
+		
+		return new Gson().toJson(list);				
+	}
+	
+	/** 원댓글 등록
+	 * @param nComm
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="insertComment.nt")
+	public String ajaxInsertCommentParent(@RequestParam(value="parentNo", defaultValue="0")String parentNo, NoticeComment nComm) {
+		
+		nComm.setNCommentParentNo(parentNo);
+		
+		int result = ntService.InsertCommentParent(nComm);
+		
+		return result >0 ? "success" : "fail";
+	}
+	
+	/** 답글 등록 
+	 * 
+	 * 아쉬운점 => 화면 설계를 잘했다면... 댓글등록과 답글등록을 한번에 할텐데 
+	 * 
+	 * 해결방법 저 RequestParam을 이용해서 원댓글 등록엔 parentNo를 전달 X => default=0이 되게하면 간단해결
+	 * @param nComm
+	 * @return
+	 */
+	/*
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value="insertCommentChild.nt") public String
+	 * ajaxInsertCommentChild(NoticeComment nComm) { System.out.println(nComm);
+	 * 
+	 * int result = ntService.InsertCommentChild(nComm);
+	 * 
+	 * return result >0 ? "success" : "fail"; }
+	 */
+	
+	
+	/** 댓글 수정
+	 * @param ncom 정보
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("updateComment.nt")
+	public String ajaxUpdateComment(NoticeComment ncomm) {	
+		int result = ntService.updateComment(ncomm);
+		return result > 0 ? "success" : "fail"; 
+	}
+	
+	
+	/** 댓글 삭제
+	 * @param comNo 삭제할 댓글번호
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("deleteComment.nt")
+	public String ajaxDeleteComment(String comNo) {
+		
+		int result = ntService.deleteComment(comNo);
+		return result > 0 ? "success" : "fail"; 
+	}
+	
+	
+	/** 메인페이지 top 최신순 5 공지사항 	
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="topMainList.nt", produces="applicaton/json; charset=utf-8")
+	public String ajaxSelectTopMainNotice() {
+		
+		ArrayList<Notice> list = ntService.selectTopMainList();
+		
+		return new Gson().toJson(list);
+				
+	}
+	
+	
 	
 	
 	

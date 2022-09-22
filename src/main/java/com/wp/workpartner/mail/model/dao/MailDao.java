@@ -188,4 +188,8 @@ public class MailDao {
 	public int updateMailY(SqlSessionTemplate sqlSession, HashMap<String,Object> map) {
 		return sqlSession.update("mailMapper.updateMailY", map);
 	}
+	
+	public ArrayList<Mail> mainTopEmailList(SqlSessionTemplate sqlSession, String email){
+		return (ArrayList)sqlSession.selectList("mailMapper.mainTopEmailList", email);
+	}
 }

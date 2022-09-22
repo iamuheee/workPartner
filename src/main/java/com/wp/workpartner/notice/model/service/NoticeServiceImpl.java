@@ -12,6 +12,7 @@ import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.notice.model.dao.NoticeDao;
 import com.wp.workpartner.notice.model.vo.Notice;
+import com.wp.workpartner.notice.model.vo.NoticeComment;
 
 @Service
 public class NoticeServiceImpl implements NoticeService{
@@ -129,6 +130,38 @@ public class NoticeServiceImpl implements NoticeService{
 	public int updateFileNotice(File file) {
 		return ntDao.updateFileNotice(sqlSession, file);
 	}
+
+	// 공지사항 댓글 조회
+	@Override
+	public ArrayList<NoticeComment> selectReplyList(String noticeNo) {
+		return ntDao.selectReplyList(sqlSession, noticeNo);
+	}
+
+	// 공지사항 원댓글 등록
+	@Override
+	public int InsertCommentParent(NoticeComment nComm) {
+		return ntDao.InsertCommentParent(sqlSession, nComm);
+	}
+
+	// 댓글 수정
+	@Override
+	public int updateComment(NoticeComment nComm) {
+		return ntDao.updateComment(sqlSession, nComm);
+	}
+
+	// 댓글삭제
+	@Override
+	public int deleteComment(String comNo) {
+		return ntDao.deleteComment(sqlSession, comNo);
+	}
+
+	@Override
+	public ArrayList<Notice> selectTopMainList() {
+		return ntDao.selectTopMainList(sqlSession);
+	}
+	
+	
+	
 
 	
 	
