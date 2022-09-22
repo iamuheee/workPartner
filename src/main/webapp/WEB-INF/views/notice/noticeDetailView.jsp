@@ -342,7 +342,7 @@ table tr:hover{background-color:white;}
 				        		           + '</div>';				        		          
 							  
         						}else{ // 답글
-        							if(comStatus == 'N' && parentCommentNo != 0){
+        							if(comStatus == 'N' && parentCommentNo != 0){ // 답글은 삭제시에는 안보이게
         								
         							}else{
         								value += '<div class="card mb-2 marginReply">'

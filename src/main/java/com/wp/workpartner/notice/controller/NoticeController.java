@@ -467,9 +467,9 @@ public class NoticeController {
 	@ResponseBody
 	@RequestMapping(value="insertComment.nt")
 	public String ajaxInsertCommentParent(@RequestParam(value="parentNo", defaultValue="0")String parentNo, NoticeComment nComm) {
-		System.out.println(nComm);
+		
 		nComm.setNCommentParentNo(parentNo);
-		System.out.println(nComm);
+		
 		int result = ntService.InsertCommentParent(nComm);
 		
 		return result >0 ? "success" : "fail";
@@ -514,10 +514,26 @@ public class NoticeController {
 	@ResponseBody
 	@RequestMapping("deleteComment.nt")
 	public String ajaxDeleteComment(String comNo) {
-		System.out.println(comNo);
+		
 		int result = ntService.deleteComment(comNo);
 		return result > 0 ? "success" : "fail"; 
 	}
+	
+	
+	/** 메인페이지 top 최신순 5 공지사항 	
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="topMainList.nt", produces="applicaton/json; charset=utf-8")
+	public String ajaxSelectTopMainNotice() {
+		
+		ArrayList<Notice> list = ntService.selectTopMainList();
+		
+		return new Gson().toJson(list);
+				
+	}
+	
+	
 	
 	
 	

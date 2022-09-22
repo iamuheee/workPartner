@@ -198,7 +198,7 @@ table tr:hover{
              	});
              	
                	$(document).on("click", "#noticeTable tr", function(){
-           		location.href = 'detail.nt?no=' + $(this).children(".no").text();
+           			location.href = 'detail.nt?no=' + $(this).children(".no").text();
              	});    
                
                	// 상단공지사항 + 일반 공지사항을 동시에 진행 되게끔

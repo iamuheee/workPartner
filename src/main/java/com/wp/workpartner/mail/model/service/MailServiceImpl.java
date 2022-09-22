@@ -214,6 +214,12 @@ public class MailServiceImpl implements MailService {
 	@Override
 	public int updateMailY(HashMap<String, Object> map) {
 		return mDao.updateMailY(sqlSession, map);
+	}
+
+	// 메인페이지용 받은 이메일 + 최신순 top 5 
+	@Override
+	public ArrayList<Mail> mainTopEmailList(String email) {
+		return mDao.mainTopEmailList(sqlSession, email);
 	}	
 
 	

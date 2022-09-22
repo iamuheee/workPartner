@@ -154,6 +154,12 @@ public class NoticeServiceImpl implements NoticeService{
 	public int deleteComment(String comNo) {
 		return ntDao.deleteComment(sqlSession, comNo);
 	}
+
+	@Override
+	public ArrayList<Notice> selectTopMainList() {
+		return ntDao.selectTopMainList(sqlSession);
+	}
+	
 	
 	
 

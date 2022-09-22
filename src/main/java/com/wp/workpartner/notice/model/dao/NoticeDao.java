@@ -111,4 +111,8 @@ public class NoticeDao {
 	public int deleteComment(SqlSessionTemplate sqlSession, String comNo) {
 		return sqlSession.update("noticeMapper.deleteComment", comNo);
 	}
+	
+	public ArrayList<Notice> selectTopMainList(SqlSessionTemplate sqlSession){
+		return (ArrayList)sqlSession.selectList("noticeMapper.selectTopMainList");
+	}
 }

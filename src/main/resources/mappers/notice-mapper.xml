@@ -496,6 +496,8 @@
 		        )	
 	</insert>
 	
+	
+	<!--  댓글 수정 -->
 	<update id="updateComment">
 		update 
 				tb_notice_comment
@@ -503,6 +505,7 @@
 		 where  ncom_no = #{nCommentNo}		
 	</update>
 	
+	<!-- 댓글 삭제 -->
 	<update id="deleteComment">
 		update 
 				tb_notice_comment
@@ -510,6 +513,19 @@
 		 where  ncom_no = #{comNo}		
 	</update>
 	
+	<select id="selectTopMainList" resultMap="noticeResult">
+		 select *    
+           from  (  select nt_no
+                         , nt_title 
+                         , nt_important                
+                         , to_char(nt_create_date, 'YYYY-MM-DD') AS "nt_create_date"               
+                     from  tb_notice             
+                    where  nt_status = 'Y'  
+                    order 
+                       by nt_create_date desc)
+          where rownum between 1 and 5   
+	
+	</select>
 	
 	
 	

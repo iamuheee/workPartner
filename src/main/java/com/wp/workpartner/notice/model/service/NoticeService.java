@@ -90,6 +90,8 @@ public interface NoticeService {
 	// 4. 삭제
 	int deleteComment(String comNo);
 	
+	// [메인페이지]
+	ArrayList<Notice> selectTopMainList();
 
 	
 	
