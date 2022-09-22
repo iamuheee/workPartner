@@ -127,6 +127,9 @@ public interface MailService {
 	// 기본서명 조회 ==> 안씀
 	Signature selectSigBasic(String empNo);
 	
+	// [메인페이지용 조회]
+	ArrayList<Mail> mainTopEmailList(String email);
+	
 	
 	
 	

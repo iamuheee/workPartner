@@ -850,6 +850,17 @@ public class MailController {
 		
 	}
 	
+	/** 메인페이지 받은메일 + 최신 top 5
+	 * @param email
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectMainTopEmail.ma" , produces="applicaton/json; charset=utf-8")
+	public String ajaxMainTopEmailList(String email) {
+		ArrayList<Mail> list = mService.mainTopEmailList(email);
+		return new Gson().toJson(list);
+	}
+	
 	
 	
 	 
