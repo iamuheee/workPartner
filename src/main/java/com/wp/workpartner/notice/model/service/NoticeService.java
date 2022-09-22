@@ -7,6 +7,7 @@ import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.notice.model.vo.Notice;
+import com.wp.workpartner.notice.model.vo.NoticeComment;
 
 public interface NoticeService {
 	
@@ -74,5 +75,22 @@ public interface NoticeService {
 	
 	// 4. file insert
 	int updateFileNotice(File file);
+	
+	
+	// [공지사항 댓글]
+	// 1. 조회
+	ArrayList<NoticeComment> selectReplyList(String noticeNo);
+	
+	// 2. 댓글 등록
+	int InsertCommentParent(NoticeComment nComm);
+	
+	// 3. 수정
+	int updateComment(NoticeComment nComm);
+	
+	// 4. 삭제
+	int deleteComment(String comNo);
+	
+
+	
 	
 }
