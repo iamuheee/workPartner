@@ -141,15 +141,15 @@
 						    <div id="roomAndDate">
 						    	<div id="selectRmName">
 						    		회의실 : 
-						        	<select id="rmName" onchange="selectAllBookList()">
+						        	<select id="rmName" name="rmName" onchange="searchBookList()">
 							        	<!-- ajax로 받을 영역 -->
 						        	</select>
 						    	</div>
 						        <div id="inputDate">
 						        	기간별 조회 :
-							        <input type="date" name="startDate">&nbsp;~&nbsp; 
-							        <input type="date" name="endDate" onchange="selectAllBookList()">
-							        <button type="button" class="btn btn-sm btn-primary"><i class="fas fa-search"></i></button>
+							        <input type="date" id="startDate" name="startDate" onchange="searchBookList()">&nbsp;~&nbsp; 
+							        <input type="date" id="endDate" name="endDate" onchange="searchBookList()">
+							        <button type="button" class="btn btn-sm btn-primary" onclick="selectAllBookList()"><i class="fa-solid fa-arrows-rotate"></i></button>
 						        </div>
 						    </div>
 						    <!-- =========================================================== -->
@@ -201,9 +201,11 @@
         document.getElementById("current_date").innerHTML = year + " / " + month + " / " + day; */
 		
 		function closeModal(){
-			$('#insertBookMd').modal('hide');
+        	$("#selectRmName").find("#rmName").val("none");	// 모달창 비우기
+        	$("#inputDate").find("#startDate").val("");
+        	$("#inputDate").find("#endDate").val("");
+			$('#selectBookDetail').modal('hide');
 		}
-		
         
         $(function(){
         	selectRoomList();	// modal select opiton에 넣을 회의실 목록 조회
@@ -222,7 +224,7 @@
 				type:"post",
 				success:function(result){
 					console.log("회의실 목록 조회용 ajax 통신 성공");
-					console.log(result);
+					//console.log(result);
 					let value = "<option value='none'>회의실명</option>";
 					
 					for(let i=0; i<result.length; i++) {
@@ -347,7 +349,7 @@
 			  })
 		  	}
 		  })
-		  
+
 		 
 		 /* 회의실 전체 예약 목록 조회용 ajax */
 		  function selectAllBookList(cpage){
@@ -400,6 +402,7 @@
 					
 					$("#historyList").html(value);
 					$("#pagingArea").html(pgValue);
+							
 				
 				  },
 				  error:function(){
@@ -410,30 +413,226 @@
 			  
 		  } 
 		 /* 회의실 예약 목록 조회용 ajax -- 회의실별 / 기간별 */
+		 /* 선택 날짜 제한하기 */
+		 $("input[name=startDate]").change(function(){
+			 $("input[name=endDate]").attr("min", $("input[name=startDate]").val());
+		 })
 		 
-		 function selectAllBookListByCondition(cpage){
-			  $.ajax({
-				  url:"selectByCondition.bk",
-				  type:"post",
-				  data:{	// 회의실 번호(회의실별 조회), 시작 날짜&&종료날짜(기간별 조회)
-					  // 시작날짜 종료날짜 중 하나만 입력됐으면 검색되지 못하도록 막아야 함
-					  cpage:cpage,
-					  rmNo:$("#selectRmName #rmName option:selected").val(),
-					  startDate:$("#inputDate input[name=startDate]").val(),
-					  endDate:$("#inputDate input[name=endDate]").val()
-				  },
-				  success:function(result){
-					  console.log("회의실 예약 목록 조회용 ajax 통신 성공");
-					  console.log(result);
+		 $("input[name=endDate]").change(function(){
+			 $("input[name=startDate]").attr("max", $("input[name=endDate]").val());
+		 })
+		 
+		 function searchBookList(){
+			 
+  			 const rmNo = $("select[name=rmName]").val();
+			 const start = $("input[name=startDate]").val();
+			 const end = $("input[name=endDate]").val();  
+			 
+			 console.log(rmNo);
+			 console.log(start);
+			 console.log(end);
+			 
+			 if(rmNo != 'none') {	
+				 if(!end){	// 회의실별로만 조회하는 경우
+					 selectByRoom();
+				 }else {	// 회의실별 + 기간별 조회하는 경우
+					 selectByRoomAndDate();
+				 }
+			 }else {	// 기간별로만 조회하는 경우
+			 	if(!end) {
+			 		selectAllBookList();
+			 	}
+				 selectByDate();
+			 }
+		 }
+		 
+		 /* 회의실별 조회용 ajax */
+		 function selectByRoom(rmNo, cpage){
+			 $.ajax({
+				 url:"selectByRoom.bk",
+				 type:"post",
+				 data:{
+					 rmNo:$("select[name=rmName]").val(),
+					 cpage:cpage
+				 },
+				 success:function(result){
+					 console.log("회의실별 조회용 ajax 통신 성공");
+					 //console.log(result);
+					 
+					  let list = result.list;
+					  let pi = result.pi;
 					  
-				  },
-				  error:function(){
-					  console.log("회의실 예약 목록 조회용 ajax 통신 실패");
-				  }
-			  })
-		  }
-		  
-		  
+					  let value = "";
+					  let pgValue = "";
+					  
+					  for(let i=0; i<list.length; i++) {
+						  value += '<tr>' 
+							  	 +		'<td>' + list[i].bkNo +'</td>'
+							  	 +		'<td>' + list[i].rmName + '</td>'
+							  	 +		'<td>' + list[i].bkTitle + '</td>'
+							  	 +		'<td>' + list[i].empName + '</td>'
+							  	 +		'<td>' + list[i].bkPerson + '</td>'
+							  	 +		'<td>' + list[i].bkDate + ' ' + list[i].bkStart + ' ~ ' + list[i].bkEnd + '</td>';
+						  	 if(list[i].bkStatus == 'N') {
+						  		 value += '<td>예약완료</td>'; 
+						  	 }else {
+						  		value += '<td style="color:red;">예약취소</td>'; 
+						  	 }
+					  }
+					
+					   	/* 페이징 처리 */
+						if(pi.currentPage != 1){
+                 			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectByRoom("+ rmNo + ", " + (pi.currentPage - 1) + ")'>&lt;</button>"	
+                 		}
+                 		
+                 		for(let p=pi.startPage; p<=pi.endPage; p++) { 
+         		   			if(p == pi.currentPage) { 
+         				   			pgValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
+         				   	}else {
+         				   			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectByRoom("+ rmNo + ", " + p +")'>" + p + "</button>"
+         		           	} 
+         		         }     
+                  
+         		         if(pi.currentPage != pi.maxPage) {
+         		        	  pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectByRoom("+ rmNo + ", " + (pi.currentPage + 1) + ")'>&gt;</button>"
+         		         }  
+					
+					$("#historyList").html(value);
+					$("#pagingArea").html(pgValue);
+					
+				 },
+				 error:function(){
+					 console.log("회의실별 조회용 ajax 통신 실패");
+				 }
+			 })
+		 }
+		 
+		 /* 날짜별 조회용 ajax */
+		 function selectByDate(start, end, cpage){
+			 $.ajax({
+				 url:"selectByDate.bk",
+				 type:"post",
+				 data:{
+					 start:$("input[name=startDate]").val(),
+					 end:$("input[name=endDate]").val(),
+					 cpage:cpage
+				 },
+				 success:function(result){
+					 console.log("날짜별 조회용 ajax 통신 성공");
+					 //console.log(result);
+
+					  let list = result.list;
+					  let pi = result.pi;
+					  
+					  let value = "";
+					  let pgValue = "";
+					  
+					  for(let i=0; i<list.length; i++) {
+						  value += '<tr>' 
+							  	 +		'<td>' + list[i].bkNo +'</td>'
+							  	 +		'<td>' + list[i].rmName + '</td>'
+							  	 +		'<td>' + list[i].bkTitle + '</td>'
+							  	 +		'<td>' + list[i].empName + '</td>'
+							  	 +		'<td>' + list[i].bkPerson + '</td>'
+							  	 +		'<td>' + list[i].bkDate + ' ' + list[i].bkStart + ' ~ ' + list[i].bkEnd + '</td>';
+						  	 if(list[i].bkStatus == 'N') {
+						  		 value += '<td>예약완료</td>'; 
+						  	 }else {
+						  		value += '<td style="color:red;">예약취소</td>'; 
+						  	 }
+					  }
+					
+					   	/* 페이징 처리 */
+						if(pi.currentPage != 1){
+                 			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectByDate(" + start + ", " + end + ", " + (pi.currentPage - 1) + ")'>&lt;</button>"	
+                 		}
+                 		
+                 		for(let p=pi.startPage; p<=pi.endPage; p++) { 
+         		   			if(p == pi.currentPage) { 
+         				   			pgValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
+         				   	}else {
+         				   			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectByDate(" + start + ", " + end + ", " + p +")'>" + p + "</button>"
+         		           	} 
+         		         }     
+                  
+         		         if(pi.currentPage != pi.maxPage) {
+         		        	  pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectByDate(" + start + ", " + end + ", " + (pi.currentPage + 1) + ")'>&gt;</button>"
+         		         }  
+					
+					$("#historyList").html(value);
+					$("#pagingArea").html(pgValue);
+					
+				 },
+				 error:function(){
+					 console.log("날짜별 조회용 ajax 통신 실패");
+				 }
+			 })
+		 }
+		 
+		 /* 회의실별 + 날짜별 조회용 ajax */
+		 function selectByRoomAndDate(rmNo, start, end, cpage){
+			 $.ajax({
+				 url:"selectByRD.bk",
+				 type:"post",
+				 data:{
+					 rmNo:$("select[name=rmName]").val(),
+					 start:$("input[name=startDate]").val(),
+					 end:$("input[name=endDate]").val(),
+					 cpage:cpage
+				 },
+				 success:function(result){
+					 console.log("회의실+날짜별 조회용 ajax 통신 성공");
+					 //console.log(result);
+					 
+					  let list = result.list;
+					  let pi = result.pi;
+					  
+					  let value = "";
+					  let pgValue = "";
+					  
+					  for(let i=0; i<list.length; i++) {
+						  value += '<tr>' 
+							  	 +		'<td>' + list[i].bkNo +'</td>'
+							  	 +		'<td>' + list[i].rmName + '</td>'
+							  	 +		'<td>' + list[i].bkTitle + '</td>'
+							  	 +		'<td>' + list[i].empName + '</td>'
+							  	 +		'<td>' + list[i].bkPerson + '</td>'
+							  	 +		'<td>' + list[i].bkDate + ' ' + list[i].bkStart + ' ~ ' + list[i].bkEnd + '</td>';
+						  	 if(list[i].bkStatus == 'N') {
+						  		 value += '<td>예약완료</td>'; 
+						  	 }else {
+						  		value += '<td style="color:red;">예약취소</td>'; 
+						  	 }
+					  }
+					
+					   	/* 페이징 처리 */
+						if(pi.currentPage != 1){
+                 			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectByRoomAndDate(" + rmNo + ", " + start + ", " + end + ", " + (pi.currentPage - 1) + ")'>&lt;</button>"	
+                 		}
+                 		
+                 		for(let p=pi.startPage; p<=pi.endPage; p++) { 
+         		   			if(p == pi.currentPage) { 
+         				   			pgValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
+         				   	}else {
+         				   			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectByRoomAndDate(" + rmNo + ", " + start + ", " + end + ", " + p +")'>" + p + "</button>"
+         		           	} 
+         		         }     
+                  
+         		         if(pi.currentPage != pi.maxPage) {
+         		        	  pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectByRoomAndDate(" + rmNo + ", " + start + ", " + end + ", " + (pi.currentPage + 1) + ")'>&gt;</button>"
+         		         }  
+					
+					$("#historyList").html(value);
+					$("#pagingArea").html(pgValue);
+					
+				 },
+				 error:function(){
+					 console.log("회의실+날짜별 조회용 ajax 통신 실패");
+				 }
+				 
+			 })
+		 }
+		 
 		</script>
 		
 		

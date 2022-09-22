@@ -51,28 +51,28 @@ public class BookDao {
 		return (ArrayList)sqlSession.selectList("bookMapper.selectRoomList");
 	}
 	
-	public int selectAllListCountByCondition(SqlSessionTemplate sqlSession, String rmNo, String startDate, String endDate) {
-		HashMap<String, String> map = new HashMap<>();
-		map.put("rmNo", rmNo);
-		map.put("startDate", startDate);
-		map.put("endDate", endDate);
-		
-		return sqlSession.selectOne("bookMapper.selectAllListCountByCondition", map);
-	}
-	
-	public ArrayList selectAllListByCondition(SqlSessionTemplate sqlSession, String rmNo, String startDate, String endDate, PageInfo pi) {
-		HashMap<String, String> map = new HashMap<>();
-		map.put("rmNo", rmNo);
-		map.put("starDate", startDate);
-		map.put("endDate", endDate);
-		
-		int limit = pi.getBoardLimit();
-		int offset = (pi.getCurrentPage() - 1);
-		
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		
-		return (ArrayList)sqlSession.selectList("bookMapper.selectAllListByCondition", map, rowBounds);
-	}
+//	public int selectAllListCountByCondition(SqlSessionTemplate sqlSession, String rmNo, String startDate, String endDate) {
+//		HashMap<String, String> map = new HashMap<>();
+//		map.put("rmNo", rmNo);
+//		map.put("startDate", startDate);
+//		map.put("endDate", endDate);
+//		
+//		return sqlSession.selectOne("bookMapper.selectAllListCountByCondition", map);
+//	}
+//	
+//	public ArrayList selectAllListByCondition(SqlSessionTemplate sqlSession, String rmNo, String startDate, String endDate, PageInfo pi) {
+//		HashMap<String, String> map = new HashMap<>();
+//		map.put("rmNo", rmNo);
+//		map.put("starDate", startDate);
+//		map.put("endDate", endDate);
+//		
+//		int limit = pi.getBoardLimit();
+//		int offset = (pi.getCurrentPage() - 1);
+//		
+//		RowBounds rowBounds = new RowBounds(offset, limit);
+//		
+//		return (ArrayList)sqlSession.selectList("bookMapper.selectAllListByCondition", map, rowBounds);
+//	}
 	
 	public int selectAllListCount(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectOne("bookMapper.selectAllListCount");
@@ -86,5 +86,64 @@ public class BookDao {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		
 		return (ArrayList)sqlSession.selectList("bookMapper.selectAllList", null, rowBounds);
+	}
+	
+	public int selectByRoomListCount(SqlSessionTemplate sqlSession, String rmNo) {
+		return sqlSession.selectOne("bookMapper.selectByRoomListCount", rmNo);
+	}
+	
+	public ArrayList selectByRoomList(SqlSessionTemplate sqlSession, String rmNo, PageInfo pi) {
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit; 
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("bookMapper.selectByRoomList", rmNo, rowBounds);
+	}
+	
+	public int selectByDateListCount(SqlSessionTemplate sqlSession, String start, String end) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		
+		return sqlSession.selectOne("bookMapper.selectByDateListCount", map);
+	}
+	
+	public ArrayList selectByDateList(SqlSessionTemplate sqlSession, String start, String end, PageInfo pi) {
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit; 
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		
+		return (ArrayList)sqlSession.selectList("bookMapper.selectByDateList", map, rowBounds);
+	}
+	
+	public int selectByRoomAndDateListCount(SqlSessionTemplate sqlSession, String rmNo, String start, String end) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("rmNo", rmNo);
+		map.put("start", start);
+		map.put("end", end);
+		return sqlSession.selectOne("bookMapper.selectByRoomAndDateListCount", map);
+	}
+	
+	public ArrayList selectByRoomAndDateList(SqlSessionTemplate sqlSession, String rmNo, String start, String end, PageInfo pi) {
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit; 
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("rmNo", rmNo);
+		map.put("start", start);
+		map.put("end", end);
+		
+		return (ArrayList)sqlSession.selectList("bookMapper.selectByRoomAndDateList", map, rowBounds);
 	}
 }

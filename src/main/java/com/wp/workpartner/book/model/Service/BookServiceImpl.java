@@ -69,15 +69,15 @@ public class BookServiceImpl implements BookService {
 		return bDao.deleteBook(sqlSession, bkNo);
 	}
 
-	@Override
-	public int selectAllListCountByCondition(String rmNo, String startDate, String endDate) {
-		return bDao.selectAllListCountByCondition(sqlSession, rmNo, startDate, endDate);
-	}
-
-	@Override
-	public ArrayList selectAllListByCondition(String rmNo, String startDate, String endDate, PageInfo pi) {
-		return bDao.selectAllListByCondition(sqlSession, rmNo, startDate, endDate, pi);
-	}
+//	@Override
+//	public int selectAllListCountByCondition(String rmNo, String startDate, String endDate) {
+//		return bDao.selectAllListCountByCondition(sqlSession, rmNo, startDate, endDate);
+//	}
+//
+//	@Override
+//	public ArrayList selectAllListByCondition(String rmNo, String startDate, String endDate, PageInfo pi) {
+//		return bDao.selectAllListByCondition(sqlSession, rmNo, startDate, endDate, pi);
+//	}
 
 	@Override
 	public int selectAllListCount() {
@@ -87,6 +87,36 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public ArrayList selectAllList(PageInfo pi) {
 		return bDao.selectAllList(sqlSession, pi);
+	}
+
+	@Override
+	public int selectByRoomListCount(String rmNo) {
+		return bDao.selectByRoomListCount(sqlSession, rmNo);
+	}
+
+	@Override
+	public ArrayList selectByRoomList(String rmNo, PageInfo pi) {
+		return bDao.selectByRoomList(sqlSession, rmNo, pi);
+	}
+
+	@Override
+	public int selectByDateListCount(String start, String end) {
+		return bDao.selectByDateListCount(sqlSession, start, end);
+	}
+
+	@Override
+	public ArrayList selectByDateList(String start, String end, PageInfo pi) {
+		return bDao.selectByDateList(sqlSession, start, end, pi);
+	}
+
+	@Override
+	public int selectByRoomAndDateListCount(String rmNo, String start, String end) {
+		return bDao.selectByRoomAndDateListCount(sqlSession, rmNo, start, end);
+	}
+
+	@Override
+	public ArrayList selectByRoomAndDateList(String rmNo, String start, String end, PageInfo pi) {
+		return bDao.selectByRoomAndDateList(sqlSession, rmNo, start, end, pi);
 	}
 
 

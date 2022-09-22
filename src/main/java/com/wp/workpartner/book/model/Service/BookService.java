@@ -37,8 +37,19 @@ public interface BookService {
 	int selectAllListCount();
 	ArrayList selectAllList(PageInfo pi);
 	
-	// 회의실별, 기간별 예약 목록 조회 서비스 (select)
-	int selectAllListCountByCondition(String rmNo, String stardDate, String endDate);
-	ArrayList selectAllListByCondition(String rmNo, String startDate, String endDate, PageInfo pi);
+//	// 회의실별, 기간별 예약 목록 조회 서비스 (select)
+//	int selectAllListCountByCondition(String rmNo, String stardDate, String endDate);
+//	ArrayList selectAllListByCondition(String rmNo, String startDate, String endDate, PageInfo pi);
 	
+	// 회의실별 예약 목록 조회 서비스
+	int selectByRoomListCount(String rmNo);
+	ArrayList selectByRoomList(String rmNo, PageInfo pi);
+	
+	// 기간별 예약 목록 조회 서비스
+	int selectByDateListCount(String start, String end);
+	ArrayList selectByDateList(String start, String end, PageInfo pi);
+	
+	// 회의실별 + 기간별 예약 목록 조회 서비스
+	int selectByRoomAndDateListCount(String rmNo, String start, String end);
+	ArrayList selectByRoomAndDateList(String rmNo, String start, String end, PageInfo pi);
 }
