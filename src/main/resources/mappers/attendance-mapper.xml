@@ -460,12 +460,12 @@
 			        		and emp_no = #{id}
 			        	</if>
 			        	
-			        	<!-- <if test="array != null"> 
-					    AND emp_no IN
-						    <foreach collection="array" item="item" index="index"  open="(" close=")" separator=",">
-				        	  #{item}
-	   						 </foreach>
-   						 </if> -->
+			        	<if test="array.length >= 1">
+					    AND att_status IN
+					    <foreach collection="array" item="item" index="index"  open="(" close=")" separator=",">
+			        	  #{item}
+   						 </foreach>
+   						 </if>
 					order by dt desc
 	    
 	</select>
@@ -552,12 +552,184 @@
 			        	<if test="id != null and id != ''">
 			        		and emp_no = #{id}
 			        	</if>
-			        	<!-- <if test="array != null and array != '0'"> 
-					    AND emp_no IN
-						    <foreach collection="array" item="item" index="index"  open="(" close=")" separator=",">
-				        	  #{item}
-	   						 </foreach>
-   						 </if> -->
+			        	
+			        	
+			        	<if test="array.length >= 1">
+					    AND att_status IN
+					    <foreach collection="array" item="item" index="index"  open="(" close=")" separator=",">
+			        	  #{item}
+   						 </foreach>
+   						 </if>
+   						 
+			        	
+					order by dt desc
+	    
+	</select>
+	
+	
+	<!-- 내 근무내역 개수 -->
+	<select id="myAttendanceCount2" resultType="_int">
+		select count(*)
+			from (SELECT 
+			        c.emp_no,
+			        d.dep_name,
+			        d.dep_cd,
+			        p.pos_name,
+			        e.emp_name,
+			        c.dt,
+			        a.att_cmt,
+			        a.att_qt,
+			        a.att_time,
+			        e.emp_status,
+			        (select to_char(trunc(sysdate,'iw'), 'mm.dd(dy)') || '~' || to_char(trunc(sysdate,'iw')+4, 'mm.dd(dy)') from dual) as work_week,
+                    (select to_char(sysdate, 'yyyy.mm') from dual) as work_month,
+                    (select trunc(sum(ATT_WORKHOURS)/60) from tb_attendance
+                      where to_date(to_char(trunc(sysdate,'iw')+4, 'yyyymmdd'), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date(to_char(trunc(sysdate,'iw'), 'yyyymmdd'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')) as week_work_hours,
+                    (select trunc(sum(ATT_TIME)/60) from tb_attendance
+                      where to_date(to_char(trunc(sysdate,'iw')+4, 'yyyymmdd'), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date(to_char(trunc(sysdate,'iw'), 'yyyymmdd'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')) as week_plus_work_hours,
+                    (select trunc(sum(ATT_WORKHOURS)/60) from tb_attendance
+                      where to_date((TO_CHAR(LAST_DAY(SYSDATE),'YYYYMMDD')), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date((TO_CHAR(SYSDATE,'YYYYMM')||'01'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')) as month_work_hours,
+                    (select trunc(sum(ATT_TIME)/60) from tb_attendance
+                      where to_date((TO_CHAR(LAST_DAY(SYSDATE),'YYYYMMDD')), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date((TO_CHAR(SYSDATE,'YYYYMM')||'01'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')) as month_plus_work_hours,
+			        case when a.att_qt is not null  
+			             then trunc((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24)||'시간'||
+			                 trunc(((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24-(trunc((to_date(a.att_qt, 'hh24mi')
+			                        -to_date(a.att_cmt, 'hh24mi'))*24)))*60)||'분'
+			             else null 
+			        end as att_workhours,
+			        case when a.att_status is null 
+			             then '결근'
+			             else a.att_status
+			             end as att_status
+				    FROM
+				        tb_attendance a 
+				    right
+				     join (SELECT DT, EMP_NO
+				              FROM (
+				                        SELECT TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS DT,
+				                               TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'D') AS DAY
+				                           FROM ( 
+				                           			<choose>
+													 	<when test="(date1 != null and date1 != '') and (date2 != null and date2 != '')">
+											            	SELECT TO_CHAR(TO_DATE(#{date1},'YYYY-MM-DD'), 'YYYYMMDD') AS ST_DT 
+			                                              , 	   TO_CHAR(TO_DATE(#{date2},'YYYY-MM-DD'), 'YYYYMMDD') AS END_DT
+											            </when>
+											           	<otherwise>
+											           		SELECT TO_CHAR(SYSDATE,'YYYYMM')||'01' AS ST_DT 
+			                                              , 	   TO_CHAR(SYSDATE,'YYYYMMDD') AS END_DT
+											            </otherwise>
+													</choose>
+				                                    FROM DUAL 
+				                                  )
+				                         CONNECT BY LEVEL <![CDATA[<=]]> TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
+				                    ), (SELECT EMP_NO FROM TB_EMPLOYEE)
+				                WHERE DAY NOT IN (1, 7)
+				                AND DT NOT IN (select hol1_day from tb_holiday1)
+				            )c on (a.emp_no = c.emp_no and a.att_date = c.dt)
+			        join tb_employee e
+				      on (c.emp_no = e.emp_no)
+				    join tb_position p
+				      on (e.pos_cd = p.pos_cd)
+				    join tb_department d
+				      on (e.dep_cd = d.dep_cd))
+			        where emp_status='Y'
+			        	
+			        	<if test="id != null and id != ''">
+			        		and emp_no = #{id}
+			        	</if>
+			        	
+					order by dt desc
+	    
+	</select>
+	
+	
+	
+	<!-- 내근무내역 조회 리스트-->
+	<select id="myAttendanceList2" resultMap="AttendanceResult">
+		select *
+			from (SELECT 
+					(select 52 - trunc(sum(ATT_WORKHOURS)/60) from tb_attendance
+                      where to_date(to_char(trunc(sysdate,'iw')+4, 'yyyymmdd'), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date(to_char(trunc(sysdate,'iw'), 'yyyymmdd'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')) as x,
+                    (select 225 - trunc(sum(ATT_WORKHOURS)/60) from tb_attendance
+                      where to_date((TO_CHAR(LAST_DAY(SYSDATE),'YYYYMMDD')), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date((TO_CHAR(SYSDATE,'YYYYMM')||'01'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')) as y,    
+			        c.emp_no,
+			        d.dep_name,
+			        p.pos_name,
+			        c.dt,
+			        a.att_cmt,
+			        a.att_qt,
+			        case when a.att_time is not null
+			        	then (trunc(a.att_time/60) || '시간' || trunc(((a.att_time/60)-trunc(a.att_time/60))*60) || '분') 
+			        	else null end as att_time,
+			        e.emp_status,
+			        (select to_char(trunc(sysdate,'iw'), 'mm.dd(dy)') || '~' || to_char(trunc(sysdate,'iw')+4, 'mm.dd(dy)') from dual) as work_week,
+                    (select to_char(sysdate, 'yyyy.mm') from dual) as work_month,
+                    (select trunc(sum(ATT_WORKHOURS)/60) from tb_attendance
+                      where to_date(to_char(trunc(sysdate,'iw')+4, 'yyyymmdd'), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date(to_char(trunc(sysdate,'iw'), 'yyyymmdd'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')) as week_work_hours,
+                    (select trunc(sum(ATT_TIME)/60) from tb_attendance
+                      where to_date(to_char(trunc(sysdate,'iw')+4, 'yyyymmdd'), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date(to_char(trunc(sysdate,'iw'), 'yyyymmdd'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')) as week_plus_work_hours,
+                    (select trunc(sum(ATT_WORKHOURS)/60) from tb_attendance
+                      where to_date((TO_CHAR(LAST_DAY(SYSDATE),'YYYYMMDD')), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date((TO_CHAR(SYSDATE,'YYYYMM')||'01'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')) as month_work_hours,
+                    (select trunc(sum(ATT_TIME)/60) from tb_attendance
+                      where to_date((TO_CHAR(LAST_DAY(SYSDATE),'YYYYMMDD')), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date((TO_CHAR(SYSDATE,'YYYYMM')||'01'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')) as month_plus_work_hours,
+			        case when a.att_qt is not null  
+			             then trunc((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24)||'시간'||
+			                 trunc(((to_date(a.att_qt, 'hh24mi')-to_date(a.att_cmt, 'hh24mi'))*24-(trunc((to_date(a.att_qt, 'hh24mi')
+			                        -to_date(a.att_cmt, 'hh24mi'))*24)))*60)||'분'
+			             else null 
+			        end as att_workhours,
+			        case when a.att_status is null 
+			             then '결근'
+			             else a.att_status
+			             end as att_status
+				    FROM
+				        tb_attendance a 
+				    right
+				     join (SELECT DT, EMP_NO
+				              FROM (
+				                        SELECT TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS DT,
+				                               TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'D') AS DAY
+				                           FROM ( 
+				                           			<choose>
+													 	<when test="(date1 != null and date1 != '') and (date2 != null and date2 != '')">
+											            	SELECT TO_CHAR(TO_DATE(#{date1},'YYYY-MM-DD'), 'YYYYMMDD') AS ST_DT 
+			                                              , 	   TO_CHAR(TO_DATE(#{date2},'YYYY-MM-DD'), 'YYYYMMDD') AS END_DT
+											            </when>
+											           	<otherwise>
+											           		SELECT TO_CHAR(SYSDATE,'YYYYMM')||'01' AS ST_DT 
+			                                              , 	   TO_CHAR(SYSDATE,'YYYYMMDD') AS END_DT
+											            </otherwise>
+													</choose>
+				                                    FROM DUAL 
+				                                  )
+				                         CONNECT BY LEVEL <![CDATA[<=]]> TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
+				                    ), (SELECT EMP_NO FROM TB_EMPLOYEE)
+				                WHERE DAY NOT IN (1, 7)
+				                AND DT NOT IN (select hol1_day from tb_holiday1)
+				            )c on (a.emp_no = c.emp_no and a.att_date = c.dt)
+			        join tb_employee e
+				      on (c.emp_no = e.emp_no)
+				    join tb_position p
+				      on (e.pos_cd = p.pos_cd)
+				    join tb_department d
+				      on (e.dep_cd = d.dep_cd))
+			        where emp_status='Y'
+			        	
+			        	<if test="id != null and id != ''">
+			        		and emp_no = #{id}
+			        	</if>
+			        	
+ 
 			        	
 					order by dt desc
 	    
@@ -741,15 +913,108 @@
 					  
 	</select>
 	
-	
 	<select id="timeSelect" resultMap="AttendanceResult">
 		
-		select to_char(to_date(ATT_CMT,'hh24:mi:ss'), 'hh24 : mi : ss') as att_cmt, to_char(to_date(ATT_qt,'hh24:mi:ss'), 'hh24 : mi : ss') as att_qt 
+		select to_char(to_date(ATT_CMT,'hh24:mi'), 'hh24 : mi') as att_cmt, 
+			   to_char(to_date(ATT_qt,'hh24:mi'), 'hh24 : mi') as att_qt 
 		from tb_attendance
 		where emp_no = #{empNo}
 		and att_date = to_char(sysdate, 'yyyymmdd')
 	
 	</select>
+	
+	<select id="checkHoliday" resultMap="AttendanceResult">
+		
+		SELECT att_holiday
+		    FROM
+		    (
+		         SELECT CASE WHEN C.DT = ( SELECT TO_CHAR(SYSDATE,'YYYYMMDD') FROM DUAL) THEN 'Y' ELSE 'N' END AS att_holiday
+		           FROM (
+		                    SELECT	B.DT
+		                    FROM
+		                    (
+		                        SELECT  TO_CHAR(TO_DATE(A.DT),'D') AS D
+		                            ,	A.DT
+		                         FROM (
+		                                     SELECT TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS DT
+		                                       FROM ( 
+		                                                SELECT TO_CHAR(SYSDATE,'YYYYMM')||'01'  AS ST_DT 
+		                                                     , TO_CHAR(LAST_DAY(SYSDATE),'YYYYMMDD') AS END_DT 
+		                                                FROM DUAL 
+		                                              )
+		                                     CONNECT BY LEVEL <![CDATA[<=]]>  TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
+		                              ) A
+		                    ) B
+		                    WHERE B.D NOT IN ('1','7')
+		                    AND B.DT NOT IN 
+		                  
+		                    ( 
+		                       SELECT HOL1_DAY FROM TB_HOLIDAY1
+		                        
+		                        union 
+		                    
+		                        select ATT_DATE
+		                            from tb_attendance
+		                            where emp_no = #{empNo}
+		                              and att_status = '연차'
+		                       
+		                    )
+		                    
+		                    
+		             )C
+		     )
+	</select>
+	
+	
+	<update id="goWorkCheck">
+		MERGE 
+		 INTO TB_ATTENDANCE A 
+		USING ( SELECT #{empNo} AS EMP_NO
+		            ,   TO_CHAR(SYSDATE,'YYYYMMDD') AS ATT_DATE
+		            ,   TO_CHAR(SYSDATE,'HH24MI') AS ATT_TIME
+		          FROM DUAL
+		        ) B
+		   ON (A.EMP_NO = B.EMP_NO
+		     AND A.ATT_DATE = B.ATT_DATE
+		   )
+		 WHEN MATCHED THEN
+		      UPDATE
+		         SET A.ATT_CMT = B.ATT_TIME
+		        ,   A.ATT_STATUS = (SELECT CASE WHEN (TO_DATE(B.ATT_DATE||A.ATT_FCMT, 'yyyymmddhh24mi') + 10/24/60) <![CDATA[<]]> SYSDATE THEN '지각' ELSE '정상' END FROM DUAL )
+		 WHEN NOT MATCHED THEN
+		       INSERT 
+		      (
+		                ATT_NO
+		            ,   EMP_NO
+		            ,   ATT_DATE
+		            ,   ATT_FQT
+		            ,   ATT_FCMT
+		            ,   ATT_CMT
+		            ,   ATT_STATUS
+		            ,   ATT_HOLIDAY
+		            )
+		      VALUES(
+		         SEQ_ATTNO.NEXTVAL 
+		      ,  B.EMP_NO
+		      ,  B.ATT_DATE
+		      , '1800'
+		      , '0900'
+		      , TO_CHAR(SYSDATE,'HH24MI')
+		      , (SELECT CASE WHEN (TO_DATE(TO_CHAR(SYSDATE,'YYYYMMDD')||'0900', 'yyyymmddhh24mi') + 10/24/60) <![CDATA[<]]> SYSDATE THEN '지각' ELSE '정상' END FROM DUAL )
+		      , 'N'
+		      )
+	</update>	
+	
+	
+	<update id="outWorkCheck">
+		
+		UPDATE TB_ATTENDANCE
+		          SET ATT_QT = (SELECT TO_CHAR(SYSDATE,'HH24MI') FROM DUAL)
+		        , ATT_STATUS = (SELECT CASE WHEN (TO_DATE((SELECT TO_CHAR(SYSDATE,'YYYYMMDD') FROM DUAL)||
+                (SELECT ATT_FQT FROM TB_ATTENDANCE WHERE EMP_NO = '6' AND ATT_DATE = TO_CHAR(SYSDATE, 'YYYYMMDD')), 'yyyymmddhh24mi')) > SYSDATE THEN '조퇴' ELSE '정상' END FROM DUAL )
+		  where emp_no = '6'
+		  and att_date = (SELECT TO_CHAR(SYSDATE,'yyyymmdd') FROM DUAL)      
+	</update>
 	
 	
 	

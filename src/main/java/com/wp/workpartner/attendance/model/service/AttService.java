@@ -66,6 +66,19 @@ public interface AttService {
 	//메인 페이지 시간 띄우기
 	ArrayList<Attendance> timeSelect(String empNo);
 	
+	//오늘인 쉬는날인지 체크
+	ArrayList<Attendance> checkHoliday(String empNo);
+	
+	//출석체크
+	int goWorkCheck(String empNo);
+	
+	// 내 근무 이력 (조건없을떄)
+	int myAttendanceCount(String date1, String date2, String id);
+	ArrayList<Attendance> myAttendanceList(String date1, String date2, PageInfo pi, String id);
+	
+	// 퇴근하기
+	int outWorkCheck(String empNo);
+	
 	
 	
 	

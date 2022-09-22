@@ -123,6 +123,16 @@ public class AttServiceImpl implements AttService{
 		return aDao.myAttendanceList(date1, date2, array, sqlSession, pi, id);
 	}
 	
+	// 내 근무내역 조회(조건x)
+		@Override
+		public int myAttendanceCount(String date1, String date2, String id) {
+			return aDao.myAttendanceCount(date1, date2, sqlSession, id);
+		}
+		@Override
+		public ArrayList<Attendance> myAttendanceList(String date1, String date2, PageInfo pi, String id) {
+			return aDao.myAttendanceList(date1, date2, sqlSession, pi, id);
+		}
+	
 	// 달력 띄우기
 	@Override
 	public ArrayList<Attendance> badWorkList(String empNo) {
@@ -145,6 +155,24 @@ public class AttServiceImpl implements AttService{
 	@Override
 	public ArrayList<Attendance> timeSelect(String empNo) {
 		return aDao.timeSelect(empNo, sqlSession);
+	}
+	
+	// 쉬는 날인지 체크
+	@Override
+	public ArrayList<Attendance> checkHoliday(String empNo) {
+		return aDao.checkHoliday(empNo, sqlSession);
+	}
+	
+	// 출석체크
+	@Override
+	public int goWorkCheck(String empNo) {
+		return aDao.goWorkCheck(empNo, sqlSession);
+	}
+	
+	// 퇴근체크
+	@Override
+	public int outWorkCheck(String empNo) {
+		return aDao.outWorkCheck(empNo, sqlSession);
 	}
 
 

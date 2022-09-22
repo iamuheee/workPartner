@@ -182,16 +182,36 @@ public class AttDao {
 		map.put("array", array);
 		map.put("id", id);
 		
-//		for (int i = 0; i < array.length; i++) 
-//	 	{   
-//		 System.out.println(array[i]);    
-//	 	}
-		
 		int limit = pi.getBoardLimit();
 		int offset = (pi.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		
 		return (ArrayList)sqlSession.selectList("attendanceMapper.myAttendanceList", map, rowBounds);
+	}
+	
+	public int myAttendanceCount(String date1, String date2, SqlSessionTemplate sqlSession, String id) {
+			
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("date1", date1);
+		map.put("date2", date2);
+		map.put("id", id);
+		
+		return sqlSession.selectOne("attendanceMapper.myAttendanceCount2", map);
+	}
+
+	public ArrayList<Attendance> myAttendanceList(String date1, String date2,
+			SqlSessionTemplate sqlSession, PageInfo pi, String id) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("date1", date1);
+		map.put("date2", date2);
+		map.put("id", id);
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("attendanceMapper.myAttendanceList2", map, rowBounds);
 	}
 
 	
@@ -211,7 +231,21 @@ public class AttDao {
 	}
 
 	public ArrayList<Attendance> timeSelect(String empNo, SqlSessionTemplate sqlSession) {
+
 		return (ArrayList)sqlSession.selectList("attendanceMapper.timeSelect", empNo);
+		
+	}
+
+	public ArrayList<Attendance> checkHoliday(String empNo, SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.checkHoliday", empNo);
+	}
+
+	public int goWorkCheck(String empNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.update("attendanceMapper.goWorkCheck", empNo);
+	}
+
+	public int outWorkCheck(String empNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.update("attendanceMapper.outWorkCheck", empNo);
 	}
 
 

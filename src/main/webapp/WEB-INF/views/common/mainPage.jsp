@@ -223,11 +223,11 @@
 								<table id="timeMenu-tb">
 									<tr>
 										<td width="50%">
-											<button class="btn btn-primary btn-sm" id="cmtButton">출근</button> <br>
+											<button class="btn btn-primary btn-sm" id="cmtButton" onclick="location.href='goWork.att?empNo=${ loginUser.empNo }'">출근</button> <br>
 											<span id="time1" style="font-size:17px">MM : DD AM</span>
 										</td>
 										<td>
-											<button class="btn btn-danger btn-sm" id="qtButton">퇴근</button> <br>
+											<button class="btn btn-danger btn-sm" id="qtButton" onclick="location.href='outWork.att?empNo=${ loginUser.empNo }'">퇴근</button> <br>
 											<span id="time2" style="font-size:17px">MM : DD AM</span>
 										</td>
 									</tr>
@@ -593,18 +593,27 @@
 						data: {empNo:${ loginUser.empNo }},
 						success:function(list){
 							
+							if( list.length != 0){
 							x = list[0].attCmt;
 							y = list[0].attQt;
+							}
 							
-							if(x != ""){
+							if(x != "" ){
 								$("#time1").html(x);
 								$("#cmtButton").attr("disabled", true)
 							
 							}
+
 							
-							if(y != ""){
-								$("#time2").html(y);
-								$("#qtButton").attr("disabled", true)
+							if(y != "" ){
+						
+								if(y == undefined){
+									console.log(y)
+								}else{
+									$("#time2").html(y);
+									$("#qtButton").attr("disabled", true)	
+								}
+								
 							}
 							
 						},error:function(){

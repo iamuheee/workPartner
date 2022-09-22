@@ -353,38 +353,124 @@ public class AttController {
 	@RequestMapping(value="my.att", produces="application/json; charset=utf-8")
 	private String AttHistory(@RequestParam(value="cpage",  defaultValue="1")int currentPage, String id, String date1, String date2, String check, Model model) {
 		
+		
 		String[] array = null;
 		
-		if(check == null) {
-			check = "0";
+		if(check == null || check == "") {
+			
+			int searchCount = aService.myAttendanceCount(date1, date2, id);
+			
+			PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
+			
+			ArrayList<Attendance> list = aService.myAttendanceList(date1, date2, pi, id);
+			
+			model.addAttribute("pi", pi);
+			model.addAttribute("list", list);
+			model.addAttribute("date1", date1);
+			model.addAttribute("date2", date2);
+			
+			return "attendance/myAttendanceView";
+			
+		}else {
+			array = check.split(",", 5);
+			
+			int searchCount = aService.myAttendanceCount(date1, date2, array, id);
+			
+			PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
+			
+			ArrayList<Attendance> list = aService.myAttendanceList(date1, date2, array, pi, id);
+			
+			model.addAttribute("pi", pi);
+			model.addAttribute("list", list);
+			model.addAttribute("date1", date1);
+			model.addAttribute("date2", date2);
+			model.addAttribute("array", array);
+			
+			return "attendance/myAttendanceView";
+			
 		}
 		
-		array = check.split(",", 5);
-		
-		int searchCount = aService.myAttendanceCount(date1, date2, array, id);
-		
-		PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
-		
-		ArrayList<Attendance> list = aService.myAttendanceList(date1, date2, array, pi, id);
-		
-		model.addAttribute("pi", pi);
-		model.addAttribute("list", list);
-		model.addAttribute("date1", date1);
-		model.addAttribute("date2", date2);
-		model.addAttribute("array", array);
-		
-		return "attendance/myAttendanceView";
 		
 	}
 	
 	
+	// 출석시간 보이는 페이지
 	@ResponseBody
 	@RequestMapping(value="mainTime.tm", produces="application/json; charset=utf-8")
 	public String ajaxSelectReplyList(String empNo) {
 		ArrayList<Attendance> list = aService.timeSelect(empNo);
+
 		return new Gson().toJson(list); // "[{}, {}, {}, ...]		
 	}
 	
+	
+	
+	
+	// 출근하기 버튼 처리
+	
+	@RequestMapping(value="goWork.att", produces="application/json; charset=utf-8")
+	public String goWork(String empNo, Model model, HttpSession session) {
+		
+		// 오늘이 공휴일, 연휴, 토/일 인지 확인    쉬는 날 : N  평일 Y
+		ArrayList<Attendance> a = aService.checkHoliday(empNo);
+		System.out.println(a);
+		
+		int count = 0;
+		
+		for (int i = 0; i < a.size(); i++) {
+			//System.out.println(a.get(i).getHollyday());
+			if(a.get(i).getHollyday().equals("Y")) {
+				count ++;
+			}
+		}
+		// System.out.println(count);
+		
+		// 오늘이 쉬는 날인 경우
+		if(count == 0) {
+			session.setAttribute("alertMsg", "오늘은 쉬는 날입니다.");
+			return "common/mainPage";
+		}else {
+			
+			// 오늘이 평일인 경우 -> 출석체크
+			int result = aService.goWorkCheck(empNo);
+			
+			if(result > 0) {  
+				session.setAttribute("alertMsg", "출근 완료");
+				return "common/mainPage";
+			}else { 
+				session.setAttribute("alertMsg", "출근 실패");
+				return "common/mainPage";
+			}
+		}
+		
+	}
+	
+	
+	// 퇴근하기 버튼 처리 & 휴가지급
+	
+		@RequestMapping(value="outWork.att", produces="application/json; charset=utf-8")
+		public String outWork(String empNo, Model model, HttpSession session) {
+
+			// 1. 퇴근하기
+			
+			int result = aService.outWorkCheck(empNo);
+			
+			if(result > 0) {  
+				
+				session.setAttribute("alertMsg", "퇴근 완료");
+				
+				// 휴가 지급
+				// 근무연수 0년차 
+				
+				return "common/mainPage";
+				
+			}else { 
+				session.setAttribute("alertMsg", "퇴근 실패");
+				return "common/mainPage";
+			}
+				
+			
+		}
 	
 	
 	
