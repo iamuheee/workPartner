@@ -42,11 +42,49 @@ public class BookDao {
 		return sqlSession.update("bookMapper.deleteBook", bkNo);
 	}
 	
+	// 풀캘린더용 (예약취소가 되지 않은 목록만 가져옴)
 	public ArrayList selectAllBookList(SqlSessionTemplate sqlSession) {
 		return (ArrayList)sqlSession.selectList("bookMapper.selectAllBookList");
 	}
 	
 	public ArrayList selectRoomList(SqlSessionTemplate sqlSession) {
 		return (ArrayList)sqlSession.selectList("bookMapper.selectRoomList");
+	}
+	
+	public int selectAllListCountByCondition(SqlSessionTemplate sqlSession, String rmNo, String startDate, String endDate) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("rmNo", rmNo);
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		
+		return sqlSession.selectOne("bookMapper.selectAllListCountByCondition", map);
+	}
+	
+	public ArrayList selectAllListByCondition(SqlSessionTemplate sqlSession, String rmNo, String startDate, String endDate, PageInfo pi) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("rmNo", rmNo);
+		map.put("starDate", startDate);
+		map.put("endDate", endDate);
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1);
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("bookMapper.selectAllListByCondition", map, rowBounds);
+	}
+	
+	public int selectAllListCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("bookMapper.selectAllListCount");
+	}
+	
+	public ArrayList selectAllList(SqlSessionTemplate sqlSession, PageInfo pi) {
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit; 
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("bookMapper.selectAllList", null, rowBounds);
 	}
 }

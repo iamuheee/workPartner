@@ -1,29 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
-<!-- datatable 적용 문제 해결해야 함 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.12.1/b-2.2.3/r-2.3.0/datatables.min.css"/>
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.12.1/b-2.2.3/r-2.3.0/datatables.min.js"></script>
-
-<script>
-    $(document).ready( function () {
-        $('#historyTable').DataTable( {
-        } );
-    } );
-</script> 
-        
+<link href='${pageContext.request.contextPath}/resources/css/fullcalendar-scheduler/main.css' rel='stylesheet' />
+<script src='${pageContext.request.contextPath}/resources/js/fullcalendar-scheduler/main.js'></script>
+</head>
 <style>
-	#bookHistory-outer {
+	#bookList-outer {
         /* border:1px solid blue; */
         width:100%;
         height:100vh;
@@ -32,124 +20,423 @@
         position:relative;
     }
 
-    #chooseDate {
-        display:flex;
-        justify-content: center;
-        align-items: center;
-        width:100%;
+	a {
+		text-decoration:none;
+	}
+	
+	#selectDate {
+	padding:20px;
+	text-align:center;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	}
+	
+	#selectDate * {
+	margin-right:10px;
+	}
+	
+   #calendar{
+   	padding-bottom:50px;
+   }
     
+    /* ================ */
+    
+    .modal-body #bookInfo {
+        margin:auto;
     }
 
-    #chooseDate a {
-        color:#0442AF;
-        padding-top:8px;
-        margin:0px;
-        /* font-size:20px; */
-    }
-
-    #chooseDate *{
-        /* border:1px solid red; */
-        font-size: 30px;
-        margin:5px;
-    }
-
-    #bookHistory {
+    #bookInfo {
         width:100%;
+    }
+
+    #bookInfo th{
+        height:50px;
+        width: 25%;
         font-size:16px;
     }
 
-    #bookDate {
-        font-size:14px;
+    #bookInfo td {
+        font-size:16px;
     }
 
+    #bookInfo input {
+        height:40px;
+        padding-left:10px;
+        border:1px solid #b7b9cc;
+    }
 
+    #rmNo {
+        width: 150px;
+        height:40px;
+        padding-left:10px;
+    }
+
+    #bkStart, #bkEnd {
+        width: 100px;
+        height:40px;
+        padding-left:10px;
+    }
+
+    #bkTimeArea {
+        display: flex;
+        align-items: center;
+    }
+
+    #bkTimeArea select {
+        border:1px solid #b7b9cc;
+        height:40px;
+        width:100px;
+        padding-left:10px;
+    }
+
+    #bkTitle {
+        width: 100%;
+    }
+    
+    #roomAndDate{
+    	display:flex;
+    	justify-content: space-between;
+    	margin-bottom:10px;
+    }
+    
+    #roomAndDate input,select {
+    	height:33px;
+    	border:1px solid lightgray;
+    	margin:0 5px;
+    }
+    
+    #inputDate {
+    	display:flex;
+    	align-items: center;
+    }
 </style>
-</head>
 <body>
-
-	<jsp:include page="../common/menubar.jsp" />
 	
-	<div id="bookHistory-outer">
+	<jsp:include page="../common/menubar.jsp"/>
+	
+	<div id="bookList-outer">
 		<!-- 상단 메뉴 제목 영역 -->
-		<div id="bookHistory-header">
-		    <h3>예약 이력 조회</h3>
+		<div id="bookList-header">
+		    <h3>회의실 예약 이력 조회</h3>
 		</div>
 		<hr>
 		
-		<!-- 예약 이력 목록 -->
-		<div id="bookHistoryArea">
-		    <!-- 날짜 선택 영역 -->
-		    <!-- 캘린더 아이콘 눌러서 특정 날짜 선택했을 때 그 날짜의 회의실 예약 내역들이 조회되도록 해야 함 -->
-		    <div id="chooseDate">
-		        <a href="이전날짜"><i class="fas fa-chevron-left" style="font-size:22px;"></i></a>
-		        <span id="current_date"></span>
-		        <span class="material-symbols-outlined">calendar_month</span>
-		        <a href="다음날짜"><i class="fas fa-chevron-right" style="font-size:22px;"></i></a>
+		<!-- 회의실 예약 캘린더 영역 -->
+		<div id='calendar'></div>
+		
+	
+		<!-- 회의실 예약 버튼 클릭 시 뜨는 모달 ==> 예약 정보 수정 -->
+		<div class="modal fade" id="selectBookDetail">
+		    <div class="modal-dialog modal-xl">
+		        <div class="modal-content">
+		            <!-- Modal Header -->
+		            <div class="modal-header">
+		                <h4 class="modal-title"><i class="fas fa-calendar-check"></i>&nbsp;&nbsp;예약 이력 상세 조회</h4>
+		                <button type="button" class="close" onclick="closeModal();">&times;</button> 
+		            </div>
+		                <div class="modal-body">
+						    <!-- 날짜 선택 영역 -->
+						    <!-- 캘린더 아이콘 눌러서 특정 날짜 선택했을 때 그 날짜의 회의실 예약 내역들이 조회되도록 해야 함 -->
+						    <div id="roomAndDate">
+						    	<div id="selectRmName">
+						    		회의실 : 
+						        	<select id="rmName" onchange="selectAllBookList()">
+							        	<!-- ajax로 받을 영역 -->
+						        	</select>
+						    	</div>
+						        <div id="inputDate">
+						        	기간별 조회 :
+							        <input type="date" name="startDate">&nbsp;~&nbsp; 
+							        <input type="date" name="endDate" onchange="selectAllBookList()">
+							        <button type="button" class="btn btn-sm btn-primary"><i class="fas fa-search"></i></button>
+						        </div>
+						    </div>
+						    <!-- =========================================================== -->
+						    <div id="historyArea">
+						        <table id="historyTable" class="table table-hover display">
+						            <thead>
+						                <tr>
+						                    <th scope="col">No.</th>
+						                    <th scope="col">회의실</th>
+						                    <th scope="col">회의명</th>
+						                    <th scope="col">예약자</th>
+						                    <th scope="col">인원</th>
+						                    <th scope="col">예약일정</th>
+						                    <th scope="col">예약상태</th>
+						                </tr>
+						            </thead>
+						            <tbody id="historyList">
+						                <tr >
+							            <!-- ================== ajax로 받을 영역===================== -->
+						               	</tr>
+						            </tbody>
+						        </table>
+							</div>
+							
+							 <!-- 페이징 처리 -->
+					        <div id="pagingArea">
+        					</div>  
+														
+							 <!-- =========================================================== -->
+						                    
+		                    
+		                    
+		                <!-- Modal footer -->
+		                <div class="modal-footer">
+		                    <button type="submit" class="btn btn-primary" id="insertBk" style="margin-right:5px;">예약</button>
+		                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal();">취소</button>
+		                </div>
+		        </div>
 		    </div>
+		</div>
 		
-		    <script>
-		        date = new Date();
-		        year = date.getFullYear();
-		        month = date.getMonth() + 1;
-		        day = date.getDate();
-		        document.getElementById("current_date").innerHTML = year + " / " + month + " / " + day;
-		    </script>
-		    
-		    <div id="historyArea">
-		        <table id="historyTable" class="table table-hover display">
-		            <thead>
-		                <tr>
-		                    <th scope="col">No.</th>
-		                    <th scope="col">회의실</th>
-		                    <th scope="col">회의명</th>
-		                    <th scope="col">예약자</th>
-		                    <th scope="col">예약일정</th>
-		                </tr>
-		            </thead>
-		            <tbody>
-		                <tr>
-		                    <td>5</td>
-		                    <td>Room A</td>
-		                    <td>동해물과 백두산이 마르고 닳도록</td>
-		                    <td>김미미</td>
-		                    <td id="bookDate">YYYY-MM-DD HH:00 ~ YYYY:MM:DD HH:00</td>
-		               </tr>
 		
-		                <tr>
-		                    <td>4</td>
-		                    <td>Room B</td>
-		                    <td>하느님이 보우하사 우리나라 만세</td>
-		                    <td>박미미</td>
-		                    <td id="bookDate">YYYY-MM-DD HH:00 ~ YYYY:MM:DD HH:00</td>
-		                </tr>
+		<script>
 		
-		                <tr>
-		                    <td>3</td>
-		                    <td>Room C</td>
-		                    <td>무궁화 삼천리 화려강산 대한사람 대한으로</td>
-		                    <td>이미미</td>
-		                    <td id="bookDate">YYYY-MM-DD HH:00 ~ YYYY:MM:DD HH:00</td>
-		                </tr>
+        /* date = new Date();
+        year = date.getFullYear();
+        month = date.getMonth() + 1;
+        day = date.getDate();
+        document.getElementById("current_date").innerHTML = year + " / " + month + " / " + day; */
 		
-		                <tr>
-		                    <td>2</td>
-		                    <td>Room D</td>
-		                    <td>길이 보전하세</td>
-		                    <td>송미미</td>
-		                    <td id="bookDate">YYYY-MM-DD HH:00 ~ YYYY:MM:DD HH:00</td>
-		                </tr>
+		function closeModal(){
+			$('#insertBookMd').modal('hide');
+		}
 		
-		                <tr>
-		                    <td>1</td>
-		                    <td>Room A</td>
-		                    <td>남산 위의 저 소나무 철갑을 두른 듯 바람서리 불변함은 우리 기상일세</td>
-		                    <td>강미미</td>
-		                    <td id="bookDate">YYYY-MM-DD HH:00 ~ YYYY:MM:DD HH:00</td>
-		                </tr>
-		            </tbody>
-		        </table>
-			</div>
-	</div>
+        
+        $(function(){
+        	selectRoomList();	// modal select opiton에 넣을 회의실 목록 조회
+        })
+        
+        // 모달창이 열렸을 때 예약 목록 조회하도록 함
+        $("#selectBookDetail").on('show.bs.modal', function(e){
+        	selectAllBookList();
+        })
+        
+        /* 회의실 목록을 조회해 오는 ajax */
+		/* 모달창 내 select option 값으로 뿌려줘야 함 */
+		function selectRoomList(){
+			$.ajax({
+				url:"selectList.ro",
+				type:"post",
+				success:function(result){
+					console.log("회의실 목록 조회용 ajax 통신 성공");
+					console.log(result);
+					let value = "<option value='none'>회의실명</option>";
+					
+					for(let i=0; i<result.length; i++) {
+						value += '<option value="' + result[i].rmNo + '">' + result[i].rmName + '</option>';
+					}
+										
+					$("#rmName").html(value);
+				},
+				error:function(){
+					console.log("회의실 목록 조회용 ajax 통신 실패");
+				}
+			})
+		}  
+        
+		  /* fullcalendar-scheduler 사용  */
+		  document.addEventListener('DOMContentLoaded', function() {
+			  
+			  $(function(){
+					 getBookCal();	// 캘린더 띄우기
+				  })
+
+		  /* 캘린더 띄우기용 ajax */
+		  function getBookCal(){
+			  $.ajax({
+				  url: "calendar.bk",	// 전달할 데이터 없으므로 type, data 생략
+				  success:function(result){
+					  console.log("캘린더 띄우기용 ajax 통신 성공")
+					  //console.log(result);
+					  
+					  let book = result.book;
+					  let room = result.room;
+					  
+					  // 넘기려는 값들을 data라는 이름의 배열에 담아야 함
+					  let dataBook = [];
+					  let dataRoom = [];
+					  
+					  // 회의실 갯수 최대 8개로 생각하고 저장해 놨음에 주의!!
+					  let eventColor=["#dc3545", "#fd7e14", "#ffc107", "#198754", "#0d6efd", "#20c997", "#0dcaf0", "#6c757d"];
+					  
+					  for(let i=0; i<book.length; i++){
+						  
+						  let objBook = {
+								  id: book[i].bkNo,
+								  resourceId: book[i].rmNo,
+								  title: book[i].bkTitle,
+								  start: book[i].bkDate + " " + book[i].bkStart,
+								  end: book[i].bkDate + " " + book[i].bkEnd,
+								  
+						  };
+						  
+						  dataBook.push(objBook);	// objBook 값을 dataBook 배열 안에 담아 캘린더 events로 넘길 것임
+					  }	
+					  
+					  for(let i=0; i<room.length; i++){
+						  
+						  let objRoom = {
+								  id: room[i].rmNo,
+								  title: room[i].rmName,
+								  eventColor: eventColor[i]
+						  };
+						  
+						  //console.log("oR : " + objRoom);
+				  		  dataRoom.push(objRoom);	// objRoom 값을 dataRoom 배열 안에 담아 캘린더 resource로 넘길 것임
+					  }
+					  
+					  //console.log(dataBook);
+					  //console.log(dataRoom);	// 성공
+					  
+					  // -------------------- 캘린더 렌더링 --------------------
+					  var calendarEl = document.getElementById('calendar');
+					    var calendar = new FullCalendar.Calendar(calendarEl, {
+					      locale: 'kr',	// 언어 설정
+					      
+					      height:'900px',	// 캘린더 높이 설정
+					      expandRows:true,
+					      initialView: 'resourceTimeline',	// 화면 포맷 설정
+					      schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',	// trial 사용 위한 라이센스 키
+					      titleFormat: { 	// 제목 포맷 설정
+					    	    month: 'long',
+					    	    year: 'numeric',
+					    	    day: 'numeric',
+					    	    weekday: 'long'
+					    	  },
+					   	  datesAboveResources: true,
+					   	    headerToolbar: {	// 헤더 표시 툴바
+					   	      left: 'today prev,next',
+					   	      center: 'title',
+					   	      right: 'resourceTimelineDay,resourceTimelineWeek myCustomButton'
+					   	    },
+					   	  customButtons: {	// 헤더 툴바에 커스텀한 버튼 추가
+					   		  myCustomButton: {
+					   			  text: '예약상세조회',
+					   			  click: function(){
+					   					$('#selectBookDetail').modal('show');
+					   			  }
+					   		  }
+					   	  },  
+					  	  views: {
+					  	     resourceTimeGridFourDay: {
+					  	       type: 'resourceTimeGrid',
+					  	       duration: { week: 1 },
+					  	       buttonText: 'week'
+					  	     }
+					  	  },
+					  	  weekends: false,	// 주말은 보이지 않게 함
+					   	  slotMinTime: "08:00:00",	// 캘린더 시작 시간
+					   	  slotMaxTime: "20:00:00",	// 캘린더 종료 시간
+					   	  allDaySlot: false,
+					   	  selectable: true,	// 캘린더의 시간을 드래그해서 선택할 수 있게 함
+					   	  nowIndicator: true,	// 현재 시간 표시
+					      events: dataBook,	// db에서 조회한 예약들을 캘린더 위에 뿌림
+					      resources: dataRoom	// db에서 조회한 회의실 이름을 컬럼명으로 뿌림 
+					    });
+					    
+					    calendar.render();
+					    calendar.updateSize();
+					 // -------------------- 캘린더 렌더링 끝 --------------------
+					  }, // success 끝
+				  	  error:function(){
+					  console.log("캘린더 띄우기용 ajax 통신 성공");
+				  }
+			  })
+		  	}
+		  })
+		  
+		 
+		 /* 회의실 전체 예약 목록 조회용 ajax */
+		  function selectAllBookList(cpage){
+			  $.ajax({
+				  url:"selectAll.bk",
+				  data:{
+					  cpage:cpage
+				  },
+				  success:function(result){
+					  console.log("회의실 전체 예약 목록 조회용 ajax 통신 성공");
+					  //console.log(result);
+					  
+					  let list = result.list;
+					  let pi = result.pi;
+					  
+					  let value = "";
+					  let pgValue = "";
+					  
+					  for(let i=0; i<list.length; i++) {
+						  value += '<tr>' 
+							  	 +		'<td>' + list[i].bkNo +'</td>'
+							  	 +		'<td>' + list[i].rmName + '</td>'
+							  	 +		'<td>' + list[i].bkTitle + '</td>'
+							  	 +		'<td>' + list[i].empName + '</td>'
+							  	 +		'<td>' + list[i].bkPerson + '</td>'
+							  	 +		'<td>' + list[i].bkDate + ' ' + list[i].bkStart + ' ~ ' + list[i].bkEnd + '</td>';
+						  	 if(list[i].bkStatus == 'N') {
+						  		 value += '<td>예약완료</td>'; 
+						  	 }else {
+						  		value += '<td style="color:red;">예약취소</td>'; 
+						  	 }
+					  }
+					
+					   	/* 페이징 처리 */
+						if(pi.currentPage != 1){
+                 			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectAllBookList("+ (pi.currentPage - 1) + ")'>&lt;</button>"	
+                 		}
+                 		
+                 		for(let p=pi.startPage; p<=pi.endPage; p++) { 
+         		   			if(p == pi.currentPage) { 
+         				   			pgValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
+         				   	}else {
+         				   			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectAllBookList("+ p +")'>" + p + "</button>"
+         		           	} 
+         		         }     
+                  
+         		         if(pi.currentPage != pi.maxPage) {
+         		        	  pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectAllBookList("  + (pi.currentPage + 1) + ")'>&gt;</button>"
+         		         }  
+					
+					$("#historyList").html(value);
+					$("#pagingArea").html(pgValue);
+				
+				  },
+				  error:function(){
+					  console.log("회의실 전체 예약 목록 조회용 ajax 통신 실패");
+				  }
+				  
+			  })
+			  
+		  } 
+		 /* 회의실 예약 목록 조회용 ajax -- 회의실별 / 기간별 */
+		 
+		 function selectAllBookListByCondition(cpage){
+			  $.ajax({
+				  url:"selectByCondition.bk",
+				  type:"post",
+				  data:{	// 회의실 번호(회의실별 조회), 시작 날짜&&종료날짜(기간별 조회)
+					  // 시작날짜 종료날짜 중 하나만 입력됐으면 검색되지 못하도록 막아야 함
+					  cpage:cpage,
+					  rmNo:$("#selectRmName #rmName option:selected").val(),
+					  startDate:$("#inputDate input[name=startDate]").val(),
+					  endDate:$("#inputDate input[name=endDate]").val()
+				  },
+				  success:function(result){
+					  console.log("회의실 예약 목록 조회용 ajax 통신 성공");
+					  console.log(result);
+					  
+				  },
+				  error:function(){
+					  console.log("회의실 예약 목록 조회용 ajax 통신 실패");
+				  }
+			  })
+		  }
+		  
+		  
+		</script>
 		
+		
+
 </body>
 </html>

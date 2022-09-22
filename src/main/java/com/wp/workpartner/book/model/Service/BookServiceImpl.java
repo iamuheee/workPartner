@@ -69,6 +69,26 @@ public class BookServiceImpl implements BookService {
 		return bDao.deleteBook(sqlSession, bkNo);
 	}
 
+	@Override
+	public int selectAllListCountByCondition(String rmNo, String startDate, String endDate) {
+		return bDao.selectAllListCountByCondition(sqlSession, rmNo, startDate, endDate);
+	}
+
+	@Override
+	public ArrayList selectAllListByCondition(String rmNo, String startDate, String endDate, PageInfo pi) {
+		return bDao.selectAllListByCondition(sqlSession, rmNo, startDate, endDate, pi);
+	}
+
+	@Override
+	public int selectAllListCount() {
+		return bDao.selectAllListCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList selectAllList(PageInfo pi) {
+		return bDao.selectAllList(sqlSession, pi);
+	}
+
 
 	
 

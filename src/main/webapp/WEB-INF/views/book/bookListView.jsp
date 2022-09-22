@@ -217,7 +217,7 @@
 							value += '<table id="bookInfo">'
 								   + '<tr>'
 								   +	'<td>' + (list.length - i) + '</td>'
-								   +	'<td>' + list[i].room.rmName + '</td>'
+								   +	'<td>' + list[i].rmName + '</td>'
 								   +	'<td>' + list[i].bkTitle + '</td>'
 								   +	'<td class="bookDate">' + list[i].bkDate + ' ' + list[i].bkStart + '~' + list[i].bkEnd + '</td>';
 								   

@@ -180,4 +180,61 @@ public class BookController {
 		
 		return new Gson().toJson(map);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="selectByCondition.bk", produces="application/json; charset=UTF-8")
+	public String selectAllListByCondition(
+			@RequestParam(value="cpage", defaultValue="1") int currentPage,
+			@RequestParam(defaultValue="none") String rmNo,
+			@RequestParam(defaultValue="none") String startDate,	// 날짜가 선택되지 않았을 경우 오늘 날짜를 기본으로 받음
+			@RequestParam(defaultValue="none") String endDate
+			) {
+		
+		System.out.println("rmNo : " + rmNo);
+		System.out.println("startDate : " + startDate);
+		System.out.println("endDate :  "+ endDate);
+		// ==> 값은 잘 넘어옴 
+		
+		// 1. 회의실, 기간이 선택되지 않았을 경우 전체 회의 예약 이력을 조회해 감 ==> defaulValue == none
+		// 2. 회의실이 선택되었을 경우, 해당 rmNo에 대한 이력만 조회해 감
+		// 3. 날짜가 선택되었을 경우, 해당 날짜에 대한 이력만 조회해 감
+		// 4. 회의실과 날짜가 모두 선택되었을 경우, 해당 rmNo와 날짜에 대한 이력을 조회해 감
+		
+		// 페이징 처리를 위한 전체 listCount 뽑기
+		int listCount = bService.selectAllListCountByCondition(rmNo, startDate, endDate);
+		
+		// 페이징 처리
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		
+		ArrayList<Book> list = bService.selectAllListByCondition(rmNo, startDate, endDate, pi);
+		
+		System.out.println("listCount : " + listCount);
+		System.out.println("list : " +list);
+		
+		
+		HashMap<String, Object> result = new HashMap<>();
+		result.put("pi", pi);
+		result.put("list", list);
+		
+		return new Gson().toJson(result);
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="selectAll.bk", produces="application/json; charset=UTF-8")
+	public String selectAll(@RequestParam(value="cpage", defaultValue="1") int currentPage) {
+		int listCount = bService.selectAllListCount();
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 5, 10);
+		
+		ArrayList<Book> list = bService.selectAllList(pi);
+		
+//		System.out.println(pi);
+//		System.out.println(list);
+		
+		HashMap<String, Object> result = new HashMap<>();
+		result.put("pi", pi);
+		result.put("list", list);
+		
+		return new Gson().toJson(result);
+	}
 }

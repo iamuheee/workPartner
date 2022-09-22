@@ -12,12 +12,19 @@
 		<result column="bk_start" property="bkStart" />
 		<result column="bk_end" property="bkEnd" />
 		<result column="bk_status" property="bkStatus"/>
-		<collection property="room" resultMap="roomResult"/>
+		<result column="bk_enroll" property="bkEnroll"/>
+		<result column="emp_name" property="empName"/>
+		<result column="rm_name" property="rmName"/>
 	</resultMap>
 	
 	<resultMap id="roomResult" type="Room">
 		<result column="rm_no" property = "rmNo" />
 		<result column="rm_name" property="rmName"/>
+	</resultMap>
+	
+	<resultMap id="employeeResult" type="Employee">
+		<result column="emp_no" property = "empNo" />
+		<result column="emp_name" property="empName"/>
 	</resultMap>
 	
 	<!-- 회의실 예약 등록 -->
@@ -148,5 +155,31 @@
 		    by rm_no asc
 	</select>
 	
+	<!-- 전체 회의실 예약 목록 listCount 조회 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectAllListCount" resultType="_int">
+		select 
+		       count(*)
+		  from tb_book
+	</select>
+
+	<select id="selectAllList" resultMap="bookResult">
+		select 
+		       bk_no
+		     , emp_name
+		     , rm_name
+		     , bk_person
+		     , bk_title
+		     , bk_meetdate
+		     , bk_start
+		     , bk_end
+		     , bk_enroll
+		     , bk_status
+		  from tb_book
+		  join tb_employee using(emp_no)
+		  join tb_room using(rm_no)
+		 order
+		    by bk_no desc
+	</select>
 
 </mapper>
