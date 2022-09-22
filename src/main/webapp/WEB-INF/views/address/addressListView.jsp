@@ -19,6 +19,13 @@
      border:1px solid lightgray;
      border-radius: 50%;               
  }
+ 
+ #profileBigImg{
+     width:350px;
+     height:350px;
+     border:1px solid lightgray;
+     border-radius: 50%;               
+ }
 </style>
 
 </head>
@@ -328,7 +335,7 @@
             
             <!-- 내연락처 그룹추가 Modal -->
             <div class="modal fade" id="addGp" tabindex="-1" aria-labelledby="addGpModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered ">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="addGpModalLabel">그룹추가</h5>
@@ -358,7 +365,7 @@
 
             <!-- 내연락처 그룹수정 Modal -->
             <div class="modal fade" id="editGp" tabindex="-1" aria-labelledby="editGpModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered ">
                     <div class="modal-content">
                         <div class="modal-header" >   
                             <h5 class="modal-title" id="addGpModalLabel">그룹수정</h5>
@@ -389,7 +396,7 @@
            
             <!-- 쪽지보내기 Modal -->
             <div class="modal fade" id="addressChat" tabindex="-1" aria-labelledby="addressChatModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered ">
                 <div class="modal-content"> 
                     <div class="modal-header">
                         <h5 class="modal-title" id="addressChatModalLabel">쪽지보내기</h5>
@@ -454,6 +461,29 @@
         </div>
         
     </div>
+    
+    
+    <!-- 프로필 크게보기 Modal -->
+     <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered">
+             <div class="modal-content" align="center">   
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="profileModalLabel">프로필이미지</h5>                        
+                     <button type="button" class="close" onclick='$("#profileModal").modal("hide");' aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>                 
+                 <div class="modal-body">
+                    
+                    <img id="profileBigImg">
+                                  
+                 </div>
+                
+             </div>
+         </div>
+     </div>
+    
+    
     
      <script>
             	$(function(){
@@ -553,7 +583,16 @@
                      	var checked = $("input[name=chk]:checked").length;
                      	if(total != checked) $("#cbx_chkAll").prop("checked", false);
 	                    else $("#cbx_chkAll").prop("checked", true); 
-                     })                   
+                     });
+                		
+                	
+                		
+                	// 프로필이미지 클릭시 크게 보이는 modal을 위해 이미지경로 보내주기	
+               		$(document).on("click", "#adDetailTb #profileImg", function(){
+               			$("#profileModal #profileBigImg").attr("src", $(this).attr("src"));
+               		});	
+                		
+                		
                         		
             	})
             	
@@ -751,7 +790,7 @@
                             }else{
                             	value += 'resources/profile_images/defaultProfile.png';
                             }		 	
-                            	value  +=			'"></th>'
+                            	value  +=			'" data-toggle="modal" onclick="' + "$('#profileModal').modal('show');\"" + '></th>'
                                 		+			'<th align="left"><h5><b>'+ result.empName +'</b></h5></th>'                               
                                 		+           '<th  align="right">'
                                     	+				'<a class="material-symbols-outlined aHover" style="text-decoration: none;" href="selectEmail.ma?email='+ result.empEmail +'">mail</a>'

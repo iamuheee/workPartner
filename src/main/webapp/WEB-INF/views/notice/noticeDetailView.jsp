@@ -301,7 +301,7 @@ table tr:hover{background-color:white;}
         					        					
         					// 원댓글 
         					if(comStatus == 'N' && parentCommentNo == 0){ // 원댓글 + 삭제시
-        						value += '<div class="card mb-2" > 삭제된 댓글입니다. </div>';
+        						value += '<div class="card mb-2" ><div class="row no-gutters"><div class="card-body"> 삭제된 댓글입니다.</div></div> </div>';
         					}else{
         						
         						if(parentCommentNo == 0){ 
