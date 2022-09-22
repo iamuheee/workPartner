@@ -1,6 +1,8 @@
 package com.wp.workpartner.attendance.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.servlet.http.HttpSession;
 
@@ -413,7 +415,6 @@ public class AttController {
 		
 		// 오늘이 공휴일, 연휴, 토/일 인지 확인    쉬는 날 : N  평일 Y
 		ArrayList<Attendance> a = aService.checkHoliday(empNo);
-		System.out.println(a);
 		
 		int count = 0;
 		
@@ -459,8 +460,148 @@ public class AttController {
 				
 				session.setAttribute("alertMsg", "퇴근 완료");
 				
-				// 휴가 지급
-				// 근무연수 0년차 
+				// 2. 휴가 지급
+				
+				// 2-1) 월말인지 구하기 
+				
+				ArrayList<Attendance> a = aService.checkMonth(empNo);
+				
+				int count = 0;
+				
+				for (int i = 0; i < a.size(); i++) {
+					//System.out.println(a.get(i).getHollyday());
+					if(a.get(i).getHollyday().equals("Y")) {
+						count ++;
+					}
+				}
+				System.out.println(count);
+				if(count == 0) {
+					
+					// 월말이 아닐 때 -> 그냥 돌아감
+					return "common/mainPage";
+				
+				}else {
+					
+					// 2-2) 오늘이 12월 연말인가 구하기 
+					
+					Calendar cal = Calendar.getInstance();
+					String format = "yyyy-MM-dd";
+					SimpleDateFormat sdf = new SimpleDateFormat(format);
+					String date = sdf.format(cal.getTime());
+
+					String month = date.substring(5, 7); 
+					
+					// 12월인가?
+					if(Integer.parseInt(month) != 12) {
+						
+						// 12월 아님
+						// 2-3)근속연수 구해오기
+						String b = aService.checkWorkYears(empNo);
+						//System.out.println(b);
+						
+						if(Integer.parseInt(b) == 0) {
+							// 근무연수 0연차
+							
+							// 이번 달에 결근 있는지 확인
+							ArrayList<Attendance> c = aService.checkWorkStatus(empNo);
+							
+							int count2 = 0;
+							
+							for (int i = 0; i < c.size(); i++) {
+								
+								if(c.get(i).getStatus().equals("결근")) {
+									count2 += 1;
+								}
+							}
+							
+							for (int i = 0; i < c.size(); i++) {
+								
+								if(c.get(i).getStatus().equals("조퇴") || c.get(i).getStatus().equals("지각")) {
+									count2 += 0.34;
+								}
+							}
+							
+							
+							System.out.println(count2);
+							
+							// 결석이 없거나 조퇴/지각이 3번 미만이면 휴가 1개 지급
+							if(count2 < 1) {
+								
+								System.out.println(count);
+								int result1 = aService.giveVacation0(empNo);
+								
+								if(result1>0) {
+									
+									session.setAttribute("alertMsg", "퇴근 완료 및 0연차 지급");
+								}else {
+									session.setAttribute("alertMsg", "퇴근 완료 및 0연차 지급 실패");
+								}
+								
+							}
+							
+						}
+						return "common/mainPage";
+						
+					//12월임	
+					}else{
+						
+						// 근속연수 구해오기
+						String x = aService.checkWorkYears(empNo);
+						
+						if(Integer.parseInt(x) == 0) {
+							// 0년차
+							
+							// 근무상태 확인
+							ArrayList<Attendance> y = aService.checkWorkStatus(empNo);
+							
+							int count3 = 0;
+							
+							for (int i = 0; i < y.size(); i++) {
+								
+								if(y.get(i).getStatus().equals("결근")) {
+									count3 += 1;
+								}
+							}
+							
+							for (int i = 0; i < y.size(); i++) {
+								
+								if(y.get(i).getStatus().equals("조퇴") || y.get(i).getStatus().equals("지각")) {
+									count3 += 0.34;
+								}
+							}
+							
+								if(count3 < 1) {
+								
+								System.out.println(count);
+								int result9 = aService.giveVacation0(empNo);
+								
+								if(result9>0) {
+									
+									session.setAttribute("alertMsg", "퇴근 완료 및 0연차 지급1");
+								}else {
+									session.setAttribute("alertMsg", "퇴근 완료 및 0연차 지급 실패1");
+								}
+								
+							}
+							
+						}else {
+							
+							// 1년차 이상 15+근속연수 만큼 연차 지급
+							
+							int result8 = aService.giveVacation1(empNo);
+							
+							if(result8>0) {
+								
+								session.setAttribute("alertMsg", "퇴근 완료 및 1연차 지급");
+							}else {
+								session.setAttribute("alertMsg", "퇴근 완료 및 1연차 지급 실패");
+							}
+							
+						}
+					};
+					
+					
+				}
 				
 				return "common/mainPage";
 				

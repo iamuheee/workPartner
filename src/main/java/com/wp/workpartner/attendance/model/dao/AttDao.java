@@ -248,5 +248,25 @@ public class AttDao {
 		return sqlSession.update("attendanceMapper.outWorkCheck", empNo);
 	}
 
+	public ArrayList<Attendance> checkMonth(String empNo, SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.checkMonth", empNo);
+	}
+
+	public String checkWorkYears(String empNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("attendanceMapper.checkWorkYears", empNo);
+	}
+
+	public ArrayList<Attendance> checkWorkStatus(String empNo, SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.checkWorkStatus", empNo);
+	}
+
+	public int giveVacation0(String empNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.insert("attendanceMapper.giveVacation0", empNo);
+	}
+
+	public int giveVacation1(String empNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.insert("attendanceMapper.giveVacation1", empNo);
+	}
+
 
 }

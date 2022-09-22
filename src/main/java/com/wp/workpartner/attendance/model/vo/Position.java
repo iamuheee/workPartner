@@ -15,4 +15,5 @@ public class Position {
 
 	private String posCd;
 	private String posName;
+	private String workYears;
 }

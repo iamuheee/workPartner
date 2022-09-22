@@ -174,6 +174,32 @@ public class AttServiceImpl implements AttService{
 	public int outWorkCheck(String empNo) {
 		return aDao.outWorkCheck(empNo, sqlSession);
 	}
+	
+	// 월말체크
+	@Override
+	public ArrayList<Attendance> checkMonth(String empNo) {
+		return aDao.checkMonth(empNo, sqlSession);
+	}
+	
+	// 근무연수 구하기
+	@Override
+	public String checkWorkYears(String empNo) {
+		return aDao.checkWorkYears(empNo, sqlSession);
+	}
+	
+	// 결근있는지구하기
+	@Override
+	public ArrayList<Attendance> checkWorkStatus(String empNo) {
+		return aDao.checkWorkStatus(empNo, sqlSession);
+	}
+	@Override
+	public int giveVacation0(String empNo) {
+		return aDao.giveVacation0(empNo, sqlSession);
+	}
+	@Override
+	public int giveVacation1(String empNo) {
+		return aDao.giveVacation1(empNo, sqlSession);
+	}
 
 
 }

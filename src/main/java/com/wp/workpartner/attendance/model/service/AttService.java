@@ -79,6 +79,21 @@ public interface AttService {
 	// 퇴근하기
 	int outWorkCheck(String empNo);
 	
+	// 월말인지 구하기
+	ArrayList<Attendance> checkMonth(String empNo);
+	
+	// 근무연수 구하기
+	String checkWorkYears(String empNo);
+	
+	// 결근 있는지 구하기
+	ArrayList<Attendance> checkWorkStatus(String empNo);
+	
+	// 0연차 연차 지급
+	int giveVacation0(String empNo);
+	
+	// 1년차 이상 지급
+	int giveVacation1(String empNo);
+	
 	
 	
 	
