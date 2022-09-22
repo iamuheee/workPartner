@@ -57,6 +57,12 @@ public interface AttService {
 	int myAttendanceCount(String date1, String date2, String[] array, String id);
 	ArrayList<Attendance> myAttendanceList(String date1, String date2, String[] array, PageInfo pi, String id);
 	
+	// 달력 띄우기
+	ArrayList<Attendance> badWorkList(String empNo);
+	ArrayList<Attendance> goodWorkList(String empNo);
+	ArrayList<Attendance> vacationWorkList(String empNo);
+	ArrayList<Attendance> bad2WorkList(String empNo);
+	
 	
 	
 	

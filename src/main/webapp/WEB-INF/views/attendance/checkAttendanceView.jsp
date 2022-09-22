@@ -12,8 +12,38 @@
     .div1{
         display:inline-block;
         width: 100%;
-        height: 80%;
+        height: 90%;
         }
+        
+	.fc-day-sun a {
+	  color: red;
+	  text-decoration: none;
+	}  
+	.fc-day-sat a {
+	  color: blue;
+	  text-decoration: none;
+	}
+	.fc-day-mon a {
+	  color: black;
+	  text-decoration: none;
+	}
+	.fc-day-tue a {
+	  color: black;
+	  text-decoration: none;
+	}
+	.fc-day-wed a {
+	  color: black;
+	  text-decoration: none;
+	}
+	.fc-day-thu a {
+	  color: black;
+	  text-decoration: none;
+	}
+	 .fc-day-fri a {
+	  color: black;
+	  text-decoration: none;
+	}
+	      
 </style>
 </head>
 <body>
@@ -21,7 +51,7 @@
 	
 	<div style="height:2%"></div>
 	
-		<div id="outer" style="width:96%">
+		<div id="outer" style="width:80%">
 			<!-- 상단 메뉴 제목 영역 -->
 			<div id="header">
 			    <h3>근태 등록</h3>
@@ -51,26 +81,94 @@
 		  var calendarEl = document.getElementById('calendar');
 		  var calendar = new FullCalendar.Calendar(calendarEl, {
 			  initialView: 'dayGridMonth',
-			  googleCalendarApiKey: 'AIzaSyDb-QzeaUWOmy40bh95g5FO0qfU9X6Hz6g',
+			  //googleCalendarApiKey: 'AIzaSyDb-QzeaUWOmy40bh95g5FO0qfU9X6Hz6g',
+			  //titleFormat: function (date) {
+			    //  year = date.date.year;
+			      //month = date.date.month + 1;
+					
+			      //return year + "년 " + month + "월";
+			    //}, 
+       
+
 			    eventSources: [
 				    {
 			          googleCalendarId: 'ko.south_korea.official#holiday@group.v.calendar.google.com',
 			          color: "red", //rgb,#ffffff 등의 형식으로 할 수 있어요.
 			          textColor: "white"
+			          
 			          //textColor: 'black' 
 			        },
 			    ],
 			    events:[
 			    	  	
-			    		  <c:forEach var="c" items="${list}">
+			    		  <c:forEach var="c" items="${list}">   // 연휴
 			    		  {
 			    			  title:"${c.holName}",
 			    			  start:"${c.holDay}",
-			    			  content: "출석 : 0900, 퇴근 : 1800",
-			    			  color: "#FF0000"
+			    			  color : "#FF0000", 
+			    			  textColor : "white"
+			    		  },
+			    		  </c:forEach>
+			    		  
+			    		  <c:forEach var="a" items="${list2}">  // 결근
+			    		  {
+			    			  title:"${a.status}",
+			    			  start:"${a.dt}",
+			    			  content: "출근 : ${a.attCmt} / 퇴근시간 : ${a.attQt}",
+			    			  color: "green"
 			    			  
 			    		  },
 			    		  </c:forEach>
+			    		  
+			    		  <c:forEach var="b" items="${list3}">  // 정상
+			    		  {
+			    			  title:"${b.status}",
+			    			  start:"${b.dt}",
+			    			  color : "#0000FF", 
+			    			  textColor : "white",
+			    			  
+			    		  },
+			    		  </c:forEach>
+			    		  <c:forEach var="b" items="${list3}">
+			    		  {
+			    			  title:"출근 : ${b.attCmt} / 퇴근 : ${b.attQt}",   //정상
+			    			  start:"${b.dt}",
+			    			  color : "#0000FF", 
+			    			  textColor : "white" 
+			    			  
+			    		  },
+			    		  </c:forEach>
+			    		  
+			    		  <c:forEach var="d" items="${list4}">        //연차
+			    		  {
+			    			  title:"${d.status}",
+			    			  start:"${d.dt}",
+			    			  content: "출근시간 : ${d.attCmt} / 퇴근시간 : ${d.attQt}",
+			    			  color: "yellow",
+			    		      textColor : "red" 
+			    			  
+			    		  },
+			    		  </c:forEach>
+			    		  
+			    		  <c:forEach var="b" items="${list5}">  // 지각, 조퇴
+			    		  {
+			    			  title:"${b.status}",
+			    			  start:"${b.dt}",
+			    			  color : "skyblue", 
+			    			  textColor : "white",
+			    			  
+			    		  },
+			    		  </c:forEach>
+			    		  <c:forEach var="b" items="${list5}">
+			    		  {
+			    			  title:"출근 : ${b.attCmt} / 퇴근 : ${b.attQt}",   // 지각, 조퇴
+			    			  start:"${b.dt}",
+			    			  color : "skyblue", 
+			    			  textColor : "white" 
+			    			  
+			    		  },
+			    		  </c:forEach>
+			    		  
 				          {
 				        	  title:'zzz',
 				        	  start:'21000902'

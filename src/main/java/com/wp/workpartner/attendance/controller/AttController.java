@@ -28,12 +28,20 @@ public class AttController {
 	/** 출석체크 이동하는 url
 	 * @return url
 	 */
-	@RequestMapping("check.att")
-	private String checkAtt(Model model) {
+	@RequestMapping(value="check.att", produces="application/json; charset=utf-8")
+	private String checkAtt(Model model, String empNo) {
 		
 		ArrayList<Holiday> list = aService.holidayList(); // 공휴일정보 가져오기
+		ArrayList<Attendance> list2 = aService.badWorkList(empNo); // 결근 정보 가져오기
+		ArrayList<Attendance> list3 = aService.goodWorkList(empNo); // 정상 정보 가져오기
+		ArrayList<Attendance> list4 = aService.vacationWorkList(empNo); // 연차 정보 가져오기
+		ArrayList<Attendance> list5 = aService.bad2WorkList(empNo); // 지각,조퇴 정보 가져오기
 		
 		model.addAttribute("list", list);
+		model.addAttribute("list2", list2);
+		model.addAttribute("list3", list3);
+		model.addAttribute("list4", list4);
+		model.addAttribute("list5", list5);
 		
 		return "attendance/checkAttendanceView";
 	}

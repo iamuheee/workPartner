@@ -122,6 +122,24 @@ public class AttServiceImpl implements AttService{
 	public ArrayList<Attendance> myAttendanceList(String date1, String date2, String[] array, PageInfo pi, String id) {
 		return aDao.myAttendanceList(date1, date2, array, sqlSession, pi, id);
 	}
+	
+	// 달력 띄우기
+	@Override
+	public ArrayList<Attendance> badWorkList(String empNo) {
+		return aDao.badWorkList(empNo, sqlSession);
+	}
+	@Override
+	public ArrayList<Attendance> goodWorkList(String empNo) {
+		return aDao.goodWorkList(empNo, sqlSession);
+	}
+	@Override
+	public ArrayList<Attendance> vacationWorkList(String empNo) {
+		return aDao.vacationWorkList(empNo, sqlSession);
+	}
+	@Override
+	public ArrayList<Attendance> bad2WorkList(String empNo) {
+		return aDao.bad2WorkList(empNo, sqlSession);
+	}
 
 
 }

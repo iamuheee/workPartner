@@ -194,5 +194,21 @@ public class AttDao {
 		return (ArrayList)sqlSession.selectList("attendanceMapper.myAttendanceList", map, rowBounds);
 	}
 
+	
+	public ArrayList<Attendance> badWorkList(String empNo, SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.badWorkList", empNo);
+	}
+
+	public ArrayList<Attendance> goodWorkList(String empNo, SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.goodWorkList", empNo);
+	}
+
+	public ArrayList<Attendance> vacationWorkList(String empNo, SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.vacationWorkList", empNo);
+	}
+	public ArrayList<Attendance> bad2WorkList(String empNo, SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.bad2WorkList", empNo);
+	}
+
 
 }

@@ -563,4 +563,185 @@
 	    
 	</select>
 	
+	
+	
+	
+	<select id="badWorkList" resultMap="AttendanceResult">
+		select *
+			from (SELECT 
+			        c.emp_no,
+			        c.dt,
+			        a.att_cmt,
+			        a.att_qt,
+			        e.emp_status,
+			        case when a.att_status is null 
+			             then '결근'
+			             else a.att_status
+			             end as att_status
+				    FROM
+				        tb_attendance a 
+				    right
+				     join (SELECT DT, EMP_NO
+				              FROM (
+				                        SELECT TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS DT,
+				                               TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'D') AS DAY
+				                           FROM ( 
+				                           			
+											            	SELECT TO_CHAR(TO_DATE(20220101,'YYYY-MM-DD'), 'YYYYMMDD') AS ST_DT 
+			                                              , 	   TO_CHAR(SYSDATE,'YYYYMMDD') AS END_DT
+											      
+				                                    FROM DUAL 
+				                                  )
+				                         CONNECT BY LEVEL <![CDATA[<=]]> TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
+				                    ), (SELECT EMP_NO FROM TB_EMPLOYEE)
+				                WHERE DAY NOT IN (1, 7)
+				                AND DT NOT IN (select hol1_day from tb_holiday1)
+				            )c on (a.emp_no = c.emp_no and a.att_date = c.dt)
+			        join tb_employee e
+				      on (c.emp_no = e.emp_no)
+				    join tb_position p
+				      on (e.pos_cd = p.pos_cd)
+				    join tb_department d
+				      on (e.dep_cd = d.dep_cd))
+			        where emp_status='Y'
+					and att_status = '결근'	
+					and emp_no = #{empNo}
+					  
+	</select>
+	
+	<select id="goodWorkList" resultMap="AttendanceResult">
+		select *
+			from (SELECT 
+			        c.emp_no,
+			        c.dt,
+			        a.att_cmt,
+			        a.att_qt,
+			        e.emp_status,
+			        case when a.att_status is null 
+			             then '결근'
+			             else a.att_status
+			             end as att_status
+				    FROM
+				        tb_attendance a 
+				    right
+				     join (SELECT DT, EMP_NO
+				              FROM (
+				                        SELECT TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS DT,
+				                               TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'D') AS DAY
+				                           FROM ( 
+				                           			
+											            	SELECT TO_CHAR(TO_DATE(20220101,'YYYY-MM-DD'), 'YYYYMMDD') AS ST_DT 
+			                                              , 	   TO_CHAR(SYSDATE,'YYYYMMDD') AS END_DT
+											      
+				                                    FROM DUAL 
+				                                  )
+				                         CONNECT BY LEVEL <![CDATA[<=]]> TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
+				                    ), (SELECT EMP_NO FROM TB_EMPLOYEE)
+				                WHERE DAY NOT IN (1, 7)
+				                AND DT NOT IN (select hol1_day from tb_holiday1)
+				            )c on (a.emp_no = c.emp_no and a.att_date = c.dt)
+			        join tb_employee e
+				      on (c.emp_no = e.emp_no)
+				    join tb_position p
+				      on (e.pos_cd = p.pos_cd)
+				    join tb_department d
+				      on (e.dep_cd = d.dep_cd))
+			        where emp_status='Y'
+					  and att_status = '정상'	
+					  and emp_no = #{empNo}
+					  
+	</select>
+	
+	
+	<select id="vacationWorkList" resultMap="AttendanceResult">
+		select *
+			from (SELECT 
+			        c.emp_no,
+			        c.dt,
+			        a.att_cmt,
+			        a.att_qt,
+			        e.emp_status,
+			        case when a.att_status is null 
+			             then '결근'
+			             else a.att_status
+			             end as att_status
+				    FROM
+				        tb_attendance a 
+				    right
+				     join (SELECT DT, EMP_NO
+				              FROM (
+				                        SELECT TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS DT,
+				                               TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'D') AS DAY
+				                           FROM ( 
+				                           			
+											            	SELECT TO_CHAR(TO_DATE(20220101,'YYYY-MM-DD'), 'YYYYMMDD') AS ST_DT 
+			                                              , 	   TO_CHAR(TO_DATE(20231230,'YYYY-MM-DD'), 'YYYYMMDD') AS END_DT
+											      
+				                                    FROM DUAL 
+				                                  )
+				                         CONNECT BY LEVEL <![CDATA[<=]]> TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
+				                    ), (SELECT EMP_NO FROM TB_EMPLOYEE)
+				                WHERE DAY NOT IN (1, 7)
+				                AND DT NOT IN (select hol1_day from tb_holiday1)
+				            )c on (a.emp_no = c.emp_no and a.att_date = c.dt)
+			        join tb_employee e
+				      on (c.emp_no = e.emp_no)
+				    join tb_position p
+				      on (e.pos_cd = p.pos_cd)
+				    join tb_department d
+				      on (e.dep_cd = d.dep_cd))
+			        where emp_status='Y'
+					  and (att_status = '연차' or att_status = '오전반차' or att_status = '오후반차')	
+					  and emp_no = #{empNo}
+					  
+	</select>
+	
+	
+	
+	<select id="bad2WorkList" resultMap="AttendanceResult">
+		select *
+			from (SELECT 
+			        c.emp_no,
+			        c.dt,
+			        a.att_cmt,
+			        a.att_qt,
+			        e.emp_status,
+			        case when a.att_status is null 
+			             then '결근'
+			             else a.att_status
+			             end as att_status
+				    FROM
+				        tb_attendance a 
+				    right
+				     join (SELECT DT, EMP_NO
+				              FROM (
+				                        SELECT TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'YYYYMMDD') AS DT,
+				                               TO_CHAR(TO_DATE(ST_DT, 'YYYYMMDD') + LEVEL - 1, 'D') AS DAY
+				                           FROM ( 
+				                           			
+											            	SELECT TO_CHAR(TO_DATE(20220101,'YYYY-MM-DD'), 'YYYYMMDD') AS ST_DT 
+			                                              , 	   TO_CHAR(SYSDATE,'YYYYMMDD') AS END_DT
+											      
+				                                    FROM DUAL 
+				                                  )
+				                         CONNECT BY LEVEL <![CDATA[<=]]> TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
+				                    ), (SELECT EMP_NO FROM TB_EMPLOYEE)
+				                WHERE DAY NOT IN (1, 7)
+				                AND DT NOT IN (select hol1_day from tb_holiday1)
+				            )c on (a.emp_no = c.emp_no and a.att_date = c.dt)
+			        join tb_employee e
+				      on (c.emp_no = e.emp_no)
+				    join tb_position p
+				      on (e.pos_cd = p.pos_cd)
+				    join tb_department d
+				      on (e.dep_cd = d.dep_cd))
+			        where emp_status='Y'
+					and(att_status = '지각' or att_status = '조퇴')	
+					and emp_no = #{empNo}
+					  
+	</select>
+	
+	
+	
+	
 </mapper>
