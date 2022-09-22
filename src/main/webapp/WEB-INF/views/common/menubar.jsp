@@ -315,7 +315,7 @@
 	                               <nav class="sb-sidenav-menu-nested nav">
 	                                   <a class="nav-link nav-choice" href="mypage.em">마이페이지</a>
 	                                   <a class="nav-link nav-choice" href="list.nt">공지사항</a>
-	                                   <a class="nav-link nav-choice" href="">쪽지함</a>
+	                                   <a class="nav-link nav-choice" href="listNote.ne">쪽지함</a>
 	                               </nav>
 	                           </div>
 	
