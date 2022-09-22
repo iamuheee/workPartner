@@ -1,5 +1,6 @@
 package com.wp.workpartner.book.model.vo;
 
+import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.room.model.vo.Room;
 
 import lombok.AllArgsConstructor;
@@ -17,7 +18,9 @@ public class Book {
 
 	private String bkNo; //
 	private String empNo;//
+	private String empName;
 	private String rmNo; //
+	private String rmName;
 	private String bkPerson; //
 	private String bkTitle; //
 	private String bkDate; //
@@ -28,4 +31,5 @@ public class Book {
 	private String bkStatus;
 	
 	private Room room;
+	private Employee employee;
 }

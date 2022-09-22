@@ -33,4 +33,12 @@ public interface BookService {
 	// 회의실 예약 취소 서비스 (update)
 	int deleteBook(String bkNo);
 	
+	// 전체 예약 목록 조회 서비스 (select)
+	int selectAllListCount();
+	ArrayList selectAllList(PageInfo pi);
+	
+	// 회의실별, 기간별 예약 목록 조회 서비스 (select)
+	int selectAllListCountByCondition(String rmNo, String stardDate, String endDate);
+	ArrayList selectAllListByCondition(String rmNo, String startDate, String endDate, PageInfo pi);
+	
 }
