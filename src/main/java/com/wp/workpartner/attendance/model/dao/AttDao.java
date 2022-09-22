@@ -210,5 +210,9 @@ public class AttDao {
 		return (ArrayList)sqlSession.selectList("attendanceMapper.bad2WorkList", empNo);
 	}
 
+	public ArrayList<Attendance> timeSelect(String empNo, SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.timeSelect", empNo);
+	}
+
 
 }

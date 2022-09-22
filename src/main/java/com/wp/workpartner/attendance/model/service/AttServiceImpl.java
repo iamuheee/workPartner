@@ -140,6 +140,12 @@ public class AttServiceImpl implements AttService{
 	public ArrayList<Attendance> bad2WorkList(String empNo) {
 		return aDao.bad2WorkList(empNo, sqlSession);
 	}
+	
+	// 메인페이지 시간띄우기
+	@Override
+	public ArrayList<Attendance> timeSelect(String empNo) {
+		return aDao.timeSelect(empNo, sqlSession);
+	}
 
 
 }

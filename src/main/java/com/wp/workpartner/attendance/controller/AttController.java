@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.wp.workpartner.attendance.model.service.AttService;
 import com.wp.workpartner.attendance.model.vo.Attendance;
 import com.wp.workpartner.attendance.model.vo.Department;
@@ -374,6 +375,18 @@ public class AttController {
 		
 		return "attendance/myAttendanceView";
 		
-	}	
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="mainTime.tm", produces="application/json; charset=utf-8")
+	public String ajaxSelectReplyList(String empNo) {
+		ArrayList<Attendance> list = aService.timeSelect(empNo);
+		return new Gson().toJson(list); // "[{}, {}, {}, ...]		
+	}
+	
+	
+	
+	
 	
 }

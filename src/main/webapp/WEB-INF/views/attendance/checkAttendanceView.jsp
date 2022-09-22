@@ -82,12 +82,12 @@
 		  var calendar = new FullCalendar.Calendar(calendarEl, {
 			  initialView: 'dayGridMonth',
 			  //googleCalendarApiKey: 'AIzaSyDb-QzeaUWOmy40bh95g5FO0qfU9X6Hz6g',
-			  //titleFormat: function (date) {
-			    //  year = date.date.year;
-			      //month = date.date.month + 1;
+			  titleFormat: function (date) {
+			      year = date.date.year;
+			      month = date.date.month + 1;
 					
-			      //return year + "년 " + month + "월";
-			    //}, 
+			      return year + "년 " + month + "월";
+			    }, 
        
 
 			    eventSources: [

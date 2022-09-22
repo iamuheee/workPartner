@@ -742,6 +742,16 @@
 	</select>
 	
 	
+	<select id="timeSelect" resultMap="AttendanceResult">
+		
+		select to_char(to_date(ATT_CMT,'hh24:mi:ss'), 'hh24 : mi : ss') as att_cmt, to_char(to_date(ATT_qt,'hh24:mi:ss'), 'hh24 : mi : ss') as att_qt 
+		from tb_attendance
+		where emp_no = #{empNo}
+		and att_date = to_char(sysdate, 'yyyymmdd')
+	
+	</select>
+	
+	
 	
 	
 </mapper>

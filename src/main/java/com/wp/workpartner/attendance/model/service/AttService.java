@@ -63,6 +63,9 @@ public interface AttService {
 	ArrayList<Attendance> vacationWorkList(String empNo);
 	ArrayList<Attendance> bad2WorkList(String empNo);
 	
+	//메인 페이지 시간 띄우기
+	ArrayList<Attendance> timeSelect(String empNo);
+	
 	
 	
 	

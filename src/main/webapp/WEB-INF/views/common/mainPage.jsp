@@ -223,12 +223,12 @@
 								<table id="timeMenu-tb">
 									<tr>
 										<td width="50%">
-											<button class="btn btn-primary btn-sm">출근</button> <br>
-											MM : DD AM
+											<button class="btn btn-primary btn-sm" id="cmtButton">출근</button> <br>
+											<span id="time1" style="font-size:17px">MM : DD AM</span>
 										</td>
 										<td>
-											<button class="btn btn-danger btn-sm">퇴근</button> <br>
-											MM : DD PM
+											<button class="btn btn-danger btn-sm" id="qtButton">퇴근</button> <br>
+											<span id="time2" style="font-size:17px">MM : DD AM</span>
 										</td>
 									</tr>
 								</table>
@@ -578,5 +578,40 @@
 				<!-- 오른쪽 영역 끝 -->
 
 			</div>
+			
+			
+			
+			<!-- 태민 출퇴근 시간 띄우는 ajax -->
+			
+			<script>
+				$(function(){
+					let x = "";
+					let y = "";
+					
+					$.ajax({
+						url: "mainTime.tm",
+						data: {empNo:${ loginUser.empNo }},
+						success:function(list){
+							
+							x = list[0].attCmt;
+							y = list[0].attQt;
+							
+							if(x != ""){
+								$("#time1").html(x);
+								$("#cmtButton").attr("disabled", true)
+							
+							}
+							
+							if(y != ""){
+								$("#time2").html(y);
+								$("#qtButton").attr("disabled", true)
+							}
+							
+						},error:function(){
+							console.log("메인페이지 시간 ajax 통신 실패");
+						}
+    				})
+				})
+			</script>
 </body>
 </html>
