@@ -508,21 +508,25 @@
             		//[상세보기]            		           	
             		// => 선언적함수로 거쳐서 값 전달하는것보다 바로 $function안에서 조회용 함수로 넘기는게 좋다
             		// 1) 사내직원 자세히 보기
-            		$(document).on("click", "#dataCompanyTable .name", function(){
-            			selectDetailEmp($(this).prev().text());
+            		$(document).on("click", "#dataCompanyTable tbody tr", function(){
+            			selectDetailEmp($(this).find(".no").text());
             		})
             		// 2) 내 연락처 내 상세보기
-            		$(document).on("click", "#dataAddTable .name", function(){
-            			selectDetailMyAdd($(this).prev().text(), $(this).parents("#dataAddTable").attr("groupno"));
+            		$(document).on("click", "#dataAddTable tbody tr", function(){
+            			selectDetailMyAdd($(this).find(".no").text(), $(this).parents("#dataAddTable").attr("groupno"));
             		})
             		// 3) 별표연락처 상세보기
-            		$(document).on("click", "#dataStarAddTable .name", function(){
-            			selectDetailMyAdd($(this).prev().text());            			
+            		$(document).on("click", "#dataStarAddTable tbody tr", function(){
+            			selectDetailMyAdd($(this).find(".no").text());            			
             		}) 
             		
             		// [별 클릭시 별표연락처설정 실시간변경] => 연락처 번호, input:addStar, *groupno 속성에 박아서 전달했음
             		$(document).on("click", "#adDetailTb :checkbox", function(){
-            			 let addStar = ''; 
+            			
+            			// 체크박스 클릭해도 tr 클릭이벤트가 발생안하도록
+        	        	event.stopPropagation(); 
+            			
+            			let addStar = ''; 
             			 if($(this).is(":checked")) {
             				addStar = 'Y'
             			 } else{
@@ -1328,7 +1332,12 @@
                     				}else{
                     					let groupNo = $("#dataAddTable").attr("groupNo");
                     					//console.log(groupNo);
-                    					selectAddTbList(groupNo);                    					
+                    					
+                    					// 다시 조회
+                    					selectAddTbList(groupNo);     
+                    					
+                    					// 혹시 전체체크됐을때 기능 후 체크가 사라지도록
+                				        $("#cbx_chkAll").prop("checked", false);
                     				}
                     				
                     				// 선택된게 있을수있으니 상세정보영역 비워주기
