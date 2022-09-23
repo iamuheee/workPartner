@@ -152,6 +152,8 @@
 		 	   ) A
 			JOIN TB_DUTY D
 			  ON A.DUTY_NO = D.DUTY_NO	 
+		   WHERE D.STATUS = 'Y'
+		   ORDER BY D.DUTY_NO DESC
 	</select>
 	
 	<select id="selectDutyChargeList" resultMap="dutyChargeResult">
@@ -245,31 +247,6 @@
 		  FROM TB_DUTY
 		 WHERE DUTY_NO = #{dutyNo}
 		   AND STATUS = 'Y'
-	</select>
-	
-	
-	<select id="selectDutyWithFile" resultMap="dutyResult">
-		SELECT
-			   DUTY_NO
-			 , EMP_NO
-			 , EMP_NAME
-			 , CALENDAR_YN
-			 , IMPORTANCE
-			 , PROGRESS
-			 , TITLE
-			 , CONTENT
-			 , ENROLL_DATE
-			 , START_DATE
-			 , END_DATE
-			 , STATUS
-			 , D.FILE_PATH
-			 , FILE_ORIGIN_NAME
-		  FROM TB_DUTY D
-		  JOIN TB_FILE F
-		    ON DUTY_NO = FILE_REF_NO
-		 WHERE DUTY_NO = #{dutyNo}
-		   AND STATUS = 'Y'
-		   AND FILE_CATEGORY = 1
 	</select>
 	
 	<select id="selectDutyCharge" resultMap="dutyChargeResult">

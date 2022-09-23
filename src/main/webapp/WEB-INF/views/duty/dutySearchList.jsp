@@ -90,7 +90,7 @@
 		                            <td><span class="prog">${ d.progress }</span></td>
 		                            <td>${ d.empName }</td>
 		                            <td>
-		                            	${ d.empIC[0].empICName } <c:if test="${ d.empIC.size() != 1 }"> 외 ${ d.empIC.size() - 1 }명</c:if>
+		                            	${ d.empIC[0].empICName } <c:if test="${ d.empIC.size() > 1 }"> 외 ${ d.empIC.size() - 1 }명</c:if>
 		                            </td>
 		                            <td>${ d.startDate }</td>
 		                            <td>${ d.endDate }</td>
@@ -111,7 +111,7 @@
 				<br><br>
 				
 				<div id="back-to-list" align="center">
-					<a class="filter back-to-list" href="list.du">개인 업무 최초 리스트로 이동</a>
+					<a class="filter back-to-list" href="list.du">개인 업무 전체 리스트로 이동</a>
 				</div>
 				
                 <br><br>

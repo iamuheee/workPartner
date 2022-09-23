@@ -174,6 +174,7 @@
                     </div>
                     <div class="content-file" align="center">
 	                <c:if test="${not empty d.filePath}">
+	                	<img src="${d.filePath}" style="width:150px;">
 	            		<span>다운로드 <i class="fa fa-download" aria-hidden="true"></i> &nbsp; </span>
 		            	<a href="${d.filePath}">${d.fileOriginName}</a>
 	            	</c:if>
