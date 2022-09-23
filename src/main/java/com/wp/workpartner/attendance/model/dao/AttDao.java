@@ -268,5 +268,36 @@ public class AttDao {
 		return sqlSession.insert("attendanceMapper.giveVacation1", empNo);
 	}
 
+	public int plusVacation0(String empNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.update("attendanceMapper.plusVacation0", empNo);
+	}
+
+	public int plusVacation1(String empNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.update("attendanceMapper.plusVacation1", empNo);
+	}
+
+	public int vacationCount(String condition, String keyword, SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		
+		return sqlSession.selectOne("attendanceMapper.vacationCount", map);
+	}
+
+	public ArrayList<Attendance> vacationList(String condition, String keyword, PageInfo pi,
+			SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("attendanceMapper.vacationList", map, rowBounds);
+	}
+
 
 }

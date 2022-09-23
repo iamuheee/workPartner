@@ -94,6 +94,19 @@ public interface AttService {
 	// 1년차 이상 지급
 	int giveVacation1(String empNo);
 	
+	// 0연차 연차 지급 employee테이블 업데이트
+	int plusVacation0(String empNo);
+	
+	
+	// 1연차 연차 지급 employee테이블 업데이트
+	int plusVacation1(String empNo);
+	
+	// 전체 회원 휴가 조회 수 
+	int vacationCount(String condition, String keyword);
+	
+	// 전체 회원 휴가 조회
+	ArrayList<Attendance> vacationList(String condition, String keyword, PageInfo pi);
+	
 	
 	
 	

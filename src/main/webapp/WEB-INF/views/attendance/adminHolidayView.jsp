@@ -35,7 +35,7 @@
 
 	<div style="height:2%"></div>
 	
-	<div id="outer" style="width:96%">
+	<div id="outer" style="width:96%; height:1200px">
 		<!-- 상단 메뉴 제목 영역 -->
 		<div id="header">
 		    <h3>공휴일 관리</h3>
@@ -43,9 +43,9 @@
 		
 		<div style="width:80%"><hr></div>
 		
-		<div style="width:82%">
+		<div style="width:82%;">
 			<!-- 테이블 -->
-		    <div class="div1" style="width:44%; height:600px; float: left;">
+		    <div class="div1" style="width:44%; height:900px; float: left;">
 		  
 		  		<br>
 		  		<div style="height: 90%; width:90%">

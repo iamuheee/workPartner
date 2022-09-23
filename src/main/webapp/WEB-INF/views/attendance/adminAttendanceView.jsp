@@ -200,9 +200,10 @@
     			$("#condition").val(${condition}).prop("selected", true);
     			//$("option[value=${condition}]").attr("selected", true);
     			
-    			/* $("#date1").val(${date1});
+    			$("#date1").val("${date1}");
+    			$("#date2").val("${date2}");
     			
-    			document.getElementById("date2").setAttribute("value", ${date2}); */
+    			/*document.getElementById("date2").setAttribute("value", ${date2}); */
     		})
     	</script>
 		

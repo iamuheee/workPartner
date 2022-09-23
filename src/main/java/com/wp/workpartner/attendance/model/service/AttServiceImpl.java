@@ -200,6 +200,22 @@ public class AttServiceImpl implements AttService{
 	public int giveVacation1(String empNo) {
 		return aDao.giveVacation1(empNo, sqlSession);
 	}
+	@Override
+	public int plusVacation0(String empNo) {
+		return aDao.plusVacation0(empNo, sqlSession);
+	}
+	@Override
+	public int plusVacation1(String empNo) {
+		return aDao.plusVacation1(empNo, sqlSession);
+	}
+	@Override
+	public int vacationCount(String condition, String keyword) {
+		return aDao.vacationCount(condition, keyword, sqlSession);
+	}
+	@Override
+	public ArrayList<Attendance> vacationList(String condition, String keyword, PageInfo pi) {
+		return aDao.vacationList(condition, keyword, pi, sqlSession);
+	}
 
 
 }

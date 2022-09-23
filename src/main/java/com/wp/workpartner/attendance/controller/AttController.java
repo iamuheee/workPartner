@@ -85,8 +85,28 @@ public class AttController {
 	/** 전사원휴가현황 이동하는 url
 	 * @return url
 	 */
-	@RequestMapping("adminVacation.att")
-	private String adminVacation() {
+
+	@RequestMapping(value="adminVacation.att", produces="application/json; charset=utf-8")
+	private String adminVacation(@RequestParam(value="cpage",  defaultValue="1")int currentPage, String condition, String keyword, Model model) {
+		
+		if(condition == null){
+			condition = "0";
+		}
+		
+		ArrayList<Department> list2 = aService.departmentList();  // 부서정보 가져오기
+		
+		int searchCount = aService.vacationCount(condition, keyword);
+		
+		PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
+		
+		ArrayList<Attendance> list = aService.vacationList(condition, keyword, pi);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("list2", list2);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("condition", condition);
+		model.addAttribute("pi", pi);
+		
 		return "attendance/adminVacationView";
 	}
 	
@@ -474,7 +494,7 @@ public class AttController {
 						count ++;
 					}
 				}
-				System.out.println(count);
+				//System.out.println(count);
 				if(count == 0) {
 					
 					// 월말이 아닐 때 -> 그냥 돌아감
@@ -492,7 +512,7 @@ public class AttController {
 					String month = date.substring(5, 7); 
 					
 					// 12월인가?
-					if(Integer.parseInt(month) != 12) {
+					if(Integer.parseInt(month) != 9) {
 						
 						// 12월 아님
 						// 2-3)근속연수 구해오기
@@ -510,31 +530,31 @@ public class AttController {
 							for (int i = 0; i < c.size(); i++) {
 								
 								if(c.get(i).getStatus().equals("결근")) {
-									count2 += 1;
+									count2 += 3;
 								}
 							}
 							
 							for (int i = 0; i < c.size(); i++) {
 								
 								if(c.get(i).getStatus().equals("조퇴") || c.get(i).getStatus().equals("지각")) {
-									count2 += 0.34;
+									count2 += 1;
 								}
 							}
 							
 							
-							System.out.println(count2);
+							//System.out.println(count2);
 							
 							// 결석이 없거나 조퇴/지각이 3번 미만이면 휴가 1개 지급
-							if(count2 < 1) {
+							if(count2 < 3) {
 								
-								System.out.println(count);
+								//System.out.println(count);
 								int result1 = aService.giveVacation0(empNo);
 								
 								if(result1>0) {
-									
-									session.setAttribute("alertMsg", "퇴근 완료 및 0연차 지급");
+									int result10 = aService.plusVacation0(empNo);
+									session.setAttribute("alertMsg", "퇴근 완료 및 월차 지급");
 								}else {
-									session.setAttribute("alertMsg", "퇴근 완료 및 0연차 지급 실패");
+									session.setAttribute("alertMsg", "퇴근 완료 및 월차 지급 실패");
 								}
 								
 							}
@@ -554,32 +574,36 @@ public class AttController {
 							// 근무상태 확인
 							ArrayList<Attendance> y = aService.checkWorkStatus(empNo);
 							
+							int i = 0;
 							int count3 = 0;
 							
-							for (int i = 0; i < y.size(); i++) {
+							
+							for (i = 0; i < y.size(); i++) {
 								
-								if(y.get(i).getStatus().equals("결근")) {
+								String str = y.get(i).getStatus();
+			
+								if("결근".equals(str)) {
+									count3 += 3;
+									
+								}else if("조퇴".equals(str) || "지각".equals(str)) {
 									count3 += 1;
+									
 								}
 							}
 							
-							for (int i = 0; i < y.size(); i++) {
+							System.out.println(count3);
+								if(count3 < 3) {
 								
-								if(y.get(i).getStatus().equals("조퇴") || y.get(i).getStatus().equals("지각")) {
-									count3 += 0.34;
-								}
-							}
-							
-								if(count3 < 1) {
 								
-								System.out.println(count);
-								int result9 = aService.giveVacation0(empNo);
+								int result9 = aService.giveVacation0(empNo); // 연차 1개 지급
 								
 								if(result9>0) {
 									
-									session.setAttribute("alertMsg", "퇴근 완료 및 0연차 지급1");
+									int result10 = aService.plusVacation0(empNo);  // employee테이블 업데이트
+									session.setAttribute("alertMsg", "퇴근 완료 및 월차 지급 완료");
+									
 								}else {
-									session.setAttribute("alertMsg", "퇴근 완료 및 0연차 지급 실패1");
+									session.setAttribute("alertMsg", "퇴근 완료 및 월차 지급 실패");
 								}
 								
 							}
@@ -592,9 +616,10 @@ public class AttController {
 							
 							if(result8>0) {
 								
-								session.setAttribute("alertMsg", "퇴근 완료 및 1연차 지급");
+								int result11 = aService.plusVacation1(empNo);
+								session.setAttribute("alertMsg", "퇴근 완료 및 연차 지급");
 							}else {
-								session.setAttribute("alertMsg", "퇴근 완료 및 1연차 지급 실패");
+								session.setAttribute("alertMsg", "퇴근 완료 및 연차 지급 실패");
 							}
 							
 						}

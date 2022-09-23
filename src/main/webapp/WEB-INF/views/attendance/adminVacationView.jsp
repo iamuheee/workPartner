@@ -39,31 +39,28 @@
 		
 		<br><br>
 		<div style="width:80%">
-			<form action="" style="float:right">
-	
-				<input type="date" name="date1">
-		        &nbsp~&nbsp	
-		        <input type="date" name="date2">
+			<form action="adminVacation.att" method="get" id="myForm" style="float:right">
 		        
 				&nbsp	
-	
-				<select name="">
-					<option value="">인사부</option>
-					<option value="">회계부</option>
-					<option value="">영업부</option>
-					<option value="">개발부</option>
-				</select>
-	
+				
+				<c:if test="${ !empty list2 }">
+					<select name="condition" id="condition" form="myForm">
+						<option value="0">모든부서</option>
+						<c:forEach var="c" items="${ list2 }">
+							<option value="${ c.depCd }">${ c.depName }</option>
+						</c:forEach>
+					</select>
+				</c:if>
 				&nbsp	
 	
-				<input type="text" placeholder="사원명/사번 검색" name="keyword">
+				<input type="text" placeholder="사원명/사번 검색" name="keyword" value="${ keyword }" style="text-align:center;">
 				<button type="submit" class="btn btn-sm btn-secondary btnSize" style="height:28px; width:60px; font-size:17px; line-height:10px">조회</button>
 			</form>
 		</div>
 		
 	    <!-- 테이블 -->
 	    <div class="ntMain" style="width:80%">
-	        <span class="span1">조회결과 <span style="font-size:x-large; font-weight: 400;">27</span><span style="font-weight:600; font-size: medium;">건</span></span>
+	        <span class="span1">조회결과 <span style="font-size:x-large; font-weight: 400;">${pi.listCount}</span><span style="font-weight:600; font-size: medium;">건</span></span>
 	
 	        <br><br>
 	        <table class="table table-hover" style="text-align:center">
@@ -81,85 +78,31 @@
 	                </tr>
 	            </thead>
 	            <tbody>
-	                <tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>15</td>
-	                    <td>7</td>
-						<td>8</td>
-						<td>2022-09-01</td>
-						<td>1</td>
-	                </tr>
-	                <tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>15</td>
-	                    <td>7</td>
-						<td>8</td>
-						<td>2022-09-01</td>
-						<td>1</td>
-	                </tr>
-	                <tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>15</td>
-	                    <td>7</td>
-						<td>8</td>
-						<td>2022-09-01</td>
-						<td>1</td>
-	                </tr>
-	                <tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>15</td>
-	                    <td>7</td>
-						<td>8</td>
-						<td>2022-09-01</td>
-						<td>1</td>
-	                </tr>
-	                <tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>15</td>
-	                    <td>7</td>
-						<td>8</td>
-						<td>2022-09-01</td>
-						<td>1</td>
-	                </tr>
-	                <tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>15</td>
-	                    <td>7</td>
-						<td>8</td>
-						<td>2022-09-01</td>
-						<td>1</td>
-	                </tr>
-	                <tr>
-	                    <td>1</td>
-	                    <td>인사부</td>
-	                    <td>부장</td>
-	                    <td>홍길동</td>
-	                    <td>15</td>
-	                    <td>7</td>
-						<td>8</td>
-						<td>2022-09-01</td>
-						<td>1</td>
-	                </tr>
-					
-	                                 
+	            
+	                <c:choose>
+                		<c:when test="${empty list}">
+                			<tr>
+                				<td colspan="10">조회된 휴가가 없습니다.</td>
+                			</tr>
+                		</c:when>
+                		<c:otherwise>
+							<c:forEach var="a" items="${list}">
+								<tr>
+			                        <td>${a.a}</td>
+			                        <td>${a.b}</td>
+			                        <td>${a.c}</td>
+			                        <td>${a.d}</td>
+			                        <td>${a.e}</td>
+			                        <td>${a.f}</td>
+			                        <td>${a.g}</td>
+			                        <td>${a.h}</td>
+			                        <td>${a.i}</td>
+			                                 
+			                    </tr>
+							</c:forEach>
+                		</c:otherwise>                    
+                    </c:choose>      
+	                        
 	
 	            </tbody>
 	        
@@ -175,15 +118,15 @@
 	        <nav aria-label="Page navigation example" class="pasingCenter">
 	            <ul class="pagination">
 	              <li class="page-item">
-	                <a class="page-link" href="#" aria-label="Previous">
+	                <a class="page-link" href="adminVacation.att?cpage=${ pi.currentPage - 1 }&condition=${condition}&keyword=${keyword}" aria-label="Previous">
 	                  <span aria-hidden="true">&laquo;</span>
 	                </a>
 	              </li>
-	              <li class="page-item"><a class="page-link" href="#">1</a></li>
-	              <li class="page-item"><a class="page-link" href="#">2</a></li>
-	              <li class="page-item"><a class="page-link" href="#">3</a></li>
+	              <c:forEach var="no" begin="${ pi.startPage }" end="${ pi.endPage }" step="1">
+		              <li class="page-item"><a class="page-link" href="adminVacation.att?cpage=${ no }&condition=${condition}&keyword=${keyword}">${ no }</a></li>
+				  </c:forEach>
 	              <li class="page-item">
-	                <a class="page-link" href="#" aria-label="Next">
+	                <a class="page-link" href="adminVacation.att?cpage=${ pi.currentPage + 1 }&condition=${condition}&keyword=${keyword}" aria-label="Next">
 	                  <span aria-hidden="true">&raquo;</span>
 	                </a>
 	              </li>
@@ -194,5 +137,26 @@
 	</div>
 	
 	<br><br><br><br><br><br><br><br><br>
+	
+	<script>
+	// 페이징 관련 스크립트 //
+	
+	// 1) pi.currentPage == 1인 경우, Previous 버튼 비활성화
+	if( ${pi.currentPage} == 1 ){
+		$("a[aria-label='Previous']").removeAttr("href");
+	}
+	
+	// 2) pi.currentPage == pi.endPage인 경우, Next 버튼 비활성화
+	if( ${pi.currentPage} == ${pi.maxPage} ){
+		$("a[aria-label='Next']").removeAttr("href");
+	}
+	
+	// 셀렉트박스 고정 
+	$(function(){
+		$("#condition").val(${condition}).prop("selected", true);
+	})	
+	</script>
+	
+	
 </body>
 </html>

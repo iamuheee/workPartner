@@ -49,6 +49,18 @@
 		<result column="hol1_name" property="holName"/>
 	</resultMap>
 	
+	<resultMap id="vacationResult" type="AttVacation">
+		<result column="a" property="a"/>
+		<result column="b" property="b"/>
+		<result column="c" property="c"/>
+		<result column="d" property="d"/>
+		<result column="e" property="e"/>
+		<result column="f" property="f"/>
+		<result column="g" property="g"/>
+		<result column="h" property="h"/>
+		<result column="i" property="i"/>
+	</resultMap>
+	
 	
 	<!-- 전사원 근태현황 조회 리스트개수 -->
 	<select id="selectSearchCount" resultType="_int">
@@ -1084,7 +1096,8 @@
 		 SELECT B.DT,
 		        NVL(B.ATT_STATUS,'결근') AS ATT_STATUS
 		 FROM
-		     (SELECT  A.DT
+		     (SELECT  A.DT,
+		     to_char(TO_DATE(a.DT),'d') d
         ,   (SELECT CASE WHEN att_status = '연차' THEN '연차'
                          WHEN att_status = '조퇴' THEN '조퇴'
                          WHEN att_status = '지각' THEN '지각'
@@ -1107,6 +1120,7 @@
 			          ) A
 				)B
 				where dt not in(select hol1_day from tb_holiday1)
+				and d NOT IN ('1','7')
 				
     
 	</select>
@@ -1151,5 +1165,91 @@
 	</insert>
 	
 	
+	<update id="plusVacation0">
+		UPDATE tb_employee
+			SET
+			    EMP_HOLTAKE = EMP_HOLTAKE + 1 
+			WHERE
+        emp_no = #{empNo}
+	</update>
+	
+	
+	<update id="plusVacation1">
+		UPDATE tb_employee
+			SET
+			    EMP_HOLTAKE = EMP_HOLTAKE + (
+			                                select trunc((sysdate-to_date(EMP_ENROLLDATE,'yyyy-mm-dd')+1)/365)+15
+			                                 from tb_employee where emp_no = #{empNo})
+			WHERE
+			        emp_no = #{empNo}
+	</update>
+	
+	
+	<select id="vacationCount" resultType="_int">
+	
+		select count(*)
+		from
+		(
+			select emp_no a
+		    , dep_name b
+		    , pos_name c
+		    , emp_name d
+		    , emp_holtake e
+		    , emp_holuse f
+		    , (emp_holtake - emp_holuse) g
+		    , emp_enrolldate h
+		    , trunc((sysdate-to_date(EMP_ENROLLDATE,'yyyy-mm-dd')+1)/365) i
+		    , dep_cd
+            , emp_name
+		from tb_employee
+		join tb_department using (dep_cd)
+		join tb_position using (pos_cd)
+		where to_date(emp_enrolldate, 'yyyy-mm-dd') <![CDATA[<=]]>  to_date('2100-12-30', 'yyyy-mm-dd')
+		<choose>
+			<when test='condition == "0"'></when>
+			<otherwise> 
+			   	and dep_cd = #{condition}
+			</otherwise>
+		</choose>
+		
+		<if test="keyword != null and keyword != ''">
+	    and (emp_name like '%' || #{keyword} || '%' or emp_no = #{keyword})
+	   	</if>
+		)
+		
+
+	</select>
+	
+	<select id="vacationList" resultMap="vacationResult">
+	
+			select emp_no a
+		    , dep_name b
+		    , pos_name c
+		    , emp_name d
+		    , emp_holtake e
+		    , emp_holuse f
+		    , (emp_holtake - emp_holuse) g
+		    , emp_enrolldate h
+		    , trunc((sysdate-to_date(EMP_ENROLLDATE,'yyyy-mm-dd')+1)/365) i
+		    , dep_cd
+            , emp_name
+		from tb_employee
+		join tb_department using (dep_cd)
+		join tb_position using (pos_cd)
+		where to_date(emp_enrolldate, 'yyyy-mm-dd') <![CDATA[<=]]>  to_date('21001230', 'yyyy-mm-dd')
+			
+			
+			<choose>
+			<when test='condition == "0"'></when>
+			<otherwise> 
+			   	and dep_cd = #{condition}
+			</otherwise>
+			</choose>
+			
+			<if test="keyword != null and keyword != ''">
+		    and (emp_name like '%' || #{keyword} || '%' or emp_no = #{keyword})
+		   	</if>
+			
+	</select>
 	
 </mapper>

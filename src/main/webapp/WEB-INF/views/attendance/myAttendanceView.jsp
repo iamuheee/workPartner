@@ -241,6 +241,8 @@
 					$("input:checkbox[id='5']").prop("checked", true);
 				}
 				
+				$("#date1").val("${date1}");
+    			$("#date2").val("${date2}");
 				
 			});		
 				
