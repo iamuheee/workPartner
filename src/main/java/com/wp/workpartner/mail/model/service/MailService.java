@@ -17,11 +17,14 @@ public interface MailService {
 	
 	// 2-1. 메일 서명 삭제
 	int deleteSig(String sigNo);
-	 
-	// 2-2. 기본설정된 서명있는지 조회
+	
+	// 2-2 우선 유효한 서명이 있는지 조회
+	int selectSigYCount(String empNo);
+	
+	// 2-2. 그리고 기본설정된 서명있는지 조회
 	int selectBasicCount(String empNo);
 	
-	// 2-3. 없을 경우 row1인 sigNo를 기본으로 바꿔주기
+	// 2-4. 없을 경우 row1인 sigNo를 기본으로 바꿔주기
 	int updateBasic(String empNo); 
 		
 	// 3. 메일 서명등록
@@ -128,9 +131,12 @@ public interface MailService {
 	Signature selectSigBasic(String empNo);
 	
 	// [메인페이지용 조회]
+	// 1. 테이블
 	ArrayList<Mail> mainTopEmailList(String email);
-	
-	
+	// 2. 받은 메일 수
+	int revEmailCount(String email);
+	// 3. 안읽은 메일 수
+	int revNotReadEmail(String email);
 	
 	
 	

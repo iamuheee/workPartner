@@ -192,4 +192,16 @@ public class MailDao {
 	public ArrayList<Mail> mainTopEmailList(SqlSessionTemplate sqlSession, String email){
 		return (ArrayList)sqlSession.selectList("mailMapper.mainTopEmailList", email);
 	}
+	
+	public int selectSigYCount(SqlSessionTemplate sqlSession, String emailNo) {
+		return sqlSession.selectOne("mailMapper.selectSigYCount", emailNo);
+	}
+	
+	public int revEmailCount(SqlSessionTemplate sqlSession, String email) {
+		return sqlSession.selectOne("mailMapper.revEmailCount", email);		
+	}
+	
+	public int revNotReadEmail(SqlSessionTemplate sqlSession, String email) {
+		return sqlSession.selectOne("mailMapper.revNotReadEmail", email);
+	}
 }

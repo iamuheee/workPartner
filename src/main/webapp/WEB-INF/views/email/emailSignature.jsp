@@ -74,7 +74,7 @@
                 
                                 
 			<div align="end">
-                <button type="submit" class="btn btn-sm btn-primary">확인</button>                
+                <button type="submit" class="btn btn-sm btn-primary" onclick="return isValidForm();">확인</button>                
             </div>
             
         </form>
@@ -177,7 +177,7 @@
 	        				value += '<tr>'                    
 					               +     '<td colspan="2" align="end" width="180px">';
 					      if(list[i].sigBasic == 'Y'){
-					         value += 	 	'<span class="roundStyle">기본</span>  &nbsp;';
+					         value += 	 	'<span class="roundStyle" id="sigBasicChoice">기본</span>  &nbsp;';
 					        } 
 					         value +=       '<input type="radio" name="sigNo" value="'+ list[i].sigNo +'" id="'+list[i].sigNo+'"';
 					      if(list[i].sigBasic == 'Y'){
@@ -188,7 +188,7 @@
 					               +     '<td align="end" width="100px"><button type="button" class="btn btn-sm btn-secondary" id="sigDelete">삭제</button></td>'
 					               + '</tr>';
 	        			}
-	        			
+	        		
 	        			$("#sigListTb").html(value);
 	        		},
 	        		error:function(){
@@ -267,17 +267,28 @@
 	        		
 	        	})
 	        }
+	       
 	        
-	      /*  function sigManage(){
-	    	   $.ajax({
-	    		   url:"sigManage.ma",
-	    		   data:{
-	    			   
-	    			   
-	    		   }
-	    		   
-	    	   })
-	       } */
+	       // 기본 + 서명사용여부  설정 전 조건
+	       // 사용한다고 했는데 기본 서명이 없을 경우은 false
+	      function isValidForm(){
+	    	  
+	    	   // 사용함  체크
+	    	  if($(".sigTable input#use").prop("checked")){
+	    		  
+	    		  // 기본으로 설정할 서명이 체크되어있음
+	    		  if($("#sigListTb  :radio").prop("checked")){
+	    			  return true;
+	    		  }else{
+	    			  // 기본으로 설정할 서명이 체크되어있지않음
+	    			  alert("기본으로 할 서명 선택해주세요");
+	    			  return false;
+	    		  }
+	    	  }else{
+	    		  // 사용안함으로 설정시 
+	    		  return true;
+	    	  }	    	  
+	      } 
 	        
         
         </script>

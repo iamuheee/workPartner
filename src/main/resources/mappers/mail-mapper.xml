@@ -127,6 +127,15 @@
 	           and sig_status = 'Y'
 	           and sig_basic = 'Y'
 	</select>
+	
+	<!-- 유효한 서명있는지 count조회  -->
+	<select id="selectSigYCount" resultType="_int">
+		 SELECT   count(*)
+           from  tb_signature 
+          where emp_no = #{empNo}
+            and sig_status = 'Y'            
+	</select>
+	
 			
 	<!-- 기본서명 갯수 조회  -->
 	<select id="selectBasicCount" resultType="_int">
@@ -1082,8 +1091,48 @@
 	                   order 
 	                      by  		    
 	                         mail_create_date desc)
-           where rownum between 1 and 5   
+           where rownum between 1 and 5   	
+	</select>
 	
+	<select id="revEmailCount" resultType="_int">
+		select count(*)               
+			   from tb_mail
+			   join tb_mail_status using(mail_no)
+			   where 
+			        (
+				        (mail_email = #{email}
+				         and mail_status = 'Y'
+				         and mail_category = 'R'
+				         ) 
+				        or 			       
+				        (
+				         mail_email = #{email}
+				         and mail_status = 'Y'
+				         and mail_category = 'C'
+				        )	         
+			        )
+	</select>
+	
+	
+	<select id="revNotReadEmail" resultType="_int">
+		select count(*)               
+		   from tb_mail
+		   join tb_mail_status using(mail_no)
+		   where 
+		        (
+			        (mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'R'
+                     and mail_read = 'N'
+			         ) 
+			        or 			       
+			        (
+			         mail_email = #{email}
+			         and mail_status = 'Y'
+			         and mail_category = 'C'
+                      and mail_read = 'N'
+			        )	         
+		        )
 	</select>
 	
 	

@@ -24,12 +24,16 @@ import com.wp.workpartner.common.template.FileUpload;
 import com.wp.workpartner.common.template.Pagination;
 import com.wp.workpartner.employee.model.service.EmployeeServiceImpl;
 import com.wp.workpartner.employee.model.vo.Employee;
+import com.wp.workpartner.mail.model.service.MailService;
 
 @Controller
 public class EmployeeController {
 	
 	@Autowired
 	private EmployeeServiceImpl eService; 
+	
+	@Autowired
+	private MailService mService; // 메일서비스
 	
 	@Autowired	
 	private BCryptPasswordEncoder bcryptPasswordEncoder;	// 비밀번호 암호화
@@ -65,8 +69,15 @@ public class EmployeeController {
 //		System.out.println(loginUser);
 		
 		if(loginUser != null && bcryptPasswordEncoder.matches(e.getEmpPwd(), loginUser.getEmpPwd())) {	// 로그인 성공
+			
 			session.setAttribute("loginUser", loginUser);
-			mv.setViewName("common/mainPage");
+			
+			// 이메일 갯수 관련 정보 
+			int revEmailCount = mService.revEmailCount(loginUser.getEmpEmail());
+			int revNotReadEmailCount = mService.revNotReadEmail(loginUser.getEmpEmail());
+			mv.addObject("revCount", revEmailCount).addObject("notReadCount", revNotReadEmailCount).setViewName("common/mainPage");
+						
+			
 		}else {	// 로그인 성공
 			mv.addObject("errorMsg", "로그인 실패");
 			mv.setViewName("common/error");
@@ -89,6 +100,7 @@ public class EmployeeController {
 	
 	@RequestMapping("main")
 	public String mainPage() {
+		
 		return "common/mainPage";
 	}
 	

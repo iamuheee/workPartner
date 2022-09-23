@@ -277,7 +277,7 @@
 									<tr>
 										<td width="50%">메일 / 받은편지함</td>
 										<!-- 새로 받은 메일 / 총 메일 수 -->
-										<td align="right"><span class="new-num"> 2 </span> / 125
+										<td align="right"><span class="new-num"> ${notReadCount} </span> / ${revCount} 
 											건</td>
 									</tr>
 									<tr>
@@ -312,7 +312,7 @@
 								<table id="quickMenu-tb">
 									<tr>
 										<td style="border-right: 1px solid #b7b9cc"><a
-											href="쪽지쓰기" class="quickA">쪽지 쓰기</a></td>
+											href="insert.ma" class="quickA">메일 쓰기</a></td>
 										<td><a href="" class="quickA">회의실 예약</a></td>
 									</tr>
 								</table>

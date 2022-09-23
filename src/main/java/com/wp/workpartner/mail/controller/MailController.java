@@ -97,15 +97,16 @@ public class MailController {
 		int result1 = mService.deleteSig(sigNo);	
 		//System.out.println(result1);
 		// 기본설정 조회
-		//Signature s = mService.selectSigBasic(empNo);
+		Signature s = mService.selectSigBasic(empNo);
 		int count = mService.selectBasicCount(empNo);
-		if(count == 0) {
+		// 기본설정된 서명이 없으면서 + 등록된 유효한 서명이 있을때 맨 첨에 있는 서명을 기본서명으로 설정해주기 
+		int sinYCount = mService.selectSigYCount(empNo);
+		if(count == 0 && sinYCount > 0) {
 			result2 =  mService.updateBasic(empNo);
-			//System.out.println(result2);
-		
+			System.out.println(result2);		
 		}
 		
-		return (result1*result2) > 0 ? "success" : "fail";
+		return (result1 * result2) > 0 ? "success" : "fail";
 	 }
 	
 	/** 서명 모달창에 입력 될 사원 정보조회
@@ -156,11 +157,18 @@ public class MailController {
 		//System.out.println(e);		
 		// 1. 직원테이블 => empSigUse
 		int result1 = mService.updateSigUseManage(e);
-		// 2-1. 서명테이블 => sigBasic설정 > 우선 모든 서명들 basic=n
-		int result2= mService.updateSigBasicNo(s);
-		// 2-2. 사용자가 설정한 sigNo만 Y
-		int result3 = mService.updateSigBasicManage(s);
 		
+		// 만약 사용안함 + 등록한 서명이 없다면 ? s는 오는데 sigNo = null로 올것임 (s에 empNo만 담겨왔음)
+		int result2 = 1;
+		int result3 = 1;
+		
+		if(s.getSigNo() != null) {
+			// 2-1. 서명테이블 => sigBasic설정 > 우선 모든 서명들 basic=n
+			result2= mService.updateSigBasicNo(s);
+			// 2-2. 사용자가 설정한 sigNo만 Y
+			result3 = mService.updateSigBasicManage(s);
+		}
+				
 		if((result1*result2*result3) > 0) {
 			// alert문구 담아서 기존에 보던 상세페이지
 			session.setAttribute("alertMsg", "설정이 완료되었습니다.");

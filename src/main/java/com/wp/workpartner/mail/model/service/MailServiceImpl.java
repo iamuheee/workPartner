@@ -220,6 +220,24 @@ public class MailServiceImpl implements MailService {
 	@Override
 	public ArrayList<Mail> mainTopEmailList(String email) {
 		return mDao.mainTopEmailList(sqlSession, email);
+	}
+
+	// 서명 삭제 시 기본서명수정 전에 기존에등록된 서명이 없을 수 있으니 count조회
+	@Override
+	public int selectSigYCount(String empNo) {
+		return mDao.selectSigYCount(sqlSession, empNo);
+	}
+
+	// 메인페이지용 받은메일 총 갯수
+	@Override
+	public int revEmailCount(String email) {
+		return mDao.revEmailCount(sqlSession, email);
+	}
+
+	// 메인 페이지용 받은메일 > 안읽은 메일 수 
+	@Override
+	public int revNotReadEmail(String email) {
+		return mDao.revNotReadEmail(sqlSession, email);
 	}	
 
 	
