@@ -290,6 +290,9 @@
 	    					$("#posCd").append('<option value="' + pos[i].position + '">' + pos[i].positionName + '</option>');
 	    				}
 	    				
+	    				$("#posCd option[value='1']").attr('disabled', true);
+	    				$("#posCd option[value='2']").attr('selected', true);
+	    				
 	    			},
 	    			error:function(){
 	    				console.log("부서, 직위 조회용 ajax 통신 실패");

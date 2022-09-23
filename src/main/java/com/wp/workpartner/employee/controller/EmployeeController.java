@@ -271,12 +271,15 @@ public class EmployeeController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="insertSimply.em", produces="application/json; charset=UTF-8")
-	public String ajaxInsertEmployeeSimply(Employee e) {
+	public String ajaxInsertEmployeeSimply(Employee e, String empProfile, String keyword) {
 				
 		// 비밀번호 암호화
 		String encPwd = bcryptPasswordEncoder.encode(e.getEmpPwd());
 		e.setEmpPwd(encPwd);
 //		System.out.println(e);
+		
+		// 프로필 사진 첨부 (디폴트 이미지)
+		e.setEmpProfile(empProfile);
 		
 		int result = eService.insertEmployee(e);
 //		System.out.println(result);
