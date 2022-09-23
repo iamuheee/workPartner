@@ -63,8 +63,8 @@
 	
 	<resultMap id="projectMeetingMemberResult" type="ProjectMeetingMember">
 		<result column="PBOARD_NO" property="pboardNo" />
-		<result column="MEM_NO" property="memNo" />
-		<result column="MEM_NAME" property="memName" />
+		<result column="EMP_NO" property="memNo" />
+		<result column="EMP_NAME" property="memName" />
 		<result column="ATTENDANCE_YN" property="attendanceYN" />
 	</resultMap>
 	
@@ -133,6 +133,26 @@
 		   AND P.STATUS = 'Y'
 		   AND M.STATUS = 'Y'
 		   AND MEM_STATUS = '참여'
+		   AND P.PROGRESS != '완료'
+		 ORDER
+		    BY ENROLL_DATE DESC
+	</select>
+	
+	<select id="selectDoneProjectList" resultMap="projectResult">
+		SELECT P.PROJ_NO
+			 , PROJ_TITLE
+			 , PROGRESS
+			 , START_DATE
+			 , END_DATE
+			 , ENROLL_DATE
+		  FROM TB_PROJECT P
+		  JOIN TB_PROJECT_MEM M
+		    ON P.PROJ_NO = M.PROJ_NO
+		 WHERE MEM_NO = #{empNo}
+		   AND P.STATUS = 'Y'
+		   AND M.STATUS = 'Y'
+		   AND MEM_STATUS = '참여'
+		   AND P.PROGRESS = '완료'
 		 ORDER
 		    BY ENROLL_DATE DESC
 	</select>
@@ -264,7 +284,7 @@
 	
 	<select id="selectProjectBoardList" resultMap="projectBoardResult">
 		SELECT PBOARD_NO
-			   PROJ_NO
+			 , PROJ_NO
 			 , PBOARD_WRITER
 			 , EMP_NAME
 			 , REF_TYPE
@@ -279,19 +299,7 @@
 		 ORDER 
 		 	BY CREATE_DATE DESC
 	</select>
-	
-	<select id="selectProjectMeeting" resultMap="projectMeetingResult">
-		SELECT PBOARD_NO
-			 , MEETING_DATE
-			 , START_TIME
-			 , END_TIME
-			 , MEETING_PLACE
-			 , IN_CHARGE
-			 , CALENDAR_YN
-		  FROM TB_PMEET
-		 WHERE PBOARD_MP = #{pboardNo}
-	</select>
-	
+
 	<insert id="insertBoard">
 	INSERT 
 	  INTO TB_PBOARD
@@ -546,6 +554,76 @@
 		 WHERE PROJ_NO = #{projNo}
 		   AND MEM_NO = #{memNo}
 	</delete>
+	
+		
+	<select id="selectMeeting" resultMap="projectMeetingResult">
+		SELECT PBOARD_NO
+			 , MEETING_DATE
+			 , START_TIME
+			 , END_TIME
+			 , MEETING_PLACE
+			 , IN_CHARGE
+			 , EMP_NAME AS IN_CHARGE_NAME
+			 , CALENDAR_YN
+		  FROM TB_PMEET
+		  JOIN TB_EMPLOYEE
+		  	ON IN_CHARGE = EMP_NO
+		 WHERE PBOARD_NO = #{pboardNo}
+	</select>
+	
+	<select id="selectMeetingMember" resultMap="projectMeetingMemberResult">
+		SELECT PBOARD_NO
+			 , EMP_NO
+			 , EMP_NAME
+			 , ATTENDANCE_YN
+		  FROM TB_PMEET_MEM
+		 WHERE PBOARD_NO = #{pboardNo}
+	</select>
+	
+	<insert id="insertMeetingBoard">
+		INSERT 
+		  INTO TB_PBOARD
+		VALUES
+			 (
+			   SEQ_PBNO.NEXTVAL
+			 , #{projNo}
+			 , #{pboardWriter}
+			 , '회의'
+			 , #{title}
+			 , #{content}
+			 , DEFAULT
+			 , DEFAULT
+			 , DEFAULT
+			 )
+	</insert>
+	
+	
+	<insert id="insertMeeting">
+		INSERT
+		  INTO TB_PMEET
+		VALUES
+			 (
+			   SEQ_PBNO.CURRVAL
+			 , #{meetingDate}
+			 , #{startTime}
+			 , #{endTime}
+			 , #{meetingPlace}
+			 , #{incharge}
+			 , #{calendarYN}
+			 )
+	</insert>
+		
+	<insert id="insertMeetingMember">
+		INSERT
+		  INTO TB_PMEET_MEM
+		VALUES
+			 (
+			   SEQ_PBNO.CURRVAL
+			 , #{empNo}
+			 , #{empName}
+			 , NULL
+			 )
+	</insert>
 	
 
 </mapper>

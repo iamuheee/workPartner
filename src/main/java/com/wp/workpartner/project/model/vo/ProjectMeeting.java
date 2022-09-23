@@ -18,8 +18,9 @@ public class ProjectMeeting {
 	private String endTime;
 	private String meetingPlace;
 	private String incharge;
+	private String inchargeName;
 	private String calendarYN;
 	
-	ArrayList<ProjectMeetingMember> mtmlist;
-
+	private String memNo;
+	
 }

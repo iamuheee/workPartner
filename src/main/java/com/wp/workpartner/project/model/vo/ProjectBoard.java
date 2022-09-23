@@ -30,8 +30,13 @@ public class ProjectBoard {
 	private String bmkDate;
 	
 	private ProjectDuty pduty;
-	private ProjectMeeting pmeet; 
 	private File file;
 	private ArrayList<Comment> comment;
+
+	private ProjectMeeting pmeet; 
+	private ArrayList<ProjectMeetingMember> pmeetMem;
+	
+	private String empNo; // , 로 연이은 회의 참석자 사번 
+	private String empName; // , 로 연이은 회의 참석자 이름
 
 }

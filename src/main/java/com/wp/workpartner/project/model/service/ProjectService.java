@@ -7,6 +7,7 @@ import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
+import com.wp.workpartner.project.model.vo.ProjectMeeting;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 public interface ProjectService {
@@ -14,6 +15,8 @@ public interface ProjectService {
 	int insertProject(Project p);
 	
 	ArrayList<Project> selectProjectList(String empNo);
+	
+	ArrayList<Project> selectDoneProjectList(String empNo);
 	
 	ArrayList<ProjectMember> selectMyInvation(String empNo);
 	
@@ -63,11 +66,18 @@ public interface ProjectService {
 	
 	int validateInchargeMember(Project p);
 	
+	int validateMeetingMember(Project p);
+	
 	int answerInvitaion(ProjectMember m, String answer);
 	
 	ArrayList<ProjectMember> selectWaitingMemberList(ProjectMember m);
 	
 	int deleteWaitingMember(ProjectMember m);
 	
+	ArrayList<ProjectBoard> selectMeetingList(Project p);
+	
+	int insertMeeting(ProjectBoard pb, ProjectMeeting pm);
+	
+	int deleteMeeting(ProjectBoard pb);
 	
 }

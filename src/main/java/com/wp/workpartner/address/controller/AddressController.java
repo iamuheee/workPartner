@@ -311,5 +311,10 @@ public class AddressController {
 		return "address/addressPcharge";
 	}
 	
+	// 프로젝트 회의 멤버용 주소록
+	@RequestMapping("addressProjectMeeting.ad")
+	public String addressProjectMeeting() {
+		return "address/addressProjectMeeting";
+	}
 	
 }

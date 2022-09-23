@@ -12,6 +12,7 @@ import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.dao.ProjectDao;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
+import com.wp.workpartner.project.model.vo.ProjectMeeting;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Service
@@ -51,6 +52,16 @@ public class ProjectServiceImpl implements ProjectService{
 	}
 	
 	
+	@Override
+	public ArrayList<Project> selectDoneProjectList(String empNo) {
+		ArrayList<Project> dplist = pDao.selectDoneProjectList(sqlSession, empNo);
+		for(Project p : dplist) {
+			p.setMlist( pDao.selectMemberList(sqlSession, p) );
+		}
+		return dplist;
+	}
+
+
 	@Override
 	public ArrayList<ProjectMember> selectMyInvation(String empNo) {
 		return pDao.selectMyInvation(sqlSession, empNo);
@@ -263,6 +274,53 @@ public class ProjectServiceImpl implements ProjectService{
 	@Override
 	public int deleteWaitingMember(ProjectMember m) {
 		return pDao.deleteWaitingMember(sqlSession, m);
+	}
+
+
+	@Override
+	public ArrayList<ProjectBoard> selectMeetingList(Project p) {
+		ArrayList<ProjectBoard> mlist = pDao.selectProjectBoardList(sqlSession, p);
+		for(ProjectBoard pb : mlist) {
+			pb.setPmeet( pDao.selectMeeting(sqlSession, pb) );
+			pb.setPmeetMem( pDao.selectMeetingMember(sqlSession, pb) );
+		}
+		return mlist;
+	}
+
+
+	@Override
+	public int insertMeeting(ProjectBoard pb, ProjectMeeting pm) {
+		int result1 = pDao.insertMeetingBoard(sqlSession, pb);
+		int result2 = pDao.insertMeeting(sqlSession, pm);
+		
+		String[] empNos = pb.getEmpNo().split(",");
+		String[] empNames = pb.getEmpName().split(",");
+		
+		int result3 = 1;
+		for(int i=0; i<empNos.length; i++) {
+			pb.setEmpNo( empNos[i] );
+			pb.setEmpName( empNames[i] );
+			result3 *= pDao.insertMeetingMember(sqlSession, pb);
+		}
+		return result1 * result2 * result3;
+	}
+
+
+	@Override
+	public int validateMeetingMember(Project p) {
+		String[] validateList = p.getEmpNo().split(",");
+		int result = 1;
+		for(int i=0; i<validateList.length; i++) {
+			p.setEmpNo(validateList[i]);
+			result *= pDao.validateInchargeMember(sqlSession, p);
+		}
+		return result;
+	}
+
+
+	@Override
+	public int deleteMeeting(ProjectBoard pb) {
+		return pDao.deleteBoard(sqlSession, pb);
 	}
 
 	

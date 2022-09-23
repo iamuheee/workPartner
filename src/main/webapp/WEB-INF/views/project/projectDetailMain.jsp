@@ -104,9 +104,9 @@
                     <li class="pmenu-item"><span onclick="moveToURL('cal.pr')">캘린더</span></li>
                 </ul>
                 <div align="right">
-					<button class="btn btn-sm btn-primary" onclick="moveToURL('newduty.pr')">새로운 업무 추가</button> 
+					<button class="btn btn-sm btn-primary" onclick="moveToURL('newduty.pr')">새로운 업무 등록</button> 
 					&nbsp;&nbsp;
-					<button class="btn btn-sm btn-primary" onclick="moveToURL('newmeet.pr')">새로운 회의 추가</button> 
+					<button class="btn btn-sm btn-primary" onclick="moveToURL('newmeet.pr')">새로운 회의 등록</button> 
                 </div>
             </div>
             

@@ -11,6 +11,7 @@ import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectDuty;
 import com.wp.workpartner.project.model.vo.ProjectMeeting;
+import com.wp.workpartner.project.model.vo.ProjectMeetingMember;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Repository
@@ -26,6 +27,10 @@ public class ProjectDao {
 	
 	public ArrayList<Project> selectProjectList(SqlSessionTemplate sqlSession, String empNo){
 		return (ArrayList)sqlSession.selectList("projectMapper.selectProjectList", empNo);
+	}
+	
+	public ArrayList<Project> selectDoneProjectList(SqlSessionTemplate sqlSession, String empNo){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectDoneProjectList", empNo);
 	}
 	
 	public ArrayList<ProjectMember> selectMemberList(SqlSessionTemplate sqlSession, Project p){
@@ -74,10 +79,6 @@ public class ProjectDao {
 	
 	public ArrayList<ProjectBoard> selectProjectBoardList(SqlSessionTemplate sqlSession, Project p){
 		return (ArrayList)sqlSession.selectList("projectMapper.selectProjectBoardList", p);
-	}
-	
-	public ProjectMeeting selectMeeting(SqlSessionTemplate sqlSession, ProjectBoard pb) {
-		return sqlSession.selectOne("projectMapper.selectProjectMeeting", pb);
 	}
 	
 	public int insertBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
@@ -163,6 +164,28 @@ public class ProjectDao {
 	public int deleteWaitingMember(SqlSessionTemplate sqlSession, ProjectMember m) {
 		return sqlSession.delete("projectMapper.deleteWaitingMember", m);
 	}
+	
+	public ProjectMeeting selectMeeting(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.selectOne("projectMapper.selectMeeting", pb);
+	}
+	
+	public ArrayList<ProjectMeetingMember> selectMeetingMember(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return (ArrayList)sqlSession.selectList("projectMapper.selectMeetingMember", pb);
+	}
+	
+	public int insertMeetingBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.insert("projectMapper.insertMeetingBoard", pb);
+	}
+	
+	public int insertMeeting(SqlSessionTemplate sqlSession, ProjectMeeting pm) {
+		return sqlSession.insert("projectMapper.insertMeeting", pm);
+	}
+	
+	public int insertMeetingMember(SqlSessionTemplate sqlSession, ProjectBoard pb) {
+		return sqlSession.insert("projectMapper.insertMeetingMember", pb);
+	}
+	
+	
 	
 
 }

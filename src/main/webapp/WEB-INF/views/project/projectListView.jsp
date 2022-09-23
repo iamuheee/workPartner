@@ -51,7 +51,7 @@
         <div class="container">
             <div class="title-area">
                 <h1 style="font-weight:bolder;">참여중인 프로젝트</h1>
-                <hr>
+                <br>
             </div>
             <div class="inner-area">
             	<c:forEach var="p" items="${ plist }">
@@ -69,6 +69,31 @@
 	                	</div>
 	                </div>
                 </c:forEach>
+            </div>
+            <br><hr><br><br>
+            <div class="title-area">
+                <h1 style="font-weight:bolder;">종료된 프로젝트</h1>
+                <br>
+				<c:choose>
+					<c:when test="${empty dplist}"><span>아직 종료한 프로젝트가 없습니다.</span></c:when>
+					<c:otherwise>
+						<c:forEach var="d" items="${ dplist }">
+			                <div class="project-card" >
+			                    <input type="hidden" class="progress" value="${d.progress}">
+			                    <form id="projectForm"> <input type="hidden" name="projNo" value="${d.projNo}"> </form>
+			                    <button class="manageProj" class="manage" style="margin-left:70%; border:none;background-color:white; width:50px; height:30px;">
+			                        <i class="fa fa-cog" aria-hidden="true"></i>
+			                    </button>
+			                    <br>
+			                    <div class="card-inner">
+				                    <span class="project-title">${d.projTitle}</span><br>
+				                    <input type="hidden" value="${d.progress}" id="priority">
+				                    <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(${d.mlist.size()})</span>
+			                	</div>
+			                </div>
+		                </c:forEach>
+					</c:otherwise>
+                </c:choose>
             </div>
         </div>
 

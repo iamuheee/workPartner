@@ -22,6 +22,8 @@ import com.wp.workpartner.project.model.service.ProjectServiceImpl;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectDuty;
+import com.wp.workpartner.project.model.vo.ProjectMeeting;
+import com.wp.workpartner.project.model.vo.ProjectMeeting;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Controller
@@ -65,8 +67,10 @@ public class ProjectController {
 	public ModelAndView selectProjectList(ModelAndView mv, HttpSession session) {
 		String empNo = ((Employee)session.getAttribute("loginUser")).getEmpNo();
 		ArrayList<Project> plist = pService.selectProjectList(empNo);
+		ArrayList<Project> dplist = pService.selectDoneProjectList(empNo);
 		
-		if(plist != null) {
+		mv.addObject("dplist", dplist).setViewName("project/projectListView");
+		if(dplist != null) {
 			mv.addObject("plist", plist).setViewName("project/projectListView");
 		}else {
 			session.setAttribute("alertMsg", "참여중인 프로젝트가 아직 없습니다.");
@@ -356,6 +360,53 @@ public class ProjectController {
 			return "성공적으로 멤버 초대를 취소했습니다.";
 		}else {
 			return "멤버 초대에 실패했습니다.";
+		}
+	}
+	
+	@RequestMapping("meet.pr")
+	public ModelAndView selectMeetingList(ModelAndView mv, Project p) {
+		mv.addObject("p", pService.selectProject(p.getProjNo()) )
+		  .setViewName("project/projectMeetingListView");
+		return mv;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="mtlist.pr", produces="application/json; charset=utf-8")
+	public String selectProjectMeetingList(Project p) {
+		ArrayList<ProjectBoard> mlist = pService.selectMeetingList(p);
+		return new Gson().toJson(mlist);
+	}
+	
+	
+	@RequestMapping(value="insertm.pr")
+	public String insertMeeting(Model m, HttpSession session, ProjectBoard pb, ProjectMeeting pm) {
+		if(pService.insertMeeting(pb, pm) > 0) {
+			session.setAttribute("alertMsg", "성공적으로 회의를 등록했습니다.");
+			return "redirect:meet.pr?projNo=" + pb.getProjNo();
+		}else {
+			m.addAttribute("errorMsg", "회의 등록에 실패했습니다.");
+			return "error/error";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="validatememe.pr", produces="application/html; charset=utf-8")
+	public String validateMeetingMember(Project p) {
+		if(pService.validateMeetingMember(p) > 0) {
+			return "성공";
+		}else {
+			return "실패";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="deletem.pr", produces="application/html; charset=utf-8")
+	public String deleteMeeting(ProjectBoard pb) {
+		System.out.println(pb);
+		if(pService.deleteMeeting(pb) > 0) {
+			return "성공적으로 회의를 삭제했습니다.";
+		}else {
+			return "회의 삭제에 실패했습니다.";
 		}
 	}
 	
