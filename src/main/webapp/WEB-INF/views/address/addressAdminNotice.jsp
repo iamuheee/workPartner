@@ -129,7 +129,17 @@ font-family: 'Noto Sans KR', sans-serif;
                 $(function(){
                     $(document).on("click", ".removeAdmin", function(){
                         $(this).parent().parent().remove();
-                    })
+                    });
+                    
+                    
+                    // table tr 클릭시 체크박스 선택/해제
+                    $(document).on("click", "#tableArea tbody tr", function(){
+                    	let checkbox = $(this).find("input:checkbox");   
+                    
+                   	  	if(checkbox.is(":checked")) checkbox.prop("checked", false);
+                         else checkbox.prop("checked", true);
+                    });
+                    
                 })
                 
                 // 클릭된 사원의 정보를 맨 왼쪽으로 넘기기 

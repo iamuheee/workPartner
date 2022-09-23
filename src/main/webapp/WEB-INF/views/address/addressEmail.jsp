@@ -152,7 +152,15 @@ font-family: 'Noto Sans KR', sans-serif;
                 $(function(){
                     $(document).on("click", ".removeMail", function(){
                         $(this).parent().parent().remove();
-                    })
+                    });
+                    
+                    // table tr 클릭시 체크박스 선택/해제
+                    $(document).on("click", "#tableArea tbody tr", function(){
+                    	let checkbox = $(this).find("input:checkbox");   
+                    
+                   	  	if(checkbox.is(":checked")) checkbox.prop("checked", false);
+                         else checkbox.prop("checked", true);
+                    });
                 })
         		
             	// 3명까지만 넘어 갈 수 있도록
@@ -165,7 +173,7 @@ font-family: 'Noto Sans KR', sans-serif;
                        alert("3명까지만 가능합니다.");
                     }
                 }
-        		
+        		  
 				function emailSend(){
 					
 					let value = "";
