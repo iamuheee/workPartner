@@ -131,7 +131,18 @@
 	#sort-search select{
 		width:60px;
 	}
-
+	
+	#checkResult{
+		font-size:13px;
+	}
+	
+	.noticeInput {
+		font-size:14px;
+		color:red;
+		display:none;
+	}
+	
+	
 </style>
 </head>
 <body>
@@ -270,8 +281,8 @@
 	    				
 	    				let dep = result.d;
 	    				let pos = result.p;
-	    				console.log(dep);
-	    				console.log(pos);
+	    				//console.log(dep);
+	    				//console.log(pos);
 	    				
 	    				for(let i=0; i<dep.length; i++) {
 	    					$("#depCd").append('<option value="' + dep[i].departmentCode + '">' + dep[i].departmentName + '</option>');
@@ -279,7 +290,11 @@
 	    				
 	    				for(let i=0; i<pos.length; i++){	// posCd = 1 == 대표, 대표로는 등록되지 않게 하기 위해 1부터 시작 ==> 일단 그냥 활성화
 	    					$("#posCd").append('<option value="' + pos[i].position + '">' + pos[i].positionName + '</option>');
+	    				
 	    				}
+	    				
+	    				$("#posCd option[value='1']").attr('disabled', true);
+	    				$("#posCd option[value='2']").attr('selected', true);
 	    				
 	    			},
 	    			error:function(){
@@ -506,7 +521,8 @@
 								empPwd:$("#empPwd").val(),
 								empEnrollDate:$("#empEnrollDate").val(),
 								depCd:$("#depCd option:selected").val(),
-								posCd:$("#posCd option:selected").val()
+								posCd:$("#posCd option:selected").val(),
+								empProfile:"resources/profile_images/defaultProfile.png"
 							},
 							success:function(e){
 								console.log("사용자 간단 추가용 ajax 통신 성공");
@@ -543,7 +559,7 @@
 	    		
 	    		$idInput.keyup(function(){
 
-	    			let regExp = /[A-Za-z0-9]+$/;
+	    			let regExp = /^[A-Za-z0-9]+$/;
 	    			
 	    			if(regExp.test( $idInput.val() )) {	// 제대로 입력한 경우 ==> 중복확인
 	    				$.ajax({
@@ -555,7 +571,7 @@
 	    						
 	    						if(result == "NNNNN"){
 	    							$("#checkResult").show();
-	    							$("#checkResult").css("color", "red").text("사용 중인 아이디");
+	    							$("#checkResult").css("color", "red").text("사용 중");
 	    							$("#insertEmpBtn").attr("disabled", true);
 	    							
 	    						}else {
@@ -679,9 +695,10 @@
                             	   +	'<td>';
                             	   
                             	   if(e.empRetireDate == " ") {	// 퇴사일이 없는 경우 빈 문자열로 받음
-                            		   value += '<input type="date" name="empRetireDate" value="">';
+                            		   value += '<input type="date" id="mdEmpRetire" name="empRetireDate" value="">';
                             	   }else {	// 퇴사일이 들어있는 경우
-                            		   value += e.empRetireDate; 
+                            		   value += '<input type="date" name="empRetireDate" value="' + e.empRetireDate + '">' 
+                            		   		  + '<div class="noticeInput">퇴사일을 입력해 주세요.</div>'; 
                             	   }
                             	   
                             value +=	'</td>'
@@ -720,6 +737,27 @@
 						
 					})
 				}
+				
+				/* 재직 상태가 퇴사로 바뀌면 퇴사일에 빨간색 표시 */
+				$(document).on("change", "#modalStatus", function(){
+						var result = $("#modalStatus option:selected").val();
+						if(result == 'Y') {
+							$('.noticeInput').hide();
+							
+						}else{
+							$('.noticeInput').show();
+						}
+					})
+					
+				$(document).on("change", "input[name=empRetireDate]", function(){
+						var result = $("input[name=empRetireDate]").val();
+						if(!result) {
+							$('.noticeInput').show();
+							
+						}else{
+							$('.noticeInput').hide();
+						}
+					})	
 				
 				/* 사용자 정보 수정 ajax  */
 				function updateEmployee(){
