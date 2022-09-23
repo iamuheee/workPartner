@@ -154,7 +154,7 @@ font-family: 'Noto Sans KR', sans-serif;
                         $(this).parent().parent().remove();
                     })
                     
-                	 // table tr 클릭시 체크박스 선택/해제
+                	// table tr 클릭시 체크박스 선택/해제
                     $(document).on("click", "#tableArea tbody tr", function(){
                     	let checkbox = $(this).find("input:checkbox");   
                     
