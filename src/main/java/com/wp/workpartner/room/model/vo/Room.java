@@ -1,5 +1,6 @@
 package com.wp.workpartner.room.model.vo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.wp.workpartner.common.model.vo.File;
@@ -30,7 +31,8 @@ public class Room {
 	private UsingEquip usingEquip;
 	
 	private List<File> files;
-	private List<ClosedRoom> closedRooms;
 	private List<UsingEquip> usingEquips;
 	private List<Equip> equips;
+	
+	
 }

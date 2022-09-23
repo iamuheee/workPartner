@@ -175,8 +175,9 @@
 		    by rm_name asc
 	</select>
     
-    <!-- 회의실 정보 조회 -->
-    <!-- 작성자 : 박태은 -->
+<!--     회의실 정보 조회
+    다음에 코드 정리할 때 써보기 ;;
+    작성자 : 박태은
     <select id="selectRoom" resultMap="selectRoomDetail">
 	    select 
 	    	   rm_no
@@ -200,6 +201,43 @@
 		 and u.eq_status = 'Y'
 		 and e.eq_status = 'Y'
 	   order by f.file_level asc
+    </select> -->
+    
+    <!-- 회의실 정보 조회 -->
+    <select id="selectRoom" resultMap="roomResult">
+		select 
+	    	   rm_no
+	         , rm_name
+	         , rm_status
+	         , rm_person
+	      from tb_room
+          where rm_no = #{ rmNo }
+    </select>
+    
+    <!-- 회의실별 장비 조회 -->
+    <select id="selectUsingEquip" resultMap="equipResult">
+         select u.rm_no
+         	  , u.eq_no
+              , e.eq_name
+           from tb_usingequip u
+           join tb_room r on(r.rm_no = u.rm_no)
+           join tb_equip e on(e.eq_no = u.eq_no)
+          where e.eq_status='Y'
+            and u.eq_status='Y'
+            and r.rm_no=#{rmNo}
+          order by e.eq_no asc
+    </select>
+    
+    <!-- 회의실별 사진 파일 조회 -->
+    <select id="selectFile" resultMap="fileResult">
+	    select file_ref_no
+			 , file_no
+			 , file_path
+			 , file_level
+	      from tb_file
+		  join tb_room on(rm_no = file_ref_no)
+		 where rm_no = #{rm_no}
+		 order by file_level asc
     </select>
     
     <!-- 회의실 삭제 -->
@@ -210,5 +248,80 @@
     	   set rm_status = 'N'
     	 where rm_no = #{rmNo}
     </update>
+    
+    <!-- 최근 한달간 이용 건수 조회 -->
+    <!-- 작성자 : 박태은 -->
+    <select id="selectUsingCount" resultType="_int">
+	    select count(*)
+		  from tb_book
+		 where rm_no = #{rmNo}
+		   and bk_status='N'
+		   and to_date(bk_meetdate) between trunc(sysdate) - 30 and trunc(sysdate)
+    </select>
+    
+    <!-- 회의실 총 이용 건수 조회 -->
+    <!-- 작성자 : 박태은 -->
+    <select id="selectTotalCount" resultType="_int">
+   	    select count(*)
+		  from tb_book
+		 where bk_status='N'
+		   and to_date(bk_meetdate) between trunc(sysdate) - 30 and trunc(sysdate)
+    </select>
+    
+    <!-- 회의실 상태 변경 -->
+    <!-- tb_room에 대해서 뿐만 아니라 tb_usingequip에 대해서도 수정해야 함 -->
+    <update id="updateRoom">
+    	update tb_room
+    	   set
+    	       rm_name = #{ rmName },
+    	       eq_no = #{ eqNo },
+    	       rm_modify = current_date
+    	 where rm_no = #{ rmNo }
+    </update>
+    
+    <!-- 회의실 사용 중인 장비 삭제 -->
+    <!-- 작성자 : 박태은 -->
+    <delete id = "deleteUsingEquip">
+    	delete tb_usingequip
+    	 where rm_no = #{ rmNo }
+    </delete>
+    
+
+    <!-- 지미씨에게 도움받은 구문! 언젠가 써보리라 -->
+<!--     <update id="deleteFix" parameterType="java.util.HashMap">
+      <foreach item="m" collection="list" index="index" open="DECLARE BEGIN" separator=";" close="; END;">          
+         delete 
+           from tb_mail_status
+          where
+                mail_no = #{m.mailNo}
+             <choose>
+                <when test="m.mailEmail != 'undefined'">
+                   and   mail_email = #{m.mailEmail}   
+                </when>
+                <otherwise>
+                   and mail_email IS NULL 
+                </otherwise>
+             </choose>
+             and mail_category = #{m.mailCategory}                  
+       </foreach>
+   </update> 
+     -->
+     
+    <!-- 회의실 정보 수정 후 장비 새로 삽입하기 -->
+    <!-- 작성자 : 박태은 -->
+    <update id="updateUsingEquip">
+  	<foreach collection="equips" item="item" index="index" open="insert all" close="select * from dual">
+		  into tb_usingequip
+		  (
+		    rm_no
+		  , eq_no
+		  )
+		  values
+		  (
+		    #{r.rmNo}
+		  , #{item}
+		  )
+	</foreach>
+	</update>
 		 
 </mapper>

@@ -1,6 +1,7 @@
 package com.wp.workpartner.room.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,6 +18,7 @@ import com.wp.workpartner.common.template.FileUpload;
 import com.wp.workpartner.room.model.service.RoomService;
 import com.wp.workpartner.room.model.vo.Equip;
 import com.wp.workpartner.room.model.vo.Room;
+import com.wp.workpartner.room.model.vo.UsingEquip;
 
 @Controller
 public class RoomController {
@@ -100,7 +102,8 @@ public class RoomController {
 	 */
 	@RequestMapping("insert.ro")
 	public String insertRoom(Room r, MultipartFile[] upfile, HttpSession session, Model model) {	// 여러 장의 회의실 이미지를 배열로 받음
-
+//		System.out.println(r);
+		
 		int result1 = rService.insertRoom(r);
 		
 		if(result1 > 0) {	// 1. tb_table insert 성공 시
@@ -156,11 +159,29 @@ public class RoomController {
 	@ResponseBody
 	@RequestMapping(value="select.ro", produces="application/json; charset=UTF-8")
 	public String ajaxSelectRoom(String rmNo) {
-		System.out.println(rmNo);	// 넘어온 rmNo 값 조회
+		System.out.println("rmNo : " + rmNo);	// 넘어온 rmNo 값 조회
 		
 		ArrayList<Room> r = rService.selectRoom(rmNo);
+		ArrayList<File> f = rService.selectFile(rmNo);
+		ArrayList<UsingEquip> u = rService.selectUsingEquip(rmNo);
+		ArrayList<Equip> e = rService.selectEquipList() ;	// 전체 장비 조회
 		
-		return new Gson().toJson(r);
+		// 회의실 사용률 조회용
+		int usingCount = rService.selectUsingCount(rmNo);
+		int totalCount = rService.selectTotalCount(rmNo);
+		
+		HashMap<String, Integer> counts = new HashMap<>();
+		counts.put("usingCount", usingCount);
+		counts.put("totalCount", totalCount);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("r", r);
+		map.put("f", f);
+		map.put("u", u);
+		map.put("e", e);
+		map.put("counts", counts);
+		
+		return new Gson().toJson(map);
 	}
 	
 	/**
@@ -180,5 +201,40 @@ public class RoomController {
 		
 	}
 	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 19.
+	 * @method	: 회의실 수정 요청 처리 
+	 * @param	: Room r
+	 * @return	: 성공 시 회의실 목록 재요청 | 실패 시 에러페이지
+	 */
+	@RequestMapping("update.ro")
+	public String updateRoom(String rmNo, String rmName, String eqNo, HttpSession session, Model model) {
+		System.out.println("rmNo : " + rmNo);
+		System.out.println("rmName: " + rmName);
+		
+		String[] equips = eqNo.split(",");	// eqNo에 담긴 값을 배열에 넣어서 보냄
+		
+		for(int i=0; i<equips.length; i++) {
+			System.out.println(equips[i]);
+		}
+		
+		System.out.println(equips);
+		
+		HashMap<String, String> r = new HashMap<>();
+		r.put("rmNo", rmNo);
+		r.put("rmName", rmName);
+		r.put("eqNo", eqNo);
+			
+		int result = rService.updateRoom(r, equips);
+				
+		if(result > 0) {
+			session.setAttribute("alertMsg", "회의실 정보 변경에 성공했습니다.");
+			return "redirect:list.ro";
+		}else {
+			model.addAttribute("errorMsg", "회의실 정보 변경 실패");
+			return "common/error";
+		}
+	}
 
 }

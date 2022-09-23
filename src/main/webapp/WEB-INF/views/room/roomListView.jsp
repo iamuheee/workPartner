@@ -75,6 +75,13 @@
     	margin:5px;
     }
     
+/*     #updateRoomTb *{
+   		border:1px solid black;
+    } */
+
+	#updateRoomTb td img{
+	max-width:100%
+	} 
 
 </style>
 
@@ -104,6 +111,7 @@
 	
 	$(function(){
 		selectRoomList();	// 회의실 목록 조회
+
 	})
 	
 	/* 회의실 목록 조회용 ajax */
@@ -138,7 +146,7 @@
 							   + 	'</tr>'
 							   + 	'<tr>'
 							   +		'<td align="right">'
-							   +			'<button type="button" class="btn btn-primary btn-sm updateRoomBt" data-toggle="modal" data-target="#updateRoomMd" onclick="selectRoom(' + list[i].rmNo + ');"><i class="fa-solid fa-eraser"></i></button>'
+							   +			'<button type="button" class="btn btn-primary btn-sm updateRoomBt" onclick="modalOpen(' + list[i].rmNo + ');"><i class="fa-solid fa-eraser"></i></button>'
 							   +			'<button type="button" class="btn btn-danger btn-sm" onclick="return userConfirm(' + list[i].rmNo + ');"><i class="fas fa-trash-alt"></i></button>'
 							   +		'</td>'
 							   + 	'</tr>'
@@ -165,66 +173,60 @@
 				data:{
 					rmNo:rmNo
 				},
-				success:function(r){
+				success:function(result){
 					console.log("개별 회의실 조회용 ajax 통신 성공");
-					console.log(r);
+					console.log(result);
 					
-					let value = "";
+					let room = result.r;
+					let file = result.f;
+					let using = result.u;
+					let equip = result.e;
+					let count = result.counts;
 					
- 					value += '<tr>'
-						   +	'<th width="200px;">회의실명</th>'
-						   +	'<td><input type="text" id="rmName" name="rmName" placeholder="' + r.rmName +'" required></td>'
-						   + '</tr>'
-						   + '<tr>'
-						   + 	'<th>회의실 이미지</th>'
-						   +	'<td>슬라이드 이미지 자리</td>'
-						   + '</tr>'
-						   + '<tr>'
-						   + 	'<th>수용인원</th>'
-						   +	'<td><input type="number" id="rmPerson" name="rmPerson" min="1" placeholder="' + r.rmPerson + '"required></td>'
-						   + '</tr>'
-						   + '<tr>'
-						   +	'<th>회의장비</th>'
-						   +	'<td>';
-						   
-						   // equips의 길이 어떻게 구함?
-								   
-						   for(let i=0; i<Object.keys(Object.keys(r.equips)).length; i++){
-					value +=	   r[i].equips[i].eqName + '<br>';	
-						   }
+					$("input[name=rmNo]").val(room[0].rmNo);
+										
+					$("input[name=rmName]").val(room[0].rmName);
 					
-					value +=  	'</td>'
-						   +	'<td>'
-						   + '</tr>'
-						   + '</tr>'
-						   + '<tr>'
-						   + 	'<th>상태</th>'
-						   + 	'<td>';
-						   
-						   if(!cr) {
-					value += '사용 가능';	   
-						   }else {
-					value += '사용 불가';		   
-						   }	   
-					value += 	'</td>'	   
-						   + '</tr>'
-						   + '<tr>'
-						   + 	'<th>이용 불가 시간</th>'
-						   + 	'<td>'
-						   +	'<input type="datetime-local" id="crStart" name="crStart"> ~ ' 
-						   +	'<input type="datetime-local" id="crEnd" name="crEnd">'
-						   +	'<input type="text" placeholder="이용 불가 사유" required>'
-						   +	'<button type="button" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></button>'
-						   +	'<br>'
-						   +	'<input type="datetime-local" id="crStart" name="crStart"> ~'
-						   +	'<input type="datetime-local" id="crEnd" name="crEnd">'
-						   +	'<input type="text" placeholder="이용 불가 사유" required>'
-						   +	'<button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-xmark"></i></button>'
-						   +	'</td>'
-						   + '</tr>';
-						   
-					$("#updateRoomTb").html(value);   
+					$("#mdImg1").html('<img src="' + file[0].filePath + '">');
 					
+					if(file[1] != null){
+						$("#mdImg2").html('<img src="' + file[1].filePath + '">');					
+					}
+					
+					if(file[2] != null){
+						$("#mdImg3").html('<img src="' + file[2].filePath + '">');
+					}
+					
+					if(file[3] != null){
+						$("#mdImg4").html('<img src="' + file[3].filePath + '">');
+					}
+					
+					$("#mdUsing").text( ((count.usingCount / count.totalCount) * 100).toFixed(1) +'%');
+					
+					////////////////// 질문
+					
+					// 전체 장비(equip에 있는 것들)에 대해 checkbox를 만듦
+					// 그 중에 사용중인 장비(using에도 있는 값들)엔 checked 속성을 부여한다.
+					
+					for(let i=0; i<equip.length; i++){
+						
+						var el = '<span><label><input type="checkbox" style="width:14px;height:14px;" name="eqNo" value="' + equip[i].eqNo +'">' 
+				   	   	   	   + equip[i].eqName + '</label></span>';
+		   	   	   	   
+				   	 	//$("#mdEquip").html(el);
+				   	   	
+				   	 	$("#mdEquip").append(el);
+				   	 	
+				   	   	
+					}
+					
+					
+					for(let j=0; j<using.length; j++){
+			   	   		
+						$("#mdEquip input[value=" + using[j].eqNo + "]").attr("checked", true);
+			   	   	}
+				
+										
 				},
 				error:function(){
 					console.log("개별 회의실 조회용 ajax 통신 실패");
@@ -232,6 +234,29 @@
 			})
 			
 		}
+		
+		/* 모달창 열기 */
+		function modalOpen(rmNo){
+			$("#updateRoomMd").modal('show');
+			selectRoom(rmNo);
+		}
+		
+		
+		/* 모달창 닫기 */
+		function modalClose(){
+			// 모달창 비우기
+			$("#mdImg1").html("");
+			$("#mdImg2").html("");
+			$("#mdImg3").html("");
+			$("#mdImg4").html("");
+			
+			//$("#mdEquip").remove();	// 회의실 장비 -->
+			$("#mdEquip").html("");
+			
+			$("#updateRoomMd").modal('hide');
+			
+		}
+		
 		
 		function userConfirm(rmNo) {
             if(confirm('회의실 삭제 시, 모든 예약 기록이 삭제되며 복구할 수 없습니다.\n회의실을 삭제하시겠습니까?')) {
@@ -267,62 +292,65 @@
 		  <!-- The Modal -->
 		  <div class="modal fade" id="updateRoomMd">
 		    <div class="modal-dialog modal-lg">
+		    <form action="update.ro" method="post">
 		      <div class="modal-content">
+		    	<input type="hidden" name="rmNo">
 		      
 		        <!-- Modal Header -->
 		        <div class="modal-header">
 		          <h4 class="modal-title">회의실 변경</h4>
-		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          <button type="button" class="close"  onclick="modalClose();">&times;</button>
 		        </div>
 		        
 		        <!-- Modal body -->
+		        
 		        <div class="modal-body">
 		          <!-- 테이블 자리 -->
 				  <table id="updateRoomTb">
-					<!-- <tr>
-						<th width="200px;">회의실명</th>
-						<td><input type="text" id="rmName" name="rmName" placeholder="현재 회의실명" required></td>
+					<tr>
+						<th width="200px">회의실명</th>
+						<td colspan="2" id="mdRmName"><input type="text" name="rmName"></td>
 					</tr>
 					<tr>
-						<th>회의실 이미지</th>
-						<td>슬라이드 이미지 자리</td>
+						<th rowspan="2">회의실 이미지</th>
+						<td id="mdImg1" width="300px">대표 이미지 자리</td>
+						<td id="mdImg2" width="300px">서브이미지1</td>
 					</tr>
 					<tr>
-						<th>수용인원</th>
-						<td><input type="number" id="rmPerson" name="rmPerson" min="1" required></td>
+						<td id="mdImg3"></td>
+						<td id="mdImg4"></td>
+					</tr>
+					<tr>
+						<th>최근 한달간 사용률</th>
+						<td colspan="2" id="mdUsing"></td>
 					</tr>
 					<tr>
 						<th>회의장비</th>
-						<td>ajax로 뿌림</td>
-					</tr>
-					<tr>
-						<th>상태</th>
-						<td>사용가능 | 사용불가</td>
-					</tr>
-					<tr>
-						<th>이용 불가 시간</th>
-						<td><input type="datetime-local" id="crStart" name="crStart"> ~ 
-							<input type="datetime-local" id="crEnd" name="crEnd">
-							<input type="text" placeholder="이용 불가 사유" required>
-							<button type="button" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></button>
-							<br>
-							<input type="datetime-local" id="crStart" name="crStart"> ~ 
-							<input type="datetime-local" id="crEnd" name="crEnd">
-							<input type="text" placeholder="이용 불가 사유" required>
-							<button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-xmark"></i></button>
-						</td>
-					</tr> -->					
+						<td colspan="2" id="mdEquip"></td>
+					</tr>		
 				  </table>
 		        </div>
 		        
 		        <!-- Modal footer -->
 		        <div class="modal-footer">
-		          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-				  <button type="button" class="btn btn-primary">저장</button>
+				  <button type="submit" class="btn btn-primary" onclick="return checkEquip();">수정</button>
+		          <button type="button" class="btn btn-secondary" onclick="modalClose();">취소</button>
 		        </div>
 		      </div>
+		      </form>
 		    </div>
 		  </div>
+		  
+		  <script>
+		  	function checkEquip(){
+		  		if( !$("input[name=eqNo]").is(":checked") ){	// 아무 회의장비도 선택되지 않았을 경우 방지
+					alert("회의 장비를 선택해 주세요.");
+					return false;
+		  		}else {
+		  			return true;
+		  		}
+		  	}
+		  </script>
 
 </body>
 </html>

@@ -23,10 +23,21 @@ public interface RoomService {
 	ArrayList selectRoomList();
 	
 	// 회의실 조회 서비스 (select) -- ajax
+	// 회의실 기본 정보 조회
 	ArrayList selectRoom(String rmNo);
+	// 회의실 사용 장비 조회
+	ArrayList selectUsingEquip(String rmNo);
+	// 회의실 이미지 조회
+	ArrayList selectFile(String rmNo);
+	
+	
+	// 회의실 사용률 조회 서비스 (select)
+	int selectUsingCount(String rmNo);
+	int selectTotalCount(String rmNo);
+	
 	
 	// 회의실 수정 서비스 (update)
-	int updateRoom(Room r);
+	int updateRoom(HashMap<String, String> r, String[] equips);
 	
 	// 회의실 삭제 서비스 (update)
 	int deleteRoom(String rmNo);
