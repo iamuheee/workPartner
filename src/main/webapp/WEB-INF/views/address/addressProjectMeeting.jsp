@@ -94,8 +94,8 @@ font-family: 'Noto Sans KR', sans-serif;
 		<div style="display:none">
 			<div id="meetingEmp">
 				<ul id="meet-mem"></ul>
-				<input type="hidden" name="empNo" id="memNo">
-				<input type="hidden" name="empName" id="memName">
+				<input type="hidden" name="empNo" id="memNo" value="">
+				<input type="hidden" name="empName" id="memName" value="">
 			</div>
 		</div>
     
@@ -182,7 +182,10 @@ font-family: 'Noto Sans KR', sans-serif;
                 */
                 function empNoSend(){
 					
-					let value = "";					
+					let value = "";				
+					let memNo = "";
+					let memName = "";
+					let html = "";
 					var arr = new Array();		
 					
 					// 체크된 항목 반복문 돌리고 
@@ -198,9 +201,7 @@ font-family: 'Noto Sans KR', sans-serif;
 						
 					});
 					
-					let memNo = "";
-					let memName = "";
-					let html = "";
+
 					for(let i=0; i<arr.length; i++){
 						 value  += '<tr>'     
 			                     +    '<td width="60px" class="empICNo"> ' + arr[i].empNo + ' </td>'
@@ -222,9 +223,9 @@ font-family: 'Noto Sans KR', sans-serif;
 					memNo = memNo.substr(0, memNo.length - 1);
 					memName = memName.substr(0, memName.length - 1);
 					
-					$("#memNo").val(memNo);
-					$("#memName").val(memName);
-					$("#meet-mem").html(html);
+					$("#memNo").val( $("#memNo").val() + memNo);
+					$("#memName").val($("#memName").val() +memName);
+					$("#meet-mem").html( $("#meet-mem").html() + html);
 					
 					$("#adminEmpList").append(value);
 					$("input[name='chk']").prop("checked", false); 

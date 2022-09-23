@@ -73,11 +73,11 @@
     
     </head>
     <body>
+	<jsp:include page="../common/menubar.jsp" />
     
     <br><br><br>
 	<div class="container">
 	
-	<jsp:include page="../common/menubar.jsp" />
 	<jsp:include page="projectDetailMenubar.jsp" />
 	<input type="hidden" name="projNo" value="${p.projNo}">
 	

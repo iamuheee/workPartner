@@ -80,7 +80,6 @@
 
 </head>
 <body>
-
 	<h1 style="font-weight:bolder;"><span>${p.projTitle}</span> 업무 공유방</h1>
     <hr>
             
@@ -100,8 +99,6 @@
 			<li class="pmenu-item"><span onclick="moveToURL('proom.pr')">홈</span></li>
 			<li class="pmenu-item"><span onclick="moveToURL('duty.pr')">업무</span></li>
 			<li class="pmenu-item"><span onclick="moveToURL('meet.pr')">회의</span></li>
-			<li class="pmenu-item"><span onclick="moveToURL('bmk.pr')">북마크</span></li>
-			<li class="pmenu-item"><span onclick="moveToURL('cal.pr')">캘린더</span></li>
 		</ul>
 		<div align="right">
 			<button class="btn btn-sm btn-primary" onclick="moveToURL('newduty.pr')">새로운 업무 등록</button> 

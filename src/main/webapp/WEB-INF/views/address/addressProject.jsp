@@ -83,8 +83,8 @@ font-family: 'Noto Sans KR', sans-serif;
     <div class="adOuter">
 
 		<div style="display:none">
-			<input type="hidden" id="memNo">
-			<input type="hidden" id="memName">
+			<input type="hidden" id="memNo" value="">
+			<input type="hidden" id="memName" value="">
 		</div>
     
         <div class="adContainer">
@@ -174,6 +174,9 @@ font-family: 'Noto Sans KR', sans-serif;
 					let value = "";					
 					var arr = new Array();		
 					
+					let memNo = "";
+					let memName = "";
+					
 					// 체크된 항목 반복문 돌리고 
 					$("input[name='chk']:checked").each(function(){			
 						
@@ -187,8 +190,7 @@ font-family: 'Noto Sans KR', sans-serif;
 						
 					});
 					
-					let memNo = "";
-					let memName = "";
+					
 					for(let i=0; i<arr.length; i++){
 						 value  += '<tr>'     
 			                     +    '<td width="60px" class="empICNo"> ' + arr[i].empNo + ' </td>'
@@ -207,8 +209,8 @@ font-family: 'Noto Sans KR', sans-serif;
 					memNo = memNo.substr(0, memNo.length - 1);
 					memName = memName.substr(0, memName.length - 1);
 					
-					$("#memNo").val(memNo);
-					$("#memName").val(memName);
+					$("#memNo").val( $("#memNo").val() + memNo);
+					$("#memName").val( $("#memName").val() + memName);
 					
 					$("#adminEmpList").append(value);
 					$("input[name='chk']").prop("checked", false); 

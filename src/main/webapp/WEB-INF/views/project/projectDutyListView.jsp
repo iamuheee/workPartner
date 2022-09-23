@@ -79,38 +79,9 @@
     <body>
     	<jsp:include page="../common/menubar.jsp" />
     	
-    	<br>	
+    	<br><br><br>
         <div class="container">
-            <h1 style="font-weight:bolder;"><span>${p.projTitle}</span> 업무 공유방</h1>
-            <hr>
-            
-            <form id="moveToURL" method="post">
-            	<input type="hidden" name="projNo" value="${p.projNo}">
-            	<input type="hidden" name="pboardWriter" value="${loginUser.empNo}"}>
-            </form>
-            <script>
-            	function moveToURL(url){
-            		$("#moveToURL").attr("action", url);
-            		$("#moveToURL").submit();
-            	}
-            </script>
-            
-            <div class="project-menubar">
-                <ul class="group-pmenu">
-                    <li class="pmenu-item"><span onclick="moveToURL('proom.pr')">홈</span></li>
-                    <li class="pmenu-item"><span onclick="moveToURL('duty.pr')">업무</span></li>
-                    <li class="pmenu-item"><span onclick="moveToURL('meet.pr')">회의</span></li>
-                    <li class="pmenu-item"><span onclick="moveToURL('bmk.pr')">북마크</span></li>
-                    <li class="pmenu-item"><span onclick="moveToURL('cal.pr')">캘린더</span></li>
-                </ul>
-                <div align="right">
-					<button class="btn btn-sm btn-primary" onclick="moveToURL('newduty.pr')">새로운 업무 추가</button> 
-					&nbsp;&nbsp;
-					<button class="btn btn-sm btn-primary" onclick="moveToURL('newmeet.pr')">새로운 회의 추가</button> 
-                </div>
-            </div>
-            
-            <hr style="clear: both;">
+            <jsp:include page="projectDetailMenubar.jsp"/>
 
             <div class="filter-wrap btn-area">
 				<select name="" id="" class="filter">
