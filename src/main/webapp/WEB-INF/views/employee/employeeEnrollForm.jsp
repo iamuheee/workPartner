@@ -237,7 +237,7 @@
 	    			// console.log($idInput.val());
 	    			
 	    			// 아이디가 영문자+숫자만으로 입력되었는지 확인
-	    			let regExp = /[A-Za-z0-9]+$/;
+	    			let regExp = /^[A-Za-z0-9]+$/;
 	    			
 	    			if(regExp.test( $idInput.val() )) {	// 제대로 입력한 경우 ==> 중복확인
 	    				$.ajax({
@@ -263,7 +263,7 @@
 	    				
 	    			}else {	// 영문자+숫자 외 다른 문자를 입력한 경우
 	    				$("#checkResult").show();
-	    				$("#checkResult").css("color", "blue").text("영문 소문자, 숫자만 사용 가능합니다.");
+	    				$("#checkResult").css("color", "blue").text("영문, 숫자만 사용 가능합니다.");
 	    				$("#enrollForm :submit").attr("disabled", true);
 	    			}
 	    		})
