@@ -24,6 +24,16 @@
 		<result column="EMP_NO" property="empICNo"></result>
 		<result column="EMP_NAME" property="empICName"></result>
 	</resultMap>
+	
+	<resultMap id="calendarResult" type="Calendar">
+		<result column="TITLE" property="title" />
+		<result column="START_DATE" property="start" />
+		<result column="END_DATE" property="end" />
+		<result column="START_TIME" property="start" />
+		<result column="END_TIME" property="end" />
+		<result column="CONTENT" property="content" />
+	</resultMap>
+	
 
 	<insert id="insertDuty">
  		INSERT
@@ -317,5 +327,61 @@
 		   SET STATUS = 'N'
 		 WHERE DUTY_NO = #{dutyNo}
 	</update>
+	
+	<select id="selectCalendarList" resultMap="dutyResult">
+		SELECT
+			   TITLE
+			 , CONTENT
+			 , START_DATE
+			 , END_DATE
+		  FROM TB_DUTY D
+		  JOIN TB_DUTY_CHARGE DC
+		 USING (DUTY_NO)
+		 WHERE STATUS = 'Y'
+		   AND CALENDAR_YN = 'Y'
+	   <choose>
+	   	<when test='empName == "준비"'>
+	   	   AND PROGRESS = '준비'
+	   	</when>
+	   	<when test='empName == "진행"'>
+	   	   AND PROGRESS = '진행'
+	   	</when>
+	   	<when test='empName == "지연"'>
+   		   AND PROGRESS = '지연'
+	   	</when>
+	   	<when test='empName == "완료"'>
+   		   AND PROGRESS = '완료'
+	   	</when>
+	   </choose>
+		   AND DC.EMP_NO = #{empNo}
+	</select>
+	
+	<insert id="insertCalendar">
+		INSERT
+		  INTO TB_CALENDAR
+		VALUES
+			 (
+			   SEQ_CALNO.NEXTVAL
+			 , #{empNo}
+			 , 1
+			 , NULL
+			 , #{title}
+			 , DEFAULT
+			 , #{start}
+			 , #{end}
+			 , DEFAULT
+			 , NULL
+			 , NULL
+			 )
+	</insert>
+	
+	<select id="selectCalList" resultMap="calendarResult">
+		SELECT
+			   TITLE
+			 , START_DATE
+			 , END_DATE
+		  FROM TB_CALENDAR
+		 WHERE EMP_NO = #{empNo}
+	</select>
 	
 </mapper>

@@ -58,7 +58,7 @@
     <div id="content">
         <main>
             <div class="container-fluid px-4">
-                <h2 class="mt-4 cate-title">개인 업무 <span style="font-size:18px;color:gray;">(${ dlist.size() })</span></h2>
+                <h2 class="mt-4 cate-title">개인 업무</h2>
                 
                 <form action="search.du" method="get" align="right" class="filter">
                     <input type="checkbox" name="exceptDone" id="exceptDone" onclick="doneFilter();">
@@ -138,15 +138,15 @@
 					
 			    	<ul class="pagination">
 						<li class="page-item">
-					        <a class="page-link" href="list.du?cpage=${ pi.currentPage - 1 }" aria-label="Previous">
+					        <a class="page-link goback" href="list.du?cpage=${ pi.currentPage - 1 }" aria-label="Previous">
 				          		<span aria-hidden="true">&laquo;</span>
 					        </a>
 						</li>
-							<c:forEach var="no" begin="${ pi.startPage }" end="${ pi.endPage }" step="1">
+							<c:forEach var="no" begin="${ pi.startPage }" end="${ pi.endPage }">
 								<li class="page-item"><a class="page-link" href="list.du?cpage=${ no }"><span>${ no }</span></a></li>
 							</c:forEach>
 						<li class="page-item">
-							<a class="page-link" href="list.du?cpage=${ pi.currentPage + 1 }" aria-label="Next">
+							<a class="page-link gonext" href="list.du?cpage=${ pi.currentPage + 1 }" aria-label="Next">
 		  						<span aria-hidden="true">&raquo;</span>
 							</a>
 						</li>
@@ -221,7 +221,7 @@
 						// 페이징바도 새로 해야함
 						$(".page-item").hide();
 						paging += '<li class="page-item">'
-								+ 	'<a class="page-link" href="list.du?cpage=' + (hashMap.pi.currentPage - 1) + '" aria-label="Previous">'
+								+ 	'<a class="page-link goback" href="list.du?cpage=' + (hashMap.pi.currentPage - 1) + '" aria-label="Previous">'
 								+		'<span aria-hidden="true">&laquo;</span>'
 								+	'</a>'
 								+ '</li>';
@@ -230,7 +230,7 @@
 							paging += '<li class="page-item"><a class="page-link" href="list.du?cpage=' + i + '"><span>' + i + '</span></a></li>'
 						}
 						paging += '<li class="page-item">'
-								+ 	'<a class="page-link" href="list.du?cpage=' + (hashMap.pi.currentPage + 1) + '" aria-label="Previous">'
+								+ 	'<a class="page-link gonext" href="list.du?cpage=' + (hashMap.pi.currentPage + 1) + '" aria-label="Previous">'
 								+		'<span aria-hidden="true">&raquo;</span>'
 								+	'</a>'
 								+ '</li>';
@@ -282,7 +282,7 @@
 					// 페이징바도 새로 해야함
 					$(".page-item").hide();
 					paging += '<li class="page-item">'
-							+ 	'<a class="page-link" href="list.du?cpage=' + (hashMap.pi.currentPage - 1) + '" aria-label="Previous">'
+							+ 	'<a class="page-link goback" href="list.du?cpage=' + (hashMap.pi.currentPage - 1) + '" aria-label="Previous">'
 							+		'<span aria-hidden="true">&laquo;</span>'
 							+	'</a>'
 							+ '</li>';
@@ -291,7 +291,7 @@
 						paging += '<li class="page-item"><a class="page-link" href="list.du?cpage=' + i + '"><span>' + i + '</span></a></li>'
 					}
 					paging += '<li class="page-item">'
-							+ 	'<a class="page-link" href="list.du?cpage=' + (hashMap.pi.currentPage + 1) + '" aria-label="Previous">'
+							+ 	'<a class="page-link gonext" href="list.du?cpage=' + (hashMap.pi.currentPage + 1) + '" aria-label="Previous">'
 							+		'<span aria-hidden="true">&raquo;</span>'
 							+	'</a>'
 							+ '</li>';
@@ -311,12 +311,12 @@
 
 		// 1) pi.currentPage == 1인 경우, Previous 버튼 비활성화
 		if( ${pi.currentPage} == 1 ){
-			$("a[aria-label='Previous']").removeAttr("href");
+			$(".goback").removeAttr("href");
 		}
 		
 		// 2) pi.currentPage == pi.endPage인 경우, Next 버튼 비활성화
 		if( ${pi.currentPage} == ${pi.endPage} ){
-			$("a[aria-label='Next']").removeAttr("href");
+			$(".gonext").removeAttr("href");
 		}
 		
     

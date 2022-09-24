@@ -250,7 +250,6 @@ public class ProjectServiceImpl implements ProjectService{
 			// TB_PROJECT_MEM -> STATUS = 'NO'
 			result = pDao.answerNo(sqlSession, m);
 		}
-		System.out.println(result);
 		return result;
 	}
 
