@@ -18,29 +18,40 @@
     }
 
     #roomEnroll {
-        width:95%;
-        margin:auto;
-        text-align: right;
+       width:100%;
+	   margin:auto;
+       text-align: left;
+	   padding-left:10px;
+	   margin-bottom:10px;
     }
 
     #roomListArea {
-        width:100%;
-        height:100vh;
+		width:100%;
         margin:auto;
-        display:flex;
+		display:flex;
         flex-wrap:wrap;
-        //justify-content:space-between;
-        
+                
     }
+
+	.btns{
+		/* border:1px solid black; */
+		width:fit-content;
+	}
 
     .roomCard{
         width:31%;
-        height:350px;
-        border:1px solid #f1f1f1;
+        height:fit-content;
+        border:1px solid lightgray;
+		border-radius: 8px;
         margin:10px;
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-		margin-bottom:20px;
+		padding-bottom:15px;
+		display: flex;		
+		justify-content: center;
     }
+
+	.rmName {
+		border-bottom: 1px solid lightgray;
+	}
     
     .roomCard:hover {
         transform: scale(1.05);
@@ -50,17 +61,18 @@
     .roomThumbnail {
         border:1px solid #f1f1f1;
         align-items: center;
-		width:90%;
+		width:100%;
         height:230px;
+		padding:0;
+		margin-top:10px;
     }
 
     .roomDetail { 
         font-size:16px;
-        /* border:1px solid red; */
         height:auto;
-        margin:auto;
-        margin-top:20px;
         width:90%;
+		margin-top:20px;
+		padding:0px;
     }
 
     .roomUpdate {
@@ -75,13 +87,44 @@
     	margin:5px;
     }
     
-/*     #updateRoomTb *{
-   		border:1px solid black;
-    } */
+     #updateRoomTb {
+		height:auto;
+    } 
 
 	#updateRoomTb td img{
-	max-width:100%
+	max-width:100%;
 	} 
+
+	.roomCoverImg {
+		max-width:100%;
+		cursor:pointer;
+	}
+
+	.mdImg{
+		width:300px;
+		height:auto;
+	}
+
+	.deleteRoom {
+		background-color: #fff;
+		color:#dc3545 !important;
+	}
+
+	#mdRmname{
+		height:40px;
+		width:200px;
+		border:1px solid lightgray;
+		border-radius: 4px;
+		padding-left:10px;
+	}
+
+	#mdEquip span {
+		margin-right:10px;
+	}
+
+	#mdEquip span *{
+		margin-right:5px;
+	}
 
 </style>
 
@@ -123,8 +166,6 @@
 				console.log("회의실 목록 조회용 ajax 통신 성공");
 				//console.log(list);
 				
- 				arr = new Array("#0F52FC","#D11E35", "#1A7742", "#FEB50D", "#191C1F");
-				
 				let value = "";
 				
 				if(!list) {
@@ -137,17 +178,16 @@
 						value += '<div class="roomCard">'                                
 							   + '<table class="roomDetail">'
 							   + 	'<tr>'
-							   +		'<th colspan="2" class="rmN"><h3 style="color:' + arr[i] + ';">' + list[i].rmName+ '</h3></th>'
-							   + 	'</tr>'
-							   + 	'<tr>'
-							   + 		'<td align="center">'
-							   +				'<img src="' + list[i].file.filePath + '" class="roomThumbnail">'
+							   +		'<th colspan="2" class="rmName"><h4>' + list[i].rmName+ '</h4></th>'
+							   +		'<td width=100px class="rmName" align="right">'
+							   +		'<div class="btns">'
+							   +			'<button type="button" class="btn deleteRoom" onclick="return userConfirm(' + list[i].rmNo + ');"><i class="fas fa-trash-alt"></i></button>'
+							   +		'</div>'
 							   +		'</td>'
 							   + 	'</tr>'
 							   + 	'<tr>'
-							   +		'<td align="right">'
-							   +			'<button type="button" class="btn btn-primary btn-sm updateRoomBt" onclick="modalOpen(' + list[i].rmNo + ');"><i class="fa-solid fa-eraser"></i></button>'
-							   +			'<button type="button" class="btn btn-danger btn-sm" onclick="return userConfirm(' + list[i].rmNo + ');"><i class="fas fa-trash-alt"></i></button>'
+							   + 		'<td colspan="3" align="center" class="roomCoverImg" onclick="modalOpen(' + list[i].rmNo + ');">'
+							   +				'<img src="' + list[i].file.filePath + '" class="roomThumbnail" class="roomCoverImg" >'
 							   +		'</td>'
 							   + 	'</tr>'
 							   + '</table>'
@@ -187,6 +227,8 @@
 										
 					$("input[name=rmName]").val(room[0].rmName);
 					
+					$("#mdPerson").text(room[0].rmPerson + "명");
+					
 					$("#mdImg1").html('<img src="' + file[0].filePath + '">');
 					
 					if(file[1] != null){
@@ -200,8 +242,13 @@
 					if(file[3] != null){
 						$("#mdImg4").html('<img src="' + file[3].filePath + '">');
 					}
-					
-					$("#mdUsing").text( ((count.usingCount / count.totalCount) * 100).toFixed(1) +'%');
+
+					var usingRate = 0;
+					if(count.usingCount != 0 && count.totalCount != 0){
+						usingRate = ((count.usingCount / count.totalCount) * 100).toFixed(1);
+					}
+	
+					$("#mdUsing").text( usingRate +'% (총 ' + count.totalCount + '건 중 ' + count.usingCount + '건)');
 					
 					////////////////// 질문
 					
@@ -214,18 +261,13 @@
 				   	   	   	   + equip[i].eqName + '</label></span>';
 		   	   	   	   
 				   	 	//$("#mdEquip").html(el);
-				   	   	
 				   	 	$("#mdEquip").append(el);
-				   	 	
-				   	   	
 					}
-					
 					
 					for(let j=0; j<using.length; j++){
 			   	   		
 						$("#mdEquip input[value=" + using[j].eqNo + "]").attr("checked", true);
 			   	   	}
-				
 										
 				},
 				error:function(){
@@ -257,9 +299,13 @@
 			
 		}
 		
+		/* 모달창 배경 클릭 시 끄기 닫기 */
+		$(function(){
+			$('#updateRoomMd').modal({backdrop: 'static', keyboard: false}) ;
+		})
 		
 		function userConfirm(rmNo) {
-            if(confirm('회의실 삭제 시, 모든 예약 기록이 삭제되며 복구할 수 없습니다.\n회의실을 삭제하시겠습니까?')) {
+            if(confirm('회의실 삭제 시 복구할 수 없습니다.\n회의실을 삭제하시겠습니까?')) {
             	deleteRoom(rmNo);
             	
             }else {
@@ -298,7 +344,7 @@
 		      
 		        <!-- Modal Header -->
 		        <div class="modal-header">
-		          <h4 class="modal-title">회의실 변경</h4>
+		          <h4 class="modal-title"><i class="fas fa-wrench"></i>&nbsp;회의실 조회 · 변경</h4>
 		          <button type="button" class="close"  onclick="modalClose();">&times;</button>
 		        </div>
 		        
@@ -308,20 +354,24 @@
 		          <!-- 테이블 자리 -->
 				  <table id="updateRoomTb">
 					<tr>
-						<th width="200px">회의실명</th>
-						<td colspan="2" id="mdRmName"><input type="text" name="rmName"></td>
+						<th width="250px" height="60px">회의실명</th>
+						<td colspan="2" id="mdRmName"><input type="text" name="rmName" id="mdRmname"></td>
 					</tr>
 					<tr>
 						<th rowspan="2">회의실 이미지</th>
-						<td id="mdImg1" width="300px">대표 이미지 자리</td>
-						<td id="mdImg2" width="300px">서브이미지1</td>
+						<td><div class="mdImg" id="mdImg1"></div></td>
+						<td><div class="mdImg" id="mdImg2"></div></td>
 					</tr>
 					<tr>
-						<td id="mdImg3"></td>
-						<td id="mdImg4"></td>
+						<td><div class="mdImg" id="mdImg3"></div></td>
+						<td><div class="mdImg" id="mdImg4"></div></td>
 					</tr>
 					<tr>
-						<th>최근 한달간 사용률</th>
+						<th height="40px">수용인원</th>
+						<td colspan="2" id="mdPerson"></td>
+					</tr>
+					<tr>
+						<th height="40px">최근 한달간 사용률</th>
 						<td colspan="2" id="mdUsing"></td>
 					</tr>
 					<tr>

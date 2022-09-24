@@ -15,6 +15,21 @@
         margin:auto;
         position:relative;
     }
+	
+	#enroll-body{
+		width:95%;
+		margin:auto;
+	}
+
+	#enrollArea{
+		box-shadow: 2px 2px 14px 0 rgb(0 0 0 / 8%);
+		border:1px solid rgba(0,0,0,.125);
+		padding:15px 20px 25px 20px;
+	}
+	
+	#createBtn{
+		margin-top: 20px;
+	}
 
     #roomEnroll {
         width:95%;
@@ -71,8 +86,9 @@
 	    </div>
 	    <hr>
 	    <!-- 사용자에게 입력받아야 하는 것 : 첨부파일, 제목, 수용인원, 회의 장비-->
-	    <div id="enrollArea">
-	        <form id="enroll-room" action="insert.ro" method="post" enctype="multipart/form-data">
+		<div id="enroll-body">
+			<form id="enroll-room" action="insert.ro" method="post" enctype="multipart/form-data">
+				<div id="enrollArea">
 	            <table id="roomEnroll">
 	                <tr>
 	                    <th width="20%">회의실 이름</th>
@@ -104,11 +120,7 @@
 							<!-- ajax로 회의장비들을 받아서 뿌림 -->
 	                    </td>
 	                </tr>
-	                <tr>
-	                    <th colspan="4" style="height:70px">
-							 <!-- 맨 처음 버튼이 있던 자리 -->
-	                    </th>
-	                </tr>
+
 	            </table>
 			    <div id="file-area" style="display:none">
 			    	<input type="file" name="upfile" id="file1" onchange="loadImg(this, 1);" required>
@@ -147,10 +159,11 @@
 				}
 			    
 			    </script>
-			    
-                <button type="submit" class="btn btn-primary" style="margin-right:5px;" onclick="return checkImg();">저장</button>
-                <button type="button" class="btn btn-secondary" onclick="location.href='javascript:history.back();'">취소</button>
-			
+			</div>
+			<div id="createBtn">
+				<button type="submit" class="btn btn-primary" style="margin-right:5px;" onclick="return checkImg();">저장</button>
+				<button type="button" class="btn btn-secondary" onclick="location.href='javascript:history.back();'">취소</button>
+			</div>
 			</form>
 		</div>
 		
@@ -264,6 +277,7 @@
 												
 						// 회의 장비 조회 ajax 실행해야 함
 						selectEquipList();
+						$("#modalEqName").val("");
 					}
 				},
 				error:function(){
