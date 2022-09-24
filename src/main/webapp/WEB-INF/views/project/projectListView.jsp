@@ -40,6 +40,12 @@
             .card-inner:hover{
                 cursor:pointer;
             }
+            .accept{
+            	width:48%;
+            	height:20px;
+            	font-size:5px;
+            	font-weight:bolder;
+            }
         </style>
     
     </head>
@@ -56,6 +62,8 @@
 		                <br>
 		            </div>
 		            <div class="inner-area">
+	            	<c:choose>
+	            		<c:when test="${ not empty plist }">
 		            	<c:forEach var="p" items="${ plist }">
 			                <div class="project-card" >
 			                    <input type="hidden" class="progress" value="${p.progress}">
@@ -71,6 +79,9 @@
 			                	</div>
 			                </div>
 		                </c:forEach>
+		                </c:when>
+		                <c:otherwise><span>아직 진행중인 프로젝트가 없습니다.</span></c:otherwise>
+	                </c:choose>
 		            </div>
 		            <br><br><br>
 		            <div class="title-area">
@@ -108,14 +119,12 @@
 	                </div>
 	                <div class="inner-area">
 	                   	<c:forEach var="i" items="${ilist}">
-		                    <div class="invitation">
+		                    <div class="invitation" style="margin-bottom:5px;">
 		                        <span style="font-weight:bold; line-height: 30px;">${i.projTitle}</span>
-		                        <span style="font-size:10px;">${i.memRole}</span>
-		                        <div class="btn-area" align="right" style="float:right">
-		                        	<input type="hidden" id="projNo" value="${i.projNo}">
-		                            <button class="btn btn-sm btn-primary accept" value="수락">수락</button>
-		                            <button class="btn btn-sm btn-secondary accept" value="거절">거절</button>
-		                        </div>
+		                        <span style="font-size:10px;padding:0px">${i.memRole}</span><br>
+	                        	<input type="hidden" id="projNo" value="${i.projNo}">
+	                            <button class="btn btn-sm btn-primary accept" value="수락" style="line-height:10px;">수락</button>
+	                            <button class="btn btn-sm btn-secondary accept" value="거절" style="line-height:10px;">거절</button>
 		                    </div>
 						</c:forEach>
 	                </div>
@@ -131,7 +140,7 @@
 	                			},
 	                			success:function(result){
 	                				alert(result);
-	                				location.href();
+	                				location.reload();
 	                			},
 	                			error:function(){
 	                				console.log("수락거절오류");
