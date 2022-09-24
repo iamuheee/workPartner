@@ -490,12 +490,11 @@
                                    <!-- 인사부 직원에게만 보여지는 메뉴 -->
 	                               <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages1">
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseProject" aria-expanded="false" aria-controls="pagesCollapseProject">
-	                                       <span class="material-symbols-outlined">settings</span>회의실 관리
+	                                       회의실 관리
 	                                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseProject" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages1">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                       	   <a class="btn btn-sm btn-primary btn-size" href="enrollForm.ro" style="margin:10px;">+ 회의실 등록</a>
 	                                           <a class="nav-link nav-choice" href="list.ro">회의실 관리</a>
 	                                           <a class="nav-link nav-choice" href="historyList.bk">예약 이력 조회</a>
 	                                       </nav>
