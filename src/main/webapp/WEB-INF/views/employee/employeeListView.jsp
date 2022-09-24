@@ -70,6 +70,12 @@
 	    margin-top:30px;
 	}
 	
+	#pagingArea button {
+		color:black;
+		border:none;
+		font-size:16px !important;
+	}
+	
 	.page-link {
 	    color:#0442AF;
 	}
@@ -142,6 +148,10 @@
 		display:none;
 	}
 	
+	.fa-check{
+		color:#3568C3;
+	}
+	
 	
 </style>
 </head>
@@ -163,13 +173,12 @@
 	    		<option value="50">50명</option>
 	    	</select>
 	        <div id="searchArea">
-	            <select id="condition" name="condition" style="margin-right:10px;height:30px;">
+	            <select id="condition" name="condition" style="margin-right:10px;height:30px;width:100px;">
 	                <option value="empNo">사번</option>
 	                <option value="empName">이름</option>
 	                <option value="empId">아이디</option>
 	            </select>
-	            <input type="text" id="keyword" name="keyword" style="height:30px;margin-right:3px">
-	            <button type="button" class="btn btn-primary btn-sm" onclick="selectSearchList();"><i class="fa-solid fa-magnifying-glass"></i></button>
+	            <input type="text" id="keyword" name="keyword" style="height:30px;margin-right:5px;padding-left:5px;" onkeyPress="if(event.keyCode == 13){selectSearchList();}">
 	        </div>
 	    </div>	    
 	    
@@ -178,6 +187,7 @@
 	        <table id="empList" class="table table-hover">
 	            <thead>
 	                <tr>
+	                	<th scope="col" style="width:10px;">No.</th>
 	                    <th scope="col">사번</th>
 	                    <th scope="col">이름<span style="color:red;">&nbsp;*</span></th>
 	                    <th scope="col">아이디<span style="color:red;">&nbsp;*</span></th>
@@ -190,7 +200,7 @@
 	                    <th scope="col" colspan="2">계정관리</th>
 	                </tr>
 	                <tr id="insertEmp">
-	                    <td align="center" style="color:#007bff;">
+	                    <td align="center" style="color:#007bff;" colspan="2">
 	                        <button type=button disabled class="btn btn-sm" id="simpleBtn">간편등록</button>
 	                    </td>
 	                    <td>
@@ -245,6 +255,7 @@
 	    <!-- 페이징 처리 -->
         <div id="pagingArea">
         </div>  
+        
 	                
         <script>
 			/* 전체 사원 조회 ==> 이 페이지의 모든 요소들이 로딩된 후에 바로 실행되어야 함 */
@@ -258,15 +269,21 @@
 				// ajax에 작성한 요소에 이벤트 걸 때는 이렇게 써야 함
 				$(document).on("click", ".updateAcc", function(){ 
 					
-					var empId = $(this).parent().siblings(".employeeId").children().text();
-					//var status = $(this).parent().siblings(".employeeStatus").text(); 
-					var accStatus = $(this).parent().siblings(".employeeAccStatus").text(); 
+					if(confirm ("계정 상태를 변경하시겠습니까?\n계정 삭제 시에는 복구할 수 없습니다.")) {
+						var empId = $(this).parent().siblings(".employeeId").children().text();
+						//var status = $(this).parent().siblings(".employeeStatus").text(); 
+						var accStatus = $(this).parent().siblings(".employeeAccStatus").text(); 
+						
+						//console.log(empId);
+						//console.log(status);
+						//console.log(accStatus);
+						
+						updateAccStatus(empId, accStatus);
+					}else {
+						return false;
+					}
 					
-					//console.log(empId);
-					//console.log(status);
-					//console.log(accStatus);
-					
-					updateAccStatus(empId, accStatus);
+						
 				})
 				
 			})
@@ -317,7 +334,12 @@
 								
 								if(result == "success") {
 									// 전체 사용자 목록 조회
-									selectEmpList();
+									if(!$("input[name=keyword]").val()){	// 검색어가 없을 경우
+										selectEmpList();
+										
+									}else {	// 검색어가 있을 경우
+										selectSearchList();										
+									}
 								}
 							},
 							error:function(){
@@ -360,8 +382,9 @@
 							for(let i=0; i<list.length; i++) {
 								
 								value += '<tr>'
+										+ '<td>' + (list.length - i) + '</td>'
 									   	+ '<td>' + list[i].empNo + '</td>'
-									   	+ '<td>' + list[i].empName + '</td>'
+									   	+ '<td class="employeeName">' + list[i].empName + '</td>'
 									   	+ '<td class="employeeId"><a data-toggle="modal" data-target="#updateEmp" class="empIdArea" onclick="selectEmployee(this);">' + list[i].empId + '</a></td>'
 									   	+ '<td class="updatePwd">********</td>'
 									   	+ '<td>' + list[i].empEnrollDate + '</td>'
@@ -376,15 +399,16 @@
 									   			value += '<td><button type="button" class="btn btn-secondary btn-sm updateAcc">정지</td>';
 									   		
 									   		}else {	// 재직 && 휴면
-									   			value += '<td class="employeeAccStatus">휴면</td>';
+									   			value += '<td class="employeeAccStatus" style="color:blue">휴면</td>';
 									   			value += '<td><button type="button" class="btn btn-warning btn-sm updateAcc">복구</td>';
 									   		}
 									   		
 									   	}else {	// 퇴사 ==> 조회할 때 퇴사 && 정상 만 조회하므로 퇴사 && 휴면 상태는 검사하지 않아도 됨
-									   		value += '<td class="employeeStatus">퇴사</td>';
+									   		value += '<td class="employeeStatus" style="color:red">퇴사</td>';
 								   			value += '<td class="employeeAccStatus">정상</td>';
 								   			value += '<td><button type="button" class="btn btn-danger btn-sm updateAcc">삭제</td>';
 								   		}
+									   	
 						   	}
 							
 						   	/* 페이징 처리 */
@@ -404,6 +428,7 @@
                		        	  pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectEmpList("  + (pi.currentPage + 1) + ")'>&gt;</button>"
                		         }  
 							
+              		      	              		    	
 							$("#employeeList").html(value);
 							$("#pagingArea").html(pgValue);
 							
@@ -418,7 +443,7 @@
 				
 			
 				/* 사용자 검색 ajax */
-				function selectSearchList(cpage){
+				function selectSearchList(keyword, cpage){
 					
 					if( $("#keyword").val().trim().length != 0 ) {	// 유효한 검색 키워드가 입력됐을 경우에만 ajax로 select 요청
 						
@@ -448,13 +473,14 @@
 									for(let i=0; i<list.length; i++) {
 										
 										value += '<tr>'
+												+ '<td>' + (list.length - i) + '</td>'
 											   	+ '<td>' + list[i].empNo + '</td>'
 											   	+ '<td>' + list[i].empName + '</td>'
 											   	+ '<td class="employeeId"><a data-toggle="modal" data-target="#updateEmp" class="empIdArea" onclick="selectEmployee(this);">' + list[i].empId + '</a></td>'
 											   	+ '<td class="updatePwd">********</td>'
 											   	+ '<td>' + list[i].empEnrollDate + '</td>'
 											   	+ '<td>' + list[i].depCd + '</td>'
-											   	+ '<td>' + list[i].posCd + '</td>';
+											   	+ '<td>' + list[i].posCd + '</td>'
 											   	
 											   	if(list[i].empStatus == 'Y') {	// 재직
 											   		value += '<td class="employeeStatus">재직</td>';
@@ -464,31 +490,31 @@
 											   			value += '<td><button type="button" class="btn btn-secondary btn-sm updateAcc" >정지</td>';
 											   		
 											   		}else {	// 재직 && 휴면
-											   			value += '<td class="employeeAccStatus">휴면</td>';
+											   			value += '<td class="employeeAccStatus" style="color:blue">휴면</td>';
 											   			value += '<td><button type="button" class="btn btn-warning btn-sm updateAcc">복구</td>';
 											   		}
 											   		
 											   	}else {	// 퇴사 ==> 조회할 때 퇴사 && 정상 만 조회하므로 퇴사 && 휴면 상태는 검사하지 않아도 됨
-											   		value += '<td class="employeeStatus">퇴사</td>';
+											   		value += '<td class="employeeStatus" style="color:red">퇴사</td>';
 										   			value += '<td class="employeeAccStatus">정상</td>';
 										   			value += '<td><button type="button" class="btn btn-danger btn-sm updateAcc">삭제</td>';
 										   		}
 								   	}
 								
 									if(pi.currentPage != 1){
-		                       			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectSearchList("+ (pi.currentPage - 1) + ")'>&lt;</button>"	
+		                       			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectSearchList(" + keyword + "," + (pi.currentPage - 1) + ")'>&lt;</button>"	
 		                       		}
 		                       		
 		                       		for(let p=pi.startPage; p<=pi.endPage; p++) { 
 		               		   			if(p == pi.currentPage) { 
 		               				   			pgValue += "<button class='btn btn-sm btn-outline-primary' disabled>"  + p  + "</button>"
 		               				   	}else {
-		               				   			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectSearchList("+ p +")'>" + p + "</button>"
+		               				   			pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectSearchList(" + keyword + ","+ p +")'>" + p + "</button>"
 		               		           	} 
 		               		         }     
 		                        
 		               		         if(pi.currentPage != pi.maxPage) {
-		               		        	  pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectSearchList("  + (pi.currentPage + 1) + ")'>&gt;</button>"
+		               		        	  pgValue += "<button class='btn btn-sm btn-outline-primary' onclick='selectSearchList(" + keyword + "," + (pi.currentPage + 1) + ")'>&gt;</button>"
 		               		         }  
 								
 								}else {	// 검색 결과가 없는 경우
@@ -608,9 +634,9 @@
 							var d = result.d;
 							var p = result.p;
 							
-							//console.log(e);
-							//console.log(d);
-							//console.log(p);
+							console.log(e);
+							console.log(d);
+							console.log(p);
 							
 							var headerValue = '';
 							var value = "";
@@ -639,7 +665,7 @@
                         	       + '<tr>'
                             	   +	'<th>이메일</th>'
                             	   +	'<td>' + e.empEmail + '</td>'
-                                   + 	'<th>재직 상태&nbsp;<i class="fa-solid fa-eraser"></i></th>'
+                                   + 	'<th>재직 상태&nbsp;<i class="fas fa-check"></i></th>'
                             	   +	'<td>'
                                    +		'<select name="empStatus" id="modalStatus" required>';
                                    
@@ -655,33 +681,33 @@
                             	   +	'</td>'
                         		   + '</tr>'
                         		   + '<tr>'
-                            	   + 	'<th>부서&nbsp;<i class="fa-solid fa-eraser"></i></th>'
+                            	   + 	'<th>부서&nbsp;<i class="fas fa-check"></i></i></th>'
                             	   +	'<td>'
                             	   +		'<select name="depCd" id="modalDepCd" style="margin-right:20px" required>';
                             	   
                             	   // 현재 이 사람이 속한 부서의 option이 selected 된 상태로 보여야 함
-                            	   for(let i=0; i<=4; i++) {
+                            	   for(let i=0; i<d.length; i++) {
                             		   if(e.depCd == d[i].departmentName) {
-                            			   value += '<option value="' + (i+1) + '" selected> ' + d[i].departmentName + '</option>';
+                            			   value += '<option value="' + d[i].departmentCode + '" selected> ' + d[i].departmentName + '</option>';
                             		   }else {
-                            			   value += '<option value="' + (i+1) + '"> ' + d[i].departmentName + '</option>';
+                            			   value += '<option value="' +  d[i].departmentCode + '"> ' + d[i].departmentName + '</option>';
                             		   }
                             	   }
                             	   
                             value +=		'</select>'
                             	   +	'</td>'
-                            	   +	'<th>직위&nbsp;<i class="fa-solid fa-eraser"></i></th>'
+                            	   +	'<th>직위&nbsp;<i class="fas fa-check"></i></th>'
                             	   +	'<td>'
                                    +		'<select name="posCd" id="modalPosCd" style="margin-right:20px" required>';
                             
                             	   // 현재 이 사람의 직위인 option이 selected 된 상태로 보여야 함
-                            	   for(let i=0; i<=5; i++) {
+                            	   for(let i=0; i<p.length; i++) {
                             		   if(p[i].positionName == "대표") {
-                            			   value += '<option value="' + (i+1) + '" disabled> ' + p[i].positionName + '</option>';
+                            			   value += '<option value="' + p[i].position + '" disabled> ' + p[i].positionName + '</option>';
                             		   }else if(e.posCd == p[i].positionName) {
-                            			   value += '<option value="' + (i+1) + '" selected> ' + p[i].positionName + '</option>';
+                            			   value += '<option value="' + p[i].position + '" selected> ' + p[i].positionName + '</option>';
                             		   }else {
-                            			   value += '<option value="' + (i+1) + '"> ' + p[i].positionName + '</option>';
+                            			   value += '<option value="' + p[i].position + '"> ' + p[i].positionName + '</option>';
                             		   }
                             	   }
                             	   
@@ -691,20 +717,21 @@
                         	       + '<tr>'
                             	   +	'<th>입사일</th>'
                             	   +	'<td>' + e.empEnrollDate + '</td>'
-                            	   +	'<th>퇴사일&nbsp;<i class="fa-solid fa-eraser"></i></th>'
+                            	   +	'<th>퇴사일&nbsp;<i class="fas fa-check"></i></th>'
                             	   +	'<td>';
                             	   
-                            	   if(e.empRetireDate == " ") {	// 퇴사일이 없는 경우 빈 문자열로 받음
-                            		   value += '<input type="date" id="mdEmpRetire" name="empRetireDate" value="">';
+                            	   if(!e.empRetireDate) {	// 퇴사일이 없는 경우 빈 문자열로 받음 + input 비활성화
+                            		   value += '<input type="date" name="empRetireDate" value="" disabled>';
                             	   }else {	// 퇴사일이 들어있는 경우
-                            		   value += '<input type="date" name="empRetireDate" value="' + e.empRetireDate + '">' 
-                            		   		  + '<div class="noticeInput">퇴사일을 입력해 주세요.</div>'; 
+                            		   value += '<input type="date" name="empRetireDate" value="' + e.empRetireDate + '">'; 
+                            		   		  
                             	   }
                             	   
-                            value +=	'</td>'
+                            value +=	'<div class="noticeInput">퇴사일을 입력해 주세요.</div>'
+                            	   +	'</td>'
                         		   + '</tr>'
                         	  	   + '<tr>'
-                            	   +	'<th>내선번호&nbsp;<i class="fa-solid fa-eraser"></i></th>'
+                            	   +	'<th>내선번호&nbsp;<i class="fas fa-check"></i></th>'
                             	   +	'<td>';
                         	  	   
                             	   // 이 사용자의 내선번호가 등록돼 있다면 기본 값으로 보여야 함
@@ -715,7 +742,7 @@
                         	  	   }
                             	   
                             value +=	'</td>'
-                            	   +	'<th>휴대전화&nbsp;<i class="fa-solid fa-eraser"></i></th>'
+                            	   +	'<th>휴대전화&nbsp;<i class="fas fa-check"></i></th>'
 		                           +	'<td>';
 		                        
 		                           // 이 사용자의 휴대전화번호가 등록돼 있다면 기본 값으로 보여야 함
@@ -738,26 +765,19 @@
 					})
 				}
 				
-				/* 재직 상태가 퇴사로 바뀌면 퇴사일에 빨간색 표시 */
+				/* 재직 상태가 퇴사로 바뀌면 퇴사일에 빨간색 표시 + 퇴사일 input 활성화*/
 				$(document).on("change", "#modalStatus", function(){
 						var result = $("#modalStatus option:selected").val();
-						if(result == 'Y') {
+						if(result == 'Y') {	// 재직중
 							$('.noticeInput').hide();
-							
-						}else{
+							$("input[name=empRetireDate]").attr("disabled", true);
+							$("input[name=empRetireDate]").val("");
+						}else{	// 퇴사
 							$('.noticeInput').show();
+							$("input[name=empRetireDate]").removeAttr("disabled");
 						}
-					})
+					}) 
 					
-				$(document).on("change", "input[name=empRetireDate]", function(){
-						var result = $("input[name=empRetireDate]").val();
-						if(!result) {
-							$('.noticeInput').show();
-							
-						}else{
-							$('.noticeInput').hide();
-						}
-					})	
 				
 				/* 사용자 정보 수정 ajax  */
 				function updateEmployee(){
@@ -777,8 +797,13 @@
 							console.log("사용자 정보 수정용 ajax 성공");
 							console.log(result);
 							if(result == 'success') {
-									// 전체 사용자 목록 조회
+								// 전체 사용자 목록 조회
+								if(!$("input[name=keyword]").val()){	// 검색어가 없을 경우
 									selectEmpList();
+									
+								}else {	// 검색어가 있을 경우
+									selectSearchList();										
+								}
 							}
 						},
 						error:function(){
