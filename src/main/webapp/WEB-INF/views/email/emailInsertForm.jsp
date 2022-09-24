@@ -35,7 +35,7 @@
 	            <table id="emailTable">
 	                <tr>
 	                    <td class="fontsize13" width="30px">제목 </td>
-	                    <td colspan="3"><input type="text" name="mailTitle" placeholder="제목을 입력해주세요" maxlength="20" style="width: 500px;" required></td>
+	                    <td colspan="3"><input type="text" name="mailTitle" placeholder="제목을 입력해주세요" maxlength="30" style="width: 500px;" required></td>
 	                </tr>
 	                <tr>
 	                    <td class="fontsize13">중요</td>
