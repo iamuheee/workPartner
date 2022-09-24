@@ -97,6 +97,15 @@
 		<result column="COM_STATUS" property="comStatus" />
 	</resultMap>
 	
+	<resultMap id="calendarResult" type="Calendar">
+		<result column="TITLE" property="title" />
+		<result column="START_DATE" property="start" />
+		<result column="END_DATE" property="end" />
+		<result column="START_TIME" property="start" />
+		<result column="END_TIME" property="end" />
+		<result column="CONTENT" property="content" />
+	</resultMap>
+	
 	<insert id="insertProject">
 		INSERT
 		  INTO TB_PROJECT
@@ -657,6 +666,44 @@
 		 WHERE PBOARD_NO = #{pboardNo}
 		   AND EMP_NO = #{memNo}
 	</update>
+	
+	<select id="selectCalendarDutyList" resultMap="calendarResult">
+		SELECT
+			   TITLE
+			 , START_DATE
+			 , END_DATE
+		  FROM TB_PBOARD
+		  JOIN TB_PDUTY
+		 USING (PBOARD_NO)
+		 WHERE STATUS = 'Y'
+		   AND CALENDAR_YN = 'Y'
+		   AND PROJ_NO = #{projNo}
+	  <choose>
+		<when test='progress == "준비"'>
+		   AND PROGRESS = '준비'
+		</when>	  
+		<when test='progress == "진행"'>
+		   AND PROGRESS = '진행'
+		</when>
+		<when test='progress == "지연"'>
+		   AND PROGRESS = '지연'
+		</when>
+	  </choose>
+	</select>
+	
+		<select id="selectCalendarMeetingList" resultMap="calendarResult">
+		SELECT
+			   TITLE
+			 , CONTENT
+			 , MEETING_DATE || 'T' || START_TIME AS "START_TIME"
+			 , MEETING_DATE || 'T' || END_TIME AS "END_TIME"
+		  FROM TB_PBOARD
+		  JOIN TB_PMEET
+		 USING (PBOARD_NO)
+		 WHERE STATUS = 'Y'
+		   AND CALENDAR_YN = 'Y'
+		   AND PROJ_NO = #{projNo}
+	</select>
 	
 
 </mapper>

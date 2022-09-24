@@ -10,6 +10,7 @@ import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.dao.ProjectDao;
+import com.wp.workpartner.project.model.vo.Calendar;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectMeeting;
@@ -321,6 +322,19 @@ public class ProjectServiceImpl implements ProjectService{
 	@Override
 	public int updateAttendance(ProjectMeetingMember m) {
 		return pDao.updateAttendance(sqlSession, m);
+	}
+
+
+	@Override
+	public ArrayList<Calendar> selectCalendarDutyList(Project p) {
+		return pDao.selectCalendarDutyList(sqlSession, p);
+	}
+
+
+	@Override
+	public ArrayList<Calendar> selectCalendarMeetingList(String projNo) {
+		// TODO Auto-generated method stub
+		return pDao.selectCalendarMeetingList(sqlSession, projNo);
 	}
 
 	

@@ -48,53 +48,102 @@
 		<jsp:include page="../common/menubar.jsp" />
     	
         <br><br><br>
-        <div class="container">
-            <div class="title-area">
-                <h1 style="font-weight:bolder;">참여중인 프로젝트</h1>
-                <br>
-            </div>
-            <div class="inner-area">
-            	<c:forEach var="p" items="${ plist }">
-	                <div class="project-card" >
-	                    <input type="hidden" class="progress" value="${p.progress}">
-	                    <form id="projectForm"> <input type="hidden" name="projNo" value="${p.projNo}"> </form>
-	                    <button class="manageProj" class="manage" style="margin-left:70%; border:none;background-color:white; width:50px; height:30px;">
-	                        <i class="fa fa-cog" aria-hidden="true"></i>
-	                    </button>
-	                    <br>
-	                    <div class="card-inner">
-		                    <span class="project-title">${p.projTitle}</span><br>
-		                    <input type="hidden" value="${p.progress}" id="priority">
-		                    <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(${p.mlist.size()})</span>
-	                	</div>
-	                </div>
-                </c:forEach>
-            </div>
-            <br><hr><br><br>
-            <div class="title-area">
-                <h1 style="font-weight:bolder;">종료된 프로젝트</h1>
-                <br>
-				<c:choose>
-					<c:when test="${empty dplist}"><span>아직 종료한 프로젝트가 없습니다.</span></c:when>
-					<c:otherwise>
-						<c:forEach var="d" items="${ dplist }">
+        <div class="container" style="width:100%;">
+        	<div class="card shadow-sm border-1 rounded-lg" style="float:left; width:73%;">
+        		<div class="card-body">
+		            <div class="title-area">
+		                <h1 style="font-weight:bolder;">참여중인 프로젝트</h1>
+		                <br>
+		            </div>
+		            <div class="inner-area">
+		            	<c:forEach var="p" items="${ plist }">
 			                <div class="project-card" >
-			                    <input type="hidden" class="progress" value="${d.progress}">
-			                    <form id="projectForm"> <input type="hidden" name="projNo" value="${d.projNo}"> </form>
+			                    <input type="hidden" class="progress" value="${p.progress}">
+			                    <form id="projectForm"> <input type="hidden" name="projNo" value="${p.projNo}"> </form>
 			                    <button class="manageProj" class="manage" style="margin-left:70%; border:none;background-color:white; width:50px; height:30px;">
 			                        <i class="fa fa-cog" aria-hidden="true"></i>
 			                    </button>
 			                    <br>
 			                    <div class="card-inner">
-				                    <span class="project-title">${d.projTitle}</span><br>
-				                    <input type="hidden" value="${d.progress}" id="priority">
-				                    <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(${d.mlist.size()})</span>
+				                    <span class="project-title">${p.projTitle}</span><br>
+				                    <input type="hidden" value="${p.progress}" id="priority">
+				                    <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(${p.mlist.size()})</span>
 			                	</div>
 			                </div>
 		                </c:forEach>
-					</c:otherwise>
-                </c:choose>
+		            </div>
+		            <br><br><br>
+		            <div class="title-area">
+		                <h1 style="font-weight:bolder;">종료된 프로젝트</h1>
+		                <br>
+						<c:choose>
+							<c:when test="${empty dplist}"><span>아직 종료한 프로젝트가 없습니다.</span></c:when>
+							<c:otherwise>
+								<c:forEach var="d" items="${ dplist }">
+					                <div class="project-card" >
+					                    <input type="hidden" class="progress" value="${d.progress}">
+					                    <form id="projectForm"> <input type="hidden" name="projNo" value="${d.projNo}"> </form>
+					                    <button class="manageProj" class="manage" style="margin-left:70%; border:none;background-color:white; width:50px; height:30px;">
+					                        <i class="fa fa-cog" aria-hidden="true"></i>
+					                    </button>
+					                    <br>
+					                    <div class="card-inner">
+						                    <span class="project-title">${d.projTitle}</span><br>
+						                    <input type="hidden" value="${d.progress}" id="priority">
+						                    <i class="fa fa-sm fa-user"></i> <span style="font-size:12px;">(${d.mlist.size()})</span>
+					                	</div>
+					                </div>
+				                </c:forEach>
+							</c:otherwise>
+		                </c:choose>
+		            </div>
+	            </div>
             </div>
+            
+			<div class="card shadow-sm border-1 rounded-lg" style="float:right; width:25%; height:500px">
+				<div class="card-body">
+	                <div class="title-area">
+	                    <span class="title">받은 프로젝트 초대</span>
+	                    <br><br>
+	                </div>
+	                <div class="inner-area">
+	                   	<c:forEach var="i" items="${ilist}">
+		                    <div class="invitation">
+		                        <span style="font-weight:bold; line-height: 30px;">${i.projTitle}</span>
+		                        <span style="font-size:10px;">${i.memRole}</span>
+		                        <div class="btn-area" align="right" style="float:right">
+		                        	<input type="hidden" id="projNo" value="${i.projNo}">
+		                            <button class="btn btn-sm btn-primary accept" value="수락">수락</button>
+		                            <button class="btn btn-sm btn-secondary accept" value="거절">거절</button>
+		                        </div>
+		                    </div>
+						</c:forEach>
+	                </div>
+	                
+	                <script>
+	                	$(".accept").click(function(){
+	                		$.ajax({
+	                			url:"yesno.pr",
+	                			data:{
+	                				projNo:$(this).siblings("#projNo").val(),
+	                				memNo:${loginUser.empNo},
+	                				answer:$(this).val()
+	                			},
+	                			success:function(result){
+	                				alert(result);
+	                				location.href();
+	                			},
+	                			error:function(){
+	                				console.log("수락거절오류");
+	                			}
+	                		})
+	                	})
+	                </script>
+            	</div>
+            </div>
+               <br><br><br>
+            
+            
         </div>
 
         <script>
@@ -144,6 +193,9 @@
                 })
             })
         </script>
+        
+        
+        
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>

@@ -89,17 +89,18 @@
 		<div style="clear:both;"></div><br>
             
 		<%-- 캘린더가 들어갈 div --%>
-		<div class="card shadow-sm border-1 rounded-lg"  style="width:64%; float:left; height:700px;">
+		<div class="card shadow-sm border-1 rounded-lg"  style="height:700px;">
 	   		<div class="card-body">
 	    		<div class="title-area">
                     <span class="title">프로젝트 일정</span>
 				</div><br>
-				<div id='calendar' style="width:95%; margin:auto;"></div>
+				<div id='calendar' style="width:90%; margin:auto;"></div>
      		</div>
 		</div>
+		
+		<br><br>
 			
-			
-		<div class="card shadow-sm border-1 rounded-lg"  style="width:35%; height:160px;float:right;">
+		<div class="card shadow-sm border-1 rounded-lg" style="width:35%; height:480px; float:left;">
 			<div class="card-body">
 	       		<div class="title-area">
 					<span class="title">팀원 연락망</span>
@@ -128,15 +129,15 @@
 				</div>
        		</div>
 		</div>
-		<div class="card shadow-sm border-1 rounded-lg"  style="width:35%; height:500px;float:right; margin-top:20px;">
+		<div class="card shadow-sm border-1 rounded-lg"  style="width:63%; height:480px;float:right;">
 	   		<div class="card-body">
 	    		<div class="title-area">
-                    <span class="title">이번 주 회의 일정</span>
+                    <span class="title">오늘의 회의 일정</span>
 				</div><br>
-				<div id="meeting" style="width:95%; margin:auto;"></div>
+				<div id="meeting" style="width:90%; margin:auto;"></div>
      		</div>
 		</div>
-        <br><br><br><br><br><br><br><br><br><br>
+        <br style="clear:both"><br><br><br><br><br><br><br><br><br>
 	</div>
         
 	<script>
@@ -159,11 +160,60 @@
 					}
 				},
 				weekends: false,	// 주말은 보이지 않게 함
-				 slotMinTime: "09:00:00",	// 캘린더 시작 시간
-				 slotMaxTime: "18:00:00",	// 캘린더 종료 시간
-				 allDaySlot: false,
-				 selectable: true,	// 캘린더의 시간을 드래그해서 선택할 수 있게 함
-				 nowIndicator: true,	// 현재 시간 표시
+				slotMinTime: "09:00:00",	// 캘린더 시작 시간
+				slotMaxTime: "18:00:00",	// 캘린더 종료 시간
+				allDaySlot: false,
+				selectable: false,	// 캘린더의 시간을 드래그해서 선택할 수 있게 함
+				nowIndicator: false,	// 현재 시간 표시
+				
+				events:[
+					// 업무 : 준비/진행/지연, 회의 => 총 4가지 들어감
+					<c:forEach var="r" items="${rlist}">
+						// 준비중인 업무
+						{
+							title:"${r.title}",
+							start:"${r.start}",
+							end:"${r.end}",
+							color:"gold",
+							textColor:"black"
+						},
+					</c:forEach>
+					<c:forEach var="c" items="${clist}">
+						// 진행중인 업무
+						{
+							title:"${c.title}",
+							start:"${c.start}",
+							end:"${c.end}",
+							color:"lightgreen",
+							textColor:""
+						},
+					</c:forEach>
+					<c:forEach var="r" items="${dlist}">
+						// 지연된 업무
+						{
+							title:"${r.title}",
+							start:"${r.start}",
+							end:"${r.end}",
+							color:"orchid",
+							textColor:""
+						},
+					</c:forEach>
+					<c:forEach var="mt" items="${mtlist}">
+						// 예정된 회의
+						{
+							title:"${mt.title}",
+							start:"${mt.start}",
+							end:"${mt.end}",
+							color:"skyblue",
+							textColor:""
+						},
+					</c:forEach>
+			          {
+			        	  title:'zzz',
+			        	  start:'21000902'
+			          }
+				]
+				
 			});
 	   
 			calendar.render();
@@ -183,7 +233,7 @@
 				locale: 'kr',	// 언어 설정
 		     
 				height:'400px',	// 캘린더 높이 설정
-				expandRows:false,
+				expandRows:true,
 				initialView: 'timeGridDay',	// 화면 포맷 설정
 				schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',	// trial 사용 위한 라이센스 키
 		
@@ -195,11 +245,27 @@
 					}
 				},
 				weekends: false,	// 주말은 보이지 않게 함
-				 slotMinTime: "09:00:00",	// 캘린더 시작 시간
-				 slotMaxTime: "18:00:00",	// 캘린더 종료 시간
-				 allDaySlot: false,
-				 selectable: true,	// 캘린더의 시간을 드래그해서 선택할 수 있게 함
-				 nowIndicator: true,	// 현재 시간 표시
+				slotMinTime: "09:00:00",	// 캘린더 시작 시간
+				slotMaxTime: "18:00:00",	// 캘린더 종료 시간
+				allDaySlot: false,
+				selectable: true,	// 캘린더의 시간을 드래그해서 선택할 수 있게 함
+				nowIndicator: false,	// 현재 시간 표시
+				events:[
+					<c:forEach var="mt" items="${mtlist}">
+						// 예정된 회의
+						{
+							title:"${mt.title}",
+							start:"${mt.start}",
+							end:"${mt.end}",
+							content:"${mt.content}",
+							color:"skyblue"
+						},
+					</c:forEach>
+			          {
+			        	  title:'zzz',
+			        	  start:'21000902'
+			          }
+				]
 			});
 	   
 			meeting.render();

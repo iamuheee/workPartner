@@ -19,12 +19,12 @@ import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.common.template.FileUpload;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.service.ProjectServiceImpl;
+import com.wp.workpartner.project.model.vo.Calendar;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectDuty;
 import com.wp.workpartner.project.model.vo.ProjectMeeting;
 import com.wp.workpartner.project.model.vo.ProjectMeetingMember;
-import com.wp.workpartner.project.model.vo.ProjectMeeting;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Controller
@@ -60,7 +60,7 @@ public class ProjectController {
 		}else {
 			session.setAttribute("alertMsg", "프로젝트 등록에 실패했습니다.");
 		}
-		return "project/projectMain";
+		return "redirect:list.pr";
 	}
 	
 	
@@ -84,8 +84,25 @@ public class ProjectController {
 	@RequestMapping("proom.pr")
 	public ModelAndView selectProject(ModelAndView mv, String projNo) {
 		Project p = pService.selectProject(projNo);
-		if(p != null) {
-			mv.addObject("p", p).setViewName("project/projectDetailMain");
+		p.setProgress("준비");
+		ArrayList<Calendar> rlist = pService.selectCalendarDutyList(p);
+		p.setProgress("진행");
+		ArrayList<Calendar> clist = pService.selectCalendarDutyList(p);
+		p.setProgress("지연");
+		ArrayList<Calendar> dlist = pService.selectCalendarDutyList(p);
+		
+		ArrayList<Calendar> mtlist = pService.selectCalendarMeetingList(p.getProjNo());
+		
+		System.out.println(rlist);
+		System.out.println(clist);
+		
+		if(p.getProjTitle() != null) {
+			mv.addObject("p", p)
+			  .addObject("rlist", rlist)
+			  .addObject("clist", clist)
+			  .addObject("dlist", dlist)
+			  .addObject("mtlist", mtlist)
+			  .setViewName("project/projectDetailMain");
 		}else {
 			mv.addObject("errorMsg", "현재 해당 업무 페이지에 접근할 수 없습니다.")
 			  .setViewName("common/errorPage");
@@ -426,6 +443,7 @@ public class ProjectController {
 			return "회의 참석 여부 반영에 실패했습니다.";
 		}
 	}
+	
 	
 	
 }

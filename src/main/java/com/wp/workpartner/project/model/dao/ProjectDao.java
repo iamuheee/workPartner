@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
+import com.wp.workpartner.project.model.vo.Calendar;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectDuty;
@@ -190,6 +191,14 @@ public class ProjectDao {
 	
 	public int updateAttendance(SqlSessionTemplate sqlSession, ProjectMeetingMember m) {
 		return sqlSession.update("projectMapper.updateAttendance", m);
+	}
+	
+	public ArrayList<Calendar> selectCalendarDutyList(SqlSessionTemplate sqlSession, Project p){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectCalendarDutyList", p);
+	}
+	
+	public ArrayList<Calendar> selectCalendarMeetingList(SqlSessionTemplate sqlSession, String projNo){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectCalendarMeetingList", projNo);
 	}
 	
 	

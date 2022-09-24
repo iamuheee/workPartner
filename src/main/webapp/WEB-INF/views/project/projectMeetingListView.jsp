@@ -148,7 +148,7 @@
 	     					  +		'</div>'
 	     					  +		'<hr>'
 	     					  +		'<div class="card-body">'
-	     					  +			'<h3 class="title">' + mlist[i].title + '</h3>'
+	     					  +			'<h2 style="font-weight:bolder">' + mlist[i].title + '</h3>'
 	     					  +			'<div class="content">'
 	     					  +				'<p style="white-space:pre-line">' + mlist[i].content + '</p>' 
 	     					  +				'<div class="attendance btn-area" align="center">'
