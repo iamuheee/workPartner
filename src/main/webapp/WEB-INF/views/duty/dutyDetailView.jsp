@@ -72,10 +72,6 @@
     	
         <br><br><br>
         <div class="container">
-            <div class="title-area">
-                <h1 style="font-weight:bolder;">개인 업무 상세 조회</h1>
-            </div>
-
             <!-- =================== 여기부터 업무 게시글 ======================== -->
             <div class="card shadow-sm border-1 rounded-lg">
                 <div class="card-title">

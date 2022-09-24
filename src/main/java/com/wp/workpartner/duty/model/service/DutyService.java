@@ -2,11 +2,11 @@ package com.wp.workpartner.duty.model.service;
 
 import java.util.ArrayList;
 
-import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.duty.model.vo.Duty;
-import com.wp.workpartner.duty.model.vo.DutyCharge;
+import com.wp.workpartner.employee.model.vo.Employee;
+import com.wp.workpartner.project.model.vo.Calendar;
 
 public interface DutyService {
 	
@@ -42,9 +42,14 @@ public interface DutyService {
 	// 업무 게시글 수정에서 최초로 파일 추가되는 경우
 	int insertDutyFile(File f);
 	
-	
-	
 	// 업무 게시글 삭제
 	int deleteDuty(String dutyNo);
+	
+	// 캘린더에 띄울 업무게시글 조회
+	ArrayList<Duty> selectCalendarList(Employee e);
+	
+	ArrayList<Calendar> selectCalList(Employee e);
+	
+	int insertCalendar(Calendar c);
 	
 }

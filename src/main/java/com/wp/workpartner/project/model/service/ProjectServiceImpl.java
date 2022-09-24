@@ -243,14 +243,13 @@ public class ProjectServiceImpl implements ProjectService{
 	@Override
 	public int answerInvitaion(ProjectMember m, String answer) {
 		int result;
-		if( answer.equals("참여") ) {
+		if( answer.equals("수락") ) {
 			// TB_PROJECT_MEM -> MEM_STATUS = '참여'
 			result = pDao.answerYes(sqlSession, m);
 		}else {
 			// TB_PROJECT_MEM -> STATUS = 'NO'
 			result = pDao.answerNo(sqlSession, m);
 		}
-		System.out.println(result);
 		return result;
 	}
 

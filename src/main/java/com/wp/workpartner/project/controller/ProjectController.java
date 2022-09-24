@@ -40,8 +40,6 @@ public class ProjectController {
 		
 		Employee loginUser = (Employee)session.getAttribute("loginUser");
 		mv.addObject("plist", pService.selectProjectList(loginUser.getEmpNo()));
-		System.out.println("ilist : " + pService.selectMyInvation(loginUser.getEmpNo()));
-		mv.addObject("ilist", pService.selectMyInvation(loginUser.getEmpNo()));
 		mv.setViewName("project/projectMain");
 		return mv;
 	}
@@ -67,16 +65,11 @@ public class ProjectController {
 	@RequestMapping("list.pr")
 	public ModelAndView selectProjectList(ModelAndView mv, HttpSession session) {
 		String empNo = ((Employee)session.getAttribute("loginUser")).getEmpNo();
-		ArrayList<Project> plist = pService.selectProjectList(empNo);
-		ArrayList<Project> dplist = pService.selectDoneProjectList(empNo);
 		
-		mv.addObject("dplist", dplist).setViewName("project/projectListView");
-		if(dplist != null) {
-			mv.addObject("plist", plist).setViewName("project/projectListView");
-		}else {
-			session.setAttribute("alertMsg", "참여중인 프로젝트가 아직 없습니다.");
-			mv.setViewName("project/projectMain");
-		}
+		mv.addObject("dplist", pService.selectDoneProjectList(empNo))
+		  .addObject("plist", pService.selectProjectList(empNo))
+		  .addObject("ilist", pService.selectMyInvation(empNo) )
+		  .setViewName("project/projectListView");
 		return mv;
 	}
 	

@@ -10,6 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Calendar {
+	private String empNo;
 	private String title;
 	private String content;
 	private String start; // 2019-09-05T12:30:00 형태
