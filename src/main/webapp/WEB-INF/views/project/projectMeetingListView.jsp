@@ -94,34 +94,13 @@
 			    success:function(result){
 			       alert(result);
 			       loadMeetingList();
+			       changeButtonColor();
 			    },
 			    error:function(){
 			        console.log("ajax 통신 실패 : 업무 게시글 삭제")
 			    }
 			})
 		})
-	
-		// 참석/불참을 클릭하면 AJAX로 TB_PMEET_MEM에 반영되고, 참석인원 버튼의 색이 변경되는 함수
-		function attendance(att){
-		    // 1. loginUser의 사번(+이름)이 해당 회의의 참석자로 등록되어 있는지 확인
-		    // 2. 참석을 눌렀으면 'Y', 불참을 눌렀으면 'N'가 DB의 ATTENDANCE_YN 컬럼에 들어가도록 요청 처리
-		    // 3. 결과에 따라 참석 확인 현황의 버튼에 색깔 반영되도록
-		    $.ajax({
-		        url:"",
-		        data:{
-		            pboardNo:$("input[name=pboardNo]").val(),
-		            empNo:"${ loginUser.empNo }",
-		            empName:"${ loginUser.empName }",
-		            attendanceYN:att
-		        },
-		        success:function(){
-		
-		        },
-		        error:function(){
-		            
-		        }
-		    })
-		}
 	
 	</script>
 
@@ -131,22 +110,19 @@
 	<script>
 	   	// 업무 게시글 리스트 조회하는 ajax
 	   	function loadMeetingList(){
-	   		console.log("로드됨");
-	   		console.log( $("input[name=projNo]").val() );
 	    	$.ajax({
 	    		url:"mtlist.pr",
 	    		data:{
 	    			projNo:$("input[name=projNo]").val()
 	    		},
+	    		async:false,
 	    		success:function(mlist){
-	    			console.log(mlist);
 	    			html = "";
 	    			if(mlist == null){
 	    				html+= "아직 등록된 회의가 없습니다.";
 	    				$("#meeting-wrap").html(html);
 	    			}else{
 	    				for(let i=0; i<mlist.length; i++){
-	    					console.log( mlist[i].pboardNo );
 	     				html += '<div class="card shadow-sm border-1 rounded-lg">'
 	     					  +		'<div class="card-title">'
 	     					  +			'<div class="left" style="width:8%; height:50px;">'
@@ -197,26 +173,27 @@
 	     					  +				'<div class="attendance btn-area" align="center">'
 	     					  +					'<br><a>참석 확인 현황</a><br>';
 	   					 	let mem = mlist[i].pmeetMem;
-	   					 	console.log(mlist[i].pmeetMem);
-	   					 	console.log(mem);
 	 						for(let j=0; j<mlist[i].pmeetMem.length; j++){
-	 						html += 				'<input type="hidden" name="memNo" value="' + mlist[i].pmeetMem[j].memNo + '">'
-	 							  +					'<button class="btn btn-sm" value="${mem.attendanceYN}">' + mlist[i].pmeetMem[j].memName + '</button>&nbsp;';
+	 							console.log( mlist[i].pmeetMem[j].attendanceYN )
+	 						html += 			'<input type="hidden" name="memNo" value="' + mlist[i].pmeetMem[j].memNo + '">'
+	 							  +				'<button class="btn btn-sm btn-att" value="' + mlist[i].pmeetMem[j].attendanceYN + '">' + mlist[i].pmeetMem[j].memName + '</button>&nbsp;';
 	 						}
-	                     html += 			'</div>'
-	                     	   +				'<br>'
-	                     	   +				'<div class="confirm-att" align="center">'
-	                     	   +					'<input type="hidden" class="pboardNo" value="' + mlist[i].pboardNo + '">'
-	                           +					'<button class="btn btn-success" onclick="attendance("Y")">참석</button> &nbsp;'
-	                           +					'<button class="btn btn-danger" onclick="attendance("N")">불참</button>'
-	                     	   +				'</div><br><br>'
-	                     	   +			'</div>'
+	                     html += 			'</div><br>'
+	                     	   +			'<div class="confirm-att" align="center">'
+	                     	   +				'<input type="hidden" class="pboardNo" value="' + mlist[i].pboardNo + '">'
+	                           +				'<button class="btn btn-success change-attendance" value="Y">참석</button> &nbsp;'
+	                           +				'<button class="btn btn-danger change-attendance" value="N">불참</button>'
+	                     	   +			'</div><br><br>'
 	                     	   +		'</div>'
-	                     	   +	'</div><br><br>';
+	                     	   +	'</div>'
+	                     	   + '</div><br><br>';
 	                     	   
 						$("#meeting-wrap").html(html);
 	    				}	  
+
+	    				
 	    			}
+	    			
 	    		},
 	    		error:function(){
 	    			console.log("에이젝스실패");
@@ -224,9 +201,74 @@
 	    	})
 	   	}
 	   	
+	   	function changeButtonColor(){
+		   	// 동적으로 리스트를 불러온 뒤에 참/불참에 따라 버튼 색깔 넣는 효과
+		   	$(".btn-att").each(function(){
+		   		console.log("접근됨")
+		   		console.log( $(this).val() );
+			   	if( $(this).val() == "Y" ){
+					$(this).css("backgrondColor", "green");
+			   	}else if( $(this).val() == "N"){
+			   		$(this).css("backgroundColor", "red").css("color","white");
+			   	}
+		   	})
+	   	}
+	   	
+	   	// 페이지 로드되자마자 회의 리스트 뽑는 AJAX
 		$(function(){
 			loadMeetingList();
+			changeButtonColor();
 		})
+	   	
+	   	
+	   	// 참석 / 불참 버튼 클릭시 발생하는 이벤트
+		$(document).on("click", ".change-attendance", function(){
+			let att = $(this).val();
+			let pboardNo = $(this).siblings("input").val();
+			let memNo = $(this).parent().siblings(".attendance").children("input").val()
+			
+			console.log(att);
+			console.log(pboardNo);
+			console.log(memNo)
+			
+			// 내가 해당 회의의 참석 명단에 있는지 확인
+			$.ajax({
+				url:"validate.pm",
+				data:{
+					memNo: ${loginUser.empNo},
+					pboardNo:pboardNo
+				},
+				success:function(result){
+					if( result == "성공" ){
+						// DB의 ATTENDANCE_YN를 'Y'/'N'로 바꾸어주기
+						$.ajax({
+							url:"showatt.pm",
+							data:{
+								memNo: ${loginUser.empNo},
+								pboardNo: pboardNo,
+								attendanceYN: att
+							},
+							success:function(result){
+								alert(result);
+								loadMeetingList();
+							},
+							error:function(){
+								console.log("성공까지는 왔는데... showatt.pm 불러오기에 실패@!!!")
+							}
+						})
+					}else{
+						alert("해당 회의 참석자만 선택 가능합니다.");
+					}
+				},
+				error:function(){
+					console.log("validate 실패");
+				}
+			})
+			
+			
+			
+		})
+		
 	   </script>
 	
 	<div id="meeting-wrap"></div>

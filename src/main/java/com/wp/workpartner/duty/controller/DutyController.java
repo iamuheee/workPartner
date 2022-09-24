@@ -137,7 +137,7 @@ public class DutyController {
 			}
 			d.setEmpICNo(empICNo.substring(0, empICNo.length() - 1));
 			d.setEmpICName(empICName.substring(0, empICName.length() - 1));
-			System.out.println(d);
+			System.out.println("수정폼에 보내는 d : " + d);
 			mv.addObject("d", d).setViewName("duty/dutyUpdateForm");
 		}else {
 			mv.addObject("errorMsg","업무 수정 페이지 이동에 실패했습니다.").setViewName("common/error");
@@ -156,30 +156,25 @@ public class DutyController {
 	 */
 	@RequestMapping("update.du")
 	public String updateDuty(MultipartFile upfile, Duty d, HttpSession session, Model m) {
-		int result1 = 0, result2 = 1; 
 		
-
-		if(upfile.getOriginalFilename().length() > 0) {
+		
+		int result2 = 1;
+		System.out.println("upfile.isEmpty는" + upfile.isEmpty() );
+		if(!upfile.isEmpty()) {
 			// 새로 업로드된 파일이 있는 경우
 			File file = File.uploadFile(upfile, FileUpload.saveFile(upfile, session, "resources/uploadFiles/"));
-			file.setRefNo(Integer.parseInt(d.getDutyNo()));
-			d.setFilePath(file.getFilePath());
-			
-			result1 = dService.updateDuty(d);
-
-			if(d.getFilePath() == null) {
-				// 기존 파일이 없는 경우
-				result2 = dService.insertDutyFile(file);
-			}else {
-				// 기존 파일이 있는 경우
-				result2 = dService.updateDutyFile(file);
-			}
-			
-		}else {
-			// 새로 업로드된 파일이 없는 경우
-			result1 = dService.updateDuty(d);
-			
+			file.setRefNo( Integer.parseInt(d.getDutyNo()) );
+			d.setFilePath(file.getFilePath()); // filePath 새로 담아주기
+			 if(d.getFilePath() == null) { 
+				 // 기존 파일이 없는 경우 : TB_FILE에 INSERT 진행
+				 result2 *= dService.insertDutyFile(file); 
+			 }else { 
+				 // 기존 파일이 있는 경우 : TB_FILE에 UPDATE (FILE_REF_NO = ?) 진행
+				 result2 *= dService.updateDutyFile(file); 
+			 }
 		}
+		
+		int result1 = dService.updateDuty(d);
 		
 		if(result1 * result2 > 0) {
 			session.setAttribute("alertMsg", "업무 수정에 성공했습니다.");
@@ -201,6 +196,6 @@ public class DutyController {
 			return "common/error";
 		}
 	}
-	
+
 	
 }

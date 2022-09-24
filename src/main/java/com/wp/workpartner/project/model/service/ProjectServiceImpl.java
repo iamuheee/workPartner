@@ -13,6 +13,7 @@ import com.wp.workpartner.project.model.dao.ProjectDao;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectMeeting;
+import com.wp.workpartner.project.model.vo.ProjectMeetingMember;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Service
@@ -321,6 +322,18 @@ public class ProjectServiceImpl implements ProjectService{
 	@Override
 	public int deleteMeeting(ProjectBoard pb) {
 		return pDao.deleteBoard(sqlSession, pb);
+	}
+
+
+	@Override
+	public int validateParticipant(ProjectMeetingMember m) {
+		return pDao.validateParticipant(sqlSession, m);
+	}
+
+
+	@Override
+	public int updateAttendance(ProjectMeetingMember m) {
+		return pDao.updateAttendance(sqlSession, m);
 	}
 
 	

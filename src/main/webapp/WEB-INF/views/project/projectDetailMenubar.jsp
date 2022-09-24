@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>WorkPartner!</title>
 
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <link href="resources/css/template.css" rel="stylesheet" />
@@ -125,30 +125,43 @@
 							<input type="text" class="form-control" name="title" required><br>
 							
 							<span class="title">회의 내용</span>
-							<textarea rows="5" class="form-control" name="content" style="resize:none" required></textarea><br><br>
-							
-							<span class="title">회의 내용</span>
-							<select name="meetingPlace">
-								<option selected>소회의실1</option>
-								<option>소회의실2</option>
-								<option>소회의실3</option>
-							</select>
+							<textarea rows="3" class="form-control" name="content" style="resize:none" required></textarea><br><br>
 							
 							<div id="pmeet-incharge" style="width:55%; float:left;">
-								<span class="title">회의 날짜</span><br>
-								<input type="date" name="meetingDate" required><br><br>
+								<span class="title">회의 장소</span><br>
+								<select name="meetingPlace">
+									<option selected>Room A</option>
+									<option>Room B</option>
+									<option>Room C</option>
+								</select>
+								<br><br>
 								<span class="title">회의 시작 시간</span><br>
-								<input type="time" name="startTime" required><br><br>
+                                <select name="startTime" required>
+									<option value="09:00">09:00</option>
+									<c:forEach var="i" begin="10" end="17">
+										<option value="${ i }:00">${ i }:00</option>       
+									</c:forEach>
+								</select>
+								<br><br>
 								<span class="title">회의 담당자</span><br>
 								<button type="button" class="btn btn-sm btn-primary search-incharge" style="width:65%">담당자 선택</button><br><br>
+								
+								<span class="title">캘린더에 추가 여부</span><br>
+								<label><input type="radio" name="calendarYN" value="Y"> 추가 O</label>&nbsp; &nbsp; <label style="margin-top:3px;"><input type="radio" name="calendarYN" value="Y"> 추가 X</label>
 							</div>
+							
 							<div id="pmeet-member" style="width:45%; float:left;">
-								<input type="radio" name="calendarYN" value="Y" checked>캘린더에 추가 O<br>
-								<input type="radio" name="calendarYN" value="N">캘린더에 추가 X<br><br>
+								<span class="title">회의 날짜</span><br>
+								<input type="date" name="meetingDate" required><br><br>
 								<span class="title">회의 종료 시간</span><br>
-								<input type="time" name="endTime" required><br><br>
+								<select name="endTime" required>
+									<option value="10:00">10:00</option>
+									<c:forEach var="i" begin="11" end="18">
+										<option value="${ i }:00">${ i }:00</option>       
+									</c:forEach>
+								</select><br><br>
 								<span class="title">회의 참석자</span><br>
-								<button type="button" class="btn btn-sm btn-primary search-member" style="width:80%">참석자 선택</button>
+								<button type="button" class="btn btn-sm btn-primary search-member" style="width:80%">참석자 선택</button><br><br>
 							</div>
 					</div>
 					<br style="clear:both"><br>

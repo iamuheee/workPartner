@@ -75,7 +75,7 @@ font-family: 'Noto Sans KR', sans-serif;
     <div style="height: 20px;"></div>
     <div class="adOuter">
     
-    <div id="empIC">
+    <div id="empIC" style="display:none">
 	    <input type="hidden" name="empICNo">
 	    <input type="hidden" name="empICName">
 		<ul id="empICList">

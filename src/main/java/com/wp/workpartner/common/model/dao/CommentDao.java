@@ -31,7 +31,7 @@ public class CommentDao {
 	}
 	
 	public int insertCommentFile(SqlSessionTemplate sqlSession, Comment c) {
-		return sqlSession.insert("commentMapper.insertFile", c);
+		return sqlSession.insert("commentMapper.insertCommentFile", c);
 	}
 	
 	public int deleteComment(SqlSessionTemplate sqlSession, String comNo) {

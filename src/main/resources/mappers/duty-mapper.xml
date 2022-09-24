@@ -76,24 +76,6 @@
 			 )
 	</insert>
 	
-	<!-- 게시글 수정에서 최초로 파일 업로드하는 경우 -->
-	<insert id="insertDutyFile">
-		INSERT
-		  INTO TB_FILE
-		VALUES
-			 (
-			   SEQ_FILENO.NEXTVAL
-			 , #{refNo} <!-- 게시글수정에서 최초 파일 업로드 -->
-			 , 1
-			 , #{fileOriginName}
-			 , #{fileChangeName}
-			 , #{filePath}
-			 , DEFAULT
-			 , NULL
-			 , 'Y'
-			 )
-	</insert>
-	
 	<select id="selectDutyListCount" resultType="_int">
 		SELECT COUNT(COUNT(*))
 		  FROM TB_DUTY D
@@ -288,6 +270,23 @@
 			 , #{empICName}
 			 )
 	</insert>
+	
+	<update id="insertDutyFile">
+		INSERT
+		  INTO TB_FILE
+		VALUES
+			 (
+			   SEQ_FILENO.NEXTVAL
+			 , #{refNo}
+			 , 1
+			 , #{fileOriginName}
+			 , #{fileChangeName}
+			 , #{filePath}
+			 , DEFAULT
+			 , NULL
+			 , DEFAULT
+			 )
+	</update>
 	
 	<update id="updateDutyFile">
 		UPDATE TB_FILE

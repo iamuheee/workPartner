@@ -205,10 +205,16 @@
 								  + 	'<td><span class="imp">' + hashMap.notDoneList[i].importance + '</span></td>'
 								  + 	'<td><span class="prog">' + hashMap.notDoneList[i].progress + '</span></td>'
 								  +		'<td>' + hashMap.notDoneList[i].empName + '</td>'
-								  +		'<td>' + hashMap.notDoneList[i].empIC[0].empICName + '외 ' + (hashMap.notDoneList[i].empIC.length - 1) + '명</td>'
+								  +		'<td>' + hashMap.notDoneList[i].empIC[0].empICName;
+							if(hashMap.notDoneList[i].empIC.length > 1){
+								tr += ' 외 ' + (hashMap.notDoneList[i].empIC.length - 1) + '명';
+							} 
+							tr   +=		'</td>'
 								  +		'<td>' + hashMap.notDoneList[i].startDate + '</td>'
 								  +		'<td>' + hashMap.notDoneList[i].endDate + '</td>'
 								  + '</tr>'
+								  
+								  
 						}
 						$("#original-tbody").html(tr);
 						

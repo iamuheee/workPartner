@@ -174,9 +174,9 @@
                     </div>
                     <div class="content-file" align="center">
 	                <c:if test="${not empty d.filePath}">
-	                	<img src="${d.filePath}" style="width:150px;">
-	            		<span>다운로드 <i class="fa fa-download" aria-hidden="true"></i> &nbsp; </span>
-		            	<a href="${d.filePath}">${d.fileOriginName}</a>
+	                	<img src="${d.filePath}" style="width:150px;"><br><br>
+	            		<i class="fa fa-download" aria-hidden="true"></i>
+		            	<a href="${d.filePath}">다운로드</a>
 	            	</c:if>
                     </div>
                 </div>
@@ -290,6 +290,7 @@
             				alert(alertMsg);
             				selectCommentList();
             				$("textarea[name=comContent]").val("");
+            				$("#fileName").html("");
             			},
             			error:function(){
             				console.log("댓글 작성 AJAX 통신 실패");

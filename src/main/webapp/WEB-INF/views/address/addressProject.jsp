@@ -51,8 +51,9 @@ font-family: 'Noto Sans KR', sans-serif;
 </style>
 <script>
 	function send() { 
-		console.log( $("#memNo").val() ) /* 숫자,숫자,숮자 */
-		console.log( $("#memName").val() ) /* 이름,이름,이름 */
+		$("#memNo").val( $("#memNo").val().substr(0, $("#memName").val().length - 1 ) )
+		$("#memName").val( $("#memName").val().substr(0, $("#memName").val().length - 1) )
+		
 		if( confirm( $("#memName").val() + "님을 프로젝트에 초대하는 것이 맞나요?") ){
 	    	
 			$.ajax({
@@ -205,9 +206,6 @@ font-family: 'Noto Sans KR', sans-serif;
 	                    memName += arr[i].empName + ",";
 	
 					}
-					
-					memNo = memNo.substr(0, memNo.length - 1);
-					memName = memName.substr(0, memName.length - 1);
 					
 					$("#memNo").val( $("#memNo").val() + memNo);
 					$("#memName").val( $("#memName").val() + memName);

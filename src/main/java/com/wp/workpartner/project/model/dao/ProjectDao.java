@@ -185,6 +185,13 @@ public class ProjectDao {
 		return sqlSession.insert("projectMapper.insertMeetingMember", pb);
 	}
 	
+	public int validateParticipant(SqlSessionTemplate sqlSession, ProjectMeetingMember m) {
+		return sqlSession.selectOne("projectMapper.validateParticipant", m);
+	}
+	
+	public int updateAttendance(SqlSessionTemplate sqlSession, ProjectMeetingMember m) {
+		return sqlSession.update("projectMapper.updateAttendance", m);
+	}
 	
 	
 

@@ -17,6 +17,7 @@ public class ProjectMember {
 	private String memRole;
 	private String phone;
 	private String email;
+	private String empProfile;
 	private String department;
 	private String position;
 	

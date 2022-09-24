@@ -8,6 +8,7 @@ import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectMeeting;
+import com.wp.workpartner.project.model.vo.ProjectMeetingMember;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 public interface ProjectService {
@@ -79,5 +80,9 @@ public interface ProjectService {
 	int insertMeeting(ProjectBoard pb, ProjectMeeting pm);
 	
 	int deleteMeeting(ProjectBoard pb);
+	
+	int validateParticipant(ProjectMeetingMember m);
+	
+	int updateAttendance(ProjectMeetingMember m);
 	
 }

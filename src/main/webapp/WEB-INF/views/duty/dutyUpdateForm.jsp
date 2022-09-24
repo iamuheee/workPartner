@@ -86,33 +86,33 @@
             <div class="setting-left">
                 <span class="title">상태</span><br>
 				<select name="progress" class="form-select">
-					<option selected>준비</option>
-					<option >진행</option>
-					<option >지연</option>
-					<option >완료</option>
+					<option value="준비">준비</option>
+					<option value="진행">진행</option>
+					<option value="지연">지연</option>
+					<option value="완료">완료</option>
 				</select>
             </div>
             
             <div class="setting-right">
                 <span class="title">우선 순위</span><br>
 				<select name="importance" class="form-select">
-					<option >긴급</option>
-					<option >중요</option>
-					<option selected>보통</option>
-					<option >낮음</option>
+					<option value="긴급">긴급</option>
+					<option value="중요">중요</option>
+					<option value="보통">보통</option>
+					<option value="낮음">낮음</option>
 				</select>
             </div>
             
             <script>
             	$(function(){
             		$("select[name=progress]>option").each(function(){
-	            		if( $(this).text() == ${d.progress} ){
-	            			$(this).attr("checked", true);
+	            		if( $(this).val() == "${d.progress}" ){
+	            			$(this).attr("selected", true);
 	            		}
             		})
    		            $("select[name=importance]>option").each(function(){
-	            		if( $(this).text() == ${d.importance} ){
-	            			$(this).attr("checked", true);
+	            		if( $(this).val() == "${d.importance}" ){
+	            			$(this).attr("selected", true);
             			}
    		         	})
             	})
@@ -167,7 +167,7 @@
             </div>
             
             <script>
-           		if( "${d.calendarYN}" == 'Y' ){
+           		if( ${d.calendarYN} == 'Y' ){
            			$("#Y").attr("checked", true);
            		}else{
            			$("#N").attr("checked", true);
@@ -191,7 +191,7 @@
                 <input type="file" name="upfile" class="form-control">
             	<c:if test="${not empty d.filePath}">
             		<span>현재 업로드된 파일 : </span>
-	            	<a href="${d.filePath}">${d.fileOriginName}</a>
+	            	<a id="originalFile" href="${d.filePath}">미리보기</a>
 	            	<input type="hidden" name="fileOriginName" value="${ d.fileOriginName }">
 	                <input type="hidden" name="filePath" value="${ d.filePath }">
             	</c:if>
@@ -216,16 +216,16 @@
     	let year = new Date().getFullYear();
     	let month = ('0' + (new Date().getMonth() + 1)).slice(-2);
     	let date = ('0' + new Date().getDate()).slice(-2);
-   		$("input[name=startDate]").click(function(){
-   			$(this).attr("min", year + '-' + month + '-' + date );
-   		})
     	
-   		
+    	$(function(){
+    		$("input[name=startDate]").attr("min", year + '-' + month + '-' + date);
+    		$("input[name=endDate]").attr("min", year + '-' + month + '-' + date);
+    	})
+    	
     	// 마감일 날짜로 시작일 이전 날짜 불가능하도록 만들기
     	$("input[name=startDate]").change(function(){
     		$("input[name=endDate]").attr("min", $(this).val());
     	})
-    	
     	
     	// TB_DUTY의 TITLE 컬럼의 자료형은 VARCHAR2(500BYTE)임 -> 제목 란에 500BYTE 초과하게 적으면 막아주기
     	$("input[name=title]").keyup(function(){

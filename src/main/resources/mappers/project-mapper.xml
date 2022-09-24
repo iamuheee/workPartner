@@ -22,6 +22,7 @@
 		<result column="MEM_ROLE" property="memRole" />
 		<result column="EMP_PHONE" property="phone" />
 		<result column="EMP_EMAIL" property="email" />
+		<result column="EMP_PROFILE" property="empProfile"/>
 		<result column="DEP_NAME" property="department" />
 		<result column="POS_NAME" property="position" />
 	</resultMap>
@@ -163,6 +164,7 @@
 			 , MEM_ROLE
 			 , EMP_PHONE
 			 , EMP_EMAIL
+			 , EMP_PROFILE
 			 , DEP_NAME
 			 , POS_NAME
 		  FROM TB_PROJECT_MEM
@@ -531,7 +533,7 @@
 		SELECT MEM_NO
 			 , MEM_NAME
 			 , MEM_ROLE
-			 , EMP_PHONE
+			 , NVL(EMP_PHONE, '등록된 번호 없음'
 			 , EMP_EMAIL
 			 , DEP_NAME
 			 , POS_NAME
@@ -624,6 +626,20 @@
 			 , NULL
 			 )
 	</insert>
+	
+	<select id="validateParticipant" resultType="_int">
+		SELECT COUNT(*)
+		  FROM TB_PMEET_MEM
+		 WHERE PBOARD_NO = #{pboardNo}
+		   AND EMP_NO = #{memNo}
+	</select>
+	
+	<update id="updateAttendance">
+		UPDATE TB_PMEET_MEM
+		   SET ATTENDANCE_YN = #{attendanceYN}
+		 WHERE PBOARD_NO = #{pboardNo}
+		   AND EMP_NO = #{memNo}
+	</update>
 	
 
 </mapper>

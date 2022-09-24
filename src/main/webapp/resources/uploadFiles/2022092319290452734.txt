@@ -1,0 +1,21 @@
+	                <!-- =================== 여기까지 반복문 돌려 게시글 작성하면 됨 ======================== -->
+	
+	                <div class="card-comment">
+	                    <div class="read-comment">
+	                        <table width="100%;">
+	                            <tr width="100%" height="10px;">
+	                                <th width="8%" style="padding-left:20px;">이름</th>
+	                                <td width="72%;" style="padding:20px; white-space:pre-line;">댓글내용</td>
+	                                <td width="10%;" style="color:gray;">2022-09-02</td>
+	                                <td><a width="5%" href="">수정</a></td>
+	                                <td><a width="5%" href="">삭제</a></td>
+	                            </tr>
+	                        </table>
+	                    </div>
+	                    <div class="write-comment" action="" method="post">
+	                        <input type="hidden" name="comRefBno" value="글번호">
+	                        <input type="hidden" name="comType" value="2">
+	                        <textarea name="comContent" class="form-control" style="width:90%; height:80px; margin:20px; float:left; resize:none"></textarea>
+	                        <button class="btn btn-sm btn-secondary" onclick="insertComment();" style="float:left; height:80px; width:5%; margin-top:20px;">댓글<br>작성</button>
+	                    </div>
+	                </div>

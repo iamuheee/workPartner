@@ -50,7 +50,6 @@ public class DutyServiceImpl implements DutyService {
 			dc.setEmpICName(empICNames[i]);
 			dclist.add(dc);
 		}
-		System.out.println(dclist);
 		for(DutyCharge dc : dclist) {
 			result2 *= dDao.insertDutyCharge(sqlSession, dc);
 		}
@@ -77,13 +76,9 @@ public class DutyServiceImpl implements DutyService {
 			dclist.add(dc);
 		}
 		
-		System.out.println(dclist);
-		
 		for(DutyCharge dc : dclist) {
 			result2 *= dDao.insertDutyCharge(sqlSession, dc);
 		}
-		
-		
 		return result1 * result2;
 	}
 	
@@ -131,7 +126,6 @@ public class DutyServiceImpl implements DutyService {
 	@Override
 	public Duty selectDuty(String dutyNo) {
 		Duty d = dDao.selectDuty(sqlSession, dutyNo);
-		System.out.println(d);
 		d.setEmpIC( dDao.selectDutyCharge(sqlSession, dutyNo) );
 		return d;
 	}
@@ -152,11 +146,11 @@ public class DutyServiceImpl implements DutyService {
 			dclist.add(dc);
 		}
 		
-		int result2 = 1;
-		result2 *= dDao.deleteDutyCharge(sqlSession, dclist.get(0));
+		int result2 = dDao.deleteDutyCharge(sqlSession, dclist.get(0));
 		for(DutyCharge dc : dclist) {
-			result2 *= dDao.updateDutyCharge(sqlSession, dc);
+			result2 += dDao.updateDutyCharge(sqlSession, dc);
 		}
+		System.out.println("result2 : " + result2);
 		return result1 * result2;
 	}
 	

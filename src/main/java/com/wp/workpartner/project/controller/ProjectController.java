@@ -23,6 +23,7 @@ import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectDuty;
 import com.wp.workpartner.project.model.vo.ProjectMeeting;
+import com.wp.workpartner.project.model.vo.ProjectMeetingMember;
 import com.wp.workpartner.project.model.vo.ProjectMeeting;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
@@ -402,12 +403,32 @@ public class ProjectController {
 	@ResponseBody
 	@RequestMapping(value="deletem.pr", produces="application/html; charset=utf-8")
 	public String deleteMeeting(ProjectBoard pb) {
-		System.out.println(pb);
 		if(pService.deleteMeeting(pb) > 0) {
 			return "성공적으로 회의를 삭제했습니다.";
 		}else {
 			return "회의 삭제에 실패했습니다.";
 		}
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="validate.pm", produces="application/html; charset=utf-8")
+	public String validateParticipant(ProjectMeetingMember m) {
+		if( pService.validateParticipant(m) > 0 ) {
+			return "성공";
+		}else {
+			return "실패";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="showatt.pm", produces="application/html; charset=utf-8")
+	public String updateAttendance(ProjectMeetingMember m) {
+		if( pService.updateAttendance(m) > 0 ) {
+			return "성공적으로 회의 참석 여부가 변경되었습니다.";
+		}else {
+			return "회의 참석 여부 반영에 실패했습니다.";
+		}
+	}
+	
 	
 }
