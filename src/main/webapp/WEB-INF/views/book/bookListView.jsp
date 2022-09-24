@@ -41,6 +41,9 @@
     
     #pagingArea button{
     	cursor:pointer;
+    	border:none;
+    	font-size:18px;
+    	color:#000;
     }
 
     .page-link {
@@ -117,11 +120,11 @@
 		    <table id="bookListTb" class="table table-hover">
 		        <thead>
 		            <tr>
-		                <th scope="col">No.</th>
-		                <th scope="col">회의실</th>
-		                <th scope="col">회의명</th>
-		                <th scope="col">예약일정</th>
-		                <th scope="col">상태</th>
+		                <th scope="col" width="10%">No.</th>
+		                <th scope="col" width="15%">회의실</th>
+		                <th scope="col" width="25%">회의명</th>
+		                <th scope="col" width="25%">예약일정</th>
+		                <th scope="col" width="25%">상태</th>
 		            </tr>
 		        </thead>
 		        <tbody id="bookList">
@@ -148,7 +151,7 @@
 		            <!-- Modal Header -->
 		            <div class="modal-header">
 		                <h4 class="modal-title"><i class="fas fa-sync"></i>&nbsp;&nbsp;회의실 일정 변경</h4>
-		                <button type="button" class="close" data-dismiss="modal">&times;</button> 
+		                <button type="button" class="close" onclick="closeModal();">&times;</button> 
 		            </div>
 						<form action="update.bk" method="post">		
 		                <!-- Modal Body -->
@@ -160,7 +163,7 @@
 		                <!-- Modal footer -->
 		                <div class="modal-footer">
 		                    <button type="submit" class="btn btn-primary" id="insertBk" style="margin-right:5px;">저장</button>
-		                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+		                    <button type="button" class="btn btn-secondary" onclick="closeModal();">취소</button>
 		                </div>
 	                </form>
 		        </div>
@@ -240,7 +243,7 @@
 										   value += '<td><button type="button" class="btn btn-secondary btn-sm" disabled>이용완료</button></td>'; 
 									   }else {	// 이용 전
 										   if(list[i].bkStatus == 'N') {	// bkStatus는 '예약취소상태'를 나타내므로 N이면 정상예약 중인 상태임
-												  value += '<td><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateBookMd" onclick="selectBook(' + list[i].bkNo + ');">일정변경</button>'
+												  value += '<td><button type="button" class="btn btn-primary btn-sm" onclick="openModal(' + list[i].bkNo + ');">일정변경</button>'
 												  	     + '<button type="button" class="btn btn-danger btn-sm" onclick="userConfirm(' + list[i].bkNo + ');">예약취소</button></td>';
 										   }else { // 취소
 											   value += '<td><button type="button" class="btn btn-warning btn-sm" disabled>취소완료</button></td>'; 
@@ -278,6 +281,35 @@
 			})
 		}
 		
+		/* 모달창 오픈 */
+		function openModal(bkNo) {
+			$("#updateBookMd").modal('show');
+			
+			selectBook(bkNo);	// 예약 조회
+
+		}
+		
+		/* 모달창 닫기 */
+		function closeModal(){
+			// 각 모달창 오픈 시 새로운 정보 조회할 것이므로 따로 비워주지 않아도 됨
+			$("#updateBookMd").modal('hide');
+		}
+		
+		/* 회의실 날짜 제한용 ajax */
+		/* 실행 후에 조회 */
+		function checkTime() {	// 모달 창 여는 버튼 누를 때 실행할 함수
+			
+			// 오늘 날짜 받기
+			var now_utc = Date.now()	// 지금 날짜를 밀리초로
+			var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
+			var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+			//console.log(today);
+			
+			$("input[name=bkDate]").attr("min", today);	// 오늘 날짜부터만 선택하게 함
+
+			
+		}
+			
 		/* 회의실 예약 상세조회용 ajax */
 		// 조회해 와서 화면에 뿌려주는 용도
 		// 변경 버튼 누를 때 실행됨
@@ -291,10 +323,12 @@
 				},
 				success:function(b){
 					console.log("회의실 예약 상세조회용 ajax 통신 성공");
-					console.log(b);
+					//console.log(b);
 					
 					/* b에 담긴 값을 예약 변경용 모달창에 뿌려준다. */
 					let value = "";
+					
+					var bkDate = $('input[name=bkDate]').val();
 					
 					value += '<tr>'
 					   	   +	'<th>회의실</th>'
@@ -355,20 +389,47 @@
                            + '</tr>'
                            + '<tr>'
                            +	'<th>참여 인원</th>'
-                           +	'<td><input type="number" name="bkPerson" id="bkPerson" min="1" class="bkInfoTd" required placeholder="'+ b.bkPerson + '">&nbsp;명'
+                           +	'<td><input type="number" name="bkPerson" id="bkPerson" min="1" class="bkInfoTd" required value="'+ b.bkPerson + '">&nbsp;명'
                 		   + '</tr>'
                 		   + '<tr>'
                 		   + 	'<th colspan="2">회의 제목</th>'
                 		   + '</tr>'
                 		   + '<tr>'
                 		   +	'<td colspan="2" style="height:60px;">'
-                		   + 	'<input type="text" name="bkTitle" id="bkTitle" placeholder="' + b.bkTitle + '" class="bkInfoTd" required>'
+                		   + 	'<input type="text" name="bkTitle" id="bkTitle" value="' + b.bkTitle + '" class="bkInfoTd" required>'
                 		   +	'<input type="hidden" name="bkNo" id="bkNo" value="' + b.bkNo + '">'	// 예약번호(bkNo)를 숨겨서 함께 보냄
                 		   +	'</td>'
                 		   + '</tr>';
                 		   
                 		   $("#bookInfo").html(value);
-					
+							
+                		   checkTime();
+                		   
+                		   
+                		   $(document).on("change", "input[name=bkDate]", function(){
+                			   var bkDate = $('input[name=bkDate]').val();
+                			   var rmNo = b.rmNo;
+                			   
+                			   selectTime(rmNo, bkDate);
+                			   
+                		   })
+                		   
+                		   $(document).on("change", "select[name=bkStart]", function(){
+                			   var bkDate = $('input[name=bkDate]').val();
+                			   var rmNo = b.rmNo;
+                			   
+                			   selectTime(rmNo, bkDate);
+                			   
+                		   })
+                		   
+                		   $(document).on("change", "select[name=bkEnd]", function(){
+                			   var bkDate = $('input[name=bkDate]').val();
+                			   var rmNo = b.rmNo;
+                			   
+                			   selectTime(rmNo, bkDate);
+                			   
+                		   })
+               				 
 					
 				},
 				error:function(){
@@ -376,6 +437,94 @@
 				}
 			})
 		}
+			
+		/* 예약 시간 제한 */
+		function selectTime(rmNo, bkDate){
+	 		
+			// 해당 날짜에 예약되어 있는 bkStart, bkEnd를 조회해 와서
+			// 선택된 bkStart, bkEnd와 비교한 후 같으면 disabled 속성을 추가한다.
+			
+			// 조회에 넘길 값 : 선택된 rmNo, bkDate
+			
+			// 조회 후 비교할 값 
+			var bkStart = $('select[name="bkStart"] option:selected').val();
+			var bkEnd = $('select[name="bkEnd"] option:selected').val();
+			
+			console.log(rmNo, bkDate);
+			
+				$.ajax({
+					url:"selectTime.bk",
+					type:"post",
+					data:{
+						rmNo:rmNo,
+						bkDate:bkDate
+					},
+					success:function(list){
+						console.log("예약완료된 시간 조회용 ajax 통신 성공");
+						console.log(list);
+						
+						var $startOption = $('#bkStart option');
+						var $endOption = $('#bkEnd option');
+						var $startValue = $('select[name="bkStart"] option:selected').val();
+						var $endValue = $('select[name="bkEnd"] option:selected').val();
+						
+						// 기본적으로 종료시간은 시작시간보다 늦은 시간만
+						// 시작시간은 종료시간보다 이른 시간만 선택되도록 설정해야 함
+						
+						if(list.length != 0){	// 해당 날짜에 이미 예약이 있는 경우
+											
+							$endOption.each(function() {
+								
+								if($(this).val() <= $startValue) {	// 시작 날짜 이후의 종료 날짜만 선택되게 함
+									$(this).attr("disabled", true);
+								}
+								
+								
+								for(let i=0; i<list.length; i++) {
+									
+									$startOption.each(function(){
+										if($(this).val() >= list[i].bkStart && $(this).val() < list[i].bkEnd) {
+											$(this).attr("disabled", true);
+										}
+									})
+									
+									$endOption.each(function(){
+										if($(this).val() > list[i].bkStart && $(this).val() <= list[i].bkEnd) {
+											$(this).attr("disabled", true);
+										}
+									})
+									
+								}// 반복문 끝 
+							})
+							
+							if($endValue != "" && $endValue < $startValue) {
+										alert("예약 시간을 다시 선택해 주세요");
+								}
+							
+						}else {	// 예약이 없는 날짜 && 방
+							
+							$startOption.each(function() {
+								$(this).attr("disabled", false);
+							})
+							
+							$endOption.each(function(){
+								$(this).attr("disabled", false);
+								
+								if($(this).val() <= $startValue) {
+									$(this).attr("disabled", true);
+								}
+							})
+						}
+						
+					},
+					error:function(){
+						console.log("예약완료된 시간 조회용 ajax 통신 실패");
+					}
+				})
+		}
+		
+		
+		
 		
 		/* 회의실 예약 취소 확인용 confirm */
 		function userConfirm(bkNo){

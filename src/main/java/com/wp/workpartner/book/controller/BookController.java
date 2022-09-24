@@ -308,6 +308,8 @@ public class BookController {
 	@ResponseBody
 	@RequestMapping(value="selectTime.bk", produces="application/json; charset=UTF-8")
 	public String ajaxSelectTime(String rmNo, String bkDate) {
+//		System.out.println("rmNo : "+ rmNo);
+//		System.out.println("bkDate : "+ bkDate);
 		
 		ArrayList<Book> list = bService.selectTime(rmNo, bkDate); 
 		

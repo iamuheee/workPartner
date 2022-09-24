@@ -69,6 +69,7 @@
  	<select id="selectBookList" resultMap="bookResult">
 		select
 		       bk_no
+		     , rm_no
 		     , rm_name
 		     , bk_title
 		     , bk_meetdate
@@ -87,6 +88,7 @@
 	<select id="selectBook" resultMap="bookResult">
 		select
 		       bk_no
+		     , rm_no
 		     , rm_name
 		     , bk_title
 		     , bk_meetdate
