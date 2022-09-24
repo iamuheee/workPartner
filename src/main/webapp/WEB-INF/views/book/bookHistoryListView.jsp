@@ -110,6 +110,28 @@
     	display:flex;
     	align-items: center;
     }
+    
+    
+    .fc-datagrid-cell{
+    	width:200px !important;
+    }
+    
+    .fc-timeline-slot-cushion {	/* 헤더 시간 수정 */
+    	color:#000
+    }
+    
+    .fc-timeline-slot-cushion:hover {
+		text-decoration: none;
+		color:#000;
+    }
+    
+    .fc-datagrid-cell-frame{
+    	width:200px;
+    }
+    
+    .fc-datagrid-cell-frame fc-datagrid-cell-frame-liquid{
+    	width:200px;
+    }
 </style>
 <body>
 	
@@ -298,9 +320,10 @@
 					    var calendar = new FullCalendar.Calendar(calendarEl, {
 					      locale: 'kr',	// 언어 설정
 					      
-					      height:'900px',	// 캘린더 높이 설정
+					      height:'80%',	// 캘린더 높이 설정
 					      expandRows:true,
-					      initialView: 'resourceTimeline',	// 화면 포맷 설정
+					      initialView: 'resourceTimelineDay',	// 화면 포맷 설정
+					      aspectRatio: 1.5,
 					      schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',	// trial 사용 위한 라이센스 키
 					      titleFormat: { 	// 제목 포맷 설정
 					    	    month: 'long',
@@ -310,9 +333,9 @@
 					    	  },
 					   	  datesAboveResources: true,
 					   	    headerToolbar: {	// 헤더 표시 툴바
-					   	      left: 'today prev,next',
-					   	      center: 'title',
-					   	      right: 'resourceTimelineDay,resourceTimelineWeek myCustomButton'
+					   	      left: 'myCustomButton',
+					   	      right: 'prev,next',
+					   	      center: 'title'
 					   	    },
 					   	  customButtons: {	// 헤더 툴바에 커스텀한 버튼 추가
 					   		  myCustomButton: {
@@ -336,7 +359,13 @@
 					   	  selectable: true,	// 캘린더의 시간을 드래그해서 선택할 수 있게 함
 					   	  nowIndicator: true,	// 현재 시간 표시
 					      events: dataBook,	// db에서 조회한 예약들을 캘린더 위에 뿌림
-					      resources: dataRoom	// db에서 조회한 회의실 이름을 컬럼명으로 뿌림 
+					      resources: dataRoom,	// db에서 조회한 회의실 이름을 컬럼명으로 뿌림
+					      resourceAreaColumns: [
+					    	  {
+					    		  headerContent: '회의실'		// resource 컬럼명 
+					    	  }
+					      ],
+					      resourceAreaWidth: "15%"	// th width
 					    });
 					    
 					    calendar.render();
@@ -350,6 +379,10 @@
 		  	}
 		  })
 
+		  /* 풀캘린더 스케쥴러 css */
+		  $(function(){
+			  $(".fc-datagrid-cell-main").html("회의실명");
+		  })
 		 
 		 /* 회의실 전체 예약 목록 조회용 ajax */
 		  function selectAllBookList(cpage){

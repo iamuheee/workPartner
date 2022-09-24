@@ -119,6 +119,11 @@ public class BookServiceImpl implements BookService {
 		return bDao.selectByRoomAndDateList(sqlSession, rmNo, start, end, pi);
 	}
 
+	@Override
+	public ArrayList selectTime(String rmNo, String bkDate) {
+		return bDao.selectTime(sqlSession, rmNo, bkDate);
+	}
+
 
 	
 

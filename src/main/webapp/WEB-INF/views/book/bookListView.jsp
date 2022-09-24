@@ -291,14 +291,14 @@
 				},
 				success:function(b){
 					console.log("회의실 예약 상세조회용 ajax 통신 성공");
-					//console.log(b);
+					console.log(b);
 					
 					/* b에 담긴 값을 예약 변경용 모달창에 뿌려준다. */
 					let value = "";
 					
 					value += '<tr>'
 					   	   +	'<th>회의실</th>'
-					   	   +	'<td><button class="btn btn-warning" disabled>'+ b.room.rmName +'</td>'
+					   	   +	'<td><button class="btn btn-warning" disabled>'+ b.rmName +'</td>'
                     	   + '</tr>'
                     	   + '<tr>'
                     	   + 	'<th>날짜</th>'

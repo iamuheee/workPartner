@@ -166,6 +166,36 @@
     #bkTitle {
         width: 100%;
     }
+    
+    /* 회의실 정보 모달창 ------------- */
+    #roomInfoMdTb {
+		height:auto;
+    } 
+
+	#roomInfoMdTb td img{
+	max-width:100%;
+	} 
+
+	.roomCoverImg {
+		max-width:100%;
+		cursor:pointer;
+	}
+
+	.mdImg{
+		width:300px;
+		height:auto;
+	}
+	
+	#equipBtn {
+		border:1px solid #0442AF;
+		color:#0442AF;
+		margin-right:5px;
+		cursor: default;
+	}
+	
+	#chooseBtn{
+		margin-right:5px;
+	}
 </style>
 <body>
 	
@@ -177,22 +207,6 @@
 		    <h3>회의실 예약</h3>
 		</div>
 		<hr>
-		
-		<!-- 
-		<!-- 날짜 페이징 처리 영역
-		<div id="selectDate">
-			<a href=""><i class="fas fa-chevron-left"></i></a>
-			<h4>2022-08-22 (월) <i class="far fa-calendar-check"></i> </h4>
-			<a href=""><i class="fas fa-chevron-right"></i></a>
-		</div>
-		 -->
-		
-		<!-- 풀캘린더 내에서 사용할 수 있는 기능이 있을지?
-		<!--  예약 등록 버튼 영역 
-		<div id="bookEnroll">
-	        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertBookMd" ><i class="fa-solid fa-plus"></i>&nbsp;회의실 예약</button>
-	    </div>
-		 -->
 		 
 		<!-- 회의실 예약 캘린더 영역 -->
 		<div id='calendar'></div>
@@ -204,8 +218,8 @@
 		        <div class="modal-content">
 		            <!-- Modal Header -->
 		            <div class="modal-header">
-		                <h4 class="modal-title"><i class="far fa-clock"></i>&nbsp;&nbsp;회의 일정</h4>
-		                <button type="button" class="close" onclick="closeModal();">&times;</button> 
+		                <h4 class="modal-title"><i class="far fa-clock"></i>&nbsp;&nbsp;회의실 예약</h4>
+		                <button type="button" class="close" onclick="closeBkMd();">&times;</button> 
 		            </div>
 						<form action="insert.bk" method="post">		
 		            	<!-- 예약자 사번을 hidden으로 같이 넘겨줌 -->
@@ -217,7 +231,7 @@
 		                            <th>회의실</th>
 		                            <td>
 		                                <!-- 회의실 이름 뿌리고 회의실 번호 값으로 넘김 -->
-		                                <select name="rmNo" id="rmNo" required>
+		                                <select name="rmNo" id="rmNo" onchange="selectTime();" required>
 		                                    <!-- ajax로 회의실 목록 조회 -->
 		                                </select>
 		                            </td>
@@ -229,15 +243,15 @@
 		                        <tr>
 		                            <th>날짜</th>
 		                            <td>
-		                                <input type="date" class="bkInfoTd" name="bkDate" id="bkDate" required>
+		                                <input type="date" class="bkInfoTd" name="bkDate" id="bkDate" onchange="selectTime();" required>
 		                            </td>
 		                        </tr>
 		                        <tr>
 		                            <th>시간</th>
 		                            <td>
 		                                <div id="bkTimeArea">
-		                                    <select name="bkStart" id="bkStart" class="bkInfoTd" required>
-		                                        <option value="">시작 시간</option>
+		                                    <select name="bkStart" id="bkStart" class="bkInfoTd" onchange="selectTime();" required>
+		                                        <option value="" disabled selected>시작 시간</option>
 		                                        <option value="08:00">08:00</option>
 		                                        <option value="09:00">09:00</option>
 	                                        <c:forEach var="i" begin="10" end="19">
@@ -245,8 +259,8 @@
 	                                        </c:forEach>
 		                                    </select>
 		                                    <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-		                                    <select name="bkEnd" id="bkEnd" class="bkInfoTd" required>
-		                                        <option value="">종료 시간</option>
+		                                    <select name="bkEnd" id="bkEnd" class="bkInfoTd" onchange="selectTime();" required>
+		                                        <option value="" disabled selected>종료 시간</option>
 		                                        <option value="09:00">09:00</option>
 		                                        <option value="10:00">10:00</option>
 	                                        <c:forEach var="i" begin="11" end="20">
@@ -265,7 +279,7 @@
 		                        </tr>
 		                        <tr>
 		                            <td colspan="2" style="height:60px;">
-		                                <input type="text" name="bkTitle" id="bkTitle" placeholder="회의 제목 자리" class="bkInfoTd" required>
+		                                <input type="text" name="bkTitle" id="bkTitle" class="bkInfoTd" required>
 		                            </td>
 		                        </tr>
 		                    </table>
@@ -273,7 +287,7 @@
 		                <!-- Modal footer -->
 		                <div class="modal-footer">
 		                    <button type="submit" class="btn btn-primary" id="insertBk" style="margin-right:5px;">예약</button>
-		                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal();">취소</button>
+		                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeBkMd();">취소</button>
 		                </div>
 	                </form>
 		        </div>
@@ -284,6 +298,7 @@
 		
 		function closeModal(){
 			$('#insertBookMd').modal('hide');
+			selectRoom();
 		}
 		
 		  /* fullcalendar-scheduler 사용  */
@@ -358,7 +373,7 @@
 					    	  },
 					   	  datesAboveResources: true,
 					   	    headerToolbar: {	// 헤더 표시 툴바
-					   	      left: 'myCustomButton prev,next',
+					   	      left: 'room myCustomButton prev,next',
 					   	      center: 'title',
 					   	      right: 'today resourceTimeGridDay,resourceTimeGridFourDay'
 					   	    },
@@ -367,8 +382,15 @@
 					   			  text: '예약하기',
 					   			  click: function(){
 					   					$('#insertBookMd').modal('show');
-					   			  }
-					   		  }
+					   					checkTime();
+					   			  },
+					   		  },
+					   		 room: {
+				   				  text:'회의실정보',
+				   				  click: function(){
+				   						modalOpen();
+				   				  }
+				   			  }
 					   	  },  
 					  	  views: {
 					  	     resourceTimeGridFourDay: {
@@ -384,7 +406,8 @@
 					   	  selectable: true,	// 캘린더의 시간을 드래그해서 선택할 수 있게 함
 					   	  nowIndicator: true,	// 현재 시간 표시
 					      events: dataBook,	// db에서 조회한 예약들을 캘린더 위에 뿌림
-					      resources: dataRoom	// db에서 조회한 회의실 이름을 컬럼명으로 뿌림 
+					      resources: dataRoom,	// db에서 조회한 회의실 이름을 컬럼명으로 뿌림
+					      datesAboveResources:true
 					    });
 					    
 					    calendar.render();
@@ -406,7 +429,7 @@
 				type:"post",
 				success:function(result){
 					console.log("회의실 목록 조회용 ajax 통신 성공");
-					//console.log(result);
+					console.log(result);
 					let value = "";
 					
 					for(let i=0; i<result.length; i++) {
@@ -462,8 +485,313 @@
 				$("#insertBookMd").modal('show');
 			}
 		}
+		
+		
+		function checkTime() {	// 모달 창 여는 버튼 누를 때 실행할 함수
+			
+			// 오늘 날짜 받기
+			var now_utc = Date.now()	// 지금 날짜를 밀리초로
+			var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
+			var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+			//console.log(today);
+			
+			$("input[name=bkDate]").attr("min", today);	// 오늘 날짜부터만 선택하게 함
+
+			selectTime();	// 예약 시간 제한 함수
+		}
+		
+		
+		function selectTime(){
+ 		
+			// 해당 날짜에 예약되어 있는 bkStart, bkEnd를 조회해 와서
+			// 선택된 bkStart, bkEnd와 비교한 후 같으면 disabled 속성을 추가한다.
+			
+			// 조회에 넘길 값 : 선택된 rmNo, bkDate
+			
+			// 조회 후 비교할 값 
+			var bkStart = $('select[name="bkStart"] option:selected').val();
+			var bkEnd = $('select[name="bkEnd"] option:selected').val();
+			
+			if($('select[name="rmNo"] option:selected').val() != null && $("input[name=bkDate]").val() !=null) {	// 회의실과 예약 날짜가 모두 선택된 후에 실행
+				
+				$.ajax({
+					url:"selectTime.bk",
+					type:"post",
+					data:{
+						rmNo:$('select[name="rmNo"] option:selected').val(),
+						bkDate:$("input[name=bkDate]").val()
+					},
+					success:function(list){
+						console.log("예약완료된 시간 조회용 ajax 통신 성공");
+						console.log(list);
+						
+						var $startOption = $('#bkStart option');
+						var $endOption = $('#bkEnd option');
+						var $startValue = $('select[name="bkStart"] option:selected').val();
+						var $endValue = $('select[name="bkEnd"] option:selected').val();
+						
+						// 기본적으로 종료시간은 시작시간보다 늦은 시간만
+						// 시작시간은 종료시간보다 이른 시간만 선택되도록 설정해야 함
+						
+						if(list.length != 0){	// 해당 날짜에 이미 예약이 있는 경우
+											
+							$endOption.each(function() {
+								
+								if($(this).val() <= $startValue) {	// 시작 날짜 이후의 종료 날짜만 선택되게 함
+									$(this).attr("disabled", true);
+								}
+								
+								
+								for(let i=0; i<list.length; i++) {
+									
+									$startOption.each(function(){
+										if($(this).val() >= list[i].bkStart && $(this).val() < list[i].bkEnd) {
+											$(this).attr("disabled", true);
+										}
+									})
+									
+									$endOption.each(function(){
+										if($(this).val() > list[i].bkStart && $(this).val() <= list[i].bkEnd) {
+											$(this).attr("disabled", true);
+										}
+									})
+									
+								}// 반복문 끝 
+							})
+							
+							if($endValue != "" && $endValue < $startValue) {
+										alert("예약 시간을 다시 선택해 주세요");
+								}
+							
+						}else {	// 예약이 없는 날짜 && 방
+							
+							$startOption.each(function() {
+								$(this).attr("disabled", false);
+							})
+							
+							$endOption.each(function(){
+								$(this).attr("disabled", false);
+								
+								if($(this).val() <= $startValue) {
+									$(this).attr("disabled", true);
+								}
+							})
+						}
+						
+					},
+					error:function(){
+						console.log("예약완료된 시간 조회용 ajax 통신 실패");
+					}
+				})
+			}
+		}
+		
+		
+		/* 예약용 모달창 열고 닫기 */
+		function openBkMd(){
+			$("#insertBookMd").modal('show');
+		}
+		
+		/* 모달창 배경 클릭 시 끄기 닫기 */
+		$(function(){
+			$('#insertBookMd').modal({backdrop: 'static', keyboard: false}) ;
+		})
+		
+		
+		function closeBkMd(){
+			$('select[name="rmNo"]').val("1").attr('selected', true);
+			$("input[name=bkDate]").val("");
+			$('select[name="bkStart"]').val("").attr('selected', true);
+			$('select[name="bkEnd"]').val("").attr('selected', true);
+			$('input[name=bkPerson]').val("");
+			$('input[name=bkTitle]').val("");
+			$("#insertBookMd").modal('hide');
+		}
+		
+		/* 개별 회의실 조회용 ajax */
+		function selectRoom(rmNo) {
+			
+			$.ajax({
+				url:"select.ro",
+				data:{
+					rmNo:rmNo
+				},
+				success:function(result){
+					console.log("개별 회의실 조회용 ajax 통신 성공");
+					console.log(result);
+					
+					let room = result.r;
+					let file = result.f;
+					let using = result.u;
+					let equip = result.e;
+					let count = result.counts;
+					
+					// 이전 정보 지우기
+					$("#mdImg1").html("");
+					$("#mdImg2").html("");
+					$("#mdImg3").html("");
+					$("#mdImg4").html("");
+					
+					$("#mdEquip").html("");
+					// 이전 정보 지우기
+					
+					$("#mdRmName").text(room[0].rmName);
+					
+					$("#mdPerson").text(room[0].rmPerson + "명");
+					
+					$("#mdImg1").html('<img src="' + file[0].filePath + '">');
+					
+					if(file[1] != null){
+						$("#mdImg2").html('<img src="' + file[1].filePath + '">');					
+					}
+					
+					if(file[2] != null){
+						$("#mdImg3").html('<img src="' + file[2].filePath + '">');
+					}
+					
+					if(file[3] != null){
+						$("#mdImg4").html('<img src="' + file[3].filePath + '">');
+					}
+
+					var value = "";
+					for(let i=0; i<using.length; i++){
+						value += '<button class="btn btn-sm" id="equipBtn">' + using[i].eqName + '</button>'
+					}
+					$("#mdEquip").html(value);	
+				},
+				error:function(){
+					console.log("개별 회의실 조회용 ajax 통신 실패");
+				}
+			})
+			
+		}
+		
+		/* 개별 회의실 조회 정보용 목록 조회 */
+		function selectRoomListforDetail(){
+			$.ajax({
+				url:"selectList.ro",
+				type:"post",
+				success:function(result){
+					console.log("회의실 목록 조회용 ajax 통신 성공");
+					console.log(result);
+					let value = "";
+					
+					for(let i=0; i<result.length; i++) {
+						value += '<button class="btn btn-sm btn-primary" id="chooseBtn" onclick="changeRoom(' + result[i].rmNo + ');">' + result[i].rmName + '</button>';
+					}
+										
+					$("#roomNameBtn").html(value);
+				},
+				error:function(){
+					console.log("회의실 목록 조회용 ajax 통신 실패");
+				}
+			})
+		}  
+		
+		/* 방 정보 바꾸기 */
+		function changeRoom(rmNo) {
+			// 모달창 비우기
+			$("#mdImg1").html("");
+			$("#mdImg2").html("");
+			$("#mdImg3").html("");
+			$("#mdImg4").html("");
+
+			$("#mdEquip").html("");
+			
+			selectRoom(rmNo);
+			
+		}
+		
+		/* 모달창 열기 */
+		function modalOpen(rmNo){
+			$("#roomInfoMd").modal('show');
+			selectRoomListforDetail();	// 버튼용 회의실 목록 조회
+			selectRoom();	// 회의실 상세 정보 조회
+		}
+		
+		
+		/* 모달창 닫기 */
+		function modalClose(){
+			// 모달창 비우기
+			$("#mdImg1").html("");
+			$("#mdImg2").html("");
+			$("#mdImg3").html("");
+			$("#mdImg4").html("");
+			
+			//$("#mdEquip").remove();	// 회의실 장비 -->
+			$("#mdEquip").html("");
+			
+			$("#roomInfoMd").modal('hide');
+			
+		}
+		
+		/* 모달창 배경 클릭 시 끄기 닫기 */
+		$(function(){
+			$('#roomInfoMd').modal({backdrop: 'static', keyboard: false}) ;
+		})
+		
+		function userConfirm(rmNo) {
+            if(confirm('회의실 삭제 시 복구할 수 없습니다.\n회의실을 삭제하시겠습니까?')) {
+            	deleteRoom(rmNo);
+            	
+            }else {
+                return false;
+            }
+        }
 		</script>
 		
+		<!-- 회의실 정보 모달 -->
+		  <!-- The Modal -->
+		  <div class="modal fade" id="roomInfoMd">
+		    <div class="modal-dialog modal-lg">
+		      <div class="modal-content">
+		    	<input type="hidden" name="rmNo">
+		      
+		        <!-- Modal Header -->
+		        <div class="modal-header">
+		          <h4 class="modal-title"><i class="fas fa-info-circle"></i>&nbsp;회의실 정보</h4>
+		          <button type="button" class="close"  onclick="modalClose();">&times;</button>
+		        </div>
+		        
+		        <!-- Modal body -->
+		        
+		        <div class="modal-body">
+	           	<div id="roomNameBtn">
+	           
+               	</div>
+		          <!-- 테이블 자리 -->
+				  <table id="roomInfoMdTb">
+					<tr>
+						<th width="250px" height="60px">회의실명</th>
+						<td colspan="2" id="mdRmName"></td>
+					</tr>
+					<tr>
+						<th rowspan="2" height="360px">회의실 이미지</th>
+						<td><div class="mdImg" id="mdImg1"></div></td>
+						<td><div class="mdImg" id="mdImg2"></div></td>
+					</tr>
+					<tr>
+						<td><div class="mdImg" id="mdImg3"></div></td>
+						<td><div class="mdImg" id="mdImg4"></div></td>
+					</tr>
+					<tr>
+						<th height="40px">수용인원</th>
+						<td colspan="2" id="mdPerson"></td>
+					</tr>
+					<tr>
+						<th height="auto">회의장비</th>
+						<td colspan="2" id="mdEquip"></td>
+					</tr>		
+				  </table>
+		        </div>
+		        
+		        <!-- Modal footer -->
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-secondary" onclick="modalClose();">닫기</button>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
 		
 
 </body>

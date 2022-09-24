@@ -52,4 +52,7 @@ public interface BookService {
 	// 회의실별 + 기간별 예약 목록 조회 서비스
 	int selectByRoomAndDateListCount(String rmNo, String start, String end);
 	ArrayList selectByRoomAndDateList(String rmNo, String start, String end, PageInfo pi);
+	
+	// 예약 날짜+시간 조회 서비스
+	ArrayList selectTime(String rmNo, String bkDate);
 }

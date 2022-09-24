@@ -151,8 +151,9 @@
 		       rm_no
 		     , rm_name
 		  from tb_room
+		 where rm_status= 'Y'
 		 order
-		    by rm_no asc
+		    by rm_name asc
 	</select>
 	
 	<!-- 전체 회의실 예약 목록 listCount 조회 -->
@@ -282,4 +283,20 @@
 		    by bk_no desc
 	</select>
 	
+	<!-- 특정 날, 특정 회의실의 예약 내역 조회 -->
+	<!-- 예약이 취소되지 않은 건들만 조회해야 함 -->
+	<!-- 작성자 : 박태은 -->
+	<select id="selectTime" resultMap="bookResult">
+		select
+		       bk_no
+		     , bk_meetdate  
+		     , bk_start
+		     , bk_end
+		  from tb_book
+		 where rm_no = #{rmNo}
+		   and bk_meetdate = #{bkDate}
+		   and bk_status = 'N'
+		 order 
+		    by bk_start asc
+   </select>
 </mapper>
