@@ -99,11 +99,17 @@
 								  + 	'</div>'
 							for(let j=0; j<tclist[i].todosPerCate.length; j++){
 								html += '<div class="todo-list">'
-									  + 	'<input type=hidden value="todoNo">'
-									  + 	'<label style="margin-bottom:0px; font-size:14px;">'
-									  +			'<input type="checkbox" class="doneYN" style="margin-left:10px; margin-right:10px;">' 
+									  + 	'<input type="hidden" value="' + tclist[i].todosPerCate[j].todoNo + '">';
+								if( tclist[i].todosPerCate[j].doneYN == 'Y' ){
+								html += 	'<label style="margin-bottom:0px; font-size:14px; text-decoration:line-through">'
+									  +			'<input type="checkbox" class="doneYN" style="margin-left:10px; margin-right:10px;" checked disabled>'
 									  + 	 	tclist[i].todosPerCate[j].todoContent 
-									  + 	'</label><br>'
+								}else{
+								html += 	'<label style="margin-bottom:0px; font-size:14px;">'
+									  +			'<input type="checkbox" class="doneYN" style="margin-left:10px; margin-right:10px;">' 
+									  +			tclist[i].todosPerCate[j].todoContent 
+								}
+								html += 	'</label><br>'
 									  +		'<div style="float:right; margin-right:5px;">'
 									  +			'<span class="delete-todo filter" onclick="deleteTodo(' + tclist[i].todosPerCate[j].todoNo + ');">삭제</span>'
 									  +		'</div>'
@@ -117,13 +123,27 @@
 						$("#todo-list-wrap").html(html);				
 						$("#selectCategory").html(modalHtml);
 					}
-					
 				},
 				error: function(){
 					console.log("리스트 조회 AJAX 통신 실패");
 				}
 			})
 		}
+		
+		// 체크리스트 선택하면 > doneYN의 컬럼값을 'Y'로 바꾸고, ajax를 reload하여 doneYN의 컬럼값에 따라 다르게 보이게 하기
+		$(document).on("click", "input[type=checkbox]", function(){
+			$(this).attr("disabled", true);
+			$(this).parent("label").css("text-decoration", "line-through");
+			$.ajax({
+				url:"done.to",
+				data:{
+					todoNo: $(this).parent().siblings("input").val()
+				},
+				success:function(result){
+					alert(result);
+				}
+			})
+		})
 	</script>
 
 	<div class="container">
@@ -171,17 +191,6 @@
 	
 	
     <script>
-        // DB의 TB_TODO_CATE의 COLOR 컬럼값에 따라 카테고리의 색 변경되도록 하는 함수
-
-        // To Do의 체크리스트 선택/해제시 취소선 나타남/사라짐 효과 적용하는 함수
-        $(function(){
-	        $("input[type=checkbox]").click(function(){
-	            $(this).attr("checked", true) ? $(this).parent("label").css("text-decoration", "line-through") : $(this).parent("label").css("text-decoration", "none") ;
-	        })
-        })
-        
-        // To DO 체크박스에 클릭이벤트 발생시 DONE_YN 컬럼 변경하는 AJAX
-
         // 카테고리 삭제 클릭시 해당 카테고리와 카테고리에 속한 모든 투두 삭제하는 AJAX
         function deleteCate(categoryNo){
         	if(window.confirm("해당 카테고리에 속한 모든 투두도 함께 지워집니다. <br> 정말 삭제하시겠습니까?")){
@@ -235,9 +244,6 @@
                 <div class="modal-body" id="submitCate">
                     <span class="filter">카테고리 이름</span><br>
                     <input type="text" name="categoryTitle" class="form-control col-md-4" required>
-                    <br><br>
-                    <span class="filter">카테고리 컬러</span><br>
-                    <input type="color" name="color">
                     <br><br>
                 </div>
                 <div class="modal-footer">

@@ -181,11 +181,6 @@
 		let month = ('0' + (new Date().getMonth() + 1)).slice(-2);
 		let date = ('0' + new Date().getDate()).slice(-2);
 		$("input[name=meetingDate]").attr("min", year + '-' + month + '-' + date );
-
-		// 회의 종료시간으로 시작시간 이전 설정 불가능하도록 만들기
-		$("input[name=startTime]").change(function(){
-       		$("input[name=endTime]").attr("min", $(this).val());
-		})
 		
 		// TB_DUTY의 TITLE 컬럼의 자료형은 VARCHAR2(500BYTE)임 -> 제목 란에 500BYTE 초과하게 적으면 막아주기
     	$("input[name=title]").keyup(function(){

@@ -52,16 +52,6 @@ public class TodoController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value="update.to", produces="application/text; charset=utf-8")
-	public String ajaxDoneTodo(Todo t, Model model) {
-		if( tService.ajaxDoneTodo(t) > 0 ) {
-			return "DONE_YN UPDATE 성공";
-		}else {
-			return "DONE_YN UPDATE 실패";
-		}
-	}
-	
-	@ResponseBody
 	@RequestMapping(value="delete.to", produces="application/text; charset=utf-8")
 	public String ajaxDeleteTodo(int todoNo) {
 		System.out.println(todoNo);
@@ -101,6 +91,18 @@ public class TodoController {
 			return "카테고리 삭제에 실패하였습니다.";
 		}
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="done.to", produces="application/html; charset=utf-8")
+	public String ajaxDoneTodo(Todo t) {
+		if( tService.ajaxDoneTodo(t) > 0) {
+			return "성공적으로 반영되었습니다.";
+		}else {
+			return "실패했습니다.";
+		}
+	}
+
 
 	
 }

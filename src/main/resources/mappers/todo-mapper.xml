@@ -40,16 +40,9 @@
 	</select>
 	
 	<update id="doneTodo">
-			UPDATE TB_TODO
-		<choose>    
-			<when test="#{doneYN} == 'Y'">
-			   SET DONE_YN = 'N'
-			</when>  
-			<otherwise>
-			   SET DONE_YN = 'Y'
-			</otherwise>
-		</choose>
-			 WHERE TODD_NO = #{ todoNo }
+		UPDATE TB_TODO
+		   SET DONE_YN = 'Y'
+		 WHERE TODO_NO = #{ todoNo }
 	</update>
 	
 	<delete id="deleteTodo">
