@@ -33,6 +33,7 @@
 		<result column="lastSigndate" property="lastSigndate"/>
 		<result column="sign_empdept" property="signEmpDept"/>
 		<result column="sign_deptname" property="signDeptName"/>
+		<result column="emp_name" property="empName"/>
 	</resultMap>
 	
 	<resultMap id="SelectSignListResult" type="Sign">
@@ -43,6 +44,7 @@
 		<result column="si_status" property="siStatus"/>
 		<result column="si_asign" property="siAsign"/>
 		<result column="si_rep" property="siRep"/>
+		<result column="signemp_name" property="signEmpName"/>
 	</resultMap>
 	
 	<resultMap id="SelectVacationResult" type="SelectVacation">
@@ -84,8 +86,6 @@
 		<result column="ot_trans" property="otTrans"/>
 		<result column="ot_note" property="otNote"/>
 		<result column="ot_place" property="otPlace"/>
-		
-	
 	</resultMap>
 	
 	<resultMap id="SelectReSignEmpResult" type="SelectReSign">
@@ -123,8 +123,9 @@
 		<result column="dp_change" property="dpChange"/>
 		<result column="cp_dept" property="cpDept"/>
 		<result column="cp_requestor" property="cpRequestor"/>
-		<result column="cp_requestday" property="cpRequestDay"/>
+		<result column="cp_requestday" property="cpRequestday"/>
 		<result column="cp_content" property="cpContent"/>
+		<result column="cp_calldept" property="cpCallDept"/>
 	</resultMap>
 	
 	 <!-- 연차 기안서 -->
@@ -371,7 +372,7 @@
 			 , cp_requestday
 			 , cp_content	
 			 , cp_dept
-			
+			 , cp_calldept
 			)
 	    values
 	      (
@@ -380,6 +381,7 @@
 	      , #{cpRequestday}
 	      , #{cpContent} 
 	      , #{cpDept}
+	      , #{cpCallDept}
 	      )
 			
 	</insert>
@@ -425,7 +427,7 @@
 	</select>
 	<select id="selectList" resultMap="SelectListResult">
 		select
-		       dp_no
+		       d.dp_no
 		      ,emp_no
 		      ,dp_title
 		      ,to_char(dp_create, 'YYYY-MM-DD') AS "dp_create"
@@ -435,7 +437,7 @@
 		      ,dp_category
 		      ,dp_origin
 		      ,dp_change
-		  from tb_dtpaper
+		  from tb_dtpaper d
 		 where dp_final = <choose>
 		 					<when test="fn.equals('임시저장')">
 		 						'임시저장'
@@ -518,292 +520,194 @@
 	<!-- 타부서 결재함 -->
 	<select id="selectOthSignListCount" resultType="_int">
 		select 
-				count(*)	
-		  from tb_dtpaper d
-		  join tb_sign s on ( d.dp_no = s.dp_no)
-		  join tb_employee e on (d.emp_no = e.emp_no)
-		  join tb_department p on (e.dep_cd = p.dep_cd)
-		   where dp_final = '진행중' or dp_final = '대기'
-		   and dp_status = 'N'
-		   and si_status = 'C'
+			   count(*)	
+		  from tb_sign s
+		  join tb_dtpaper dt on (s.dp_no = dt.dp_no) 
+		  join tb_employee e on (dt.emp_no = e.emp_no)
+		  join tb_department d on (e.dep_cd = d.dep_cd)
+		 where si_status = 'C'
+		   and dt.dp_status = 'N'
 		   and signemp_no = #{ empNo }
-		   and e.dep_cd != (select f.dep_cd
-		                       from tb_sign s
-		                       join tb_employee f on (s.signemp_no = f.emp_no)
-		                       join tb_department c on (f.dep_cd = c.dep_cd )
-		                      where dp_no = d.dp_no
-                                and signemp_no = #{empNo}
-		                       )
-		 order
-		    by dp_modify desc, dp_create desc
+		   and e.dep_cd != #{ depCd }
 	</select>
 	<select id="selectOthSignList" resultMap="SelectProgressListResult">
-		select
-		       d.dp_no
-		      ,(select e.emp_name
-			       		from tb_dtpaper p
-			      	    join tb_employee e on (p.emp_no = e.emp_no)
-			      	   where dp_no = d.dp_no
-			   ) as emp_no
-		      ,dp_title
-		      ,to_char(dp_create, 'YYYY-MM-DD') AS "dp_create"
-		      ,dp_modify
-		      ,dp_status
-		      ,dp_final
-		      ,dp_category
-		      ,dp_origin
-		      ,dp_change
-		      ,(select emp_name 
-				    from tb_sign 
-				    join tb_employee on (signemp_no = emp_no)
-				   where dp_no = d.dp_no 
-				     and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
-				  ) AS sign_empname
-			  ,(select dep_name
-				   from tb_sign s
-				   join tb_employee e on (s.signemp_no = e.emp_no)
-				   join tb_department b on (e.dep_cd = b.dep_cd)
-				   where dp_no = d.dp_no
-				   and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
-			   ) AS sign_empdept
-			   ,dep_name as sign_deptname
-		  from tb_dtpaper d
-		  join tb_sign s on ( d.dp_no = s.dp_no)
-		  join tb_employee e on (d.emp_no = e.emp_no)
-		  join tb_department p on (e.dep_cd = p.dep_cd)
-		 where dp_final = '진행중' or dp_final = '대기'
-		   and dp_status = 'N'
-		   and si_status = 'C'
-		   and signemp_no = #{ empNo }
-		   and e.dep_cd != (select f.dep_cd
-		                       from tb_sign s
-		                       join tb_employee f on (s.signemp_no = f.emp_no)
-		                       join tb_department c on (f.dep_cd = c.dep_cd )
-		                      where dp_no = d.dp_no
-                                and signemp_no = #{empNo}
-		                       )
-		 order
-		    by dp_modify desc, dp_create desc
+		select dt.dp_no
+		     , dt.emp_no as emp_no	
+		     , e.emp_name as emp_name
+		     , d.dep_name as sign_deptname
+		     , dt.dp_title
+		      , to_char(dt.dp_create, 'YYYY-MM-DD') as dp_create
+		     , dt.dp_category
+		     , (
+		         select sse.emp_name
+		           from tb_sign ss
+		           join tb_employee sse on(ss.signemp_no = sse.emp_no)
+		          where ss.dp_no = s.dp_no
+		            and ss.si_seq = s.si_asign
+		       ) as sign_empname
+		     , (
+		         select ssd.dep_name
+		           from tb_sign ss
+		           join tb_employee sse on(ss.signemp_no = sse.emp_no)
+		           join tb_department ssd on (sse.dep_cd = ssd.dep_cd)
+		          where ss.dp_no = s.dp_no
+		            and ss.si_seq = s.si_asign
+		       ) as sign_empdept
+		  from tb_sign s
+		  join tb_dtpaper dt on (s.dp_no = dt.dp_no) 
+		  join tb_employee e on (dt.emp_no = e.emp_no)
+		  join tb_department d on (e.dep_cd = d.dep_cd)
+		 where si_status = 'C'
+		   and dt.dp_status = 'N'
+		   and signemp_no = #{ map.empNo }
+		   and e.dep_cd != #{ map.depCd }
 	</select>
 <!-- 타부서 결재완료 -->
 	<select id="selectEndOthSignListCount" resultType="_int">
 		select 
 				count(*)	
-		  from tb_dtpaper d
-		  join tb_sign s on ( d.dp_no = s.dp_no)
-		  join tb_employee e on (d.emp_no = e.emp_no)
-		  join tb_department p on (e.dep_cd = p.dep_cd)
-		   where dp_final = '결재완료'
-		   and dp_status = 'N'
-		   and si_status = 'Y'
+		  from tb_sign s
+		  join tb_dtpaper dt on (s.dp_no = dt.dp_no) 
+		  join tb_employee e on (dt.emp_no = e.emp_no)
+		  join tb_department d on (e.dep_cd = d.dep_cd)
+		 where si_status = 'Y'
+		   and dt.dp_status = 'N'
 		   and signemp_no = #{ empNo }
-		   and e.dep_cd != (select f.dep_cd
-		                       from tb_sign s
-		                       join tb_employee f on (s.signemp_no = f.emp_no)
-		                       join tb_department c on (f.dep_cd = c.dep_cd )
-		                      where dp_no = d.dp_no
-                                and signemp_no = #{empNo}
-		                       )
-		 order
-		    by dp_modify desc, dp_create desc
+		   and e.dep_cd != #{ depCd }
 	</select>
 	<select id="selectEndOthSignList" resultMap="SelectProgressListResult">
-		select
-		       d.dp_no
-		      ,(select e.emp_name
-			       		from tb_dtpaper p
-			      	    join tb_employee e on (p.emp_no = e.emp_no)
-			      	   where dp_no = d.dp_no
-			   ) as emp_no
-		      ,dp_title
-		      ,to_char((select si_appdate from tb_sign where signemp_no = #{empNo} and dp_no = d.dp_no), 'YYYY-MM-DD') AS "dp_create"
-		      ,dp_modify
-		      ,dp_status
-		      ,dp_final
-		      ,dp_category
-		      ,dp_origin
-		      ,dp_change
-		      ,(select emp_name 
-				    from tb_sign 
-				    join tb_employee on (signemp_no = emp_no)
-				   where dp_no = d.dp_no 
-				     and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
-				  ) AS sign_empname
-			  ,(select dep_name
-				   from tb_sign s
-				   join tb_employee e on (s.signemp_no = e.emp_no)
-				   join tb_department b on (e.dep_cd = b.dep_cd)
-				   where dp_no = d.dp_no
-				   and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
-			   ) AS sign_empdept
-			   ,dep_name as sign_deptname
-		  from tb_dtpaper d
-		  join tb_sign s on ( d.dp_no = s.dp_no)
-		  join tb_employee e on (d.emp_no = e.emp_no)
-		  join tb_department p on (e.dep_cd = p.dep_cd)
-		 where dp_final = '결재완료'
-		   and dp_status = 'N'
-		   and si_status = 'Y'
+		select dt.dp_no
+		     , dt.emp_no as emp_no	
+		     , e.emp_name as emp_name
+		     , d.dep_name as sign_deptname
+		     , dt.dp_title
+		     , to_char(dt.dp_create, 'YYYY-MM-DD') as dp_create
+		     , dt.dp_category
+		     , (
+		         select sse.emp_name
+		           from tb_sign ss
+		           join tb_employee sse on(ss.signemp_no = sse.emp_no)
+		          where ss.dp_no = s.dp_no
+		            and ss.si_seq = s.si_asign
+		       ) as sign_empname
+		     , (
+		         select ssd.dep_name
+		           from tb_sign ss
+		           join tb_employee sse on(ss.signemp_no = sse.emp_no)
+		           join tb_department ssd on (sse.dep_cd = ssd.dep_cd)
+		          where ss.dp_no = s.dp_no
+		            and ss.si_seq = s.si_asign
+		       ) as sign_empdept
+		  from tb_sign s
+		  join tb_dtpaper dt on (s.dp_no = dt.dp_no) 
+		  join tb_employee e on (dt.emp_no = e.emp_no)
+		  join tb_department d on (e.dep_cd = d.dep_cd)
+		 where si_status = 'Y'
+		   and dt.dp_status = 'N'
 		   and signemp_no = #{ empNo }
-		   and e.dep_cd != (select f.dep_cd
-		                       from tb_sign s
-		                       join tb_employee f on (s.signemp_no = f.emp_no)
-		                       join tb_department c on (f.dep_cd = c.dep_cd )
-		                      where dp_no = d.dp_no
-                                and signemp_no = #{empNo}
-		                       )
-		 order
-		    by dp_modify desc, dp_create desc
+		   and e.dep_cd != #{ depCd } 
 	</select>
 	
 	
 	
 	<!-- 내 부서 결재함 -->
 	<select id="selectDeptSignList" resultMap="SelectProgressListResult">
-		select
-		       d.dp_no
-		      ,(select e.emp_name
-			       		from tb_dtpaper p
-			      	    join tb_employee e on (p.emp_no = e.emp_no)
-			      	   where dp_no = d.dp_no
-			   ) as emp_no
-		      ,dp_title
-		      ,to_char(dp_create, 'YYYY-MM-DD') AS "dp_create"
-		      ,dp_modify
-		      ,dp_status
-		      ,dp_final
-		      ,dp_category
-		      ,dp_origin
-		      ,dp_change
-		      ,(select emp_name 
-				    from tb_sign 
-				    join tb_employee on (signemp_no = emp_no)
-				   where dp_no = d.dp_no 
-				     and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
-				  ) AS sign_empname
-			  ,(select dep_name
-				   from tb_sign s
-				   join tb_employee e on (s.signemp_no = e.emp_no)
-				   join tb_department b on (e.dep_cd = b.dep_cd)
-				   where dp_no = d.dp_no
-				   and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
-			   ) AS sign_empdept
-			   ,dep_name as sign_deptname
-		  from tb_dtpaper d
-		  join tb_sign s on ( d.dp_no = s.dp_no)
-		  join tb_employee e on (d.emp_no = e.emp_no)
-		  join tb_department p on (e.dep_cd = p.dep_cd)
-		 where dp_final = '진행중' or dp_final = '대기'
-		   and dp_status = 'N'
-		   and si_status = 'C'
+		select dt.dp_no
+		     , dt.emp_no as emp_no	
+		     , e.emp_name as emp_name
+		     , d.dep_name as sign_deptname
+		     , dt.dp_title
+		     , to_char(dt.dp_create, 'YYYY-MM-DD') as dp_create
+		     , dt.dp_category
+		     , (
+		         select sse.emp_name
+		           from tb_sign ss
+		           join tb_employee sse on(ss.signemp_no = sse.emp_no)
+		          where ss.dp_no = s.dp_no
+		            and ss.si_seq = s.si_asign
+		       ) as sign_empname
+		     , (
+		         select ssd.dep_name
+		           from tb_sign ss
+		           join tb_employee sse on(ss.signemp_no = sse.emp_no)
+		           join tb_department ssd on (sse.dep_cd = ssd.dep_cd)
+		          where ss.dp_no = s.dp_no
+		            and ss.si_seq = s.si_asign
+		       ) as sign_empdept
+		  from tb_sign s
+		  join tb_dtpaper dt on (s.dp_no = dt.dp_no) 
+		  join tb_employee e on (dt.emp_no = e.emp_no)
+		  join tb_department d on (e.dep_cd = d.dep_cd)
+		 where si_status = 'C'
+		   and dt.dp_status = 'N'
 		   and signemp_no = #{ empNo }
-		   and e.dep_cd = (select f.dep_cd
-		                     from tb_sign s
-		                     join tb_employee f on (s.signemp_no = f.emp_no)
-		                     join tb_department c on (f.dep_cd = c.dep_cd )
-		                    where dp_no = d.dp_no
-                              and signemp_no = #{empNo}
-		                   )
-		 order
-		    by dp_modify desc, dp_create desc
+		   and e.dep_cd = #{ depCd }
 	</select>
 	<select id="selectDeptSignListCount" resultType="_int">
 		select 
 				count(*)	
-		  from tb_dtpaper d
-		  join tb_sign s on ( d.dp_no = s.dp_no)
-		  join tb_employee e on (d.emp_no = e.emp_no)
-		  join tb_department p on (e.dep_cd = p.dep_cd)
-		   where dp_final = '진행중' or dp_final = '대기'
-		   and dp_status = 'N'
-		   and si_status = 'C'
+		   from tb_sign s
+		  join tb_dtpaper dt on (s.dp_no = dt.dp_no) 
+		  join tb_employee e on (dt.emp_no = e.emp_no)
+		  join tb_department d on (e.dep_cd = d.dep_cd)
+		 where si_status = 'C'
+		   and dt.dp_status = 'N'
 		   and signemp_no = #{ empNo }
-		   and e.dep_cd = (select f.dep_cd
-		                       from tb_sign s
-		                       join tb_employee f on (s.signemp_no = f.emp_no)
-		                       join tb_department c on (f.dep_cd = c.dep_cd )
-		                      where dp_no = d.dp_no
-                                and signemp_no = #{empNo}
-		                       )
-		 order
-		    by dp_modify desc, dp_create desc
+		   and e.dep_cd = #{ depCd }
 	</select>
 	<!-- 내부서 결재완료 -->
 		<select id="selectEndSignList" resultMap="SelectProgressListResult">
-		select
-		       d.dp_no
-		      ,(select e.emp_name
-			       		from tb_dtpaper p
-			      	    join tb_employee e on (p.emp_no = e.emp_no)
-			      	   where dp_no = d.dp_no
-			   ) as emp_no
-		      ,dp_title
-		      ,to_char((select si_appdate from tb_sign where signemp_no = #{empNo} and dp_no = d.dp_no), 'YYYY-MM-DD') AS "dp_create"
-		      ,dp_modify
-		      ,dp_status
-		      ,dp_final
-		      ,dp_category
-		      ,dp_origin
-		      ,dp_change
-		      ,(select emp_name 
-				    from tb_sign 
-				    join tb_employee on (signemp_no = emp_no)
-				   where dp_no = d.dp_no 
-				     and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
-				  ) AS sign_empname
-			  ,(select dep_name
-				   from tb_sign s
-				   join tb_employee e on (s.signemp_no = e.emp_no)
-				   join tb_department b on (e.dep_cd = b.dep_cd)
-				   where dp_no = d.dp_no
-				   and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
-			   ) AS sign_empdept
-			   ,dep_name as sign_deptname
-		  from tb_dtpaper d
-		  join tb_sign s on ( d.dp_no = s.dp_no)
-		  join tb_employee e on (d.emp_no = e.emp_no)
-		  join tb_department p on (e.dep_cd = p.dep_cd)
-		 where dp_final = '결재완료'
-		   and dp_status = 'N'
-		   and si_status = 'Y'
+			select dt.dp_no
+		     , dt.emp_no as emp_no	
+		     , e.emp_name as emp_name
+		     , d.dep_name as sign_deptname
+		     , dt.dp_title
+		     , to_char(dt.dp_create, 'YYYY-MM-DD') as dp_create
+		     , dt.dp_category
+		     , (
+		         select sse.emp_name
+		           from tb_sign ss
+		           join tb_employee sse on(ss.signemp_no = sse.emp_no)
+		          where ss.dp_no = s.dp_no
+		            and ss.si_seq = s.si_asign
+		       ) as sign_empname
+		     , (
+		         select ssd.dep_name
+		           from tb_sign ss
+		           join tb_employee sse on(ss.signemp_no = sse.emp_no)
+		           join tb_department ssd on (sse.dep_cd = ssd.dep_cd)
+		          where ss.dp_no = s.dp_no
+		            and ss.si_seq = s.si_asign
+		       ) as sign_empdept
+		  from tb_sign s
+		  join tb_dtpaper dt on (s.dp_no = dt.dp_no) 
+		  join tb_employee e on (dt.emp_no = e.emp_no)
+		  join tb_department d on (e.dep_cd = d.dep_cd)
+		 where si_status = 'Y'
+		   and dt.dp_status = 'N'
 		   and signemp_no = #{ empNo }
-		   and e.dep_cd = (select f.dep_cd
-		                     from tb_sign s
-		                     join tb_employee f on (s.signemp_no = f.emp_no)
-		                     join tb_department c on (f.dep_cd = c.dep_cd )
-		                    where dp_no = d.dp_no
-                              and signemp_no = #{empNo}
-		                   )
-		 order
-		    by dp_modify desc, dp_create desc
+		   and e.dep_cd = #{ depCd }
+
 	</select>
 	<select id="selectEndSignListCount" resultType="_int">
 		select 
-				count(*)	
-		  from tb_dtpaper d
-		  join tb_sign s on ( d.dp_no = s.dp_no)
-		  join tb_employee e on (d.emp_no = e.emp_no)
-		  join tb_department p on (e.dep_cd = p.dep_cd)
-		   where dp_final = '결재완료'
-		   and dp_status = 'N'
-		   and si_status = 'Y'
+			   count(*)	
+		  from tb_sign s
+		  join tb_dtpaper dt on (s.dp_no = dt.dp_no) 
+		  join tb_employee e on (dt.emp_no = e.emp_no)
+		  join tb_department d on (e.dep_cd = d.dep_cd)
+		 where si_status = 'Y'
+		   and dt.dp_status = 'N'
 		   and signemp_no = #{ empNo }
-		   and e.dep_cd = (select f.dep_cd
-		                       from tb_sign s
-		                       join tb_employee f on (s.signemp_no = f.emp_no)
-		                       join tb_department c on (f.dep_cd = c.dep_cd )
-		                      where dp_no = d.dp_no
-                                and signemp_no = #{empNo}
-		                       )
-		 order
-		    by dp_modify desc, dp_create desc
+		   and e.dep_cd = #{ depCd }
 	</select>
 	
 	<!-- 기안서 상세보기 결재선리스트 --> 
 	<select id="selectSignList" resultMap="SelectSignListResult">
 		select
 		       s.dp_no
-		      ,e.emp_name as signemp_no
+		      ,signemp_no
+		      ,e.emp_name as signemp_name
 		      ,si_seq
 		      ,si_status
 		      ,si_asign
@@ -813,6 +717,23 @@
 	     where s.dp_no = #{no}
 	     order 
 	        by si_seq
+	</select>
+	<!-- 상세보기 타이틀 -->
+	<select id="selectTitleList" resultMap="SelectProgressListResult">
+		select
+			   dp_no
+			  ,d.emp_no
+		      ,dp_title
+		      ,dp_category
+		      ,e.emp_name as emp_name
+		      ,dep_name as sign_empdept
+		      ,dp_origin
+		      ,dp_change 
+	      from tb_dtpaper d
+	      join tb_employee e on(d.emp_no = e.emp_no)
+	      join tb_department dd on(e.dep_cd = dd.dep_cd)
+	     where dp_no = #{no}
+	
 	</select>
 	<!-- 연차 상세보기 -->
 	<select id="selectVa" resultMap="SelectVacationResult">
@@ -863,6 +784,7 @@
 		  join tb_otwork o on (d.dp_no = o.dp_no)
 		 where d.dp_no = #{no}
 	</select>
+	
 	<select id="selectRe" resultMap="SelectReSignEmpResult">
 		select 
 		       d.dp_no
@@ -888,6 +810,7 @@
 		  join tb_resign r on (d.dp_no = r.dp_no)
 		 where d.dp_no = #{no}
 	</select>
+	
 	<select id="selectCo" resultMap="SelectCooperationResult">
 		select 
 		       d.dp_no
@@ -904,8 +827,66 @@
 		      ,cp_requestor
 		      ,cp_requestday
 		      ,cp_content
+		      ,cp_calldept
 		  from tb_dtpaper d
 		  join tb_coop c on (d.dp_no = c.dp_no)
 		 where d.dp_no = #{no}
 	</select>
+	
+	<update id="updateAgreeSign">
+	
+		update tb_sign
+	       set si_status = 'Y',
+	           si_appdate = current_date
+	     where dp_no = #{ dpNo }
+	       and signemp_no = #{ signEmpNo }
+	
+	</update>
+	<update id="updateAgreeDtpaper">
+		update tb_dtpaper
+		   set dp_modify = current_date,
+			<if test="siAsign == 1">
+				dp_final = '결재완료'
+			</if>
+			<if test="siAsign == 2 and siSeq == 1">
+				dp_final = '진행중'
+			</if>
+			<if test="siAsign == 2 and siSeq == 2">
+				dp_final = '결재완료'
+			</if>
+			<if test="siAsign == 3 and siSeq == 1">
+				dp_final = '진행중'
+			</if>
+			<if test="siAsign == 3 and siSeq == 2">
+				dp_final = '진행중'
+			</if>
+			<if test="siAsign == 3 and siSeq == 3">
+				dp_final = '결재완료'
+			</if>
+		 where dp_no = #{dpNo}
+	</update>
+	<update id="updateAgreeSiStatus">
+		
+		update tb_sign
+		   set si_status = 'C'
+		 where dp_no = #{dpNo}
+		   and si_seq = #{siSeq} + 1
+		   
+	</update>
+	
+	<update id="updateDisagreeSign">
+	
+		update tb_sign
+	       set si_status = 'Y',
+	           si_appdate = current_date
+	     where dp_no = #{ dpNo }
+	       and signemp_no = #{ signEmpNo }
+	
+	</update>
+	<update id="updateDisagreeDtpaper">
+		update tb_dtpaper
+		   set dp_modify = current_date,
+			   dp_final = '반려됨'
+		 where dp_no = #{dpNo}
+	</update>
 </mapper>

@@ -182,7 +182,14 @@
 </head>
 
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-	<jsp:include page="../sign/selectTitle.jsp"/>
+	<c:choose>
+		<c:when test="${ loginUser.empNo eq t.empNo}">
+			<jsp:include page="../sign/selectTitle.jsp"/>
+		</c:when>
+		<c:otherwise>
+			<jsp:include page="../sign/signPaper.jsp"/>
+		</c:otherwise>
+	</c:choose>
 	<br>
     <section>
         <div style="margin: auto; margin-top: 10px; width: 800px;">

@@ -233,9 +233,9 @@
                                         <th width="5%"><input type="checkbox" style="scale: 1.3;"></th>
                                         <th class="endNum" width="10%">문서번호</th>
                                         <th class="endNum" width="10%">서식</th>
+                                        <th width="15%">첨부파일</th>
                                         <th class="endTitle" width="30%">제목</th>
                                         <th class="endCreate" width="15%">기안일</th>
-                                        <th width="15%">첨부파일</th>
                                         <th width="15%">재작성</th>
                                     </tr>
 										<c:choose>
@@ -250,6 +250,13 @@
 							                   	    <td><input type="checkbox" style="scale: 1.3;"></td>
 							                        <td>${ r.dpNo }</td>
 							                        <td>${ r.dpCategory }</td>
+							                        <td>
+								                        <c:if test="${ not empty r.dpOrigin }">
+								                       		<span class="material-icons" style="vertical-align:middle; font-size:17px; color:#878787;">
+															attachment
+															</span>
+								                        </c:if>
+							                        </td>
 							                        <c:choose>
 								                        <c:when test="${empty r.dpTitle }">
 								                        	<td><a href="" id="detailBtn" class="dpTitle">제목없음</a></td>
@@ -259,30 +266,8 @@
 								                        </c:otherwise>
 							                        </c:choose>
 							                        <td>${ r.dpCreate }</td>
-							                        <td>
-								                        <c:if test="${ not empty r.dpOrigin }">
-								                       		<span class="material-icons" style="vertical-align:middle; font-size:17px; color:#878787;">
-															attachment
-															</span>
-								                        </c:if>
-							                        </td>
                                        				<td><a href="" class="dpTitle">작성하기</a></td>
 							                    </tr>
-							                    <script>
-													$(document).ready(function(){
-														$(".dpTitle").click(function(){
-								                    		if('${r.dpCategory}' == '연차'){
-																$(".dpTitle").attr("href", "detailVa.si");
-															}else if('${r.dpCategory}' == '외근'){
-																$(".dpTitle").attr("href", "detailOtw.si");
-															}else if('${r.dpCategory}' == '퇴직원'){
-																$(".dpTitle").attr("href", "detailRes.si");
-															}else{
-																$(".dpTitle").attr("href", "detailCo.si");
-															}
-														})
-													})
-												</script>
 						                    </c:forEach>
 				                		</c:otherwise>
 				                   </c:choose>

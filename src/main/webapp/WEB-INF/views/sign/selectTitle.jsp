@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,7 +44,6 @@
         }
 
         .dtpaperName {
-            margin-left: 10px;
             line-height: 10px;
         }
 
@@ -139,11 +139,16 @@
 
 <form action="" method="post" name="updateForm" id="updateForm" 
 		enctype="multipart/form-data"> 
-	<input type="hidden" name="dpCategory" value="${ paperName }">
 		
 	<section class="mainTitle">
 			<a class="insertBtn" onclick="updateCheck();">기안서 재작성</a>
             <a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
+            <c:forEach var="s" items="${ selectSignList }">
+           		<c:set var="i" value="${ i + 1 }"/>
+				<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
+				<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
+			    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
+           	</c:forEach>
 		<hr>
 	</section>
     <script>
@@ -188,8 +193,8 @@
     <section>
         <div>
         	<h3 class="dtpaperName">
-				<span>${ paperName }</span> 신청서 - <span
-					style="font-weight: lighter;"><input type="hidden" name="empNo" value="${ loginUser.empNo }">${ loginUser.empName }(${ loginUser.depCd })</span>
+				<span>${ t.dpCategory }</span> 신청서 - <span
+					style="font-weight: lighter;">${ t.empName }(${ t.signEmpDept})</span>
 			</h3>
             <hr>
         </div>
@@ -200,7 +205,7 @@
             <table align="center" style="border:0;">
             		<tr>
             			<c:choose>
-            				<c:when test="${empty signList }">
+            				<c:when test="${empty selectSignList }">
             					<td style="border:0.5px solid #878787; background: #f1f1f1;">
 									결재선
 								 </td>
@@ -221,12 +226,12 @@
 								</td>
             				</c:when>
             				<c:otherwise>
-				            	<c:forEach var="s" items="${ signList }">
+				            	<c:forEach var="s" items="${ selectSignList }">
 								<td style="border:0.5px solid #878787; background: #f1f1f1;">
 									결재선
 								 </td>
 								<td style="border:0.5px solid #878787">
-								   ${ s.signEmpNo }
+								   ${ s.signEmpName }
 								</td>
 				            	</c:forEach>
 				            </c:otherwise>
@@ -242,17 +247,17 @@
                 <tr class="titleSection">
                     <th style="border-bottom:0.5px solid #878787;">제목</th>
                     <td align="left" style="border-bottom:0.5px solid #878787;"><span
-                            style="margin-left:10px;">${ v.dpTitle }</span></td>
+                            style="margin-left:10px;">${ t.dpTitle }</span></td>
                 </tr>
                 <tr style="border-top:0.5px solid #878787;">
                     <th>첨부파일</th>
                     <td align="left">
 	                    <c:choose>
-	                   		<c:when test="${ empty v.dpOrigin }">
+	                   		<c:when test="${ empty t.dpOrigin }">
 	                   			<span style="margin-left:10px">첨부파일이 없습니다.</span>
 	                       	</c:when>
 	                       	<c:otherwise>
-	                       		<a href="${ v.dpChange }" download="${ v.dpOrigin }">${ v.dpOrigin }</a>
+	                       		<a style="margin-left:10px" href="${ t.dpChange }" download="${ t.dpOrigin }">${ t.dpOrigin }</a>
 	                       	</c:otherwise>
 	                    </c:choose>
                     </td>

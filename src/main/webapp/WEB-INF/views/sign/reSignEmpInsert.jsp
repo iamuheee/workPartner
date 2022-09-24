@@ -183,7 +183,7 @@
                 </tr>
                 <tr>
                     <td class="tableTitle">퇴직예정일자</td>
-                    <td align="left"><input style="margin-left:10px;" type="date" name="resRedate"></td>
+                    <td align="left"><input style="margin-left:10px;" type="date" name="resRedate" id="resRedate"></td>
                     <td class="tableTitle">업무인수자</td>
                     <td align="right" style="border-right:0;"><input type="text" name="resNextMem"></td>
                 </tr>
@@ -212,8 +212,7 @@
     </section>
 
     <script>
-        document.getElementById('currentDate').value = new Date().toISOString().substring(0, 10);
-        document.getElementById('currentDate2').value = new Date().toISOString().substring(0, 10);;
+        document.getElementById('resRedate').value = new Date().toISOString().substring(0, 10);
     </script>
 	</form>
 	

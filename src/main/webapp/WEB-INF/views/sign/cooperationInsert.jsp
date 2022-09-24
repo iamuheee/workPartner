@@ -301,7 +301,7 @@
             <table class="otworkPaper" style="border:0.5px solid rgba(143, 143, 143, 0.547)" align="center">
                 <tr>
                     <td class="tableTitle" width="100">발신부서</td>
-                    <td width="280" align="right"><input type="text" readonly value="${ loginUser.depCd }"></td>
+                    <td width="280" align="right"><input type="text" name="cpCallDept" readonly value="${ loginUser.depCd }"></td>
                     <td class="tableTitle" width="100">수신부서</td>
                     <td width="280" align="right" style="border-right:0;" >
                         <input type="text" name="cpDept">

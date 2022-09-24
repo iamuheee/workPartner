@@ -207,50 +207,66 @@ span {
 </head>
 
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-	<jsp:include page="../sign/selectTitle.jsp"/>
+	<c:choose>
+		
+		<c:when test="${ loginUser.empNo eq t.empNo}">
+			<jsp:include page="../sign/selectTitle.jsp"/>
+		</c:when>
+		<c:otherwise>
+			<jsp:include page="../sign/signPaper.jsp"/>
+		</c:otherwise>
+	</c:choose>
 	<br>
 	<section>
 		<div style="margin: auto; margin-top: 10px; width: 800px;">
-			<table class="otworkPaper"
-				style="border: 1px solid rgba(143, 143, 143, 0.547)" align="center">
+			<table class="otworkPaper" style="border: 1px solid rgba(143, 143, 143, 0.547)" align="center">
 				<tr>
 					<td class="tableTitle" width="100">신청자</td>
-					<td width="280" align="left"><span>김범진</span></td>
+					<td width="280" align="right"><input type="text" id="writeEmp"
+						name="otCall" value="${ o.otCall }" readonly></td>
 					<td class="tableTitle" width="100">담당자</td>
-					<td width="280" align="left" style="border-right: 0;"><span>김범진</span>
-					</td>
+					<td width="280" align="right" style="border-right: 0;"><input
+						type="text" name="otSupervisor" value="${ o.otSupervisor }" readonly></td>
 				</tr>
 				<tr>
 					<td class="tableTitle">외근목적</td>
-					<td align="left"><span>출장</span></td>
+					<td align="right">
+						<input type="text" name="otContent" value="${ o.otContent }" readonly>
+					</td>
 					<td class="tableTitle">거래처</td>
-					<td align="left" style="border-right: 0;"><span>동양생명</span></td>
+					<td align="right" style="border-right: 0;">
+						<input type="text"name="otCustomer" value="${ o.otCustomer }" readonly>
+					</td>
 				</tr>
 				<tr>
 					<td class="tableTitle">교통수단</td>
-					<td align="left"><span>자차</span></td>
+					<td align="left">
+						<select name="otTrain" style="margin-left: 10px" disabled>
+							<option value="${ o.otTrans }">${ o.otTrans }</option>
+						</select>
+					</td>
 					<td class="tableTitle">위치</td>
-					<td style="border-right: 0;" align="left"><span>영등포로
-							49길 23</span></td>
+					<td style="border-right: 0;" align="right">
+						<input type="text" name="otPlace" value="${ o.otPlace }"readonly>
+						</td>
 				</tr>
 				<tr>
 					<td class="tableTitle">시간</td>
-					<td colspan="3" align="left" style="border-right: 0;"><span>2022-01-02</span>
-						~ <span>2022-02-02</span></td>
+					<td colspan="3" align="left" style="border-right: 0;">
+					<input type="datetime-local" id="startTime" style="margin-left: 10px" name="otStartdate" value="${ o.otStartdate }" readonly> ~ 
+					<input type="datetime-local" id="endTime" name="otEnddate" value="${ o.otEnddate }" readonly>
+					</td>
 
 				</tr>
 				<tr>
 					<td class="tableTitle" style="border-bottom: 0;">비고</td>
-					<td colspan="3" style="border-bottom: 0; border-right: 0;"
-						align="left">
-						<div style="margin-left: 10px;">
-							<p>하이용</p>
-						</div>
+					<td colspan="3" style="border-bottom: 0; border-right: 0;"><textarea name="otNote" id="" cols="53" rows="10" style="resize: none; height: 95%; width: 96%; margin-top: 3px; border: 0; font-size: 16px;"readonly>${ o.otNote }</textarea>
 					</td>
 				</tr>
 			</table>
 		</div>
 	</section>
+	</form>
 
 </body>
 </html>

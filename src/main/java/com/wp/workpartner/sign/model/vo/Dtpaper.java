@@ -24,6 +24,7 @@ public class Dtpaper {
 	private String dpCategory;
 	private String dpOrigin;
 	private String dpChange;
+	private String empName;
 	
 //	내가 쓴 기안서 리스트 조회용
 	private String signEmpName;

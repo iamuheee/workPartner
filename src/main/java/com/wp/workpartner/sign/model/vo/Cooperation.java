@@ -17,4 +17,5 @@ public class Cooperation {
 	private String cpRequestor;
 	private String cpRequestday;
 	private String cpContent;
+	private String cpCallDept;
 }

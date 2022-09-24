@@ -7,11 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
- <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <style>
         .insertBtn {
             font-size: 18px;
@@ -137,8 +132,14 @@
 </head>
 <!-- onload="window.resizeTo(620,800)" -->
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-	<jsp:include page="../sign/selectTitle.jsp"/>
-	
+	<c:choose>
+		<c:when test="${ loginUser.empNo eq t.empNo}">
+			<jsp:include page="../sign/selectTitle.jsp"/>
+		</c:when>
+		<c:otherwise>
+			<jsp:include page="../sign/signPaper.jsp"/>
+		</c:otherwise>
+	</c:choose>
 	 <br>
     <section>
         <div style="margin:auto; margin-top: 10px; width: 768.5px; border:0.5px solid #878787;" >

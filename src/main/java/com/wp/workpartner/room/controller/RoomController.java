@@ -159,7 +159,7 @@ public class RoomController {
 	@ResponseBody
 	@RequestMapping(value="select.ro", produces="application/json; charset=UTF-8")
 	public String ajaxSelectRoom(String rmNo) {
-		System.out.println("rmNo : " + rmNo);	// 넘어온 rmNo 값 조회
+//		System.out.println("rmNo : " + rmNo);	// 넘어온 rmNo 값 조회
 		
 		ArrayList<Room> r = rService.selectRoom(rmNo);
 		ArrayList<File> f = rService.selectFile(rmNo);
@@ -210,16 +210,16 @@ public class RoomController {
 	 */
 	@RequestMapping("update.ro")
 	public String updateRoom(String rmNo, String rmName, String eqNo, HttpSession session, Model model) {
-		System.out.println("rmNo : " + rmNo);
-		System.out.println("rmName: " + rmName);
+//		System.out.println("rmNo : " + rmNo);
+//		System.out.println("rmName: " + rmName);
 		
 		String[] equips = eqNo.split(",");	// eqNo에 담긴 값을 배열에 넣어서 보냄
 		
 		for(int i=0; i<equips.length; i++) {
-			System.out.println(equips[i]);
+//			System.out.println(equips[i]);
 		}
 		
-		System.out.println(equips);
+//		System.out.println(equips);
 		
 		HashMap<String, String> r = new HashMap<>();
 		r.put("rmNo", rmNo);
