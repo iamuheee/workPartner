@@ -333,7 +333,7 @@
 	                                   <a class="nav-link nav-choice" href="check.att?empNo=${ loginUser.empNo }">근태 등록</a>
 	                                   <a class="nav-link nav-choice" href="my.att?id=${ loginUser.empNo }">내 근태 현황</a>
 	                                   <a class="nav-link nav-choice" href="myAttHis.att">근태 이력</a>
-	                                   <a class="nav-link nav-choice" href="myVacation.att">휴가 관리</a>
+	                                   <a class="nav-link nav-choice" href="myVacation.att?empNo=${ loginUser.empNo }">휴가 관리</a>
 	                               </nav>
 	                               
 	                               <div class="menu-side-head">관리자 메뉴</div>

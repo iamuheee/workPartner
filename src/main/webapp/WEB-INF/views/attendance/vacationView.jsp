@@ -49,9 +49,9 @@
 	           <th class="alignCenter" style="color:black; font-weight:normal">남은 연차</th>
 	       </tr>
 	       <tr>
-	           <td class="alignCenter">8</td>
-	           <td class="alignCenter">32</td>
-	           <td class="alignCenter">0</td>
+	           <td class="alignCenter">${list[0].a}</td>
+	           <td class="alignCenter">${list[0].b}</td>
+	           <td class="alignCenter">${list[0].c}</td>
 	       </tr>
 	   </table>
 	</div>
@@ -75,12 +75,23 @@
 	                </tr>
 	            </thead>
 	            <tbody>
-	                <tr>
-	                    <td>2022-01-01</td>
-	                    <td>2022-12-31</td>
-	                    <td>15</td>
-	                    <td>연차</td>
-	                </tr>                 
+	                <c:choose>
+                		<c:when test="${empty list2}">
+                			<tr>
+                				<td colspan="4">조회된 휴가생성내역이 없습니다.</td>
+                			</tr>
+                		</c:when>
+                		<c:otherwise>
+							<c:forEach var="a" items="${list2}">
+								<tr>
+			                        <td>${a.a}</td>
+			                        <td>${a.b}</td>
+			                        <td>${a.c}</td>
+			                        <td>${a.d}</td> 
+			                    </tr>
+							</c:forEach>
+                		</c:otherwise>                    
+                    </c:choose>               
 	
 	            </tbody>    
 	            
@@ -108,34 +119,25 @@
 	                </tr>
 	            </thead>
 	            <tbody>
-	                <tr>
-	                    <td>2022-01-01</td>
-	                    <td>연차</td>
-	                    <td>2022-08-01 ~ 2022-08-02</td>
-	                    <td>2</td>
-	                    <td>조정중</td>
-	                </tr>
-					<tr>
-	                    <td>2022-01-01</td>
-	                    <td>연차</td>
-	                    <td>2022-08-01 ~ 2022-08-02</td>
-	                    <td>2</td>
-	                    <td>조정중</td>
-	                </tr>
-	                <tr>
-	                    <td>2022-01-01</td>
-	                    <td>연차</td>
-	                    <td>2022-08-01 ~ 2022-08-02</td>
-	                    <td>2</td>
-	                    <td>조정중</td>
-	                </tr>
-	                <tr>
-	                    <td>2022-01-01</td>
-	                    <td>연차</td>
-	                    <td>2022-08-01 ~ 2022-08-02</td>
-	                    <td>2</td>
-	                    <td>조정중</td>
-	                </tr>	            	               
+	                
+	                <c:choose>
+                		<c:when test="${empty list3}">
+                			<tr>
+                				<td colspan="5">조회된 휴가사용내역이 없습니다.</td>
+                			</tr>
+                		</c:when>
+                		<c:otherwise>
+							<c:forEach var="a" items="${list3}">
+								<tr>
+			                        <td>${a.a}</td>
+			                        <td>${a.b}</td>
+			                        <td>${a.c}</td>
+			                        <td>${a.d}</td> 
+			                        <td>${a.e}</td>  
+			                    </tr>
+							</c:forEach>
+                		</c:otherwise>                    
+                    </c:choose>         	               
 	
 	            </tbody>    
 	            
@@ -149,15 +151,15 @@
 	        <nav aria-label="Page navigation example" class="pasingCenter">
 	            <ul class="pagination">
 	              <li class="page-item">
-	                <a class="page-link" href="#" aria-label="Previous">
+	                <a class="page-link" href="myVacation.att?cpage=${ pi.currentPage - 1 }&empNo=${ loginUser.empNo }" aria-label="Previous">
 	                  <span aria-hidden="true">&laquo;</span>
 	                </a>
 	              </li>
-	              <li class="page-item"><a class="page-link" href="#">1</a></li>
-	              <li class="page-item"><a class="page-link" href="#">2</a></li>
-	              <li class="page-item"><a class="page-link" href="#">3</a></li>
+	              <c:forEach var="no" begin="${ pi.startPage }" end="${ pi.endPage }" step="1">
+		              <li class="page-item"><a class="page-link" href="myVacation.att?cpage=${ no }&empNo=${ loginUser.empNo }">${ no }</a></li>
+				  </c:forEach>
 	              <li class="page-item">
-	                <a class="page-link" href="#" aria-label="Next">
+	                <a class="page-link" href="myVacation.att?cpage=${ pi.currentPage + 1 }&empNo=${ loginUser.empNo }" aria-label="Next">
 	                  <span aria-hidden="true">&raquo;</span>
 	                </a>
 	              </li>
@@ -166,5 +168,18 @@
 	    </div>
 	    
 	</div>
+	
+	<script>
+
+		// 1) pi.currentPage == 1인 경우, Previous 버튼 비활성화
+		if( ${pi.currentPage} == 1 ){
+			$("a[aria-label='Previous']").removeAttr("href");
+		}
+		
+		// 2) pi.currentPage == pi.endPage인 경우, Next 버튼 비활성화
+		if( ${pi.currentPage} == ${pi.maxPage} ){
+			$("a[aria-label='Next']").removeAttr("href");
+		}
+	</script>
 </body>
 </html>

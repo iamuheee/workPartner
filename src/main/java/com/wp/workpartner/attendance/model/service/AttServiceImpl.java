@@ -11,6 +11,7 @@ import com.wp.workpartner.attendance.model.vo.Attendance;
 import com.wp.workpartner.attendance.model.vo.Department;
 import com.wp.workpartner.attendance.model.vo.Holiday;
 import com.wp.workpartner.attendance.model.vo.Position;
+import com.wp.workpartner.attendance.model.vo.Vacation;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.duty.model.vo.Duty;
 
@@ -192,14 +193,24 @@ public class AttServiceImpl implements AttService{
 	public ArrayList<Attendance> checkWorkStatus(String empNo) {
 		return aDao.checkWorkStatus(empNo, sqlSession);
 	}
+	
+	// 휴가 주기
 	@Override
 	public int giveVacation0(String empNo) {
 		return aDao.giveVacation0(empNo, sqlSession);
 	}
+	
+	@Override
+	public int giveVacation00(String empNo) {
+		return aDao.giveVacation00(empNo, sqlSession);
+	}
+	
 	@Override
 	public int giveVacation1(String empNo) {
 		return aDao.giveVacation1(empNo, sqlSession);
 	}
+	
+	// employee 테이블 휴가 추가
 	@Override
 	public int plusVacation0(String empNo) {
 		return aDao.plusVacation0(empNo, sqlSession);
@@ -208,6 +219,8 @@ public class AttServiceImpl implements AttService{
 	public int plusVacation1(String empNo) {
 		return aDao.plusVacation1(empNo, sqlSession);
 	}
+	
+	// 전체 휴가 조회
 	@Override
 	public int vacationCount(String condition, String keyword) {
 		return aDao.vacationCount(condition, keyword, sqlSession);
@@ -215,6 +228,35 @@ public class AttServiceImpl implements AttService{
 	@Override
 	public ArrayList<Attendance> vacationList(String condition, String keyword, PageInfo pi) {
 		return aDao.vacationList(condition, keyword, pi, sqlSession);
+	}
+	
+	// 내 근무이력 (추가 수정)
+	@Override
+	public ArrayList<Attendance> myAttendanceList2(String id) {
+		return aDao.myAttendanceList2(id, sqlSession);
+	}
+	
+	
+	// 내 휴가내역 조회
+	@Override
+	public int myVacationCount(String empNo) {
+		return aDao.myVacationCount(empNo, sqlSession);
+	}
+	@Override
+	public ArrayList<Vacation> myVacationList(String empNo) {
+		return aDao.myVacationList(empNo, sqlSession);
+	}
+	@Override
+	public ArrayList<Vacation> myVacationList2(String empNo) {
+		return aDao.myVacationList2(empNo, sqlSession);
+	}
+	@Override
+	public ArrayList<Vacation> myVacationList3(String empNo, PageInfo pi) {
+		return aDao.myVacationList3(empNo, pi, sqlSession);
+	}
+	@Override
+	public int resetVacation(String empNo) {
+		return aDao.resetVacation(empNo, sqlSession);
 	}
 
 

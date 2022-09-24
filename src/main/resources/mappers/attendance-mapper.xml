@@ -964,7 +964,7 @@
 		                                     CONNECT BY LEVEL <![CDATA[<=]]>  TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
 		                              ) A
 		                    ) B
-		                    WHERE B.D NOT IN ('1','7')
+		                    WHERE B.D NOT IN ('1')
 		                    AND B.DT NOT IN 
 		                  
 		                    ( 
@@ -1062,7 +1062,7 @@
 	                                     CONNECT BY LEVEL <![CDATA[<=]]>  TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
 	                              ) A
 	                    ) B
-	                    WHERE B.D NOT IN ('1','7')
+	                    WHERE B.D NOT IN ('1')
 	                    AND B.DT NOT IN 
 	                  
 	                    ( 
@@ -1145,6 +1145,24 @@
 
 	</insert>
 	
+	<insert id="giveVacation00">
+		
+		INSERT INTO tb_holiday2 (
+		    hol2_no,
+		    emp_no,
+		    hol2_occurday,
+		    hol2_expireday,
+		    hol2_occurno
+		) VALUES (
+		    seq_holno.nextval,
+		    #{empNo},
+		    to_char(sysdate, 'YYYY-MM-DD'),
+		    (to_char(sysdate+(INTERVAL '1' YEAR),'YYYY')||'-12-31'),
+		    '1'
+		)
+
+	</insert>
+	
 	
 	<insert id="giveVacation1">
 	
@@ -1158,8 +1176,8 @@
 		    seq_holno.nextval,
 		    #{empNo},
 		    to_char(sysdate, 'YYYY-MM-DD'),
-		    (to_char(sysdate,'YYYY')||'-12-31'),
-		    (select trunc((sysdate-to_date(EMP_ENROLLDATE,'yyyy-mm-dd')+1)/365)+15 from tb_employee where emp_no = #{empNo})
+		    (to_char(sysdate+(INTERVAL '1' YEAR),'YYYY')||'-12-31'),
+		    (select trunc((sysdate-to_date(EMP_ENROLLDATE,'yyyy-mm-dd')+1)/365)+14 from tb_employee where emp_no = #{empNo})
 		)
 		
 	</insert>
@@ -1178,7 +1196,7 @@
 		UPDATE tb_employee
 			SET
 			    EMP_HOLTAKE = EMP_HOLTAKE + (
-			                                select trunc((sysdate-to_date(EMP_ENROLLDATE,'yyyy-mm-dd')+1)/365)+15
+			                                select trunc((sysdate-to_date(EMP_ENROLLDATE,'yyyy-mm-dd')+1)/365)+14
 			                                 from tb_employee where emp_no = #{empNo})
 			WHERE
 			        emp_no = #{empNo}
@@ -1251,5 +1269,103 @@
 		   	</if>
 			
 	</select>
+	
+	<select id="myAttendanceList3" resultMap="AttendanceResult">
+		select (select 52 - trunc(sum(ATT_WORKHOURS)/60) from tb_attendance
+                      where to_date(to_char(trunc(sysdate,'iw')+4, 'yyyymmdd'), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date(to_char(trunc(sysdate,'iw'), 'yyyymmdd'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')
+                        and emp_no = #{id}) as x,
+                    (select 225 - trunc(sum(ATT_WORKHOURS)/60) from tb_attendance
+                      where to_date((TO_CHAR(LAST_DAY(SYSDATE),'YYYYMMDD')), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date((TO_CHAR(SYSDATE,'YYYYMM')||'01'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')
+                        and emp_no = #{id} ) as y,   
+                (select trunc(sum(ATT_WORKHOURS)/60) from tb_attendance
+                      where to_date(to_char(trunc(sysdate,'iw')+4, 'yyyymmdd'), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date(to_char(trunc(sysdate,'iw'), 'yyyymmdd'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')
+                        and emp_no = #{id}) as week_work_hours,
+                    (select trunc(sum(ATT_TIME)/60) from tb_attendance
+                      where to_date(to_char(trunc(sysdate,'iw')+4, 'yyyymmdd'), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date(to_char(trunc(sysdate,'iw'), 'yyyymmdd'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')
+                        and emp_no = #{id}) as week_plus_work_hours,
+                    (select trunc(sum(ATT_WORKHOURS)/60) from tb_attendance
+                      where to_date((TO_CHAR(LAST_DAY(SYSDATE),'YYYYMMDD')), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date((TO_CHAR(SYSDATE,'YYYYMM')||'01'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')
+                        and emp_no = #{id}) as month_work_hours,
+                    (select trunc(sum(ATT_TIME)/60) from tb_attendance
+                      where to_date((TO_CHAR(LAST_DAY(SYSDATE),'YYYYMMDD')), 'yyyymmdd') <![CDATA[>=]]> to_date(att_date, 'yyyymmdd')
+                        and to_date((TO_CHAR(SYSDATE,'YYYYMM')||'01'), 'yyyymmdd') <![CDATA[<=]]> to_date(att_date, 'yyyymmdd')
+                        and emp_no = #{id}) as month_plus_work_hours
+          from tb_attendance        
+		
+	</select>
+	
+	
+	<select id="myVacationList" resultMap="vacationResult">
+	
+		select EMP_HOLTAKE a,
+			EMP_HOLUSE b,
+			(emp_holtake - emp_holuse)c
+		from tb_employee
+		where emp_no = #{empNo}
+		
+	</select>
+	
+	<select id="myVacationList2" resultMap="vacationResult">
+	
+		select HOL2_OCCURDAY a,
+				HOL2_EXPIREDAY b,
+				HOL2_OCCURNO c,
+				(case when HOL2_OCCURNO = '1' then '월차' else '연차' end) d
+			from tb_holiday2
+			where emp_no = #{empNo}
+			order by a desc
+		
+	</select>
+	
+	<select id="myVacationList3" resultMap="vacationResult">
+	
+		select to_char(to_date(va_create, 'yyyymmdd'), 'yyyy-mm-dd') a,
+				va_category b,
+				case when va_useday = '0.5' then to_char(to_date(va_start, 'yyyymmdd'), 'yyyy-mm-dd')
+				     when va_useday = '1' then to_char(to_date(va_start, 'yyyymmdd'), 'yyyy-mm-dd')
+				     else to_char(to_date(va_start, 'yyyymmdd'), 'yyyy-mm-dd') || '~' || to_char(to_date(va_end, 'yyyymmdd'), 'yyyy-mm-dd')
+				     end c,
+				va_useday d,
+				va_status e
+				from vacation
+		where emp_no = #{empNo}
+		order by a desc
+
+
+	</select>
+	
+	<select id="myVacationCount" resultType="_int">
+		
+		select count(*)
+		from
+		(
+		select to_char(to_date(va_create, 'yyyymmdd'), 'yyyy-mm-dd') a,
+				va_category b,
+				case when va_useday = '0.5' then to_char(to_date(va_start, 'yyyymmdd'), 'yyyy-mm-dd')
+				     when va_useday = '1' then to_char(to_date(va_start, 'yyyymmdd'), 'yyyy-mm-dd')
+				     else to_char(to_date(va_start, 'yyyymmdd'), 'yyyy-mm-dd') || '~' || to_char(to_date(va_end, 'yyyymmdd'), 'yyyy-mm-dd')
+				     end c,
+				va_useday d,
+				va_status e
+				from vacation
+		where emp_no = #{empNo}
+		)
+	</select>
+	
+	<update id="resetVacation">
+	
+		UPDATE tb_employee
+			SET
+			    emp_holtake = '0',
+			    emp_holuse = '0'
+			WHERE
+			    emp_no =#{empNo}
+		
+	</update>
 	
 </mapper>

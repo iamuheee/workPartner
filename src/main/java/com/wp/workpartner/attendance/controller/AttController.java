@@ -19,6 +19,7 @@ import com.wp.workpartner.attendance.model.vo.Attendance;
 import com.wp.workpartner.attendance.model.vo.Department;
 import com.wp.workpartner.attendance.model.vo.Holiday;
 import com.wp.workpartner.attendance.model.vo.Position;
+import com.wp.workpartner.attendance.model.vo.Vacation;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.common.template.Pagination;
 
@@ -52,8 +53,23 @@ public class AttController {
 	/** 내휴가내역 이동하는 url
 	 * @return url
 	 */
-	@RequestMapping("myVacation.att")
-	private String myVacation() {
+	@RequestMapping(value="myVacation.att", produces="application/json; charset=utf-8")
+	private String myVacation(@RequestParam(value="cpage",  defaultValue="1")int currentPage, String empNo, Model model) {
+		
+		int myVacationCount = aService.myVacationCount(empNo);
+		
+		PageInfo pi = Pagination.getPageInfo(myVacationCount, currentPage, 5, 10);
+		
+		ArrayList<Vacation> list = aService.myVacationList(empNo);  // 잔여연차조회
+		ArrayList<Vacation> list2 = aService.myVacationList2(empNo); // 휴가생성내역조회
+		ArrayList<Vacation> list3 = aService.myVacationList3(empNo, pi); // 휴가사용내역조회
+		
+		
+		model.addAttribute("list", list);
+		model.addAttribute("list2", list2);
+		model.addAttribute("list3", list3);
+		model.addAttribute("pi", pi);
+		
 		return "attendance/vacationView";
 	}
 	
@@ -66,13 +82,6 @@ public class AttController {
 		return "attendance/attendanceHistoryView";
 	}
 	
-	/** 전사원근태현황 이동하는 url
-	 * @return url
-	 */
-//	@RequestMapping("adminAtt.att")
-//	private String adminAttendance() {
-//		return "attendance/adminAttendanceView";
-//	}
 	
 	/** 근태조정내역 이동하는 url
 	 * @return url
@@ -385,9 +394,11 @@ public class AttController {
 			PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
 			
 			ArrayList<Attendance> list = aService.myAttendanceList(date1, date2, pi, id);
+			ArrayList<Attendance> list2 = aService.myAttendanceList2(id);
 			
 			model.addAttribute("pi", pi);
 			model.addAttribute("list", list);
+			model.addAttribute("list2", list2);
 			model.addAttribute("date1", date1);
 			model.addAttribute("date2", date2);
 			
@@ -401,9 +412,11 @@ public class AttController {
 			PageInfo pi = Pagination.getPageInfo(searchCount, currentPage, 5, 10);
 			
 			ArrayList<Attendance> list = aService.myAttendanceList(date1, date2, array, pi, id);
+			ArrayList<Attendance> list2 = aService.myAttendanceList2(id);
 			
 			model.addAttribute("pi", pi);
 			model.addAttribute("list", list);
+			model.addAttribute("list2", list2);
 			model.addAttribute("date1", date1);
 			model.addAttribute("date2", date2);
 			model.addAttribute("array", array);
@@ -591,20 +604,26 @@ public class AttController {
 								}
 							}
 							
-							System.out.println(count3);
-								if(count3 < 3) {
+							
+							if(count3 < 3) {
 								
+								int reset = aService.resetVacation(empNo); // 기존 연차 지우기
 								
-								int result9 = aService.giveVacation0(empNo); // 연차 1개 지급
-								
-								if(result9>0) {
+								if(reset > 0) {
 									
-									int result10 = aService.plusVacation0(empNo);  // employee테이블 업데이트
-									session.setAttribute("alertMsg", "퇴근 완료 및 월차 지급 완료");
+									int result9 = aService.giveVacation00(empNo); // 연차 1개 지급
 									
-								}else {
-									session.setAttribute("alertMsg", "퇴근 완료 및 월차 지급 실패");
+									if(result9>0) {
+										
+										int result10 = aService.plusVacation0(empNo);  // employee테이블 업데이트
+										session.setAttribute("alertMsg", "퇴근 완료 및 월차 지급 완료1");
+										
+									}else {
+										session.setAttribute("alertMsg", "퇴근 완료 및 월차 지급 실패");
+									}
+									
 								}
+								
 								
 							}
 							
@@ -612,20 +631,25 @@ public class AttController {
 							
 							// 1년차 이상 15+근속연수 만큼 연차 지급
 							
-							int result8 = aService.giveVacation1(empNo);
+							int reset = aService.resetVacation(empNo); // 기존 연차 지우기
 							
-							if(result8>0) {
+							if(reset > 0) {
 								
-								int result11 = aService.plusVacation1(empNo);
-								session.setAttribute("alertMsg", "퇴근 완료 및 연차 지급");
-							}else {
-								session.setAttribute("alertMsg", "퇴근 완료 및 연차 지급 실패");
+								int result8 = aService.giveVacation1(empNo); // 연차 지급
+								
+								if(result8>0) {
+									
+									int result11 = aService.plusVacation1(empNo);
+									session.setAttribute("alertMsg", "퇴근 완료 및 연차 지급");
+									
+								}else {
+									session.setAttribute("alertMsg", "퇴근 완료 및 연차 지급 실패");
+								}
 							}
-							
+									
 						}
-					};
-					
-					
+					}
+
 				}
 				
 				return "common/mainPage";
