@@ -126,26 +126,11 @@ table {
 					                        	<td><a href="" class="dpTitle">${ d.dpTitle }</a></td>
 					                        </c:otherwise>
 				                        </c:choose>
-				                        <td>${ d.empNo}(${d.signDeptName})</td>
+				                        <td>${ d.empName}(${d.signDeptName})</td>
 				                        <td>${ d.dpCreate }</td>
 				                        <td>${ loginUser.empName }(${ loginUser.depCd }) </td>
 				                        <td>${ d.signEmpName }(${ d.signEmpDept })</td>
 				                    </tr>
-				                    <script>
-										$(document).ready(function(){
-											$(".dpTitle").click(function(){
-					                    		if('${s.dpCategory}' == '연차'){
-													$(".dpTitle").attr("href", "detailVa.si");
-												}else if('${s.dpCategory}' == '외근'){
-													$(".dpTitle").attr("href", "detailOtw.si");
-												}else if('${s.dpCategory}' == '퇴직원'){
-													$(".dpTitle").attr("href", "detailRes.si");
-												}else{
-													$(".dpTitle").attr("href", "detailCo.si");
-												}
-											})
-										})
-									</script>
 			                    </c:forEach>
 	                		</c:otherwise>
 	                   </c:choose>
@@ -222,13 +207,13 @@ table {
                                     </tr>
 
                                     <c:choose>
-	                		<c:when test="${empty endSignList }">
+	                		<c:when test="${empty endDeptSignList }">
 	                			<tr>
 	                				<td colspan="7" align="center">현재 게시글이 없습니다.</td>
 	                			</tr>
 	                		</c:when>
 	                		<c:otherwise>
-	                			<c:forEach var="d" items="${ endSignList }">
+	                			<c:forEach var="d" items="${ endDeptSignList }">
 				                    <tr align="center">
 				                   	    <td>${ d.dpNo }</td>
 				                        <td>${ d.dpCategory }</td>
@@ -247,31 +232,15 @@ table {
 					                        	<td><a href="" class="dpTitle">${ d.dpTitle }</a></td>
 					                        </c:otherwise>
 				                        </c:choose>
-				                        <td>${ d.empNo}(${d.signDeptName})</td>
+				                        <td>${ d.empName}(${d.signDeptName})</td>
 				                        <td>${ d.dpCreate }</td>
-				                        <td>${ loginUser.empName }(${ loginUser.depCd }) </td>
 				                        <td>${ d.signEmpName }(${ d.signEmpDept })</td>
 				                    </tr>
-				                    <script>
-										$(document).ready(function(){
-											$(".dpTitle").click(function(){
-					                    		if('${s.dpCategory}' == '연차'){
-													$(".dpTitle").attr("href", "detailVa.si");
-												}else if('${s.dpCategory}' == '외근'){
-													$(".dpTitle").attr("href", "detailOtw.si");
-												}else if('${s.dpCategory}' == '퇴직원'){
-													$(".dpTitle").attr("href", "detailRes.si");
-												}else{
-													$(".dpTitle").attr("href", "detailCo.si");
-												}
-											})
-										})
-									</script>
 			                    </c:forEach>
 	                		</c:otherwise>
 	                   </c:choose>
 					</table>
-					<c:if test="${not empty endSignList }">
+					<c:if test="${not empty endDeptSignList }">
                         <div id="pagingArea">
 			                <ul class="pagination">
 			                	<c:choose>
@@ -303,6 +272,16 @@ table {
 
                     </c:otherwise>
                 </c:choose>
+                <script>   
+					$(document).ready(function(){
+						$(".dpTitle").click(function(){
+			              			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(0).text() + "&ct=" + $(this).parents().parents().children().eq(1).text(), "btn", "width=815, height=800");
+			              			console.log($(this).parent().siblings(".a").val("input[type=hidden]"));
+				            	vacation.moveTo(560,120);
+				            	vacation.focus();
+						})
+					})
+			    </script> 
             </main>
         </div>
     </div>

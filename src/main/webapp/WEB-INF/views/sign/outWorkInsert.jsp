@@ -226,11 +226,11 @@ input, select, textarea {
 				</tr>
 				<tr>
 					<td class="tableTitle">교통수단</td>
-					<td align="left"><select name="otTrain"
+					<td align="left"><select name="otTrans"
 						style="margin-left: 10px">
-							<option value="'대중교통'">대중교통</option>
-							<option value="'자차'">자차</option>
-							<option value="'도보'">도보</option>
+							<option value="대중교통">대중교통</option>
+							<option value="자차">자차</option>
+							<option value="도보">도보</option>
 					</select></td>
 					<td class="tableTitle">위치</td>
 					<td style="border-right: 0;" align="right"><input type="text"
@@ -251,7 +251,7 @@ input, select, textarea {
 				</tr>
 			</table>
 		</div>
-	</section>
+		
 	</section>
 	</form>
 </body>

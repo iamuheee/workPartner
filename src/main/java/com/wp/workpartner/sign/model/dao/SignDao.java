@@ -113,54 +113,78 @@ public class SignDao {
 		return (ArrayList)sqlSession.selectList("signMapper.selectProgressList", map, rowBounds);
 	}
 //	타부서 결재함
-	public int selectOthSignListCount(SqlSessionTemplate sqlSession, String empNo) {
+	public int selectOthSignListCount(SqlSessionTemplate sqlSession, String empNo, String deoCd) {
 		return sqlSession.selectOne("signMapper.selectOthSignListCount", empNo);
 	}
-	public ArrayList<Dtpaper> selectOthSignList(SqlSessionTemplate sqlSession,PageInfo pi, String empNo){
+	public ArrayList<Dtpaper> selectOthSignList(SqlSessionTemplate sqlSession,PageInfo pi, String empNo, String depCd){
 		int limit = pi.getBoardLimit();
 		int offset = (pi.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return (ArrayList)sqlSession.selectList("signMapper.selectOthSignList", empNo, rowBounds);
+		HashMap<String, String> map = new HashMap();
+		map.put("empNo", empNo);
+		map.put("depCd", depCd);
+		return (ArrayList)sqlSession.selectList("signMapper.selectOthSignList", map, rowBounds);
 	}
 	
 //	타부서 결재완료
-	public int selectEndOthSignListCount(SqlSessionTemplate sqlSession, String empNo) {
-		return sqlSession.selectOne("signMapper.selectEndOthSignListCount", empNo);
+	public int selectEndOthSignListCount(SqlSessionTemplate sqlSession, String empNo, String depCd) {
+		HashMap<String, String> map = new HashMap();
+		map.put("empNo", empNo);
+		map.put("depCd", depCd);
+		return sqlSession.selectOne("signMapper.selectEndOthSignListCount", map);
 	}
-	public ArrayList<Dtpaper> selectEndOthSignList(SqlSessionTemplate sqlSession, PageInfo pi, String empNo){
+	public ArrayList<Dtpaper> selectEndOthSignList(SqlSessionTemplate sqlSession, PageInfo pi, String empNo, String depCd){
 		int limit = pi.getBoardLimit();
 		int offset = (pi.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return (ArrayList)sqlSession.selectList("signMapper.selectEndOthSignList", empNo, rowBounds);
+		HashMap<String, String> map = new HashMap();
+		map.put("empNo", empNo);
+		map.put("depCd", depCd);
+		
+		return (ArrayList)sqlSession.selectList("signMapper.selectEndOthSignList", map, rowBounds);
 	}
 	
 //	내부서 결재완료
-	public int selectEndSignListCount(SqlSessionTemplate sqlSession, String empNo) {
+	public int selectEndSignListCount(SqlSessionTemplate sqlSession, String empNo,String deoCd) {
 		return sqlSession.selectOne("signMapper.selectEndSignListCount", empNo);
 	}
-	public ArrayList<Dtpaper> selectEndSignList(SqlSessionTemplate sqlSession, PageInfo pi, String empNo){
+	public ArrayList<Dtpaper> selectEndSignList(SqlSessionTemplate sqlSession, PageInfo pi, String empNo, String depCd){
 		int limit = pi.getBoardLimit();
 		int offset = (pi.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return (ArrayList)sqlSession.selectList("signMapper.selectEndSignList", empNo, rowBounds);
+		HashMap<String, String> map = new HashMap();
+		map.put("empNo", empNo);
+		map.put("depCd", depCd);
+		return (ArrayList)sqlSession.selectList("signMapper.selectEndSignList", map, rowBounds);
 	}
 	
 //	내부서 결재함
-	public ArrayList<Dtpaper> selectDeptSignList(SqlSessionTemplate sqlSession,PageInfo pi, String empNo) {
+	public ArrayList<Dtpaper> selectDeptSignList(SqlSessionTemplate sqlSession,PageInfo pi, String empNo, String depCd) {
 		int limit = pi.getBoardLimit();
 		int offset = (pi.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return (ArrayList)sqlSession.selectList("signMapper.selectDeptSignList", empNo, rowBounds);
+		HashMap<String, String> map = new HashMap();
+		map.put("empNo", empNo);
+		map.put("depCd", depCd);
+		
+		return (ArrayList)sqlSession.selectList("signMapper.selectDeptSignList", map, rowBounds);
 	}
-	public int selectDeptSignListCount(SqlSessionTemplate sqlSession, String empNo) {
-		return sqlSession.selectOne("signMapper.selectDeptSignListCount", empNo);
+	public int selectDeptSignListCount(SqlSessionTemplate sqlSession, String empNo, String depCd) {
+		HashMap<String, String> map = new HashMap();
+		map.put("empNo", empNo);
+		map.put("depCd", depCd);
+		return sqlSession.selectOne("signMapper.selectDeptSignListCount", map);
 	}
 	
 //  상세보기 결재선 리스트
-	public ArrayList<Sign> selectSignList(SqlSessionTemplate sqlSession, int no){
+	public ArrayList<Sign> selectSignList(SqlSessionTemplate sqlSession, int no ){
 		return (ArrayList)sqlSession.selectList("signMapper.selectSignList", no);
 	}
-	
+//	상세보기 타이틀 및 첨부파일
+	public Dtpaper selectTitleList(SqlSessionTemplate sqlSession, int no) {
+		return sqlSession.selectOne("signMapper.selectTitleList", no);
+	}
+//	기안서 상세보기
 	public SelectVacation selectVa(SqlSessionTemplate sqlSession, int no) {
 		return sqlSession.selectOne("signMapper.selectVa", no);
 	}
@@ -172,5 +196,26 @@ public class SignDao {
 	}
 	public SelectCooperation selectCo(SqlSessionTemplate sqlSession, int no) {
 		return sqlSession.selectOne("signMapper.selectCo", no);
+	}
+//	기안서 승인하기 업데이트
+	public int updateAgreeSign(SqlSessionTemplate sqlSession, Sign s) {
+//		HashMap<String, Integer> map = new HashMap();
+//		map.put("dpNo", dpNo);
+//		map.put("signEmpNo", signEmpNo);
+//		System.out.println(map);
+		
+		return sqlSession.update("signMapper.updateAgreeSign", s);
+	}
+	public int updateAgreeDtpaper(SqlSessionTemplate sqlSession,  Sign s) {
+		return sqlSession.update("signMapper.updateAgreeDtpaper", s);
+	}
+	public int updateAgreeSiStatus(SqlSessionTemplate sqlSession,Sign s) {
+		return sqlSession.update("signMapper.updateAgreeSiStatus", s);
+	}
+	public int updateDisagreeSign(SqlSessionTemplate sqlSession,  Sign s) {
+		return sqlSession.update("signMapper.updateDisagreeSign", s);
+	}
+	public int updateDisagreeDtpaper(SqlSessionTemplate sqlSession,Sign s) {
+		return sqlSession.update("signMapper.updateDisagreeDtpaper", s);
 	}
 }

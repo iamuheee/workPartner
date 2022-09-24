@@ -3,6 +3,7 @@ package com.wp.workpartner.sign.model.service;
 import java.util.ArrayList;
 
 import com.wp.workpartner.common.model.vo.PageInfo;
+import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.sign.model.vo.Cooperation;
 import com.wp.workpartner.sign.model.vo.Dtpaper;
 import com.wp.workpartner.sign.model.vo.Otwork;
@@ -35,17 +36,17 @@ public interface SignService {
 	int selectProgressListCount(String fn, String empNo);
 	ArrayList<Dtpaper> selectProgressList(PageInfo pi, String empNo, String fn);
 //	타부터 결재리스트
-	int selectOthSignListCount(String empNo);
-	ArrayList<Dtpaper> selectOthSignList(PageInfo pi, String empNo);
+	int selectOthSignListCount(String empNo,String depCd);
+	ArrayList<Dtpaper> selectOthSignList(PageInfo pi, String empNo, String depCd);
 //	타부서 결재완료
-	int selectEndOthSignListCount(String empNo);
-	ArrayList<Dtpaper> selectEndOthSignList(PageInfo pi, String empNo);
+	int selectEndOthSignListCount(String empNo, String depCd);
+	ArrayList<Dtpaper> selectEndOthSignList(PageInfo pi, String empNo, String depCd);
 //  결재 리스트
-	int selectDeptSignListCount(String empNo);
-	ArrayList<Dtpaper> selectDeptSignList(PageInfo pi, String empNo);
+	int selectDeptSignListCount(String empNo, String depCd);
+	ArrayList<Dtpaper> selectDeptSignList(PageInfo pi, String empNo, String depCd);
 //	내부서 결재완료
-	int selectEndSignListCount(String empNo);
-	ArrayList<Dtpaper> selectEndSignList(PageInfo pi, String empNo);
+	int selectEndSignListCount(String empNo, String depCd);
+	ArrayList<Dtpaper> selectEndSignList(PageInfo pi, String empNo, String depCd);
 //  결재 할 기안서 상세조회
 	SelectCooperation selectSignCooperation(int dpNo); 
 	SelectReSign selectSignResign(int dpNo); 
@@ -66,6 +67,16 @@ public interface SignService {
 	SelectReSign selectRe(int no); 
 	SelectVacation selectVa(int no); 
 	SelectOtwork selectOw(int no); 
-//  기안서 결재선
+//  기안서 상세보기 결재선
 	ArrayList<Sign> selectSignList(int no);
+//	기안서 상세보기 타이틀
+	Dtpaper selectTitleList(int no);
+//	기안서 승인하기 결재선 상태 업데이트
+	int updateAgreeSign(Sign s);
+//  기안서 승인하기 기안서 상태 업데이트
+	int updateAgreeDtpaper(Sign s);
+	int updateAgreeSiStatus(Sign s);
+//	기안서 결재반려 상태 업데이트 
+	int updateDisagreeSign(Sign s);
+	int updateDisagreeDtpaper(Sign s);
 }

@@ -24,10 +24,10 @@ public class SelectCooperation {
 	private String dpCategory;
 	private String dpOrigin;
 	private String dpChange;
-	
+	private String cpCallDept;
 	private String cpDept;
 	private String cpRequestor;
-	private String cpRequestDay;
+	private String cpRequestday;
 	private String cpContent;
 	
 	private ArrayList<Sign> signList;

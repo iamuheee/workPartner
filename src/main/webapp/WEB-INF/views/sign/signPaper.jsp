@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -214,57 +215,50 @@ input, select, textarea {
 </style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-    $(document).ready(function(){
 
-        $( "#selectVacation" ).change(function() {
-            console.log($("#selectVacation").val());
-
-            if($("#selectVacation").val() == "연차"){
-                $("#startTime").hide();
-                $("#endTime").hide();
-            }else{
-                $("#startTime").show();
-                $("#endTime").show();
-            }
-
-        });
-    });
-</script>
 </head>
 <!-- onload="window.resizeTo(620,800)" -->
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
+<form action="" method="post" name="updateForm" id="updateForm" enctype="multipart/form-data"> 
+	<c:if test="${flag ==  otherSign or flag == deptSign}">
 	<section class="mainTitle">
-		<form action="insertSign.me" name="insertSignForm" style="float: left">
-			<a class="insertBtn" onclick="insertSign();">승인하기</a>
-		</form>
-		<form action="reSign.me" name="reSignForm" style="float: left">
-			<a class="insertBtn" id="btn-modal" onclick="reSign()">반려</a>
-		</form>
-		<c:if test="${loginUser.empNo == d.empNo}">
-			<form action="deletePaper.bo" name="deleteForm" style="float: left">
-				<a class="insertBtn" onclick="deleteCheck()">기안 취소하기</a>
-			</form>
-			<form action="deletePaper.bo" name="saveForm">
-				<a class="insertBtn" onclick="deleteCheck()">결재선 변경</a>
-			</form>
-		</c:if>
+			<a class="insertBtn" onclick="agreeSign();">결재승인</a>
+			<a class="insertBtn" onclick="disagreeSign()">결재반려</a>
+			<c:forEach var="s" items="${ selectSignList }">
+           		<c:set var="i" value="${ i + 1 }"/>
+				<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
+				<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
+			    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
+           	</c:forEach>
 		<hr>
 	</section>
+	</c:if>
 	<script>
-        function insertSign() {
-            if (confirm("승인하시겠습니까?") == true){    //확인
-                document.insertSignForm.submit();
-            }else{   //취소
-                return false;
-            }
-            }
-    </script>
+		function agreeSign() {
+			if (confirm("결재를 승인하시겠습니까?") == true) { //확인
+				document.updateForm.action = "agreeSign.si?dpNo=" /* + $("#dpNo").val() + "&signEmpNo=" + $("#signEmpNo").val() */ ;
+				document.updateForm.submit();
+			} else { //취소
+				return false;
+			}
+		}
+	</script>
+	<script>
+		function disagreeSign() {
+			if (confirm("결재를 반려하시겠습니까?") == true) { //확인
+				document.updateForm.action = "disagreeSign.si";
+				document.updateForm.submit();
+			} else { //취소
+				return false;
+			}
+		}
+	</script>
 
 	<section>
 		<div>
 			<h1 class="dtpaperName">
-				XX 신청서 - <span style="font-weight: lighter;">김종군(영업부)</span>
+				<span>${ t.dpCategory }</span> 신청서 - <span
+					style="font-weight: lighter;">${ t.empName }(${ t.signEmpDept})</span>
 			</h1>
 			<hr>
 		</div>
@@ -274,34 +268,68 @@ input, select, textarea {
 			<h3>결재선</h3>
 			<table align="center">
 				<tr>
-					<th width="100">결재</th>
-					<td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"><span>김종군(마케팅부)</span></td>
-					<th>결재</th>
-					<td style="border-right: 0.5px solid rgba(143, 143, 143, 0.547);"></td>
-					<th>결재</th>
-					<td></td>
+          			<c:choose>
+          				<c:when test="${empty selectSignList }">
+          					<td style="border:0.5px solid #878787; background: #f1f1f1;">
+							결재선
+						 </td>
+						<td style="border:0.5px solid #878787">
+						   
+						</td>
+						<td style="border:0.5px solid #878787; background: #f1f1f1;">
+							결재선
+						 </td>
+						<td style="border:0.5px solid #878787">
+						   
+						</td>
+						<td style="border:0.5px solid #878787; background: #f1f1f1;">
+							결재선
+						 </td>
+						<td style="border:0.5px solid #878787">
+						  
+						</td>
+          				</c:when>
+          				<c:otherwise>
+          				
+		            	<c:forEach var="s" items="${ selectSignList }">
+						<td style="border:0.5px solid #878787; background: #f1f1f1;">
+							결재선
+						 </td>
+						<td style="border:0.5px solid #878787">
+						   ${ s.signEmpName }
+						</td>
+		            	</c:forEach>
+		            </c:otherwise>
+          			</c:choose>
 				</tr>
 			</table>
 		</div>
 	</section>
 	<hr style="margin-top: 10px;">
-	<section class="publicPaper">
-		<div>
-			<table align="center">
-				<tr class="titleSection">
-					<th style="border-bottom: 0.5px solid rgba(143, 143, 143, 0.547);">제목</th>
-					<td align="left"
-						style="border-bottom: 0.5px solid rgba(143, 143, 143, 0.547);"><span
-						style="margin-left: 10px;">외근신청서 결재 부탁드립니다.</span></td>
-				</tr>
-				<tr style="border-top: 0.5px solid rgba(143, 143, 143, 0.547);">
-					<th>첨부파일</th>
-					<td align="left"><input type="file"
-						style="margin-left: 10px; border: 0;"></td>
-				</tr>
-			</table>
-		</div>
-	</section>
+    <section class="publicPaper">
+        <div>
+            <table align="center">
+                <tr class="titleSection">
+                    <th style="border-bottom:0.5px solid #878787;">제목</th>
+                    <td align="left" style="border-bottom:0.5px solid #878787;"><span
+                            style="margin-left:10px;">${ t.dpTitle }</span></td>
+                </tr>
+                <tr style="border-top:0.5px solid #878787;">
+                    <th>첨부파일</th>
+                    <td align="left">
+	                    <c:choose>
+	                   		<c:when test="${ empty t.dpOrigin }">
+	                   			<span style="margin-left:10px">첨부파일이 없습니다.</span>
+	                       	</c:when>
+	                       	<c:otherwise>
+	                       		<a style="margin-left:10px" href="${ t.dpChange }" download="${ t.dpOrigin }">${ t.dpOrigin }</a>
+	                       	</c:otherwise>
+	                    </c:choose>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
 
 	<section class="modal">
 		<div id="modal" class="modal-overlay">

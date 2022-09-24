@@ -19,5 +19,6 @@ public class Sign {
 	private String siStatus;
 	private int siAsign;
 	private String siRep;
+	private String signEmpName;
 	
 }

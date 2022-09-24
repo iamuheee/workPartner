@@ -133,26 +133,11 @@ table {
 					                        	<td><a href="" class="dpTitle">${ o.dpTitle }</a></td>
 					                        </c:otherwise>
 				                        </c:choose>
-				                        <td>${ o.empNo}(${o.signDeptName})</td>
+				                        <td>${ o.empName}(${o.signDeptName})</td>
 				                        <td>${ o.dpCreate }</td>
 				                        <td>${ loginUser.empName }(${ loginUser.depCd }) </td>
 				                        <td>${ o.signEmpName }(${ o.signEmpDept })</td>
 				                    </tr>
-				                    <script>
-										$(document).ready(function(){
-											$(".dpTitle").click(function(){
-					                    		if('${s.dpCategory}' == '연차'){
-													$(".dpTitle").attr("href", "detailVa.si");
-												}else if('${s.dpCategory}' == '외근'){
-													$(".dpTitle").attr("href", "detailOtw.si");
-												}else if('${s.dpCategory}' == '퇴직원'){
-													$(".dpTitle").attr("href", "detailRes.si");
-												}else{
-													$(".dpTitle").attr("href", "detailCo.si");
-												}
-											})
-										})
-									</script>
 			                    </c:forEach>
 	                		</c:otherwise>
 	                   </c:choose>
@@ -263,25 +248,10 @@ table {
 					                        	<td><a href="" class="dpTitle">${ e.dpTitle }</a></td>
 					                        </c:otherwise>
 				                        </c:choose>
-				                        <td>${ e.empNo}(${e.signDeptName})</td>
+				                        <td>${ e.empName}(${e.signDeptName})</td>
 				                        <td>${ e.dpCreate }</td>
 				                        <td>${ e.signEmpName }(${ e.signEmpDept })</td>
 				                    </tr>
-				                    <script>
-										$(document).ready(function(){
-											$(".dpTitle").click(function(){
-					                    		if('${s.dpCategory}' == '연차'){
-													$(".dpTitle").attr("href", "detailVa.si");
-												}else if('${s.dpCategory}' == '외근'){
-													$(".dpTitle").attr("href", "detailOtw.si");
-												}else if('${s.dpCategory}' == '퇴직원'){
-													$(".dpTitle").attr("href", "detailRes.si");
-												}else{
-													$(".dpTitle").attr("href", "detailCo.si");
-												}
-											})
-										})
-									</script>
 			                    </c:forEach>
 	                		</c:otherwise>
 	                   </c:choose>
@@ -316,9 +286,18 @@ table {
 	                </c:if>
 				</div>
 			</div>
-
 		</c:otherwise>
 	</c:choose>
+	<script>   
+		$(document).ready(function(){
+			$(".dpTitle").click(function(){
+              			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(0).text() + "&ct=" + $(this).parents().parents().children().eq(1).text(), "btn", "width=815, height=800");
+              			console.log($(this).parent().siblings(".a").val("input[type=hidden]"));
+	            	vacation.moveTo(560,120);
+	            	vacation.focus();
+			})
+		})
+    </script> 
 	</main>
 	</div>
 	</div>

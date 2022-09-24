@@ -189,13 +189,13 @@
 						for (let i = 0; i < arr.length; i++) {
 							value += '<tr>'
 									+ '<td width="80px" style="border:0.5px solid #878787; background: #f1f1f1;"> '
-									+ '<input type="hidden" name="signList['+ i + '].siSeq" value="'+ (i+1) + '">' + '결재'
+									+ '<input type="hidden" name="signList['+ i + '].siSeq" value="'+ (i+1) + '">' + '<input type="hidden" name="signList[' + i + '].siAsign" value="' + arr.length + '">' + '결재'
 									+ ' </td>'
 									+ '<td width="80px" style="border:0.5px solid #878787">'
 									+ arr[i].empName + '(' + arr[i].depCd + ')' + '<input type="hidden" name="signList[' + i + '].signEmpNo" value="'+ arr[i].empNo +'">'
 									+ '  </td>'
 									+ '<td width="10px" align="left">'
-									+ '<input type="hidden" name="signList[' + i + '].siAsign" value="' + arr.length + '">' + '<span class="removeAdmin" style="cursor: pointer;"> x</span>'
+									+ '<span class="removeAdmin" style="cursor: pointer;"> x</span>'
 									+ '</td>'
 									+ '</tr>';
 
