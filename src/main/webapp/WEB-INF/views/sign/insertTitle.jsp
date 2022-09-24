@@ -48,7 +48,7 @@
 	color: black;
 	font-weight: bold;
 	margin-left: 10px;
-	border-right: 0.5px solid rgba(143, 143, 143, 0.547);
+	border-right: 0.5px solid #878787;
 	padding-right: 15px;
 }
 
@@ -63,7 +63,7 @@
 }
 
 hr {
-	opacity: 0.7;
+	opacity: 0.4;
 	width: 100%;
 }
 
@@ -74,14 +74,13 @@ h3 {
 }
 
 .dtpaperName {
-	margin-left: 10px;
 	line-height: 10px;
 }
 
 table {
 	font-size: 16px;
 	border-spacing: 0px;
-	border: 0.5px solid rgba(143, 143, 143, 0.547);
+	border: 0.5px solid #878787;
 }
 
 tr {
@@ -97,7 +96,7 @@ th {
 }
 
 th, td {
-	border-right: 0.5px solid rgba(143, 143, 143, 0.547);
+	
 }
 
 .signSelect tr {
@@ -111,7 +110,7 @@ th, td {
 }
 
 .signSelect td {
-	width: 150px;
+	width: 125px;
 	border: 0;
 }
 
@@ -126,7 +125,7 @@ th, td {
 }
 
 .titleSection th, td {
-	border-bottom: 0.5px solid rgba(143, 143, 143, 0.547);
+	border-bottom: 0.5px solid solid #878787;
 }
 
 .plusVa {
@@ -153,120 +152,6 @@ th, td {
 
 input, select, textarea {
 	border: 0.5px solid rgba(143, 143, 143, 0.547)
-}
-
-/* -----------------모달----------------------- */
-#modal {
-	z-index: 1550;
-}
-
-#modal.modal-overlay {
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	left: 0;
-	top: 0;
-	display: none;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background: rgba(95, 95, 95, 0.666);
-	box-shadow: 0 8px 32px 0 rgba(61, 61, 61, 0.37);
-	backdrop-filter: blur(1.5px);
-	-webkit-backdrop-filter: blur(1.5px);
-	border-radius: 10px;
-	border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-#modal .modal-window {
-	background: rgba(255, 255, 255);
-	box-shadow: 0 8px 32px 0 rgba(34, 34, 34, 0.37);
-	backdrop-filter: blur(13.5px);
-	-webkit-backdrop-filter: blur(13.5px);
-	border-radius: 10px;
-	border: 1px solid rgba(255, 255, 255, 0.18);
-	width: 700px;
-	height: 1100px;
-	position: relative;
-	top: 0;
-}
-
-#modal .modaltitle {
-	display: inline-block;
-	color: rgb(7, 7, 7);
-	border-bottom: 1px solid #8787874d;
-	padding-bottom: 10px;
-	margin-top: 15px;
-	width: 100%;
-}
-
-#modal .modaltitle h2 {
-	display: inline;
-	padding: 20px;
-}
-
-#modal .modalcontent {
-	margin-top: 20px;
-	padding: 0px 10px;
-	text-shadow: 1px 1px 2px gray;
-	color: rgb(0, 0, 0);
-}
-
-#modal .modaltitle>hr {
-	margin-top: 15px;
-	margin-bottom: 0;
-	padding: 0;
-}
-
-.material-symbols-outlined {
-	font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 48;
-	float: right;
-	color: rgb(143, 143, 143);
-	margin-right: 20px;
-}
-
-.close-area:hover {
-	cursor: pointer;
-	color: rgb(100, 100, 100);
-	font-weight: 600;
-}
-
-.searchEmp {
-	display: flex;
-	width: 50%;
-	height: 500px;
-	border-right: 1px solid #8787874d;
-	margin-top: 0;
-}
-
-.selectEmp {
-	flex-direction: column;
-	width: 50%;
-}
-
-.material-symbols-outlined {
-	font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48
-}
-
-.modalSearch {
-	position: relative;
-	height: 30px;
-	width: 95%;
-	margin-left: 15px;
-	margin-top: 15px;
-}
-
-.searchBtn {
-	position: absolute;
-	left: 140px;
-	top: 80px;
-	background-color: white;
-	border: none;
-}
-
-.searchBtn:hover {
-	cursor: pointer;
-	color: black;
 }
 
 input[type=text] {
@@ -345,10 +230,10 @@ input[type=text] {
 	
 	<section>
 		<div>
-			<h3 class="dtpaperName">
+			<h2 class="dtpaperName">
 				<span>${ paperName }</span> 신청서 - <span
 					style="font-weight: lighter;"><input type="hidden" name="empNo" value="${ loginUser.empNo }">${ loginUser.empName }(${ loginUser.depCd })</span>
-			</h3>
+			</h2>
 			<hr>
 		</div>
 	</section>

@@ -30,7 +30,7 @@
 		<result column="dp_origin" property="dpOrigin"/>
 		<result column="dp_change" property="dpChange"/>
 		<result column="sign_empname" property="signEmpName"/>
-		<result column="lastSigndate" property="lastSigndate"/>
+		<result column="last_signdate" property="lastSigndate"/>
 		<result column="sign_empdept" property="signEmpDept"/>
 		<result column="sign_deptname" property="signDeptName"/>
 		<result column="emp_name" property="empName"/>
@@ -414,79 +414,89 @@
 		select
 		       count(*)	
 		  from tb_dtpaper
-		 where dp_final = <choose>
-		 					<when test="fn.equals('임시저장')">
+		 where emp_no = #{empNo}
+		   and dp_final =  <if test="fn.equals('임시저장')">
 		 						'임시저장'
-		 					</when>
-		 					<otherwise>
-		 						'반려됨'
-		 					</otherwise>
-		 				  </choose>
-		   and dp_status = 'N'  
-		   and emp_no = ${ empNo }
+			 				</if>
+			 				<if test="fn.equals('반려됨')">
+			 					'반려됨'
+			 				</if>
+		   and dp_status = 'N'
 	</select>
-	<select id="selectList" resultMap="SelectListResult">
+	<!-- 임시, 반려 리스트 -->
+	<select id="selectList" resultMap="SelectProgressListResult">
 		select
 		       d.dp_no
-		      ,emp_no
-		      ,dp_title
-		      ,to_char(dp_create, 'YYYY-MM-DD') AS "dp_create"
-		      ,dp_modify
-		      ,dp_status
-		      ,dp_final
-		      ,dp_category
-		      ,dp_origin
-		      ,dp_change
-		  from tb_dtpaper d
-		 where dp_final = <choose>
-		 					<when test="fn.equals('임시저장')">
+		     , dp_category
+		     , dp_title
+		     , dp_origin
+		     , dp_change
+		     , dp_final
+		     , to_char(dp_create, 'YYYY-MM-DD')as dp_create
+		     , (select emp_name 
+		          from tb_sign  
+		          join tb_employee on (signemp_no = emp_no) 
+		         where si_status = 'R'
+		           and dp_no = d.dp_no) as "sign_empname"
+		     , (select dep_name 
+		          from tb_sign 
+		          join tb_employee e on (signemp_no = e.emp_no) 
+		          join tb_department using (dep_cd) 
+		         where si_status = 'R' 
+		           and dp_no = d.dp_no) as "sign_empdept"
+		  from tb_dtpaper d 
+		  join tb_employee e on (d.emp_no = e.emp_no)
+		 where d.emp_no = #{empNo}
+		   and dp_final =  <if test="fn.equals('임시저장')">
 		 						'임시저장'
-		 					</when>
-		 					<otherwise>
-		 						'반려됨'
-		 					</otherwise>
-		 				  </choose>
+			 				</if>
+			 				<if test="fn.equals('반려됨')">
+			 					'반려됨'
+			 				</if>
 		   and dp_status = 'N'
-		   and emp_no = #{ empNo }
 		 order
-		    by dp_create desc
+		    by dp_create desc, dp_modify desc
 	</select>
+	<!-- 진행, 완료 리스트 -->
 	<select id="selectProgressList" resultMap="SelectProgressListResult">
 		select
 		       d.dp_no
-		      ,emp_no
-		      ,dp_title
-		      ,to_char(dp_create, 'YYYY-MM-DD') AS "dp_create"
-		      ,dp_modify
-		      ,dp_status
-		      ,dp_final
-		      ,dp_category
-		      ,dp_origin
-		      ,dp_change
-		      ,(select emp_name 
-				    from tb_sign 
-				    join tb_employee on (signemp_no = emp_no)
-				   where dp_no = d.dp_no 
-				     and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
-				  ) AS sign_empname
-			  ,(select to_char(si_appdate, 'YYYY-MM-DD') 
-			      from tb_sign s 
-			     where s.dp_no = d.dp_no 
-			       and si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no)
-			       ) AS lastSigndate
-		  from tb_dtpaper d
-		 where 	dp_final = 	<choose>
-			 					<when test="fn.equals('진행중')">
-						       		'진행중' or dp_final = '대기'
-			 					</when>
-			 					<otherwise>
-			 						'결재완료'
-			 					</otherwise>
-			 				  </choose>
-		   and dp_status = 'N'
-		   and d.emp_no = #{ empNo }
+		     , dp_category
+		     , dp_title
+		     , dp_origin
+		     , dp_change
+		     , dp_final
+		     , to_char(dp_create, 'YYYY-MM-DD')as dp_create
+		     , (select emp_name 
+		          from tb_sign  
+		          join tb_employee on (signemp_no = emp_no) 
+		         where si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no) 
+		           and dp_no = d.dp_no
+		       ) as "sign_empname"
+		     , (select dep_name 
+		          from tb_sign 
+		          join tb_employee e on (signemp_no = e.emp_no) 
+		          join tb_department using (dep_cd) 
+		         where si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no) 
+		           and dp_no = d.dp_no
+		       ) as "sign_empdept"
+		     , (select to_char(si_appdate, 'YYYY-MM-DD') as si_appdate
+		          from tb_sign 
+		         where si_seq = (select max(si_seq) from tb_sign where dp_no = d.dp_no) 
+		           and dp_no = d.dp_no
+		       ) as "last_signdate"
+		  from tb_dtpaper d 
+		  join tb_employee e on (d.emp_no = e.emp_no)
+		 where d.emp_no = #{empNo}
+		   and dp_final in <if test="fn.equals('진행중')">
+		 					   ('진행중', '대기')
+			 				</if>
+			 				<if test="fn.equals('완료됨')">
+			 					('결재완료')
+			 				</if>
+		   and dp_status = 'N'				
 		 order
-		    by dp_create desc
+		    by dp_create desc, dp_modify desc
 	</select>
 	
 	<!-- <select>
@@ -505,16 +515,15 @@
 		select
 		       count(*)	
 		  from tb_dtpaper
-		 where dp_final = <choose> 
-		 					<when test="fn.equals('진행중')">
-					       		 '진행중' or dp_final = '대기'
-		 					</when>
-		 					<otherwise>
-		 						 '결재완료'
-		 					</otherwise>
-		 				</choose>
-		   and dp_status = 'N' 
-		   and emp_no = ${ empNo }
+		 where emp_no = #{empNo}
+		   and dp_final in <if test="fn.equals('진행중')">
+		 					   ('진행중', '대기')
+			 				</if>
+			 				<if test="fn.equals('완료됨')">
+			 					('결재완료')
+			 				</if>
+		   and dp_status = 'N'	
+		 
 	</select>
 	
 	<!-- 타부서 결재함 -->
@@ -559,8 +568,10 @@
 		  join tb_department d on (e.dep_cd = d.dep_cd)
 		 where si_status = 'C'
 		   and dt.dp_status = 'N'
-		   and signemp_no = #{ map.empNo }
-		   and e.dep_cd != #{ map.depCd }
+		   and signemp_no = #{ empNo }
+		   and e.dep_cd != #{ depCd }
+		 order
+		    by dp_create desc, dp_modify desc
 	</select>
 <!-- 타부서 결재완료 -->
 	<select id="selectEndOthSignListCount" resultType="_int">
@@ -606,6 +617,8 @@
 		   and dt.dp_status = 'N'
 		   and signemp_no = #{ empNo }
 		   and e.dep_cd != #{ depCd } 
+		 order
+		    by dp_create desc, dp_modify desc
 	</select>
 	
 	
@@ -642,6 +655,8 @@
 		   and dt.dp_status = 'N'
 		   and signemp_no = #{ empNo }
 		   and e.dep_cd = #{ depCd }
+		 order
+		    by dp_create desc, dp_modify desc
 	</select>
 	<select id="selectDeptSignListCount" resultType="_int">
 		select 
@@ -687,6 +702,8 @@
 		   and dt.dp_status = 'N'
 		   and signemp_no = #{ empNo }
 		   and e.dep_cd = #{ depCd }
+		 order
+		    by dp_create desc, dp_modify desc
 
 	</select>
 	<select id="selectEndSignListCount" resultType="_int">
@@ -729,6 +746,7 @@
 		      ,dep_name as sign_empdept
 		      ,dp_origin
 		      ,dp_change 
+		      ,dp_final
 	      from tb_dtpaper d
 	      join tb_employee e on(d.emp_no = e.emp_no)
 	      join tb_department dd on(e.dep_cd = dd.dep_cd)
@@ -877,7 +895,7 @@
 	<update id="updateDisagreeSign">
 	
 		update tb_sign
-	       set si_status = 'Y',
+	       set si_status = 'R',
 	           si_appdate = current_date
 	     where dp_no = #{ dpNo }
 	       and signemp_no = #{ signEmpNo }
@@ -889,4 +907,91 @@
 			   dp_final = '반려됨'
 		 where dp_no = #{dpNo}
 	</update>
+	<!-- 기안서 수정하기 순서대로 공통 - 연차 - 외근 - 퇴직원 - 업무협조 -->
+	<update id="updateDt">
+		update tb_dtpaper
+		   set dp_title = #{dpTitle}
+		   	<if test="dpFinal == '임시저장'">
+		     , dp_final = '대기'
+		     , dp_create = current_date
+		    </if>
+		      ,dp_origin = #{dpOrigin}
+		      ,dp_change = #{dpChange}
+		      <if test="dpFinal == '대기'and dpFinal == '진행중'">
+		      ,dp_modify = current_date
+		       </if>
+ 		 where dp_no = #{dpNo}
+	</update>
+	<update id="updateVa">
+		update tb_vacation
+		   set va_start = #{vaStart}
+		     , va_end = #{vaEnd}
+		     , va_category = #{vaCategory}
+		     , va_content = #{vaCategory}
+		 where dp_no = #{dpNo}
+	</update>
+	<update id="updateOw">
+		update tb_otwork
+		   set ot_startdate = #{otStartdate}
+		     , ot_enddate = #{otEnddate}
+		     , ot_customer = #{otCustomer}
+		     , ot_content = #{otContent}
+		     , ot_trans = #{otTrans}
+		     , ot_note = #{otNote}
+		     , ot_place = #{otPlace}
+		     , ot_supervisor = #{otSupervisor}
+		     , ot_call = #{otCall}
+     	 where dp_no = #{dpNo}
+	</update>
+	
+	<update id="updateRe">
+		update tb_resign
+		   set res_redate = #{resRedate}
+		     , res_account = #{resAccount}
+		     , res_bank = #{resBank}
+		     , res_content = #{resContent}
+		     , res_mem = #{resMem}
+		     , res_dept = #{resDept}
+		     , res_email = #{resEmail}
+		     , res_nextmem = #{resNextMem}
+		     , res_tamem = #{resTaMem}
+		 where dp_no = #{dpNo}
+	</update>
+	<update id="updateCo">
+		update tb_coop
+		   set cp_requestor = #{cpRequestor}
+			 , cp_requestday = #{cpRequestday}
+			 , cp_content = #{cpContent} 
+			 , cp_dept = #{cpDept}
+			 , cp_calldept = #{cpCallDept}
+	     where dp_no = #{dpNo}
+	</update>
+	<delete id="deleteSign">
+		delete tb_sign
+		 where dp_no = #{dpNo}
+	</delete>
+	<!-- 반려됨 재작성 결재선 다시 인서트 -->
+	<insert id="updateSign">
+		insert
+		  into tb_sign
+		     (
+		       dp_no
+		     , signemp_no
+		     , si_seq
+		     , si_asign
+	         <if test="siSeq == 1">
+			 , si_status
+			 </if>
+		     ) 
+		 values
+		 (
+			#{ no }
+		  , #{ s.signEmpNo }
+		  , #{ s.siSeq }
+		  , #{ s.siAsign }
+		   <if test="siSeq == 1">
+		  , 'C'
+		  </if>
+		 )
+	</insert>
 </mapper>

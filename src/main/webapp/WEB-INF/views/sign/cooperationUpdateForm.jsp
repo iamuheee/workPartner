@@ -1,18 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
- <style>
+<style>
         .insertBtn {
             font-size: 18px;
             color: black;
             font-weight: bold;
             margin-left: 10px;
-            border-right: 1px solid rgba(143, 143, 143, 0.547);
+            border-right: 0.5px solid rgba(143, 143, 143, 0.547);
             padding-right: 15px;
         }
 
@@ -163,63 +163,44 @@
             font-size: 16px;
         }
 
-      
-	</style>
+        .otworkPaper input[type=datetime-local] {
+            text-align: center;
+            width: 40%;
+            vertical-align: middle;
+        }
+
+    </style>
 </head>
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;" >
-	<jsp:include page="../sign/insertTitle.jsp"/>
+<jsp:include page="../sign/updateTitle.jsp"/>
 	
-	 <br>
+	<br>
     <section>
         <div style="margin: auto; margin-top: 10px; width: 800px;">
-            <table class="otworkPaper" style="border:1px solid rgba(143, 143, 143, 0.547)" align="center">
+            <table class="otworkPaper" style="border:0.5px solid rgba(143, 143, 143, 0.547)" align="center">
                 <tr>
-                    <td class="tableTitle" width="100">퇴직자</td>
-                    <td width="280" align="right"><input type="text" name="resMem" value="${ loginUser.empName }" readonly></td>
-                    <td class="tableTitle" width="100">부서</td>
-                    <td width="280" align="right" style="border-right:0;">
-                        <input type="text" value="${ loginUser.depCd }" readonly name="resDept">
+                    <td class="tableTitle" width="100">발신부서</td>
+                    <td width="280" align="right"><input type="text" name="cpCallDept"  value="${ c.cpCallDept }"></td>
+                    <td class="tableTitle" width="100">수신부서</td>
+                    <td width="280" align="right" style="border-right:0;" >
+                        <input type="text" name="cpDept" value="${ c.cpDept }" >
                     </td>
                 </tr>
                 <tr>
-                    <td class="tableTitle">퇴직예정일자</td>
-                    <td align="left"><input style="margin-left:10px;" type="date" name="resRedate" id="resRedate"></td>
-                    <td class="tableTitle">업무인수자</td>
-                    <td align="right" style="border-right:0;"><input type="text" name="resNextMem"></td>
+                    <td class="tableTitle">요청자</td>
+                    <td align="right"><input type="text" name="cpRequestor" value="${ c.cpRequestor }" ></td>
+                    <td class="tableTitle">요청일</td>
+                    <td align="right" style="border-right:0;"><input type="text" name="cpRequestday" value="${ c.cpRequestday }" ></td>
                 </tr>
                 <tr>
-                    <td class="tableTitle">외부메일주소</td>
-                    <td align="right" >
-                        <input type="text" name="resEmail">
-                    </td>
-                    <td class="tableTitle">면담자</td>
-                    <td style="border-right:0;" align="right"><input type="text" name="resTaMem"></td>
-                </tr>
-                <tr>
-                    <td class="tableTitle">은행명</td>
-                    <td align="right"><input type="text" name="resBank"></td>
-                    <td class="tableTitle">계좌번호</td>
-                    <td style="border-right:0;" align="right"><input type="text" name="resAccount"></td>
-                </tr>
-                <tr>
-                    <td class="tableTitle" style="border-bottom: 0;">퇴직사유</td>
+                    <td class="tableTitle" style="border-bottom: 0;">요청내용</td>
                     <td colspan="3" style="border-bottom: 0; border-right:0;">
-                        <textarea name="resContent" cols="53" rows="10" style="resize: none; height:95%; width: 96%; margin-top: 3px; border: 0; font-size: 16px;"></textarea>
+                        <textarea name="cpContent" cols="53" rows="10" style="resize: none; height:95%; width: 96%; margin-top: 3px; border: 0; font-size: 16px;" >${ c.cpContent }</textarea>
                     </td>
                 </tr>
             </table>
         </div>
     </section>
-
-    <script>
-        document.getElementById('resRedate').value = new Date().toISOString().substring(0, 10);
-        var now_utc = Date.now() 
-		var timeOff = new Date().getTimezoneOffset()*60000;
-		var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
-		document.getElementById("resRedate").setAttribute("min", today);
-		
-    </script>
 	</form>
-	
 </body>
 </html>

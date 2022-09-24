@@ -1,5 +1,6 @@
 package com.wp.workpartner.sign.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
@@ -318,7 +319,7 @@ public class SignController {
 // 기안서 리스트 조회
 	// 임시저장
 	@RequestMapping("saveSi.si")
-	public ModelAndView selectSaveList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn) {
+	public ModelAndView selectSaveList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn, String st) {
 		model.addAttribute("flag", "save");
 		int saveListCount = sService.selectListCount(fn, empNo);
 		PageInfo pi = Pagination.getPageInfo(saveListCount, currentPage, 5, 15);
@@ -330,7 +331,7 @@ public class SignController {
 	}
 	// 반려됨
 	@RequestMapping("reSi.si")
-	public ModelAndView selectReSignList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn) {
+	public ModelAndView selectReSignList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn, String st) {
 		model.addAttribute("flag", "ReSign");
 		int reSignListCount = sService.selectListCount(fn, empNo);
 		PageInfo pi = Pagination.getPageInfo(reSignListCount, currentPage, 5, 15);
@@ -343,7 +344,7 @@ public class SignController {
 	// 진행중
 	// 반려됨
 		@RequestMapping("contSi.si")
-		public ModelAndView selectProgressList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn) {
+		public ModelAndView selectProgressList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn, String st) {
 			model.addAttribute("flag", "continue");
 			int contListCount = sService.selectProgressListCount(fn, empNo);
 			PageInfo pi = Pagination.getPageInfo(contListCount, currentPage, 5, 15);
@@ -355,7 +356,7 @@ public class SignController {
 		}
 	// 결재완료
 		@RequestMapping("endSi.si")
-		public ModelAndView selectEndSignList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn) {
+		public ModelAndView selectEndSignList(@RequestParam(value="cpage", defaultValue="1") int currentPage, ModelAndView mv, Model model, String empNo, String fn, String st) {
 			model.addAttribute("flag", "end");
 			int endListCount = sService.selectProgressListCount(fn, empNo);
 			PageInfo pi = Pagination.getPageInfo(endListCount, currentPage, 5, 15);
@@ -426,12 +427,12 @@ public class SignController {
 	}
 //	기안서 상세보기
 	@RequestMapping("detailMy.si")
-	public ModelAndView selectDetailView(ModelAndView mv, Model model, int no, String ct) {
+	public ModelAndView selectDetailView(ModelAndView mv, Model model, int no, String ct, String st) {
 //		System.out.println(no);
 		ArrayList<Sign> selectSignList = sService.selectSignList(no);
 		Dtpaper titleList = sService.selectTitleList(no);
 		if(ct.equals("연차")) {
-			model.addAttribute("flag", "연차");
+			model.addAttribute("flag", st);
 			SelectVacation selectVa = sService.selectVa(no);
 			mv.addObject("selectSignList", selectSignList)
 			.addObject("v", selectVa)
@@ -439,8 +440,12 @@ public class SignController {
 			.setViewName("sign/vacationDetailView");
 //			System.out.println(signList);
 //			System.out.println(selectVa);
+			System.out.println(selectVa.getVaStartTime());
+			System.out.println(selectVa.getVaStart());
+			System.out.println(selectVa.getVaEndTime());
+			System.out.println(selectVa.getVaEnd());
 		}else if(ct.equals("외근")) {
-			model.addAttribute("flag", "외근");
+			model.addAttribute("flag", st);
 			SelectOtwork selectOw = sService.selectOw(no);
 			mv.addObject("selectSignList", selectSignList)
 			.addObject("o", selectOw)
@@ -449,7 +454,7 @@ public class SignController {
 //			System.out.println(signList);
 //			System.out.println(selectOw);
 		}else if(ct.equals("퇴직원")) {
-			model.addAttribute("flag", "퇴직원");
+			model.addAttribute("flag", st);
 			SelectReSign selectRe = sService.selectRe(no);
 			mv.addObject("selectSignList", selectSignList)
 			.addObject("r", selectRe)
@@ -458,7 +463,7 @@ public class SignController {
 //			System.out.println(signList);
 //			System.out.println(selectRe);
 		}else {
-			model.addAttribute("flag", "외근");
+			model.addAttribute("flag", st);
 			SelectCooperation selectCo = sService.selectCo(no);
 			mv.addObject("selectSignList", selectSignList)
 			.addObject("c", selectCo)
@@ -511,11 +516,14 @@ public class SignController {
 	@RequestMapping("agreeSign.si")
 	public String updateAgreeSign(HttpSession session,Dtpaper d, Model model) {
 		System.out.println(d);
+		System.out.println(d.getDpNo());
+		System.out.println(d.getDpCategory());
 		Employee loginUser = (Employee)session.getAttribute("loginUser");
 		ArrayList<Sign> signList = d.getSignList();
 		int result = 0;
 		int result1 = 0;
 		int result2 = 0;
+		
 		for(Sign s : signList) {
 			System.out.println(s.getSignEmpNo());
 			System.out.println(loginUser.getEmpNo());
@@ -526,7 +534,7 @@ public class SignController {
 				 if(result > 0) {
 					 result1 = sService.updateAgreeDtpaper(s);
 					 
-					 
+//					 
 //					 if(s.getSiAsign() == 2 || s.getSiAsign() == 3) {
 //						 if(s.getSiSeq()== 1 || s.getSiSeq() == 2) {
 //							 if(s.getSiAsign() != s.getSiSeq()) {
@@ -535,7 +543,7 @@ public class SignController {
 //						 }
 //					 }
 					 
-					 
+//					 
 					 if(s.getSiAsign() > 1 && s.getSiSeq() < s.getSiAsign()) { // 총결재자수가 다수일경우 
 						 result2 = sService.updateAgreeSiStatus(s);
 					 }
@@ -549,16 +557,306 @@ public class SignController {
 				System.out.println("실패");
 			}
 				
-			System.out.println(result2);
 		}
-		if(result2 > 0) {
-			session.setAttribute("alertMsg", "게시글이 수정되었습니다.");
-			return "redirect:detailMy.si?no=" + d.getDpNo();
+			
+		
+			session.setAttribute("alertSignMsg", "결재처리되었습니다.");
+			return "redirect:detailMy.si?no=" + d.getDpNo() + "&ct=" + d.getDpCategory() + "&st=af";
+	}
+	
+	@RequestMapping("updateForm.si")
+	public ModelAndView updateForm(ModelAndView mv, Model model, int no, String ct) {
+			System.out.println(no);
+			ArrayList<Sign> selectSignList = sService.selectSignList(no);
+			Dtpaper titleList = sService.selectTitleList(no);
+			if(ct.equals("연차")) {
+				SelectVacation selectVa = sService.selectVa(no);
+				mv.addObject("selectSignList", selectSignList)
+				.addObject("v", selectVa)
+				.addObject("t", titleList)
+				.setViewName("sign/vacationUpdateForm");
+			}else if(ct.equals("외근")) {
+				SelectOtwork selectOw = sService.selectOw(no);
+				mv.addObject("selectSignList", selectSignList)
+				.addObject("o", selectOw)
+				.addObject("t", titleList)
+				.setViewName("sign/outworkUpdateForm");
+			}else if(ct.equals("퇴직원")) {
+				SelectReSign selectRe = sService.selectRe(no);
+				mv.addObject("selectSignList", selectSignList)
+				.addObject("r", selectRe)
+				.addObject("t", titleList)
+				.setViewName("sign/reSignEmpUpdateForm");
+			}else {
+				SelectCooperation selectCo = sService.selectCo(no);
+				mv.addObject("selectSignList", selectSignList)
+				.addObject("c", selectCo)
+				.addObject("t", titleList)
+				.setViewName("sign/cooperationUpdateForm");
+			}
+			return mv;
+	}
+	@RequestMapping("updateSi.si")
+	public String updateDtpaper(Dtpaper d, Vacation v, Otwork o, ReSign r, Cooperation c,  HttpSession session, MultipartFile reupfile, String ct) {
+		System.out.println(d);
+		System.out.println(v);
+		System.out.println(o);
+		System.out.println(r);
+		System.out.println(c);
+		System.out.println(ct);
+		if(!reupfile.getOriginalFilename().equals("")) {
+			
+			// 기존에 첨부파일이 있을 경우
+			if(d.getDpOrigin() != null) {
+				new File(session.getServletContext().getRealPath(d.getDpChange())).delete();
+			}
+			// 새로 넘어온 첨부파일 서버 업로드 시키기
+			String saveFilePath = FileUpload.saveFile(reupfile, session, "resources/uploadFiles/");
+			
+			d.setDpOrigin(reupfile.getOriginalFilename());
+			d.setDpChange(saveFilePath);
 		}
-		else {
-			model.addAttribute("errorPage", "게시글 수정에 실패하였습니다.");
+		int dtpaper = sService.updateDt(d);
+		System.out.println(dtpaper);
+		if(dtpaper > 0) {
+			if(ct.equals("연차")) {
+				int updateVa = sService.updateVa(v);
+				System.out.println(1);
+			}else if(ct.equals("외근")) {
+				int updateOw = sService.updateOw(o);
+				System.out.println(2);
+			}else if(ct.equals("퇴직원")) {
+				int updateRe = sService.updateRe(r);
+				System.out.println(3);
+			}else {
+				int updateCo = sService.updateCo(c);
+				System.out.println(4);
+			}
+			
+		}
+		return "rr";
+	}
+	/**
+	 * 임시저장 재작성하기
+	 * @param d
+	 * @param v
+	 * @param o
+	 * @param r
+	 * @param c
+	 * @param session
+	 * @param reupfile
+	 * @param ct
+	 * @return
+	 */
+	@RequestMapping("updateRsi.si")
+	public String updateReDtpaper(Dtpaper d, Vacation v, Otwork o, ReSign r, Cooperation c,  HttpSession session, MultipartFile reupfile, String ct) {
+		int deleteSign = sService.deleteSign(d);
+		System.out.println(d);
+		System.out.println(v);
+		System.out.println(o);
+		System.out.println(r);
+		System.out.println(c);
+		System.out.println(ct);
+		if(!reupfile.getOriginalFilename().equals("")) {
+			
+			// 기존에 첨부파일이 있을 경우
+			if(d.getDpOrigin() != null) {
+				new File(session.getServletContext().getRealPath(d.getDpChange())).delete();
+			}
+			// 새로 넘어온 첨부파일 서버 업로드 시키기
+			String saveFilePath = FileUpload.saveFile(reupfile, session, "resources/uploadFiles/");
+			
+			d.setDpOrigin(reupfile.getOriginalFilename());
+			d.setDpChange(saveFilePath);
+		}
+		
+		System.out.println(deleteSign);
+		
+		int dtpaper = sService.updateDt(d);
+		System.out.println(dtpaper);
+		if(dtpaper > 0) {
+			ArrayList<Sign> signList = d.getSignList();
+			System.out.println(signList);
+			if(ct.equals("연차")) {
+				int updateVa = sService.updateVa(v);
+				if(updateVa > 0) {
+					int result3 = sService.updateSign(signList,d);
+				}
+				System.out.println(1);
+			}else if(ct.equals("외근")) {
+				int updateOw = sService.updateOw(o);
+				if(updateOw > 0) {
+					int result3 = sService.updateSign(signList,d);
+				}
+				System.out.println(2);
+			}else if(ct.equals("퇴직원")) {
+				int updateRe = sService.updateRe(r);
+				if(updateRe > 0) {
+					int result3 = sService.updateSign(signList,d);
+				}
+				System.out.println(3);
+			}else {
+				int updateCo = sService.updateCo(c);
+				if(updateCo > 0) {
+					int result3 = sService.updateSign(signList,d);
+				}
+				System.out.println(4);
+			}
+			
+		}
+		return "rr";
+	}
+	
+	@RequestMapping("insertReVa.si")
+	public String insertVacation2(Dtpaper d, Vacation v, MultipartFile reupfile, HttpSession session, Model model) {
+
+		if(!reupfile.getOriginalFilename().equals("")) {
+			
+			// 기존에 첨부파일이 있을 경우
+			if(d.getDpOrigin() != null) {
+				new File(session.getServletContext().getRealPath(d.getDpChange())).delete();
+			}
+			// 새로 넘어온 첨부파일 서버 업로드 시키기
+			String saveFilePath = FileUpload.saveFile(reupfile, session, "resources/uploadFiles/");
+			
+			d.setDpOrigin(reupfile.getOriginalFilename());
+			d.setDpChange(saveFilePath);
+		}
+	
+		ArrayList<Sign> signList = d.getSignList();
+ 
+		int result1 = sService.insertDtpaper(d);
+		
+		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
+			int result2 = sService.insertVacation(v);
+				if(result2 > 0) {
+					int result3 = sService.updateSign(signList,d);
+					if(result3 > 0) {
+						session.setAttribute("alertSignMsg", "결재신청되었습니다.");
+					}
+				}
+				return "redirect:selectVa.si";
+		}else { // 실패 => 에러문구, 에러페이지
+			model.addAttribute("errorMsg", "결재 신청 실패.");
 			return "common/errorPage";
 		}
-	}	
+	}
+	@RequestMapping("insertReOw.si")
+	public String insertOtWork2(Dtpaper d, Otwork o, MultipartFile reupfile, HttpSession session, Model model) {
+		System.out.println(reupfile);
+		System.out.println(d);
+		System.out.println(d.getSignList()); // ArrayList<Sign> 결재자리스
+		System.out.println(o);
+		if(!reupfile.getOriginalFilename().equals("")) {
+			
+			// 기존에 첨부파일이 있을 경우
+			if(d.getDpOrigin() != null) {
+				new File(session.getServletContext().getRealPath(d.getDpChange())).delete();
+			}
+			// 새로 넘어온 첨부파일 서버 업로드 시키기
+			String saveFilePath = FileUpload.saveFile(reupfile, session, "resources/uploadFiles/");
+			
+			d.setDpOrigin(reupfile.getOriginalFilename());
+			d.setDpChange(saveFilePath);
+		}
+		//int siAsign = d.getSignList().size();
+		//System.out.println(siAsign);
+		ArrayList<Sign> signList = d.getSignList();
+//		System.out.println(signList);
+		//signList.add(d.setSignList((d.getSignList).length);
+		int result1 = sService.insertDtpaper(d);
+		
+		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
+			int result2 = sService.insertOtwork(o);
+				if(result2 > 0) {
+					int result3 = sService.updateSign(signList,d);
+					if(result3 > 0) {
+						session.setAttribute("alertSignMsg", "결재신청되었습니다.");
+					}
+				}
+				return "redirect:selectOutWork";
+		}else { // 실패 => 에러문구, 에러페이지
+			model.addAttribute("errorMsg", "결재 신청 실패.");
+			return "common/errorPage";
+		}
+	}
+	@RequestMapping("insertReRe.si")
+	public String insertReSignEmp2(Dtpaper d, ReSign r, MultipartFile reupfile, HttpSession session, Model model) {
+		System.out.println(reupfile);
+		System.out.println(d);
+		System.out.println(d.getSignList()); // ArrayList<Sign> 결재자리스
+		System.out.println(r);
+		if(!reupfile.getOriginalFilename().equals("")) {
+			
+			// 기존에 첨부파일이 있을 경우
+			if(d.getDpOrigin() != null) {
+				new File(session.getServletContext().getRealPath(d.getDpChange())).delete();
+			}
+			// 새로 넘어온 첨부파일 서버 업로드 시키기
+			String saveFilePath = FileUpload.saveFile(reupfile, session, "resources/uploadFiles/");
+			
+			d.setDpOrigin(reupfile.getOriginalFilename());
+			d.setDpChange(saveFilePath);
+		}
+		//int siAsign = d.getSignList().size();
+		//System.out.println(siAsign);
+		ArrayList<Sign> signList = d.getSignList();
+//		System.out.println(signList);
+		//signList.add(d.setSignList((d.getSignList).length);
+		int result1 = sService.insertDtpaper(d);
+		
+		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
+			int result2 = sService.insertReSignEmp(r);
+			if(result2 > 0) {
+				int result3 = sService.updateSign(signList,d);
+				if(result3 > 0) {
+					session.setAttribute("alertSignMsg", "결재신청되었습니다.");
+				}
+			}
+			return "redirect:sign/selectOutWork";
+		}else { // 실패 => 에러문구, 에러페이지
+			model.addAttribute("errorMsg", "결재 신청 실패.");
+			return "common/errorPage";
+		}
+	}
+	@RequestMapping("insertReCo.si")
+	public String insertCooperation2(Dtpaper d, Cooperation c, MultipartFile reupfile, HttpSession session, Model model) {
+		System.out.println(reupfile);
+		System.out.println(d);
+		System.out.println(d.getSignList()); // ArrayList<Sign> 결재자리스
+		System.out.println(c);
+		if(!reupfile.getOriginalFilename().equals("")) {
+			
+			// 기존에 첨부파일이 있을 경우
+			if(d.getDpOrigin() != null) {
+				new File(session.getServletContext().getRealPath(d.getDpChange())).delete();
+			}
+			// 새로 넘어온 첨부파일 서버 업로드 시키기
+			String saveFilePath = FileUpload.saveFile(reupfile, session, "resources/uploadFiles/");
+			
+			d.setDpOrigin(reupfile.getOriginalFilename());
+			d.setDpChange(saveFilePath);
+		}
+		//int siAsign = d.getSignList().size();
+		//System.out.println(siAsign);
+		ArrayList<Sign> signList = d.getSignList();
+//		System.out.println(signList);
+		//signList.add(d.setSignList((d.getSignList).length);
+		int result1 = sService.insertDtpaper(d);
+		
+		if(result1 > 0) { // 성공 => alert, 게시글 리스트페이지
+			int result2 = sService.insertCooperation(c);
+			if(result2 > 0) {
+				int result3 = sService.updateSign(signList ,d);
+				if(result3 > 0) {
+					session.setAttribute("alertSignMsg", "결재신청되었습니다.");
+				}
+			}
+			return "redirect:sign/selectOutWork";
+		}else { // 실패 => 에러문구, 에러페이지
+			model.addAttribute("errorMsg", "결재 신청 실패.");
+			return "common/errorPage";
+		}
+	}
 }
 	

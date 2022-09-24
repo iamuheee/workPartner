@@ -22,6 +22,8 @@ public interface SignService {
 	int insertReSign(ArrayList<Sign> signList);
 	int insertCoSign(ArrayList<Sign> signList);
 	
+	int updateSign(ArrayList<Sign> signList, Dtpaper d);
+	
 	int insertDtpaper(Dtpaper d);
 	int saveDtpaper(Dtpaper d);
 	
@@ -47,21 +49,16 @@ public interface SignService {
 //	내부서 결재완료
 	int selectEndSignListCount(String empNo, String depCd);
 	ArrayList<Dtpaper> selectEndSignList(PageInfo pi, String empNo, String depCd);
-//  결재 할 기안서 상세조회
-	SelectCooperation selectSignCooperation(int dpNo); 
-	SelectReSign selectSignResign(int dpNo); 
-	SelectVacation selectSignVacation(int dpNo); 
-	SelectOtwork selectSignOtwork(int dpNo);
 //  기안서 수정하기
-	int updateCooperation(Dtpaper d, Cooperation c);
-	int updateVacation(Dtpaper d, Vacation v);
-	int updateOtwork(Dtpaper d, Otwork o);
-	int updateReSignEmp(Dtpaper d, ReSign r);
+	int updateCo(Cooperation c);
+	int updateVa(Vacation v);
+	int updateOw(Otwork o);
+	int updateRe(ReSign r);
+//  기안서 수정하기 dtpaper
+	int updateDt(Dtpaper d);
 //	기안서 삭제하기
-	int deleteCooperation(int dpNo);
-	int deleteVacation(int dpNo);
-	int deleteOtwork(int dpNo);
-	int deleteReSignEmp(int dpNo);
+	int deleteSign(Dtpaper d);
+	int deleteDt(int dpNo);
 //  기안서 상세조회
 	SelectCooperation selectCo(int no); 
 	SelectReSign selectRe(int no); 
@@ -79,4 +76,5 @@ public interface SignService {
 //	기안서 결재반려 상태 업데이트 
 	int updateDisagreeSign(Sign s);
 	int updateDisagreeDtpaper(Sign s);
+	
 }

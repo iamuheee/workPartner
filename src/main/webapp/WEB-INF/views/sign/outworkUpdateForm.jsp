@@ -118,22 +118,23 @@ th, td {
 	font-size: 16px;
 }
 
-input[type=file] {
-	margin-bottom: 4px;
-}
 
 input, select, textarea {
 	border: 1px solid rgba(143, 143, 143, 0.547)
 }
 
+span {
+	margin-left: 5px
+}
+
 .otworkPaper input[type=text] {
-	width: 95%;
+	width: 97%;
+	box-sizing: border-box;
 	margin: auto;
-	margin-left:10px;
 	height: 100%;
 	border: 0;
 	font-size: 16px;
-	background-color: #ffffff48 !important;
+	background-color: #ffffff48;
 	padding: auto;
 }
 
@@ -163,13 +164,23 @@ input, select, textarea {
 	text-align: center;
 	width: 28%;
 	vertical-align: middle;
-	
 }
 #startDate{
 margin-left: 10px;
 }
 </style>
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<script src="https://uicdn.toast.com/tui-tree/latest/tui-tree.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css" />
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- <script>
@@ -192,8 +203,7 @@ margin-left: 10px;
 </head>
 
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-	<jsp:include page="../sign/insertTitle.jsp" />
-
+<jsp:include page="../sign/updateTitle.jsp"/>
 	<br>
 	<section>
 		<div style="margin: auto; margin-top: 10px; width: 800px;">
@@ -201,50 +211,58 @@ margin-left: 10px;
 				<tr>
 					<td class="tableTitle" width="100">신청자</td>
 					<td width="280" align="right"><input type="text" id="writeEmp"
-						name="otCall" value="${ loginUser.empName }" readonly></td>
+						name="otCall" value="${ o.otCall }" readonly></td>
 					<td class="tableTitle" width="100">담당자</td>
 					<td width="280" align="right" style="border-right: 0;"><input
-						type="text" name="otSupervisor"></td>
+						type="text" name="otSupervisor" value="${ o.otSupervisor }" ></td>
 				</tr>
 				<tr>
 					<td class="tableTitle">외근목적</td>
-					<td align="right"><input type="text" name="otContent"></td>
+					<td align="right">
+						<input type="text" name="otContent" value="${ o.otContent }" >
+					</td>
 					<td class="tableTitle">거래처</td>
-					<td align="right" style="border-right: 0;"><input type="text"
-						name="otCustomer"></td>
+					<td align="right" style="border-right: 0;">
+						<input type="text"name="otCustomer" value="${ o.otCustomer }" >
+					</td>
 				</tr>
 				<tr>
 					<td class="tableTitle">교통수단</td>
-					<td align="left"><select name="otTrans"
-						style="margin-left: 10px">
+					<td align="left">
+					<script>
+						$(document).ready(function(){
+							$(".trans").val("${o.otTrans}").prop("selected", true)
+						})
+					</script>
+						<select class="trans" name="otTrans" style="margin-left: 10px" >
 							<option value="대중교통">대중교통</option>
 							<option value="자차">자차</option>
 							<option value="도보">도보</option>
-					</select></td>
+						</select>
+					</td>
 					<td class="tableTitle">위치</td>
-					<td style="border-right: 0;" align="right"><input type="text"
-						name="otPlace"></td>
+					<td style="border-right: 0;" align="right">
+						<input type="text" name="otPlace" value="${ o.otPlace }">
+						</td>
 				</tr>
 				<tr>
 					<td class="tableTitle">시간</td>
 					<td colspan="3" align="left" style="border-right: 0;">
-					<input type="datetime-local" id="startDate" name="otStartdate" onchange="setMinValue()">
-					<input type="datetime-local" id="endDate" name="otEnddate" onchange="setMinValue()">
+					<input type="datetime-local" id="startDate" style="margin-left: 10px" name="otStartdate" value="${ o.otStartdate }"onchange="setMinValue()" > ~ 
+					<input type="datetime-local" id="endDate" name="otEnddate" value="${ o.otEnddate }"onchange="setMinValue()" >
 					</td>
 
 				</tr>
 				<tr>
 					<td class="tableTitle" style="border-bottom: 0;">비고</td>
-					<td colspan="3" style="border-bottom: 0; border-right: 0;"><textarea name="otNote" id="" cols="53" rows="10" style="resize: none; height: 95%; width: 96%; margin-top: 3px; border: 0; font-size: 16px;"></textarea>
+					<td colspan="3" style="border-bottom: 0; border-right: 0;"><textarea name="otNote" id="" cols="53" rows="10" style="resize: none; height: 95%; width: 96%; margin-top: 3px; border: 0; font-size: 16px;">${ o.otNote }</textarea>
 					</td>
 				</tr>
 			</table>
 		</div>
-<!-- 		<script>
- 		 	document.getElementById('startTime').value= new Date().toISOString().slice(0, -1);
- 		 	document.getElementById('endTime').value= new Date().toISOString().slice(0, -1);
-		</script> -->
-	    <script>
+	</section>
+	</form>
+	<script>
 		    let dateElement = document.getElementById('startDate');
 	        let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -8);
 	        dateElement.value = date;
@@ -272,10 +290,6 @@ margin-left: 10px;
 			    document.getElementById("endDate").setAttribute("min", val);
 			}
 	        
-	    	</script>
-	    	
-	    	
-	</section>
-	</form>
+    </script>
 </body>
 </html>

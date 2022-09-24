@@ -46,7 +46,6 @@ h3 {
 }
 
 .dtpaperName {
-	margin-left: 10px;
 	line-height: 10px;
 }
 
@@ -83,7 +82,7 @@ th, td {
 }
 
 .signSelect td {
-	width: 150px;
+	width: 125px;
 	border: 0;
 }
 
@@ -219,24 +218,44 @@ input, select, textarea {
 </head>
 <!-- onload="window.resizeTo(620,800)" -->
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
+<c:if test="${ not empty alertSignMsg }">
+		<script>
+			alert("${alertSignMsg}");
+		</script>
+		<c:remove var="alertSignMsg" scope="session" />
+</c:if>
 <form action="" method="post" name="updateForm" id="updateForm" enctype="multipart/form-data"> 
-	<c:if test="${flag ==  otherSign or flag == deptSign}">
-	<section class="mainTitle">
-			<a class="insertBtn" onclick="agreeSign();">결재승인</a>
-			<a class="insertBtn" onclick="disagreeSign()">결재반려</a>
-			<c:forEach var="s" items="${ selectSignList }">
-           		<c:set var="i" value="${ i + 1 }"/>
-				<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
-				<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
-			    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
-           	</c:forEach>
-		<hr>
-	</section>
-	</c:if>
+	<c:choose>
+		<c:when test="${flag == 'be'}">
+			<section class="mainTitle">
+					<a class="insertBtn" onclick="agreeSign();">결재승인</a>
+					<a class="insertBtn" onclick="disagreeSign()">결재반려</a>
+					<c:forEach var="s" items="${ selectSignList }">
+		           		<c:set var="i" value="${ i + 1 }"/>
+						<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
+						<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
+					    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
+		           	</c:forEach>
+				<hr> 
+			</section>
+		</c:when>
+		<c:otherwise>
+			<section class="mainTitle">
+					<span style="font-size: 18px; margin-left:10px; color:green;">결재완료</span>
+					<c:forEach var="s" items="${ selectSignList }">
+		           		<c:set var="i" value="${ i + 1 }"/>
+						<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
+						<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
+					    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
+		           	</c:forEach>
+				<hr>
+			</section>
+		</c:otherwise>
+	</c:choose>
 	<script>
 		function agreeSign() {
 			if (confirm("결재를 승인하시겠습니까?") == true) { //확인
-				document.updateForm.action = "agreeSign.si?dpNo=" /* + $("#dpNo").val() + "&signEmpNo=" + $("#signEmpNo").val() */ ;
+				document.updateForm.action = "agreeSign.si?";
 				document.updateForm.submit();
 			} else { //취소
 				return false;
@@ -256,10 +275,10 @@ input, select, textarea {
 
 	<section>
 		<div>
-			<h1 class="dtpaperName">
+			<h2 class="dtpaperName">
 				<span>${ t.dpCategory }</span> 신청서 - <span
 					style="font-weight: lighter;">${ t.empName }(${ t.signEmpDept})</span>
-			</h1>
+			</h2>
 			<hr>
 		</div>
 	</section>
