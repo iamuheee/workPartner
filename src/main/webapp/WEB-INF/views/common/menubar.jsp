@@ -372,8 +372,7 @@
 	                                   </a>
 	                                   <div class="collapse" id="pagesCollapseProject" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages1">
 	                                       <nav class="sb-sidenav-menu-nested nav">
-	                                           <a class="nav-link nav-choice" href="main.pr">홈</a>
-	                                           <a class="nav-link nav-choice" href="list.pr">참여프로젝트</a>
+	                                           <a class="nav-link nav-choice" href="list.pr">나의 프로젝트</a>
 	                                           <a class="nav-link nav-choice" href="enroll.pr">프로젝트 생성</a>
 	                                       </nav>
 	                                   </div>
