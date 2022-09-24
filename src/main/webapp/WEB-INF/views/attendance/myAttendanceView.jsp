@@ -53,9 +53,9 @@
 					<th>연장 근무 시간</th>
 				</tr>
 				<tr>
-					<td class="alignCenter">${list[0].weekWorkHours}시간</td>
-					<td class="alignCenter">${list[0].x}시간</td>
-					<td class="alignCenter">${ list[0].weekPlusWorkHours }시간</td>
+					<td class="alignCenter">${list2[0].weekWorkHours}시간</td>
+					<td class="alignCenter">${list2[0].x}시간</td>
+					<td class="alignCenter">${ list2[0].weekPlusWorkHours }시간</td>
 				</tr>
 			</table>
 			</div>
@@ -74,9 +74,9 @@
 						<th>연장 근무 시간</th>
 					</tr>
 					<tr>
-						<td class="alignCenter">${list[0].monthWorkHours}시간</td>
-						<td class="alignCenter">${list[0].y}시간</td>
-						<td class="alignCenter">${ list[0].monthPlusWorkHours }시간</td>
+						<td class="alignCenter">${list2[0].monthWorkHours}시간</td>
+						<td class="alignCenter">${list2[0].y}시간</td>
+						<td class="alignCenter">${ list2[0].monthPlusWorkHours }시간</td>
 					</tr>
 				</table>
 			</div>

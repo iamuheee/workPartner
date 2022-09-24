@@ -11,6 +11,7 @@ import com.wp.workpartner.attendance.model.vo.Attendance;
 import com.wp.workpartner.attendance.model.vo.Department;
 import com.wp.workpartner.attendance.model.vo.Holiday;
 import com.wp.workpartner.attendance.model.vo.Position;
+import com.wp.workpartner.attendance.model.vo.Vacation;
 import com.wp.workpartner.common.model.vo.PageInfo;
 
 @Repository
@@ -263,6 +264,10 @@ public class AttDao {
 	public int giveVacation0(String empNo, SqlSessionTemplate sqlSession) {
 		return sqlSession.insert("attendanceMapper.giveVacation0", empNo);
 	}
+	
+	public int giveVacation00(String empNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.insert("attendanceMapper.giveVacation00", empNo);
+	}
 
 	public int giveVacation1(String empNo, SqlSessionTemplate sqlSession) {
 		return sqlSession.insert("attendanceMapper.giveVacation1", empNo);
@@ -297,6 +302,35 @@ public class AttDao {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		
 		return (ArrayList)sqlSession.selectList("attendanceMapper.vacationList", map, rowBounds);
+	}
+
+	public ArrayList<Attendance> myAttendanceList2(String id, SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.myAttendanceList3",id);
+	}
+
+	public int myVacationCount(String empNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("attendanceMapper.myVacationCount",empNo);
+	}
+
+	public ArrayList<Vacation> myVacationList(String empNo, SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.myVacationList", empNo);
+	}
+
+	public ArrayList<Vacation> myVacationList2(String empNo, SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.myVacationList2", empNo);
+	}
+
+	public ArrayList<Vacation> myVacationList3(String empNo, PageInfo pi, SqlSessionTemplate sqlSession) {
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("attendanceMapper.myVacationList3", empNo, rowBounds);
+	}
+
+	public int resetVacation(String empNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.update("attendanceMapper.resetVacation", empNo);
 	}
 
 

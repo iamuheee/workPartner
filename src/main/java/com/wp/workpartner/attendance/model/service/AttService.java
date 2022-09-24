@@ -6,6 +6,7 @@ import com.wp.workpartner.attendance.model.vo.Attendance;
 import com.wp.workpartner.attendance.model.vo.Department;
 import com.wp.workpartner.attendance.model.vo.Holiday;
 import com.wp.workpartner.attendance.model.vo.Position;
+import com.wp.workpartner.attendance.model.vo.Vacation;
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.duty.model.vo.Duty;
 
@@ -91,6 +92,10 @@ public interface AttService {
 	// 0연차 연차 지급
 	int giveVacation0(String empNo);
 	
+	// 0연차 연차 지급
+		int giveVacation00(String empNo);  //연말
+
+	
 	// 1년차 이상 지급
 	int giveVacation1(String empNo);
 	
@@ -106,6 +111,19 @@ public interface AttService {
 	
 	// 전체 회원 휴가 조회
 	ArrayList<Attendance> vacationList(String condition, String keyword, PageInfo pi);
+	
+	// 내 근태이력 시간 계산
+	ArrayList<Attendance> myAttendanceList2(String id);
+	
+	// 내 휴가 
+	int myVacationCount(String empNo);
+	ArrayList<Vacation> myVacationList(String empNo);
+	ArrayList<Vacation> myVacationList2(String empNo);
+	ArrayList<Vacation> myVacationList3(String empNo, PageInfo pi);
+	
+	// 연차 정보 지우기
+	int resetVacation(String empNo);
+
 	
 	
 	
