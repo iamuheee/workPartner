@@ -196,5 +196,10 @@ public class DutyController {
 			return "common/error";
 		}
 	}
-
+	
+	@RequestMapping("cal.du")
+	public String selectCalendar() {
+		return "duty/dutyCalendarView";
+	}
+	
 }

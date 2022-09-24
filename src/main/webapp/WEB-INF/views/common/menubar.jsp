@@ -363,7 +363,7 @@
 	                                       <nav class="sb-sidenav-menu-nested nav">
 												<a class="nav-link nav-choice" href="list.du">전체 업무</a>
 												<a class="nav-link nav-choice" href="list.to">To Do 리스트</a>
-												<a class="nav-link nav-choice" href="">캘린더</a>
+												<a class="nav-link nav-choice" href="cal.du">캘린더</a>
 	                                       </nav>
 	                                   </div>
 	                                   <a class="nav-link collapsed nav-choice" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseProject" aria-expanded="false" aria-controls="pagesCollapseProject">
