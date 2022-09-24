@@ -147,18 +147,6 @@ public class ProjectServiceImpl implements ProjectService{
 	}
 
 
-	@Override
-	public ArrayList<ProjectBoard> selectProjectBoardList(Project p) {
-		ArrayList<ProjectBoard> blist = pDao.selectProjectBoardList(sqlSession, p);
-		for(ProjectBoard pb : blist) {
-			switch( pb.getRefType() ) {
-			case "업무" : pb.setPduty( pDao.selectDuty(sqlSession, pb) ); break;
-			case "회의" : pb.setPmeet( pDao.selectMeeting(sqlSession, pb) ); break;
-			}
-		}
-		return blist;
-	}
-
 
 	@Override
 	public int insertDuty(ProjectBoard pb) {
@@ -280,9 +268,8 @@ public class ProjectServiceImpl implements ProjectService{
 
 	@Override
 	public ArrayList<ProjectBoard> selectMeetingList(Project p) {
-		ArrayList<ProjectBoard> mlist = pDao.selectProjectBoardList(sqlSession, p);
+		ArrayList<ProjectBoard> mlist = pDao.selectMeetingList(sqlSession, p);
 		for(ProjectBoard pb : mlist) {
-			pb.setPmeet( pDao.selectMeeting(sqlSession, pb) );
 			pb.setPmeetMem( pDao.selectMeetingMember(sqlSession, pb) );
 		}
 		return mlist;

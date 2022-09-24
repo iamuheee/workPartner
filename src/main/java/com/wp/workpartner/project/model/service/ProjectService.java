@@ -41,8 +41,6 @@ public interface ProjectService {
 	
 	int insertMember(ProjectMember m);
 	
-	ArrayList<ProjectBoard> selectProjectBoardList(Project p);
-	
 	int insertDuty(ProjectBoard pb);
 	
 	int insertFile(File f);

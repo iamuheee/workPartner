@@ -38,6 +38,13 @@
 		<result column="CREATE_DATE" property="createDate" />
 		<result column="MODIFY_DATE" property="modifyDate" />
 		<result column="STATUS" property="status" />
+		<result column="MEETING_DATE" property="meetingDate" />
+		<result column="START_TIME" property="startTime" />
+		<result column="END_TIME" property="endTime" />
+		<result column="MEETING_PLACE" property="meetingPlace" />
+		<result column="IN_CHARGE" property="incharge" />
+		<result column="IN_CHARGE_NAME" property="inchargeName" />
+		<result column="CALENDAR_YN" property="calendarYN" />
 	</resultMap>
 	
 	<resultMap id="projectDutyResult" type="ProjectDuty">
@@ -282,24 +289,6 @@
 		  FROM TB_PROJECT_MEM
 		 WHERE PROJ_NO = #{projNo}
 		   AND MEM_NO IN ${memNo}
-	</select>
-	
-	<select id="selectProjectBoardList" resultMap="projectBoardResult">
-		SELECT PBOARD_NO
-			 , PROJ_NO
-			 , PBOARD_WRITER
-			 , EMP_NAME
-			 , REF_TYPE
-			 , TITLE
-			 , CONTENT
-			 , CREATE_DATE
-		  FROM TB_PBOARD
-		  JOIN TB_EMPLOYEE
-		  	ON PBOARD_WRITER = EMP_NO
-		 WHERE PROJ_NO = #{projNo}
-		   AND STATUS = 'Y'
-		 ORDER 
-		 	BY CREATE_DATE DESC
 	</select>
 
 	<insert id="insertBoard">
@@ -556,6 +545,34 @@
 		 WHERE PROJ_NO = #{projNo}
 		   AND MEM_NO = #{memNo}
 	</delete>
+	
+	<select id="selectMeetingList" resultMap="projectBoardResult">
+		SELECT PBOARD_NO
+			 , PROJ_NO
+			 , PBOARD_WRITER
+			 , EMP_NAME
+			 , REF_TYPE
+			 , TITLE
+			 , CONTENT
+			 , CREATE_DATE
+			 , MEETING_DATE
+			 , START_TIME
+			 , END_TIME
+			 , MEETING_PLACE
+			 , IN_CHARGE
+			 , EMP_NAME AS IN_CHARGE_NAME
+			 , CALENDAR_YN
+		  FROM TB_PBOARD
+		  JOIN TB_EMPLOYEE
+		  	ON PBOARD_WRITER = EMP_NO
+		  JOIN TB_PMEET
+		 USING (PBOARD_NO)
+		 WHERE PROJ_NO = #{projNo}
+		   AND STATUS = 'Y'
+		   AND REF_TYPE = '회의'
+		 ORDER 
+		 	BY CREATE_DATE DESC
+	</select>
 	
 		
 	<select id="selectMeeting" resultMap="projectMeetingResult">

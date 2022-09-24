@@ -77,10 +77,6 @@ public class ProjectDao {
 		return sqlSession.insert("projectMapper.insertMember", m);
 	}
 	
-	public ArrayList<ProjectBoard> selectProjectBoardList(SqlSessionTemplate sqlSession, Project p){
-		return (ArrayList)sqlSession.selectList("projectMapper.selectProjectBoardList", p);
-	}
-	
 	public int insertBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
 		return sqlSession.insert("projectMapper.insertBoard", pb);
 	}
@@ -163,6 +159,9 @@ public class ProjectDao {
 	
 	public int deleteWaitingMember(SqlSessionTemplate sqlSession, ProjectMember m) {
 		return sqlSession.delete("projectMapper.deleteWaitingMember", m);
+	}
+	public ArrayList<ProjectBoard> selectMeetingList(SqlSessionTemplate sqlSession, Project p){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectMeetingList", p);
 	}
 	
 	public ProjectMeeting selectMeeting(SqlSessionTemplate sqlSession, ProjectBoard pb) {

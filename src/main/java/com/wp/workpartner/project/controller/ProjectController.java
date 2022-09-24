@@ -85,9 +85,6 @@ public class ProjectController {
 	public ModelAndView selectProject(ModelAndView mv, String projNo) {
 		Project p = pService.selectProject(projNo);
 		if(p != null) {
-			p.setBlist( pService.selectProjectBoardList(p) );
-			// 이제 Project p 안에는 ArrayList<ProjectMember>, ArrayList<ProjectBoard>가 담겨있음
-			// ProjectBoard 안에는 게시글 종류에 따라 ProjectDuty, ProjectMeeting이 담겨있음
 			mv.addObject("p", p).setViewName("project/projectDetailMain");
 		}else {
 			mv.addObject("errorMsg", "현재 해당 업무 페이지에 접근할 수 없습니다.")

@@ -34,6 +34,16 @@ public class ProjectBoard {
 	private ArrayList<Comment> comment;
 
 	private ProjectMeeting pmeet; 
+	
+	private String meetingDate;
+	private String startTime;
+	private String endTime;
+	private String meetingPlace;
+	private String incharge;
+	private String inchargeName;
+	private String calendarYN;
+	
+	
 	private ArrayList<ProjectMeetingMember> pmeetMem;
 	
 	private String empNo; // , 로 연이은 회의 참석자 사번 

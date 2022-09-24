@@ -80,32 +80,12 @@
 	
 	<jsp:include page="projectDetailMenubar.jsp" />
 	<input type="hidden" name="projNo" value="${p.projNo}">
-	
 
-	<!-- SCRIPT 영역 -->
-	<script>
-		// 게시글 삭제를 누르면 해당 게시글이 삭제되도록하는 ajax
-		$(document).on("click", ".delete-board", function(){
-			$.ajax({
-			    url:"deletem.pr",
-			    data:{
-			        pboardNo:$(this).parent().parent().parent().parent().siblings("input[name=pboardNo]").val()
-			    },
-			    success:function(result){
-			       alert(result);
-			       loadMeetingList();
-			       changeButtonColor();
-			    },
-			    error:function(){
-			        console.log("ajax 통신 실패 : 업무 게시글 삭제")
-			    }
-			})
-		})
-	
-	</script>
 
 	<!-- =================== 여기부터 업무 게시글 ======================== -->
 	<!-- =================== 반복문 시작하는 위치 ======================== -->
+	
+	<div id="meeting-wrap"></div>
 	
 	<script>
 	   	// 업무 게시글 리스트 조회하는 ajax
@@ -117,6 +97,7 @@
 	    		},
 	    		async:false,
 	    		success:function(mlist){
+	    			console.log(mlist)
 	    			html = "";
 	    			if(mlist == null){
 	    				html+= "아직 등록된 회의가 없습니다.";
@@ -152,15 +133,15 @@
 	     					  +				'<tbody>'
 	     					  +					'<tr>'
 	     					  +						'<th>담당자</th>'
-	     					  +						'<td>' + mlist[i].pmeet.inchargeName + '</td>'
+	     					  +						'<td>' + mlist[i].inchargeName + '</td>'
 	                          +						'<th>회의 장소</th>'
-	                          +						'<td>' + mlist[i].pmeet.meetingPlace + '</td>'
+	                          +						'<td>' + mlist[i].meetingPlace + '</td>'
 	     					  +					'</tr>'
 	     					  +					'<tr>'
 	     					  +						'<th>시작일시</th>'
-	     					  +						'<td>' + mlist[i].pmeet.meetingDate + ' '+ mlist[i].pmeet.startTime +'</td>'
+	     					  +						'<td>' + mlist[i].meetingDate + ' '+ mlist[i].startTime +'</td>'
 	     					  +						'<th>종료일시</th>'
-	     					  +						'<td>' + mlist[i].pmeet.meetingDate + ' ' + mlist[i].pmeet.endTime + '</td>'
+	     					  +						'<td>' + mlist[i].meetingDate + ' ' + mlist[i].endTime + '</td>'
 	     					  +					'</tr>'
 	     					  +				'</tbody>'
 	     					  +			'</table>'
@@ -174,7 +155,6 @@
 	     					  +					'<br><a>참석 확인 현황</a><br>';
 	   					 	let mem = mlist[i].pmeetMem;
 	 						for(let j=0; j<mlist[i].pmeetMem.length; j++){
-	 							console.log( mlist[i].pmeetMem[j].attendanceYN )
 	 						html += 			'<input type="hidden" name="memNo" value="' + mlist[i].pmeetMem[j].memNo + '">'
 	 							  +				'<button class="btn btn-sm btn-att" value="' + mlist[i].pmeetMem[j].attendanceYN + '">' + mlist[i].pmeetMem[j].memName + '</button>&nbsp;';
 	 						}
@@ -204,10 +184,8 @@
 	   	function changeButtonColor(){
 		   	// 동적으로 리스트를 불러온 뒤에 참/불참에 따라 버튼 색깔 넣는 효과
 		   	$(".btn-att").each(function(){
-		   		console.log("접근됨")
-		   		console.log( $(this).val() );
 			   	if( $(this).val() == "Y" ){
-					$(this).css("backgrondColor", "green");
+					$(this).css("backgroundColor", "green").css("color", "white");
 			   	}else if( $(this).val() == "N"){
 			   		$(this).css("backgroundColor", "red").css("color","white");
 			   	}
@@ -226,10 +204,6 @@
 			let att = $(this).val();
 			let pboardNo = $(this).siblings("input").val();
 			let memNo = $(this).parent().siblings(".attendance").children("input").val()
-			
-			console.log(att);
-			console.log(pboardNo);
-			console.log(memNo)
 			
 			// 내가 해당 회의의 참석 명단에 있는지 확인
 			$.ajax({
@@ -251,6 +225,7 @@
 							success:function(result){
 								alert(result);
 								loadMeetingList();
+								changeButtonColor();
 							},
 							error:function(){
 								console.log("성공까지는 왔는데... showatt.pm 불러오기에 실패@!!!")
@@ -264,14 +239,34 @@
 					console.log("validate 실패");
 				}
 			})
-			
-			
-			
 		})
 		
 	   </script>
+	   
+	   
+		<!-- SCRIPT 영역 -->
+		<script>
+			// 게시글 삭제를 누르면 해당 게시글이 삭제되도록하는 ajax
+			$(document).on("click", ".delete-board", function(){
+				$.ajax({
+				    url:"deletem.pr",
+				    data:{
+				        pboardNo:$(this).parent().parent().parent().parent().siblings("input[name=pboardNo]").val()
+				    },
+				    success:function(result){
+				       alert(result);
+				       loadMeetingList();
+				       changeButtonColor();
+				    },
+				    error:function(){
+				        console.log("ajax 통신 실패 : 업무 게시글 삭제")
+				    }
+				})
+			})
+		
+		</script>
 	
-	<div id="meeting-wrap"></div>
+
 
         </div>
 

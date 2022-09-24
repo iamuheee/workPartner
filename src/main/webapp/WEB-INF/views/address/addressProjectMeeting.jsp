@@ -57,6 +57,9 @@ font-family: 'Noto Sans KR', sans-serif;
 	})
 
 	function send() { 
+		$("#memNo").val( $("#memNo").val().substr(0, $("#memNo").val().length - 1 ) )
+		$("#memName").val( $("#memName").val().substr(0, $("#memName").val().length - 1) )
+		
 		console.log( $("#memNo").val() ) /* 숫자,숫자,숮자 */
 		console.log( $("#memName").val() ) /* 이름,이름,이름 */
 		if( confirm( $("#memName").val() + "님을 회의 멤버로 추가하는 것이 맞나요?") ){
@@ -73,7 +76,7 @@ font-family: 'Noto Sans KR', sans-serif;
 						// 모든 사원이 프로젝트 멤버임
 				    	let data = $("#meetingEmp");
 				    	opener.sendMemberData(data);
-				    	alert("성공적으로 담당자로 추가되었습니다.");
+				    	alert("성공적으로 회의 멤버에 추가되었습니다.");
 						window.close();
 					}else{
 						// 해당 사원은 프로젝트 멤버가 아님
@@ -82,6 +85,10 @@ font-family: 'Noto Sans KR', sans-serif;
 					}
 				}
 			})
+		}else{
+			alert("천천히 골라주십시오.");
+			$("#memNo").val( "" )
+			$("#memName").val( "" )
 		}
 	}
 </script>
@@ -214,17 +221,14 @@ font-family: 'Noto Sans KR', sans-serif;
 	                    // 부모창에 돌려보내기 위한 구문들
 			        	memNo += arr[i].empNo + ",";
 	                    memName += arr[i].empName + ",";
-	                    html += '<li>'
+	                    html += '<li style="font-size:12px;">'
 	                    	  + 	'<span><b>' + arr[i].empName + '</b></span>님 초대 완료'
 	                    	  + '</li>'
 	
 					}
 					
-					memNo = memNo.substr(0, memNo.length - 1);
-					memName = memName.substr(0, memName.length - 1);
-					
 					$("#memNo").val( $("#memNo").val() + memNo);
-					$("#memName").val($("#memName").val() +memName);
+					$("#memName").val($("#memName").val() + memName);
 					$("#meet-mem").html( $("#meet-mem").html() + html);
 					
 					$("#adminEmpList").append(value);
