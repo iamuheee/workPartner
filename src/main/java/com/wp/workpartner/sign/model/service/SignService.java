@@ -1,9 +1,11 @@
 package com.wp.workpartner.sign.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.employee.model.vo.Employee;
+import com.wp.workpartner.mail.model.vo.Mail;
 import com.wp.workpartner.sign.model.vo.Cooperation;
 import com.wp.workpartner.sign.model.vo.Dtpaper;
 import com.wp.workpartner.sign.model.vo.Otwork;
@@ -16,21 +18,46 @@ import com.wp.workpartner.sign.model.vo.Sign;
 import com.wp.workpartner.sign.model.vo.Vacation;
 
 public interface SignService {
-//	기안서 작성
+//	기안서 작성 결재선 insert 
 	int insertVaSign(ArrayList<Sign> signList);
 	int insertOwSign(ArrayList<Sign> signList);
 	int insertReSign(ArrayList<Sign> signList);
 	int insertCoSign(ArrayList<Sign> signList);
 	
 	int updateSign(ArrayList<Sign> signList, Dtpaper d);
-	
+//	기안서 공통 insert 및 임시저장 insert
 	int insertDtpaper(Dtpaper d);
 	int saveDtpaper(Dtpaper d);
-	
+//	기안서 항목별 insert
 	int insertVacation(Vacation v);
 	int insertOtwork(Otwork o);
 	int insertReSignEmp(ReSign r);
 	int insertCooperation(Cooperation c);
+	
+//  기안서 수정하기
+	int updateCo(Cooperation c);
+	int updateVa(Vacation v);
+	int updateOw(Otwork o);
+	int updateRe(ReSign r);
+//  기안서 수정하기 dtpaper
+	int updateDt(Dtpaper d);
+//	기안서 삭제하기
+	int deleteSign(Dtpaper d);
+	int deleteDt(int dpNo);
+	
+//  기안서 상세조회
+	SelectCooperation selectCo(int dpNo); 
+	SelectReSign selectRe(int dpNo); 
+	SelectVacation selectVa(int dpNo); 
+	SelectOtwork selectOw(int dpNo); 
+//  기안서 상세보기 결재선
+	ArrayList<Sign> selectSignList(int dpNo);
+//	기안서 상세보기 타이틀
+	Dtpaper selectTitleList(int dpNo);
+	
+	int deleteDtpaper(int dpNo);
+	
+	
 //	임시저장 반려됨 임시저장 리스트
 	int selectListCount(String fn, String empNo);
 	ArrayList<Dtpaper> selectList(PageInfo pi, String empNo, String fn);
@@ -49,25 +76,7 @@ public interface SignService {
 //	내부서 결재완료
 	int selectEndSignListCount(String empNo, String depCd);
 	ArrayList<Dtpaper> selectEndSignList(PageInfo pi, String empNo, String depCd);
-//  기안서 수정하기
-	int updateCo(Cooperation c);
-	int updateVa(Vacation v);
-	int updateOw(Otwork o);
-	int updateRe(ReSign r);
-//  기안서 수정하기 dtpaper
-	int updateDt(Dtpaper d);
-//	기안서 삭제하기
-	int deleteSign(Dtpaper d);
-	int deleteDt(int dpNo);
-//  기안서 상세조회
-	SelectCooperation selectCo(int no); 
-	SelectReSign selectRe(int no); 
-	SelectVacation selectVa(int no); 
-	SelectOtwork selectOw(int no); 
-//  기안서 상세보기 결재선
-	ArrayList<Sign> selectSignList(int no);
-//	기안서 상세보기 타이틀
-	Dtpaper selectTitleList(int no);
+
 //	기안서 승인하기 결재선 상태 업데이트
 	int updateAgreeSign(Sign s);
 //  기안서 승인하기 기안서 상태 업데이트
@@ -76,5 +85,5 @@ public interface SignService {
 //	기안서 결재반려 상태 업데이트 
 	int updateDisagreeSign(Sign s);
 	int updateDisagreeDtpaper(Sign s);
-	
+	ArrayList<Dtpaper> ajaxMainSignList(String empNo);
 }

@@ -1,6 +1,7 @@
 package com.wp.workpartner.sign.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,14 +183,16 @@ public class SignServiceImpl implements SignService {
 	
 //	기안서 상세보기 결재선
 	@Override
-	public ArrayList<Sign> selectSignList(int no) {
-		return sDao.selectSignList(sqlSession, no);
+	public ArrayList<Sign> selectSignList(int dpNo) {
+		return sDao.selectSignList(sqlSession, dpNo);
 	}
 //	기안서 상세보기 타이틀
 	@Override
-	public Dtpaper selectTitleList(int no) {
-		return sDao.selectTitleList(sqlSession, no);
+	public Dtpaper selectTitleList(int dpNo) {
+		return sDao.selectTitleList(sqlSession, dpNo);
 	}
+	
+	
 	@Override
 	public int updateAgreeSign(Sign s) {
 		return sDao.updateAgreeSign(sqlSession, s);
@@ -222,6 +225,14 @@ public class SignServiceImpl implements SignService {
 	@Override
 	public int updateSign(ArrayList<Sign> signList, Dtpaper d) {
 		return sDao.updateSign(sqlSession, signList, d);
+	}
+	@Override
+	public int deleteDtpaper(int dpNo) {
+		return sDao.deleteDtpaper(sqlSession, dpNo);
+	}
+	@Override
+	public ArrayList<Dtpaper> ajaxMainSignList(String empNo) {
+		return sDao.ajaxMainSignList(sqlSession, empNo);
 	}
 	
 	

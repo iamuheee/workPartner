@@ -152,11 +152,65 @@
 		</script>
 		<c:remove var="alertSignMsg" scope="session" />
 	</c:if>
+	
+
+	<form action="" method="post" name="insertForm" id="insertForm" enctype="multipart/form-data"> 
+	<input type="hidden" name="dpFinal" value="${ t.dpFinal }">
+	<input type="hidden" name="dpCategory" value="${ t.dpCategory }">
+	<input type="hidden" name="dpNo" value="${ t.dpNo }">
+    <c:forEach var="s" items="${ selectSignList }">
+    	<c:set var="i" value="${ i + 1 }"/>
+		<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
+    </c:forEach>
+	<section class="mainTitle">
+		<c:choose>
+			<c:when test="${ t.dpFinal.equals('임시저장') or t.dpFinal.equals('반려됨')}">
+				<a class="insertBtn" id="insertForm" onclick="insertCheck()">다시 기안하기</a>
+				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
+				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
+			</c:when>
+			<c:otherwise>
+				<a class="insertBtn"  id="insertForm" onclick="insertCheck()">다시 기안하기</a>
+				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
+			</c:otherwise>
+		</c:choose>
+		<hr>
+	</section>
+	
+			<%--<c:when test="${ t.dpFinal == '대기'}">
+				<a class="insertBtn" id="insertForm" onclick="insertCheck()">다시 기안하기</a>
+				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
+				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
+			</c:when>
+			 <c:when test="${ t.dpFinal == '반려됨' }">
+				<a class="insertBtn"  id="insertForm" onclick="insertCheck()">다시 기안하기</a>
+				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
+				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
+			</c:when> --%>
+	
+					<%-- if('${ t.dpCategory }'  == '연차'){
+						document.insertForm.action = "insertReVa.si";
+					}else if('${ t.dpCategory }'  == '외근'){
+						document.insertForm.action = "insertReOw.si";
+					}else if('${ t.dpCategory }'  == '업무협조'){
+						document.insertForm.action = "insertReCo.si";
+					}else {
+						document.insertForm.action = "insertReRe.si";
+					}  --%>
 	<script>
 		function insertCheck() {
-				console.log('${t.dpFinal}');
-			if (confirm("기안하시겠습니까?") == true) { //확인
-				if('${ t.dpFinal}' != "임시저장" && '${ t.dpFinal}' != "반려됨"){
+			if (confirm("다시 기안하시겠습니까?") == true) { //확인
+				 if('${ t.dpFinal }' == "반려됨" || '${ t.dpFinal }' == "임시저장"){
+					if('${ t.dpCategory }'  == '연차'){
+						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=연차";
+					}else if('${ t.dpCategory }'  == '외근'){
+						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=외근";
+					}else if('${ t.dpCategory }'  == '업무협조'){
+						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=업무협조";
+					}else {
+						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=퇴직원";
+					}
+				}else{ // 진행중 대기 결재완료 == 기존 결재선은 업데이트 x
 					if('${ t.dpCategory }' == '연차'){
 						document.insertForm.action = "updateSi.si?dpNo=" + ${t.dpNo} + "&ct=연차"
 					}else if('${ t.dpCategory }' == '외근'){
@@ -166,26 +220,6 @@
 					}else {
 						document.insertForm.action = "updateSi.si?dpNo=" + ${t.dpNo} + "&ct=퇴직원";
 					}
-				}else if('${ t.dpFinal}' == '반려됨'){
-					if('${ t.dpCategory }'  == '연차'){
-						document.insertForm.action = "insertReVa.si";
-					}else if('${ t.dpCategory }'  == '외근'){
-						document.insertForm.action = "insertReOw.si";
-					}else if('${ t.dpCategory }'  == '업무협조'){
-						document.insertForm.action = "insertReCo.si";
-					}else {
-						document.insertForm.action = "insertReRe.si";
-					}
-				}else{
-					if('${ t.dpCategory }'  == '연차'){
-						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=연차";
-					}else if('${ t.dpCategory }'  == '외근'){
-						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=외근";
-					}else if('${ t.dpCategory }'  == '업무협조'){
-						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=업무협조";
-					}else {
-						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=퇴직원";
-					}
 				}
 				document.insertForm.submit();
 			} else { //취소
@@ -193,116 +227,15 @@
 			}
 		}
 	</script>
-	<!-- <script>
-		function insertCheck() {
-			if (confirm("기안하시겠습니까?") == true) { //확인
-				var queryString = $("form[name=insertForm]").serialize() ;
-				if('${ t.dpFinal}' != "임시저장" && '${ t.dpFinal}' != "반려됨"){
-					if('${ t.dpCategory }' == '연차'){
-						 $.ajax({
-					            url : "updateSi.si?dpNo="+ ${t.dpNo} + "&ct=va", // 요기에
-					            enctype: 'multipart/form-data',
-					            processData: false,
-					            contentType: false,
-					            type : "POST", 
-					            data : queryString, 
-					            cache: false,
-					            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-					            dataType:"json",
-					            success : function(data) {
-					                var jsonObj = JSON.parse(data);
-					            }, // success 
-					    
-					            error : function(xhr, status) {
-					                alert('전송실패');
-					            }
-					        });
-					/* 	document.insertForm.action = "updateSi.si?dpNo=" + "${t.dpNo}" + "&ct=연차" */
-					}else if('${ t.dpCategory }' == '외근'){
-						var form = $("form")[0];        
-				        var formData = new FormData(form);
-
-/* 						document.insertForm.action = "updateSi.si?dpNo=" + ${t.dpNo} + "&ct=외근";
- */					}else if('${ t.dpCategory }' == '업무협조'){
-
-/* 						document.insertForm.action = "updateSi.si?dpNo=" + ${t.dpNo} + "&ct=업무협조";
- */					}else {
-
-/* 						document.insertForm.action = "updateSi.si?dpNo=" + ${t.dpNo} + "&ct=퇴직원";
- */					}
-				}else if('${ t.dpFinal}' == '반려됨'){
-					if('${ t.dpCategory }'  == '연차'){
-						document.insertForm.action = "insertReVa.si";
-					}else if('${ t.dpCategory }'  == '외근'){
-						document.insertForm.action = "insertReOw.si";
-					}else if('${ t.dpCategory }'  == '업무협조'){
-						document.insertForm.action = "insertReCo.si";
-					}else {
-						document.insertForm.action = "insertReRe.si";
-					}
-				}else{
-					if('${ t.dpCategory }'  == '연차'){
-						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=연차";
-					}else if('${ t.dpCategory }'  == '외근'){
-						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=외근";
-					}else if('${ t.dpCategory }'  == '업무협조'){
-						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=업무협조";
-					}else {
-						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=퇴직원";
-					}
-				}
+	<script>
+		function deleteCheck() {
+			if (confirm("진행중인 결재서류도 삭제됩니다. 정말 삭제하시겠습니까?") == true) { //확인
+					document.location.href =  "delete.si?dpNo=" + ${t.dpNo};
 			} else { //취소
 				return false;
 			}
 		}
-		
-		
-	</script> -->
-	<form action="" method="post" name="insertForm" id="insertForm" enctype="multipart/form-data"> 
-	<input type="hidden" name="dpFinal" value="${ t.dpFinal }">
-	<input type="hidden" name="dpCategory" value="${ t.dpCategory }">
-	<section class="mainTitle">
-		<c:choose>
-			<c:when test="${ t.dpFinal == '임시저장'}">
-				<a class="insertBtn" id="insertForm" onclick="insertCheck()">다시 기안하기</a>
-				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
-				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
-			</c:when>
-			<c:when test="${ t.dpFinal == '대기'}">
-				<a class="insertBtn" id="insertForm" onclick="insertCheck()">다시 기안하기</a>
-				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
-				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
-			</c:when>
-			<c:when test="${ t.dpFinal == '반려됨' }">
-				<a class="insertBtn"  id="insertForm" onclick="insertCheck()">다시 기안하기</a>
-				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
-				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
-			</c:when>
-			<c:otherwise>
-				<a class="insertBtn"  id="insertForm" onclick="insertCheck()">기안하기</a>
-				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
-			</c:otherwise>
-		</c:choose>
-		<hr>
-	</section>
-<!-- 	<script>
-		function saveCheck() {
-			if (confirm("임시저장하시겠습니까?") == true) { //확인
-				if('${paperName}' == '연차'){
-					document.insertForm.action = "updateVa.si";
-				}else if('${paperName}' == '외근'){
-					document.insertForm.action = "updateOt.si";
-				}else if('${paperName}' == '업무협조'){
-					document.insertForm.action = "updateCo.si";
-				}else {
-					document.insertForm.action = "updateRe.si";
-				}
-				document.insertForm.submit();
-			} else { //취소
-				return false;
-			}
-		}
-	</script> -->
+	</script> 
 
     <section>
         <div>
@@ -316,15 +249,12 @@
     <section class="signSelect">
         <div>
             <h3>결재선</h3>
-            <table align="center" style="border:0;" id="adminList">
+            <table align="center" style="border:0;" id="signList">
 	         	<c:choose>
 	         		<c:when test="${ t.dpFinal == '임시저장'}">
 	         				
 	         		</c:when>
 	         		<c:when test="${ t.dpFinal == '반려됨'}">
-	         				
-	         		</c:when>
-	         		<c:when test="${ t.dpFinal == '대기'}">
 	         				
 	         		</c:when>
 	         		<c:otherwise>
@@ -367,20 +297,38 @@
             </table>
         </div>
     </section>
-    <script>
-		var chartPopup;
-		function openAddressWindow() {
-			chartPopup = window.open(
-					"${pageContext.request.contextPath}/addressAdmin.si",
-					"addressWindow", "height=700, width=1100");
-		}
+   <script>
+	$(function(){
+	    $(document).on("click", ".removeMail", function(){ // x클릭시 실행할 내용
+	        // 현재 클릭이벤트가 발생한 x의 부모요소들 중에 tr 태그인 요소만 선택 => remove();                            
+	        $(this).parent().parent().remove();     
+	    })
+	})
+        <!-- 이메일 주소록 관련 (자식창 open 및 data 받기)  -->
+            var newWindow;
+            function openAddressWindow(){
+                newWindow = window.open("${pageContext.request.contextPath}/addressAdmin.si","addressWindow", "height=700, width=1100");                
+            }
 
-		/* 자식창으로부터 전달된 정보  */
-		function sendMeData(data) {
-			//console.log(data);
-			$("#adminList").append(data);
-		}
-	</script> 
+            function sendData(data){
+                
+                let count2 = $("#signList tr").length;
+					
+                /* if(count2 < 3){
+                    $("#recipientTB").append(data); 
+                }else{
+                    alert("3명까지만 가능합니다.");                    
+                    searchCCEmail.attr("placeholder", "총 3개까지 가능합니다.");
+                }     */    
+                if(count2 + data.length < 4){
+                	 $("#signList").append(data); 
+                }else{
+                	alert("3명까지만 가능합니다.");  
+                }
+               
+            }
+            
+        </script> 
 	
 </body>
 </html>

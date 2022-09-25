@@ -7,38 +7,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
-<link rel="stylesheet"
-	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
-<!-- 구글폰트 -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&family=Poppins:wght@300&display=swap"
-	rel="stylesheet">
-
-<!-- 부트스트랩 4.6 -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-	integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
-	crossorigin="anonymous">
-<script
-	src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-	crossorigin="anonymous"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
-	integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
-	crossorigin="anonymous"></script>
-
-<!-- jQuery 라이브러리 -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<!-- css -->
-
 
 <style>
 
@@ -178,7 +148,6 @@ input[type=text] {
 		<c:remove var="alertSignMsg" scope="session" />
 	</c:if>
 	<form action="" method="post" name="insertForm" id="insertForm" enctype="multipart/form-data"> 
-	<input type="hidden" name="dpCategory" value="${ paperName }">
 		
 	<section class="mainTitle">
 			<a class="insertBtn" onclick="insertCheck();">기안하기</a>
@@ -186,6 +155,35 @@ input[type=text] {
 		<a class="insertBtn" id="btn-modal" onclick="openAddressWindow();">결재선 추가</a>
 		<hr>
 	</section>
+	<!-- 기안하기 폼 액션값 변경 폼.si 가면 반환값 paperName -->
+	<script>
+		function insertCheck() {
+			 let count = $("#signList tr").length;
+		        
+		        if(count > 0){
+					if (confirm("기안하시겠습니까?") == true) { //확인
+						
+						if('${paperName}' == '연차'){
+							document.insertForm.action = "insertV.si";
+						}else if('${paperName}' == '외근'){
+							document.insertForm.action = "insertOw.si";
+						}else if('${paperName}' == '업무협조'){
+							document.insertForm.action = "insertCo.si";
+						}else {
+							document.insertForm.action = "insertRe.si";
+						}
+						document.insertForm.submit();
+		
+					} else { //취소
+						return false;
+					}
+		        }else{
+		     	    alert("결재선을 설정해주세요.");
+		            return false;
+		        }
+		}
+	</script>
+	<!-- 임시저장 폼 액션값 변경 -->
 	<script>
 		function saveCheck() {
 			if (confirm("임시저장하시겠습니까?") == true) { //확인
@@ -205,33 +203,11 @@ input[type=text] {
 			}
 		}
 	</script>
-	<script>
-		function insertCheck() {
-			if (confirm("기안하시겠습니까?") == true) { //확인
-				
-				if('${paperName}' == '연차'){
-					document.insertForm.action = "insertV.si";
-				}else if('${paperName}' == '외근'){
-					document.insertForm.action = "insertOw.si";
-				}else if('${paperName}' == '업무협조'){
-					document.insertForm.action = "insertCo.si";
-				}else {
-					document.insertForm.action = "insertRe.si";
-				}
-				document.insertForm.submit();
-
-			} else { //취소
-				return false;
-			}
-		}
-	</script>
-	
-	
 	
 	<section>
 		<div>
 			<h2 class="dtpaperName">
-				<span>${ paperName }</span> 신청서 - <span
+				<span><input type="hidden" name="dpCategory" value="${ paperName }">${ paperName }</span> 신청서 - <span
 					style="font-weight: lighter;"><input type="hidden" name="empNo" value="${ loginUser.empNo }">${ loginUser.empName }(${ loginUser.depCd })</span>
 			</h2>
 			<hr>
@@ -240,7 +216,7 @@ input[type=text] {
 	<section class="signSelect">
 		<div>
 			<h3>결재선</h3>
-			<table align="center" id="adminList">
+			<table align="center" id="signList" style="width:300px!important;">
 			
 			</table>
 		</div>
@@ -264,21 +240,72 @@ input[type=text] {
 			</table>
 		</div>
 	</section>
+<script>
+	$(function(){
+	    $(document).on("click", ".removeMail", function(){ // x클릭시 실행할 내용
+	        // 현재 클릭이벤트가 발생한 x의 부모요소들 중에 tr 태그인 요소만 선택 => remove();                            
+	        $(this).parent().parent().remove();     
+	    })
+	})
+        <!-- 이메일 주소록 관련 (자식창 open 및 data 받기)  -->
+            var newWindow;
+            function openAddressWindow(){
+                newWindow = window.open("${pageContext.request.contextPath}/addressAdmin.si","addressWindow", "height=700, width=1100");                
+            }
 
+            function sendData(data){
+                
+                let count2 = $("#signList tr").length;
+					
+                /* if(count2 < 3){
+                    $("#recipientTB").append(data); 
+                }else{
+                    alert("3명까지만 가능합니다.");                    
+                    searchCCEmail.attr("placeholder", "총 3개까지 가능합니다.");
+                }     */    
+                if(count2 + data.length < 4){
+                	 $("#signList").append(data); 
+                }else{
+                	alert("3명까지만 가능합니다.");  
+                }
+               
+            }
+            
+        </script>
 
-	<script>
-		var chartPopup;
-		function openAddressWindow() {
-			chartPopup = window.open(
-					"${pageContext.request.contextPath}/addressAdmin.si",
-					"addressWindow", "height=700, width=1100");
-		}
+	<!-- <script>
+	var newWindow;
+    function openAddressTo(){
+        newWindow = window.open("${pageContext.request.contextPath}/addressEmail.ad","addressWindow", "height=700, width=1100");                
+    }
 
-		/* 자식창으로부터 전달된 정보  */
-		function sendMeData(data) {
-			//console.log(data);
-			$("#adminList").append(data);
-		}
-	</script> 
+    function sendData(data){
+        
+        let count2 = $("#signList tr").length;
+			
+        /* if(count2 < 3){
+            $("#recipientTB").append(data); 
+        }else{
+            alert("3명까지만 가능합니다.");                    
+            searchCCEmail.attr("placeholder", "총 3개까지 가능합니다.");
+        }     */    
+        if(count2 + data.length < 4){
+        	 $("#signList").append(data); 
+        }else{
+        	alert("3명까지만 가능합니다.");  
+        }
+       
+    }
+    function submitCheck(){
+ 	   let count = $("#recipientTB tr").length;
+       
+        if(count > 0){
+            return true;
+        }else{
+     	    alert("받는사람 이메일을 입력해주세요");
+             return false;
+        }
+    }
+	</script>  -->
 </body>
 </html>

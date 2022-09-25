@@ -381,29 +381,15 @@
 						<!-- 각 영역 테이블 자리 -->
 						<div class="card-body">
 							<table id="signList" class="table table-sm table-hover">
-								<thead>
+								<thead align="center">
 									<tr>
-										<th scope="col" width="50%">결재할 문서</th>
-										<th scope="col" width="50%">결재중</th>
+										<th scope="col" width="32%">문서번호</th>
+										<th scope="col" width="32%">제목</th>
+										<th scope="col" width="32%">기안일</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>결재할 문서4</td>
-										<td>결재 완료3</td>
-									</tr>
-									<tr>
-										<td>결재할 문서4</td>
-										<td>결재 완료3</td>
-									</tr>
-									<tr>
-										<td>결재할 문서4</td>
-										<td>결재 완료3</td>
-									</tr>
-									<tr>
-										<td>결재할 문서4</td>
-										<td>결재 완료3</td>
-									</tr>
+									
 								</tbody>
 							</table>
 						</div>
@@ -661,6 +647,10 @@
 				        	location.href = 'detail.ma?no=' + $(this).find(".emailNo").val()+'&mailEmail=' +$(this).find(".mailEmail").val();
 				     });
 					
+					 selectMainSign();	
+					 $("#signList").on("click", "tr", function(){	         	
+				        	location.href = 'detailMy.si?dpNo=' + $(this).find(".dpNo").val()+'&ct=' + $(this).find(".ct").val() + '&st=' + + $(this).find(".st").val();
+				     });
 				})
 				
 				
@@ -725,7 +715,35 @@
 					})
 				}
 				
-				
+				// 기안서 목록
+				function selectMainSign(){
+					$.ajax({
+						url:"mainSelectSign.si",
+						data : {empNo:${ loginUser.empNo }
+					},
+						success:function(list){
+							let value = "";
+							
+							if(list.length == 0){
+								value += '<tr>'
+										+	'<td colspan="3">진행중인 기안서가 없습니다.</td>'
+										+'</tr>';
+							}
+							for(let h=0; h < 5; h++){
+								value += '<tr>'
+										+   '<input type="hidden" class="dpNo"" value="'+ list[h].dpNo + '">'
+										+   '<input type="hidden" class="ct" value="'+ list[h].dpCategory + '">'
+										+   '<input type="hidden" class="st" value="be">'
+										+	'<td align="center">'+ list[h].dpNo +'</td>'
+										+	'<td align="center">'+ list[h].dpTitle  +'</td>'
+										+	'<td align="center">'+ list[h].dpCreate +'</td>'
+										+'</tr>';
+							};
+						
+							$("#signList tbody").html(value);
+						}					
+					})
+				}
 			</script>
 </body>
 </html>

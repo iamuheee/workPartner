@@ -44,7 +44,7 @@
 	    <br>
 	    <!-- 테이블 -->
 	    <div class="ntMain" style="width:80%">
-	        <table class="table table-hover" style="text-align:center">
+	        <table class="table table-hover" style="text-align:center" id="detail1">
 	            <thead>
 	                <tr>     
 	                	<th>문서번호</th>                       
@@ -67,7 +67,7 @@
 							<c:forEach var="a" items="${list}">
 								<tr>
 			                        <td class="no">${a.a}</td>
-			                        <td>${a.b}</td>
+			                        <td class="date">${a.b}</td>
 			                        <td>${a.c}</td>
 			                        <td class="name">${a.d}</td>
 			                        <td>${a.e}</td>
@@ -92,7 +92,7 @@
 	        
 	    <h4>근무시간변경</h4>
 		<br>
-	         <table class="table table-hover" style="text-align:center">
+	         <table class="table table-hover" style="text-align:center" id="detail2">
 	             <thead>
 	                <tr>     
 	                	<th>문서번호</th>                       
@@ -115,10 +115,10 @@
                 		<c:otherwise>
 							<c:forEach var="a" items="${list2}">
 								<tr>
-			                        <td class="no1">${a.a}</td>
-			                        <td>${a.b}</td>
+			                        <td class="no">${a.a}</td>
+			                        <td class="date">${a.b}</td>
 			                        <td>${a.c}</td>
-			                        <td>${a.d}</td>
+			                        <td class="name">${a.d}</td>
 			                        <td>${a.e}</td>
 			                        <td>${a.f}</td>
 			                        <td>
@@ -153,13 +153,14 @@
 				
 				var a = $(this).parent().siblings(".no").text();
 				var b = $(this).parent().siblings(".name").text();
+				var c = $(this).parent().siblings(".date").text();
 				
 				$.ajax({	
 	    			url:"agreeModify.att",
-	    			data:{"aatNo":a, "empName":b},
+	    			data:{"aatNo":a, "empName":b, "date":c},
 	    			success:function(){
 	    				
-	    				console.log("근태수정신청 ajax 통신 성공");
+	    				location.reload();
 	    				
 	    			},
 	    			error:function(){
@@ -171,8 +172,305 @@
 			
 			})
 		})
+		
+		$(function(){
+			
+			$("#button2").on('click', function(){
+				
+				var a = $(this).parent().siblings(".no").text();
+				
+				$.ajax({	
+	    			url:"agreeModify2.att",
+	    			data:{"aatNo":a},
+	    			success:function(){
+	    				
+	    				location.reload();
+	    				
+	    			},
+	    			error:function(){
+	    				console.log("근태수정신청 ajax 통신 실패");
+	    			}
+				
+	    		
+			})
+			
+			})
+		})
+		
+		
+		$(function(){
+			
+			$("#button3").on('click', function(){
+				
+				var a = $(this).parent().siblings(".no").text();
+				
+				$.ajax({	
+	    			url:"agreeModify3.att",
+	    			data:{"aatNo":a},
+	    			success:function(){
+	    				
+	    				location.reload();
+	    				
+	    			},
+	    			error:function(){
+	    				console.log("근태수정신청 ajax 통신 실패");
+	    			}
+				
+	    		
+			})
+			
+			})
+		})
+		
+		$(function(){
+			
+			$("#button4").on('click', function(){
+				
+				var a = $(this).parent().siblings(".no").text();
+				
+				$.ajax({	
+	    			url:"agreeModify2.att",
+	    			data:{"aatNo":a},
+	    			success:function(){
+	    				
+	    				location.reload();
+	    				
+	    			},
+	    			error:function(){
+	    				console.log("근태수정신청 ajax 통신 실패");
+	    			}
+				
+	    		
+			})
+			
+			})
+		})
+		
+		
+		
+		$(function(){
+            	
+			$("#detail1>tbody>tr").click(function(){
+            		
+					let x = $(this).children().siblings(".no").text();
+
+          			$("#z").click()
+          			
+          			$.ajax({
+	    			url: "detail.att",
+	    			data: {
+	    					  "aatNo":x
+	    			      },
+	    				   
+	    			success:function(list){
+	    				
+	    				let a = list[0].a;
+	    				let b = list[0].b;
+	    				let c = list[0].c;
+	    				let d = list[0].d;
+	    				let e = list[0].e;
+	    				let f = list[0].f;
+	    				
+	    				$("#text1").val(a);
+	    				$("#text2").val(b);
+	    				$("#text3").val(c);
+	    				$("#text4").val(d);
+	    				$("#text5").val(e);
+	    				$("#text6").val(f);
+	    				
+	    			},error:function(){
+	    				console.log("댓글리스트 조회용 ajax통신 실패");
+	    			}
+				})
+          			
+          			
+       		})
+       })
+		
+		// 근무시간
+		$(function(){
+            		$("#detail2>tbody>tr").click(function(){
+
+            			let y = $(this).children().siblings(".no").text();
+
+              			$("#zz").click()
+              			
+              			$.ajax({
+    	    			url: "detail.att",
+    	    			data: {
+    	    					  "aatNo":y
+    	    			      },
+    	    				   
+    	    			success:function(list){
+    	    				
+    	    				let a = list[0].a;
+    	    				let b = list[0].b;
+    	    				let c = list[0].c;
+    	    				let d = list[0].d;
+    	    				let e = list[0].e;
+    	    				let f = list[0].f;
+    	    				
+    	    				$("#text11").val(a);
+    	    				$("#text22").val(b);
+    	    				$("#text33").val(c);
+    	    				$("#text44").val(d);
+    	    				$("#text55").val(e);
+    	    				$("#text66").val(f);
+    	    				
+    	    			},error:function(){
+    	    				console.log("댓글리스트 조회용 ajax통신 실패");
+    	    			}
+    				})
+            		
+            		})
+        })
 	</script>
 	
+	<button id="z" data-target="#departmentUpdate" data-toggle="modal" style="display:none"></button>
+	<button id="zz" data-target="#departmentUpdate1" data-toggle="modal" style="display:none"></button>
+	
+	
+	
+	<!-- ====================================================  Modal ================================================================ -->
+
+        <!-- 직위등록 -->
+        <div class="modal fade" id="departmentUpdate" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">출퇴근시간변경</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">                          
+                         <form action="insert.pst" method="get">                                              
+                            <div align="center">
+                                <table>
+                                	<tr>                                    
+                                        <th>수정할 날짜</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text1" name="text1" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>    
+                                	<tr>                                    
+                                        <th>출근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text2" name="text2" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>                                                             
+                                    <tr>                                    
+                                        <th>퇴근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text3" name="text3" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>  
+                                    <tr><td colspan="2">--------------------------------------------------------------------------</td></tr>
+                                    <tr>                                    
+                                        <th>수정할 출근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text4" name="text4" style="text-align:center" readonly>                                    
+                                        </td>                                                                            
+                                    </tr>                                                             
+                                    <tr>                                    
+                                        <th>수정할 퇴근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text5" name="text5" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>                             
+                                    <tr>
+                                    	<th>사 유</th>
+                                    	<td>
+                                    		<textarea id="text6" name="text6"  rows="5" cols="25" wrap="hard" readonly></textarea>
+                                    	</td>
+                                    </tr>
+                                   
+                                     
+                                </table>
+                            </div>
+                            <br>
+                            <div align="center">
+                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
+                            </div>
+                            
+                       </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        <!-- ====================================================  Modal ================================================================ -->
+
+        <!-- 직위등록 -->
+        <div class="modal fade" id="departmentUpdate1" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">근무시간변경</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">                          
+                         <form action="insert.pst" method="get">                                              
+                            <div align="center">
+                                <table>
+                                	<tr>                                    
+                                        <th>수정할 날짜</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text11" name="text1" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>    
+                                	<tr>                                    
+                                        <th>지정출근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text22" name="text2" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>                                                             
+                                    <tr>                                    
+                                        <th>지정퇴근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text33" name="text3" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>  
+                                    <tr><td colspan="2">--------------------------------------------------------------------------</td></tr>
+                                    <tr>                                    
+                                        <th>수정할 출근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text44" name="text4" style="text-align:center" readonly>                                    
+                                        </td>                                                                            
+                                    </tr>                                                             
+                                    <tr>                                    
+                                        <th>수정할 퇴근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text55" name="text5" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>                             
+                                    <tr>
+                                    	<th>사 유</th>
+                                    	<td>
+                                    		<textarea id="text66" name="text6"  rows="5" cols="25" wrap="hard" readonly></textarea>
+                                    	</td>
+                                    </tr>
+                                   
+                                     
+                                </table>
+                            </div>
+                            <br>
+                            <div align="center">
+                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
+                            </div>
+                            
+                       </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
 	
 </body>
 </html>

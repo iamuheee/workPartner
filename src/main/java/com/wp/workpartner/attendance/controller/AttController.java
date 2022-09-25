@@ -83,9 +83,16 @@ public class AttController {
 	 * @return url
 	 */
 	@RequestMapping("myAttHis.att")
-	private String myAtt() {
+	private String myAtt(Model model, String empNo) {
 
+		ArrayList<Vacation> list = aService.adminAttAdjust(empNo);
+		ArrayList<Vacation> list2 = aService.adminAttAdjust2(empNo);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("list2", list2);
+		
 		return "attendance/attendanceHistoryView";
+		
 	}
 
 	/**
@@ -686,7 +693,7 @@ public class AttController {
 			  return "redirect:check.att?empNo="+empNo;
 		  }else {
 			  
-			  text6=text6.replace("\r\n","<br>");
+//			  text6=text6.replace("\r\n","<br>");
 			  
 			  int result = aService.changeAttendanceTime2(empNo, text1, text2, text3, text4, text5, text6);
 			  
@@ -715,7 +722,7 @@ public class AttController {
 				  return "redirect:check.att?empNo="+empNo;
 			  }else {
 				  
-				  text66=text66.replace("\r\n","<br>");
+//				  text66=text66.replace("\r\n","<br>");
 				  
 				  int result = aService.changeAttendanceTime3(empNo, text11, text44, text55, text66);
 				  
@@ -733,15 +740,62 @@ public class AttController {
 
 		}
 		
+		// 출퇴근변경 수정승인
+		@RequestMapping(value = "agreeModify.att", produces = "application/json; charset=utf-8")
+		public String agreeModify(String aatNo, String empName, String date) {
+			
+			// update 상태
+			int result = aService.agreeModify(aatNo, empName, date);
+			
+			// update 신청서 상태
+			int result2 = aService.paperModify(aatNo);
+			 
+			
+			return "redirect:adminAttAdjust.att";
+		}
+		
+		// 출퇴근변경 수정반려
+		@RequestMapping(value = "agreeModify2.att", produces = "application/json; charset=utf-8")
+		public String agreeModify2(String aatNo, String empName, String date) {
+			
+			// update 신청서 상태
+			int result = aService.paperModify2(aatNo);
+			
+			return "redirect:adminAttAdjust.att";
+		}
 		
 		
-//		// 출퇴근변경 수정승인
-//		@RequestMapping(value = "agreeModify.att", produces = "application/json; charset=utf-8")
-//		public String agreeModify(String aatNo, String empName) {
-//			
-//			//int result = aService.agreeModify(aatNo, empName);
-//			// 
-//			
-//			return "redirect:adminAttAdjust.att";
-//		}
+		// 출퇴근변경 수정반려
+		@RequestMapping(value = "agreeModify3.att", produces = "application/json; charset=utf-8")
+		public String agreeModify2(String aatNo) {
+			
+			// update 신청서 상태
+			int result = aService.paperModify3(aatNo);
+			aService.paperModify(aatNo);
+			
+			return "redirect:adminAttAdjust.att";
+		}
+		
+		
+		// 근태 수정 취소
+		@RequestMapping(value = "cancelModify.att", produces = "application/json; charset=utf-8")
+		public String cancelModify(String aatNo) {
+			
+			int a = aService.cancelModify(aatNo);
+			
+			return "redirect:adminAttAdjust.att";
+		}
+		
+		
+		// 근태 이력 상세
+		@ResponseBody
+		@RequestMapping(value = "detail.att", produces = "application/json; charset=utf-8")
+		public String detail(String aatNo, String empNo) {
+			
+			ArrayList<Vacation> list = aService.detail(aatNo);
+			
+			return new Gson().toJson(list);
+		}
+		
+		
 }

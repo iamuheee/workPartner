@@ -332,7 +332,7 @@
 	                               <nav class="sb-sidenav-menu-nested nav">                                                                    
 	                                   <a class="nav-link nav-choice" href="check.att?empNo=${ loginUser.empNo }">근태 등록</a>
 	                                   <a class="nav-link nav-choice" href="my.att?id=${ loginUser.empNo }">내 근태 현황</a>
-	                                   <a class="nav-link nav-choice" href="myAttHis.att">근태 이력</a>
+	                                   <a class="nav-link nav-choice" href="myAttHis.att?empNo=${ loginUser.empNo }">근태 이력</a>
 	                                   <a class="nav-link nav-choice" href="myVacation.att?empNo=${ loginUser.empNo }">휴가 관리</a>
 	                               </nav>
 	                               

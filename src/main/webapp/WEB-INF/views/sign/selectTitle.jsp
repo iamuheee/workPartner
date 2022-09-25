@@ -147,90 +147,49 @@
 	
 	</script>
 <form action="" method="post" name="updateForm" id="updateForm" enctype="multipart/form-data"> 
-	<c:choose>
-		<c:when test="${ flag == 'be' }">
-			<section class="mainTitle">
-					<a id="updateBtn" class="insertBtn" onclick="updateCheck();">기안서 재작성</a>
-		            <a id="deleteBtn" class="insertBtn" onclick="deleteCheck()">삭제하기</a>
-		            <input type="hidden" name="dpFinal" value="${ t.dpFinal }">
-		            <c:forEach var="s" items="${ selectSignList }">
-		           		<c:set var="i" value="${ i + 1 }"/>
-						<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
-						<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
-					    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
-		           	</c:forEach>
-				<hr>
-			</section>
-		</c:when>
-		<c:when test="${ flag == 're' }">
-			<section class="mainTitle">
-					<span style="font-size: 18px; margin-left:10px; color:red; border-right: 0.5px solid #878787; padding-right:15px;">반려됨</span>
-					<a class="insertBtn" onclick="updateCheck();" >기안서 재작성</a>
-		            <a class="insertBtn" onclick="deleteCheck()" >삭제하기</a>
-		            <input type="hidden" name="dpFinal" value="${ t.dpFinal }">
-		            <c:forEach var="s" items="${ selectSignList }">
-		           		<c:set var="i" value="${ i + 1 }"/>
-						<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
-						<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
-					    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
-		           	</c:forEach>
-				<hr>
-			</section>
-		</c:when>
-		<c:otherwise>
-			<section class="mainTitle">
-					<span style="font-size: 18px; margin-left:10px; color:green; border-right: 0.5px solid #878787; padding-right:15px;">결재완료</span>
-					<a class="insertBtn" onclick="updateCheck();" >기안서 재작성</a>
-					<a class="insertBtn" onclick="deleteCheck()" >삭제하기</a>
-					<input type="hidden" name="dpFinal" value="${ t.dpFinal }">
-					<c:forEach var="s" items="${ selectSignList }">
-		           		<c:set var="i" value="${ i + 1 }"/>
-						<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
-						<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
-					    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
-		           	</c:forEach>
-				<hr>
-			</section>
-		</c:otherwise>
-	</c:choose>
+	<section class="mainTitle">
+			<a id="updateBtn" class="insertBtn" onclick="updateCheck();">기안서 재작성</a>
+            <a id="deleteBtn" class="insertBtn" onclick="deleteCheck()">삭제하기</a>
+            <input type="hidden" name="dpFinal" value="${ t.dpFinal }">
+            <%-- <c:forEach var="s" items="${ selectSignList }">
+           		<c:set var="i" value="${ i + 1 }"/>
+				<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
+				<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
+			    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
+           	</c:forEach> --%>
+		<hr>
+	</section>
 	
-    <script>
-		function deleteCheck() {
-			if (confirm("정말 삭제하시겠습니까?") == true) { //확인
-				
-				if('${t.dpCategory}' == '연차'){
-					document.location.href = "deleteVa.si?no=" + ${t.dpNo} + "&ct=연차"
-				}else if('${t.dpCategory}' == '외근'){
-					document.location.href = "deleteOt.si?no=" + ${t.dpNo} + "&ct=외근"
-				}else if('${t.dpCategory}' == '업무협조'){
-					document.location.href = "deleteCo.si?no=" + ${t.dpNo} + "&ct=업무협조"
-				}else {
-					document.location.href = "deleteRe.si?no=" + ${t.dpNo} + "&ct=퇴직원"
-				} 
-				document.getElementById("#updateBtn").submit;
-			} else { //취소
-				return false;
-			}
-		}
-	</script>
+	
 	<script>
 		function updateCheck() {
 			if (confirm("수정하시겠습니까?") == true) { //확인
 				
 				if('${t.dpCategory}' == '연차'){
-					document.location.href = "updateForm.si?no=" + ${t.dpNo} + "&ct=연차"
+					document.location.href = "updateForm.si?dpNo=" + ${t.dpNo} + "&ct=연차"
 				}else if('${t.dpCategory}' == '외근'){
-					document.location.href = "updateForm.si?no=" + ${t.dpNo} + "&ct=외근";
+					document.location.href = "updateForm.si?dpNo=" + ${t.dpNo} + "&ct=외근";
 				}else if('${t.dpCategory}' == '업무협조'){
-					document.location.href = "updateForm.si?no=" + ${t.dpNo} + "&ct=업무협조";
+					document.location.href = "updateForm.si?dpNo=" + ${t.dpNo} + "&ct=업무협조";
 				}else {
-					document.location.href = "updateForm.si?no=" + ${t.dpNo} + "&ct=퇴직원";
+					document.location.href = "updateForm.si?dpNo=" + ${t.dpNo} + "&ct=퇴직원";
 				}
 			} else { //취소
 				return false;
 			}
 		}
 	</script>
+    <script>
+			function deleteCheck() {
+				if (confirm("진행중인 결재서류도 삭제됩니다. 정말 삭제하시겠습니까?") == true) { //확인
+						document.location.href =  "delete.si?dpNo=" + ${t.dpNo};
+				} else { //취소
+					return false;
+				}
+			}
+	</script>
+	
+	
     <section>
         <div>
         	<h2 class="dtpaperName">
