@@ -152,46 +152,6 @@
 		</script>
 		<c:remove var="alertSignMsg" scope="session" />
 	</c:if>
-	<form action="" method="post" name="insertForm" id="insertForm" enctype="multipart/form-data"> 
-	<input type="hidden" name="dpFinal" value="${ t.dpFinal }">
-		
-	<section class="mainTitle">
-		<c:choose>
-			<c:when test="${ t.dpFinal == '임시저장'}">
-				<a class="insertBtn" onclick="insertCheck()">다시 기안하기</a>
-				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
-				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
-			</c:when>
-			<c:when test="${ t.dpFinal == '반려됨' }">
-				<a class="insertBtn" onclick="insertCheck()">다시 기안하기</a>
-				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
-				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
-			</c:when>
-			<c:otherwise>
-				<a class="insertBtn" onclick="insertCheck()">기안하기</a>
-				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
-			</c:otherwise>
-		</c:choose>
-		<hr>
-	</section>
-<!-- 	<script>
-		function saveCheck() {
-			if (confirm("임시저장하시겠습니까?") == true) { //확인
-				if('${paperName}' == '연차'){
-					document.insertForm.action = "updateVa.si";
-				}else if('${paperName}' == '외근'){
-					document.insertForm.action = "updateOt.si";
-				}else if('${paperName}' == '업무협조'){
-					document.insertForm.action = "updateCo.si";
-				}else {
-					document.insertForm.action = "updateRe.si";
-				}
-				document.insertForm.submit();
-			} else { //취소
-				return false;
-			}
-		}
-	</script> -->
 	<script>
 		function insertCheck() {
 				console.log('${t.dpFinal}');
@@ -233,6 +193,113 @@
 			}
 		}
 	</script>
+	<!-- <script>
+		function insertCheck() {
+			if (confirm("기안하시겠습니까?") == true) { //확인
+				var queryString = $("form[name=insertForm]").serialize() ;
+				if('${ t.dpFinal}' != "임시저장" && '${ t.dpFinal}' != "반려됨"){
+					if('${ t.dpCategory }' == '연차'){
+						 $.ajax({
+					            url : "updateSi.si?dpNo="+ ${t.dpNo} + "&ct=va", // 요기에
+					            enctype: 'multipart/form-data',
+					            processData: false,
+					            contentType: false,
+					            type : "POST", 
+					            data : queryString, 
+					            cache: false,
+					            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+					            dataType:"json",
+					            success : function(data) {
+					                var jsonObj = JSON.parse(data);
+					            }, // success 
+					    
+					            error : function(xhr, status) {
+					                alert('전송실패');
+					            }
+					        });
+					/* 	document.insertForm.action = "updateSi.si?dpNo=" + "${t.dpNo}" + "&ct=연차" */
+					}else if('${ t.dpCategory }' == '외근'){
+						var form = $("form")[0];        
+				        var formData = new FormData(form);
+
+/* 						document.insertForm.action = "updateSi.si?dpNo=" + ${t.dpNo} + "&ct=외근";
+ */					}else if('${ t.dpCategory }' == '업무협조'){
+
+/* 						document.insertForm.action = "updateSi.si?dpNo=" + ${t.dpNo} + "&ct=업무협조";
+ */					}else {
+
+/* 						document.insertForm.action = "updateSi.si?dpNo=" + ${t.dpNo} + "&ct=퇴직원";
+ */					}
+				}else if('${ t.dpFinal}' == '반려됨'){
+					if('${ t.dpCategory }'  == '연차'){
+						document.insertForm.action = "insertReVa.si";
+					}else if('${ t.dpCategory }'  == '외근'){
+						document.insertForm.action = "insertReOw.si";
+					}else if('${ t.dpCategory }'  == '업무협조'){
+						document.insertForm.action = "insertReCo.si";
+					}else {
+						document.insertForm.action = "insertReRe.si";
+					}
+				}else{
+					if('${ t.dpCategory }'  == '연차'){
+						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=연차";
+					}else if('${ t.dpCategory }'  == '외근'){
+						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=외근";
+					}else if('${ t.dpCategory }'  == '업무협조'){
+						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=업무협조";
+					}else {
+						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=퇴직원";
+					}
+				}
+			} else { //취소
+				return false;
+			}
+		}
+		
+		
+	</script> -->
+	<form action="" method="post" name="insertForm" id="insertForm" enctype="multipart/form-data"> 
+	<input type="hidden" name="dpFinal" value="${ t.dpFinal }">
+	<input type="hidden" name="dpCategory" value="${ t.dpCategory }">
+		
+	<section class="mainTitle">
+		<c:choose>
+			<c:when test="${ t.dpFinal == '임시저장'}">
+				<a class="insertBtn" id="insertForm" onclick="insertCheck()">다시 기안하기</a>
+				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
+				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
+			</c:when>
+			<c:when test="${ t.dpFinal == '반려됨' }">
+				<a class="insertBtn"  id="insertForm" onclick="insertCheck()">다시 기안하기</a>
+				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
+				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
+			</c:when>
+			<c:otherwise>
+				<a class="insertBtn"  id="insertForm" onclick="insertCheck()">기안하기</a>
+				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
+			</c:otherwise>
+		</c:choose>
+		<hr>
+	</section>
+<!-- 	<script>
+		function saveCheck() {
+			if (confirm("임시저장하시겠습니까?") == true) { //확인
+				if('${paperName}' == '연차'){
+					document.insertForm.action = "updateVa.si";
+				}else if('${paperName}' == '외근'){
+					document.insertForm.action = "updateOt.si";
+				}else if('${paperName}' == '업무협조'){
+					document.insertForm.action = "updateCo.si";
+				}else {
+					document.insertForm.action = "updateRe.si";
+				}
+				document.insertForm.submit();
+			} else { //취소
+				return false;
+			}
+		}
+	</script> -->
+
     <section>
         <div>
         	<h2 class="dtpaperName">
@@ -281,7 +348,7 @@
                 <tr style="border-top:0.5px solid #878787;">
                     <th>첨부파일</th>
                     <td align="left" style="vertical-align:middle; padding:0;">
-                          <input type="file" id="upfile" name="reupfile" style="margin-left:10px">
+                          <input type="file" id="reupfile" name="reupfile" style="margin-left:10px">
                        	 <c:if test="${ not empty t.dpOrigin }">
                        	 	<span style="margin-top: 15px;">현재 업로드된 파일 - </span> 
                        		<a style="margin-left:10px" href="${ t.dpChange }" download="${ t.dpOrigin }">${ t.dpOrigin }</a>
@@ -307,5 +374,6 @@
 			$("#adminList").append(data);
 		}
 	</script> 
+	
 </body>
 </html>

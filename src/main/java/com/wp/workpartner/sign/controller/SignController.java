@@ -61,7 +61,8 @@ public class SignController {
 //	}
 	@RequestMapping("insertV.si")
 	public String insertVacation(Dtpaper d, Vacation v, MultipartFile upfile, HttpSession session, Model model) {
-		
+		System.out.println(d);
+		System.out.println(v);
 
 		if(!upfile.getOriginalFilename().equals("")) {
 			String saveFilePath = FileUpload.saveFile(upfile, session, "resources/uploadFiles/"); 
