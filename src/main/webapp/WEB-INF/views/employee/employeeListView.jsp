@@ -130,8 +130,8 @@
 	}
 	
 	#simpleBtn{
-		border:1px solid #0442AF;
-		color:#0442AF;
+		border:1px solid red;
+		color:red;
 	}
 	
 	#sort-search select{
