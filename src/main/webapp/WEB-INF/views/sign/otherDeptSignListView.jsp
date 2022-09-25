@@ -295,7 +295,7 @@ table {
 	<script>   
 		$(document).ready(function(){
 			$(".EndDpTitle").click(function(){
-              			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(0).text() + "&ct=" + $(this).parents().parents().children().eq(1).text() + "&st=af", "btn", "width=815, height=800");
+              			vacation = window.open("detailMy.si?dpNo=" + $(this).parents().parents().children().eq(0).text() + "&ct=" + $(this).parents().parents().children().eq(1).text() + "&st=af", "btn", "width=815, height=800");
 	            	vacation.moveTo(560,120);
 	            	vacation.focus();
 			})
@@ -304,7 +304,7 @@ table {
     <script>   
 		$(document).ready(function(){
 			$(".dpTitle").click(function(){
-              			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(0).text() + "&ct=" + $(this).parents().parents().children().eq(1).text() + "&st=be", "btn", "width=815, height=800");
+              			vacation = window.open("detailMy.si?dpNo=" + $(this).parents().parents().children().eq(0).text() + "&ct=" + $(this).parents().parents().children().eq(1).text() + "&st=be", "btn", "width=815, height=800");
 	            	vacation.moveTo(560,120);
 	            	vacation.focus();
 			})

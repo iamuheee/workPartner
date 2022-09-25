@@ -62,6 +62,10 @@
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"/>
+	<script>
+		
+	
+	</script>
                 <c:choose>
                     <c:when test="${ flag == 'save' }">
                         <div class="container-fluid px-4" style="margin-top: 30px;">
@@ -76,20 +80,12 @@
                             <div>
                                 <div class="searchbar" style="width: 100%;" align="right">
                                     <span style="font-size: 14px; float: left;">서식명 : </span>
-                                    <select
-                                        style="margin-left:5px; float: left; width:90px; text-align:center; border:none; box-shadow: 0px 0px 2px #878787;">
-                                        <option value="">전체</option>
-                                        <option value="">연차</option>
-                                        <option value="">업무협조</option>
-                                        <option value="">외근</option>
-                                        <option value="">퇴직원</option>
-                                    </select>
-                                    <span style="font-size: 14px; float: left; margin-left: 15px;">작성일 : </span>
-                                    <select
-                                        style="margin-left:5px; float: left; width:90px; text-align:center; border:none; box-shadow: 0px 0px 2px #878787;">
-                                        <option value="">최근 1개월</option>
-                                        <option value="">최근 3개월</option>
-                                        <option value="">최근 6개월</option>
+                                    <select id="selectLi" style="margin-left:5px; float: left; width:90px; text-align:center; border:none; box-shadow: 0px 0px 2px #878787;">
+                                        <option value="" selected>전체</option>
+                                        <option value="연차">연차</option>
+                                        <option value="업무협조">업무협조</option>
+                                        <option value="외근">외근</option>
+                                        <option value="퇴직원">퇴직원</option>
                                     </select>
                                     <input type="text"
                                         style="width: 15%; box-shadow: 0px 0px 2px #878787; border:none;"
@@ -103,7 +99,7 @@
                                 <table class="endSignList" width="100%">
 
                                     <tr align="center">
-                                        <th width="5%"><input type="checkbox" style="scale: 1.3;"></th>
+                                        <th width="5%"><input type="checkbox" style="scale: 1.3;" id="cbx_chkAll"></th>
                                         <th class="endNum" width="10%">문서번호</th>
                                         <th class="endNum" width="10%">서식</th>
                                         <th class="endTitle" width="30%">제목</th>
@@ -122,7 +118,7 @@
 				                		<c:otherwise>
 				                			<c:forEach var="s" items="${ saveList }">
 							                    <tr align="center">
-							                   	    <td><input type="checkbox" style="scale: 1.3;"></td>
+							                   	    <td><input type="checkbox" style="scale: 1.3;" name="chk"></td>
 							                        <td class='a'>${ s.dpNo }</td>
 							                        <td>${ s.dpCategory }</td>
 							                        <c:choose>
@@ -141,7 +137,7 @@
 															</span>
 								                        </c:if>
 							                        </td>
-                                       				<td><a href="" class="dpTitle">작성하기</a></td>
+                                       				<td><a href="" class="dpTitle" onclick="updateCheck()">작성하기</a></td>
 							                    </tr>
 												<!-- <script>
 													$(document).ready(function(){
@@ -165,7 +161,7 @@
 
                                 <c:if test="${not empty saveList }">
                                 <div id="pagingArea">
-                                <button style="float:left; margin-left:10px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
+                                <button type="button" id="deleteBtn" style="float:left; margin-left:10px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;" onclick="deleteList()">삭제</button>
 					                <ul class="pagination">
 					                	<c:choose>
 					                		<c:when test="${ pi.currentPage eq 1 }">
@@ -234,7 +230,7 @@
                                 <table class="endSignList" width="100%">
 
                                     <tr align="center">
-                                        <th width="5%"><input type="checkbox" style="scale: 1.3;"></th>
+                                        <th width="5%"><input type="checkbox" id="ck_all" style="scale: 1.3;"></th>
                                         <th class="endNum" width="10%">문서번호</th>
                                         <th class="endNum" width="10%">서식</th>
                                         <th width="10%">첨부파일</th>
@@ -252,7 +248,7 @@
 				                		<c:otherwise>
 				                			<c:forEach var="r" items="${ reSignList }">
 							                    <tr align="center">
-							                   	    <td><input type="checkbox" style="scale: 1.3;"></td>
+							                   	    <td><input type="checkbox" value="${ r.dpNo }" style="scale: 1.3;" name="chk"></td>
 							                        <td>${ r.dpNo }</td>
 							                        <td>${ r.dpCategory }</td>
 							                        <td>
@@ -272,7 +268,7 @@
 							                        </c:choose>
 							                        <td>${ r.dpCreate }</td>
 							                        <td>${ r.signEmpName }(${r.signEmpDept })</td>
-                                       				<td><a href="" class="dpTitle">작성하기</a></td>
+                                       				<td><a href="" class="dpTitle" onclick="updateCheck()">작성하기</a></td>
 							                    </tr>
 						                    </c:forEach>
 				                		</c:otherwise>
@@ -281,7 +277,7 @@
 
                                	<c:if test="${ not empty reSignList }">
                                 <div id="pagingArea">
-                                <button style="float:left; margin-left:10px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;">삭제</button>
+                                <button type="button" id="deleteBtn" style="float:left; margin-left:10px; margin-top: 10px; border:none; box-shadow:0px 0px 2px #878787; font-size: 14px;" onclick="deleteList();">삭제</button>
 					                <ul class="pagination">
 					                	<c:choose>
 					                		<c:when test="${ pi.currentPage eq 1 }">
@@ -314,7 +310,7 @@
 		            <script>   
 						$(document).ready(function(){
 							$(".dpTitle").click(function(){
-		                			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(1).text() + "&ct=" + $(this).parents().parents().children().eq(2).text() + "&st=be", "btn", "width=815, height=800");
+		                			vacation = window.open("detailMy.si?dpNo=" + $(this).parents().parents().children().eq(1).text() + "&ct=" + $(this).parents().parents().children().eq(2).text() +  "&st=be", "btn", "width=815, height=800");
 		                			console.log($(this).parent().siblings(".a").val("input[type=hidden]"));
 					            	vacation.moveTo(560,120);
 					            	vacation.focus();
@@ -324,15 +320,31 @@
 				    <script>   
 						$(document).ready(function(){
 							$(".reSignDpTitle").click(function(){
-		                			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(1).text() + "&ct=" + $(this).parents().parents().children().eq(2).text() + "&st=re", "btn", "width=815, height=800");
+		                			vacation = window.open("detailMy.si?dpNo=" + $(this).parents().parents().children().eq(1).text() + "&ct=" + $(this).parents().parents().children().eq(2).text() + "&st=re", "btn", "width=815, height=800");
 		                			console.log($(this).parent().siblings(".a").val("input[type=hidden]"));
 					            	vacation.moveTo(560,120);
 					            	vacation.focus();
 							})
 						})
 				    </script> 
+				    <script>
+						function updateCheck() {
+							if (confirm("다시 작성하시겠습니까?") == true) { //확인
+								if($(this).parents().parents().children().eq(2).text() == '연차'){
+									document.location.href = "updateForm.si?dpNo=" + ${t.dpNo} + "&ct=연차"
+								}else if($(this).parents().parents().children().eq(2).text() == '외근'){
+									document.location.href = "updateForm.si?dpNo=" + ${t.dpNo} + "&ct=외근";
+								}else if($(this).parents().parents().children().eq(2).text() == '업무협조'){
+									document.location.href = "updateForm.si?dpNo=" + ${t.dpNo} + "&ct=업무협조";
+								}else {
+									document.location.href = "updateForm.si?dpNo=" + ${t.dpNo} + "&ct=퇴직원";
+								}
+							} else { //취소
+								return false;
+							}
+						}	
+					</script>
             </main>
-        
         </div>
     </div>
 </body>
