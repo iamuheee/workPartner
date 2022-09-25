@@ -596,7 +596,7 @@ public class SignController {
 			}
 			return mv;
 	}
-	@RequestMapping("updateSi.si")
+	@RequestMapping(value="updateSi.si", produces="applicaton/json; charset=utf-8")
 	public String updateDtpaper(Dtpaper d, Vacation v, Otwork o, ReSign r, Cooperation c,  HttpSession session, MultipartFile reupfile, String ct) {
 		System.out.println(d);
 		System.out.println(v);
@@ -604,28 +604,30 @@ public class SignController {
 		System.out.println(r);
 		System.out.println(c);
 		System.out.println(ct);
-		if(!reupfile.getOriginalFilename().equals("")) {
-			
-			// 기존에 첨부파일이 있을 경우
-			if(d.getDpOrigin() != null) {
-				new File(session.getServletContext().getRealPath(d.getDpChange())).delete();
-			}
-			// 새로 넘어온 첨부파일 서버 업로드 시키기
-			String saveFilePath = FileUpload.saveFile(reupfile, session, "resources/uploadFiles/");
-			
-			d.setDpOrigin(reupfile.getOriginalFilename());
-			d.setDpChange(saveFilePath);
-		}
+		System.out.println(reupfile);
+		
+//		if(!reupfile.getOriginalFilename().equals("")) {
+//			
+//			// 기존에 첨부파일이 있을 경우
+//			if(d.getDpOrigin() != null) {
+//				new File(session.getServletContext().getRealPath(d.getDpChange())).delete();
+//			}
+//			// 새로 넘어온 첨부파일 서버 업로드 시키기
+//			String saveFilePath = FileUpload.saveFile(reupfile, session, "resources/uploadFiles/");
+//			
+//			d.setDpOrigin(reupfile.getOriginalFilename());
+//			d.setDpChange(saveFilePath);
+//		}
 		int dtpaper = sService.updateDt(d);
 		System.out.println(dtpaper);
 		if(dtpaper > 0) {
-			if(ct.equals("연차")) {
+			if(ct.equals("va")) {
 				int updateVa = sService.updateVa(v);
 				System.out.println(1);
-			}else if(ct.equals("외근")) {
+			}else if(ct.equals("ot")) {
 				int updateOw = sService.updateOw(o);
 				System.out.println(2);
-			}else if(ct.equals("퇴직원")) {
+			}else if(ct.equals("re")) {
 				int updateRe = sService.updateRe(r);
 				System.out.println(3);
 			}else {

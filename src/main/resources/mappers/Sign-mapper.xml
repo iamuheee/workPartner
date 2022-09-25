@@ -927,7 +927,7 @@
 		   set va_start = #{vaStart}
 		     , va_end = #{vaEnd}
 		     , va_category = #{vaCategory}
-		     , va_content = #{vaCategory}
+		     , va_content = #{vaContent}
 		 where dp_no = #{dpNo}
 	</update>
 	<update id="updateOw">
