@@ -82,6 +82,7 @@ font-family: 'Noto Sans KR', sans-serif;
 						// 해당 사원은 프로젝트 멤버가 아님
 						alert("프로젝트 멤버만 회의에 추가 가능합니다.");
 						$("#myform tr").remove();
+						window.close();
 					}
 				}
 			})
@@ -89,6 +90,7 @@ font-family: 'Noto Sans KR', sans-serif;
 			alert("천천히 골라주십시오.");
 			$("#memNo").val( "" )
 			$("#memName").val( "" )
+			window.close();
 		}
 	}
 </script>

@@ -81,11 +81,13 @@ font-family: 'Noto Sans KR', sans-serif;
 					    }else{
 							alert("천천히 골라주십쇼!");	 
 							$("#myform tr").remove();
+							window.close();
 					    }
 					}else{
 						// 해당 사원은 프로젝트 멤버가 아님
 						alert("업무 담당자는 프로젝트 멤버여야 합니다.");
 						$("#myform tr").remove();
+						window.close();
 					}
 				}
 			})
