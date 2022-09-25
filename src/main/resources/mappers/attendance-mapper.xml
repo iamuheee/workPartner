@@ -964,7 +964,7 @@
 		                                     CONNECT BY LEVEL <![CDATA[<=]]>  TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
 		                              ) A
 		                    ) B
-		                    WHERE B.D NOT IN ('7')
+		                    WHERE B.D NOT IN ('1','7')
 		                    AND B.DT NOT IN 
 		                  
 		                    ( 
@@ -1062,7 +1062,7 @@
 	                                     CONNECT BY LEVEL <![CDATA[<=]]>  TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
 	                              ) A
 	                    ) B
-	                    WHERE B.D NOT IN ('7')
+	                    WHERE B.D NOT IN ('1','7')
 	                    AND B.DT NOT IN 
 	                  
 	                    ( 
@@ -1459,7 +1459,10 @@
 		join tb_employee using(emp_no)
 		join tb_department using(dep_cd)
 		where aat_status = '1'
-		order by b desc
+			<if test="empNo != null and empNo != ''">
+			    and emp_no = #{empNo}
+		   	</if>
+		order by a desc
 		
 	</select>
 	
@@ -1477,7 +1480,83 @@
 		join tb_employee using(emp_no)
 		join tb_department using(dep_cd)
 		where aat_status = '2'
-		order by b desc
+			<if test="empNo != null and empNo != ''">
+			    and emp_no = #{empNo}
+		   	</if>
+		order by a desc
 		
 	</select>
+	
+	<update id="agreeModify">
+	
+		update tb_attendance a
+		  set (a.att_cmt 
+		     , a.att_qt  
+		     , a.att_status)
+		     = (select aat_ajfcmt
+		             , aat_ajfqt
+		             , '정상'
+		         from TB_ADJUST_ATTENDANCE b
+		         where aat_no= #{aatNo})
+		  where a.att_date = #{date}
+		  and a.emp_no = (select emp_no
+		                    from tb_employee
+		                    where emp_name=#{empName})
+	</update>
+	
+	<update id="paperModify">
+		update TB_ADJUST_ATTENDANCE
+                       set aat_time = '승인'
+                    where aat_no = #{aatNo}
+	</update>
+	
+	<update id="paperModify2">
+		update TB_ADJUST_ATTENDANCE
+                       set aat_time = '반려'
+                    where aat_no = #{aatNo}
+	</update>
+	
+	<insert id="paperModify3">
+		insert 
+		    into TB_ATTENDANCE
+		    (
+		        att_no,
+		        emp_no,
+		        att_date,
+		        att_fcmt,
+		        att_fqt
+		    )
+		    (
+		    select 
+		          seq_attno.nextval
+		        , emp_no
+		        , AAT_DATE
+		        , AAT_AJFCMT
+		        , AAT_AJFQT
+		    from TB_ADJUST_ATTENDANCE
+		    where aat_no = #{aatNo}
+		    )
+	</insert>
+	
+	<delete id="cancelModify">
+		DELETE from TB_ADJUST_ATTENDANCE
+		WHERE aat_no = #{aatNo}
+	</delete>
+	
+	
+	<select id="detail" resultMap="vacationResult">
+	
+		select 
+			aat_date a,
+			aat_fcmt b,
+			aat_fqt c,
+			AAT_AJFCMT d,
+			AAT_AJFQT e,
+			AAT_REASON f
+		from TB_ADJUST_ATTENDANCE
+		where aat_no = #{aatNo}
+		
+	</select>
+	
+	
 </mapper>

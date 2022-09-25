@@ -377,6 +377,44 @@ public class AttDao {
 	public ArrayList<Vacation> adminAttAdjust2(SqlSessionTemplate sqlSession) {
 		return (ArrayList)sqlSession.selectList("attendanceMapper.adminAttAdjust2");
 	}
+	
+	public int agreeModify(String aatNo, String empName, String date, SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("empName", empName);
+		map.put("aatNo", aatNo);
+		map.put("date", date);
+		
+		return sqlSession.update("attendanceMapper.agreeModify", map);
+	}
+
+	public int paperModify(String aatNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.update("attendanceMapper.paperModify", aatNo);
+	}
+	
+	public int paperModify2(String aatNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.update("attendanceMapper.paperModify2", aatNo);
+	}
+	
+	public int paperModify3(String aatNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.insert("attendanceMapper.paperModify3", aatNo);
+	}
+
+	public ArrayList<Vacation> adminAttAdjust(SqlSessionTemplate sqlSession, String empNo) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.adminAttAdjust", empNo);
+	}
+
+	public ArrayList<Vacation> adminAttAdjust2(SqlSessionTemplate sqlSession, String empNo) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.adminAttAdjust2", empNo);
+	}
+
+	public int cancelModify(SqlSessionTemplate sqlSession, String aatNo) {
+		return sqlSession.delete("attendanceMapper.cancelModify", aatNo);
+	}
+
+	public ArrayList<Vacation> detail(SqlSessionTemplate sqlSession, String aatNo) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.detail", aatNo);
+	}
 
 
 }

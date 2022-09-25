@@ -132,7 +132,14 @@ public interface AttService {
 	// 전사원 근태조정내역
 	ArrayList<Vacation> adminAttAdjust();
 	ArrayList<Vacation> adminAttAdjust2();
-//	int agreeModify(String aatNo, String empName);
+	int agreeModify(String aatNo, String empName, String date);
+	int paperModify(String aatNo);
+	int paperModify2(String aatNo);
+	int paperModify3(String aatNo);
+	ArrayList<Vacation> adminAttAdjust(String empNo);
+	ArrayList<Vacation> adminAttAdjust2(String empNo);
+	int cancelModify(String aatNo);
+	ArrayList<Vacation> detail(String aatNo);
 	
 
 	
