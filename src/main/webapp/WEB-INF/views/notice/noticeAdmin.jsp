@@ -147,6 +147,7 @@
                 				   //ajaxSelectNtAdminY();
                 				   // => 얘는 Y인 애들만 조회하는거라서 남아있는 추가하려고 검색해온 일반사원들이 없어져버림
                 				   // 그래서 ajax 처리 전에 클릭한 this에 tr을 없애도록!!!
+                				   alert("삭제되었습니다.");
                 			   }
                 		   }, 
                 		   error:function(){

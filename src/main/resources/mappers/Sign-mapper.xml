@@ -455,7 +455,7 @@
 			 				</if>
 		   and dp_status = 'N'
 		 order
-		    by dp_create desc, dp_modify desc
+		    by dp_create desc, d.dp_no desc
 	</select>
 	<!-- 진행, 완료 리스트 -->
 	<select id="selectProgressList" resultMap="SelectProgressListResult">
@@ -496,7 +496,7 @@
 			 				</if>
 		   and dp_status = 'N'				
 		 order
-		    by dp_create desc, dp_modify desc
+		    by dp_create desc
 	</select>
 	
 	<!-- <select>
@@ -571,7 +571,7 @@
 		   and signemp_no = #{ empNo }
 		   and e.dep_cd != #{ depCd }
 		 order
-		    by dp_create desc, dp_modify desc
+		    by dp_create desc
 	</select>
 <!-- 타부서 결재완료 -->
 	<select id="selectEndOthSignListCount" resultType="_int">
@@ -618,7 +618,7 @@
 		   and signemp_no = #{ empNo }
 		   and e.dep_cd != #{ depCd } 
 		 order
-		    by dp_create desc, dp_modify desc
+		    by dp_create desc
 	</select>
 	
 	
@@ -656,7 +656,7 @@
 		   and signemp_no = #{ empNo }
 		   and e.dep_cd = #{ depCd }
 		 order
-		    by dp_create desc, dp_modify desc
+		    by dp_create desc
 	</select>
 	<select id="selectDeptSignListCount" resultType="_int">
 		select 
@@ -703,7 +703,7 @@
 		   and signemp_no = #{ empNo }
 		   and e.dep_cd = #{ depCd }
 		 order
-		    by dp_create desc, dp_modify desc
+		    by dp_create desc
 
 	</select>
 	<select id="selectEndSignListCount" resultType="_int">
@@ -927,7 +927,7 @@
 		   set va_start = #{vaStart}
 		     , va_end = #{vaEnd}
 		     , va_category = #{vaCategory}
-		     , va_content = #{vaCategory}
+		     , va_content = #{vaContent}
 		 where dp_no = #{dpNo}
 	</update>
 	<update id="updateOw">

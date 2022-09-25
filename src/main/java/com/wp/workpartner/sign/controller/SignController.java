@@ -61,7 +61,8 @@ public class SignController {
 //	}
 	@RequestMapping("insertV.si")
 	public String insertVacation(Dtpaper d, Vacation v, MultipartFile upfile, HttpSession session, Model model) {
-		
+		System.out.println(d);
+		System.out.println(v);
 
 		if(!upfile.getOriginalFilename().equals("")) {
 			String saveFilePath = FileUpload.saveFile(upfile, session, "resources/uploadFiles/"); 
@@ -596,7 +597,7 @@ public class SignController {
 			}
 			return mv;
 	}
-	@RequestMapping("updateSi.si")
+	@RequestMapping(value="updateSi.si", produces="applicaton/json; charset=utf-8")
 	public String updateDtpaper(Dtpaper d, Vacation v, Otwork o, ReSign r, Cooperation c,  HttpSession session, MultipartFile reupfile, String ct) {
 		System.out.println(d);
 		System.out.println(v);
@@ -604,6 +605,8 @@ public class SignController {
 		System.out.println(r);
 		System.out.println(c);
 		System.out.println(ct);
+		System.out.println(reupfile);
+		
 		if(!reupfile.getOriginalFilename().equals("")) {
 			
 			// 기존에 첨부파일이 있을 경우
@@ -619,13 +622,13 @@ public class SignController {
 		int dtpaper = sService.updateDt(d);
 		System.out.println(dtpaper);
 		if(dtpaper > 0) {
-			if(ct.equals("연차")) {
+			if(ct.equals("va")) {
 				int updateVa = sService.updateVa(v);
 				System.out.println(1);
-			}else if(ct.equals("외근")) {
+			}else if(ct.equals("ot")) {
 				int updateOw = sService.updateOw(o);
 				System.out.println(2);
-			}else if(ct.equals("퇴직원")) {
+			}else if(ct.equals("re")) {
 				int updateRe = sService.updateRe(r);
 				System.out.println(3);
 			}else {

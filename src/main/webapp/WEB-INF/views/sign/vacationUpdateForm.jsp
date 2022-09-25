@@ -299,9 +299,8 @@ $(document).ready(function() {
 		}
 		
     </script>
-	</section>
 	</form>
-
+	
 
 </body>
 	

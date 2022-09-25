@@ -313,7 +313,7 @@
 									<tr>
 										<td style="border-right: 1px solid #b7b9cc"><a
 											href="insert.ma" class="quickA">메일 쓰기</a></td>
-										<td><a href="" class="quickA">회의실 예약</a></td>
+										<td><a href="enrollForm.bk" class="quickA">회의실 예약</a></td>
 									</tr>
 								</table>
 							</div>

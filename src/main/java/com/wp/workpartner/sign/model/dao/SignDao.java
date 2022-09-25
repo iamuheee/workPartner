@@ -30,6 +30,7 @@ public class SignDao {
 		
 		int result = 0;
 		for(Sign s : signList) {
+			System.out.println(s);
 			result += sqlSession.insert("signMapper.insertVaSign", s);
 		}
 		
