@@ -132,6 +132,20 @@
     .fc-datagrid-cell-frame fc-datagrid-cell-frame-liquid{
     	width:200px;
     }
+    
+    #pagingArea{
+    	
+    	display:flex;
+    	justify-content:center;
+    }
+    
+    #pagingArea * {
+    	border:none;
+    	color:#000;
+    	font-size:18px;
+   	}
+    
+    
 </style>
 <body>
 	
@@ -171,7 +185,7 @@
 						        	기간별 조회 :
 							        <input type="date" id="startDate" name="startDate" onchange="searchBookList()">&nbsp;~&nbsp; 
 							        <input type="date" id="endDate" name="endDate" onchange="searchBookList()">
-							        <button type="button" class="btn btn-sm btn-primary" onclick="selectAllBookList()"><i class="fa-solid fa-arrows-rotate"></i></button>
+							        <button type="button" class="btn btn-sm btn-primary" onclick="refreshList()"><i class="fa-solid fa-arrows-rotate"></i></button>
 						        </div>
 						    </div>
 						    <!-- =========================================================== -->
@@ -179,13 +193,13 @@
 						        <table id="historyTable" class="table table-hover display">
 						            <thead>
 						                <tr>
-						                    <th scope="col">No.</th>
-						                    <th scope="col">회의실</th>
-						                    <th scope="col">회의명</th>
-						                    <th scope="col">예약자</th>
-						                    <th scope="col">인원</th>
-						                    <th scope="col">예약일정</th>
-						                    <th scope="col">예약상태</th>
+						                    <th width="5%" scope="col">No.</th>
+						                    <th width="15%" scope="col">회의실</th>
+						                    <th width="30%" scope="col">회의명</th>
+						                    <th width="15%" scope="col">예약자</th>
+						                    <th width="5%" scope="col">인원</th>
+						                    <th width="20%"scope="col">예약일정</th>
+						                    <th width="10%" scope="col">예약상태</th>
 						                </tr>
 						            </thead>
 						            <tbody id="historyList">
@@ -203,12 +217,7 @@
 							 <!-- =========================================================== -->
 						                    
 		                    
-		                    
-		                <!-- Modal footer -->
-		                <div class="modal-footer">
-		                    <button type="submit" class="btn btn-primary" id="insertBk" style="margin-right:5px;">예약</button>
-		                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal();">취소</button>
-		                </div>
+		             
 		        </div>
 		    </div>
 		</div>
@@ -228,6 +237,13 @@
         	$("#inputDate").find("#endDate").val("");
 			$('#selectBookDetail').modal('hide');
 		}
+        
+        function refreshList(){
+        	selectAllBookList();
+        	$("#inputDate").find("#startDate").val("");
+        	$("#inputDate").find("#endDate").val("");
+        }
+        
         
         $(function(){
         	selectRoomList();	// modal select opiton에 넣을 회의실 목록 조회
@@ -435,7 +451,8 @@
 					
 					$("#historyList").html(value);
 					$("#pagingArea").html(pgValue);
-							
+					
+				
 				
 				  },
 				  error:function(){

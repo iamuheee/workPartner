@@ -123,6 +123,17 @@ public interface AttService {
 	
 	// 연차 정보 지우기
 	int resetVacation(String empNo);
+	
+	// 출퇴근시간변경
+	ArrayList<Vacation> changeAttendanceTime(String empNo, String time);
+	int changeAttendanceTime2(String empNo, String text1, String text2, String text3, String text4, String text5, String text6);
+	int changeAttendanceTime3(String empNo, String text11, String text44, String text55, String text66);
+	
+	// 전사원 근태조정내역
+	ArrayList<Vacation> adminAttAdjust();
+	ArrayList<Vacation> adminAttAdjust2();
+	int agreeModify(String aatNo, String empName);
+	
 
 	
 	

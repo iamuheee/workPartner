@@ -130,8 +130,8 @@
 	}
 	
 	#simpleBtn{
-		border:1px solid #0442AF;
-		color:#0442AF;
+		border:1px solid red;
+		color:red;
 	}
 	
 	#sort-search select{
@@ -568,6 +568,7 @@
 					   		   
 					   		   $('input').val('');
 					   		   $('select').find('option:first').attr('selected', 'selected');
+					   		   
 							},
 							error:function(){
 								console.log("사용자 간단 추가용 ajax 통신 실패");

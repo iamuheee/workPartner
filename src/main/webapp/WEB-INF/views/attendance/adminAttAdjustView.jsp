@@ -36,130 +36,142 @@
 		
 		<div style="width:80%"><hr></div>
 		
-		<br>
-		
-		<form action="">
-	        <span class="span1">기간조회&nbsp&nbsp&nbsp</span>
-	        <input type="date" name="date1">
-	        &nbsp~&nbsp	
-	        <input type="date" name="date2">
-	        <br><br>
-	
-	        <span class="span1">근무상태&nbsp&nbsp</span>
-	        <input type="checkbox" name="check">출퇴근시간변경 &nbsp
-	        <input type="checkbox" name="check">근무시간변경 &nbsp
-	        <input type="checkbox" name="check">연장근무신청 &nbsp
-	
-	        &nbsp&nbsp
-	        <button type="submit" class="btn btn-sm btn-secondary btnSize" style="height:30px; width:60px; font-size:17px; line-height:10px ">조 회</button>
-	    </form>
+
 	    
 	    <br><br>
+	    
+ <h4>출퇴근시간변경</h4>
+	    <br>
 	    <!-- 테이블 -->
 	    <div class="ntMain" style="width:80%">
-	        <span class="span1">조회결과 <span style="font-size:x-large; font-weight: 400;">27</span><span style="font-weight:600; font-size: medium;">건</span></span>
-			
-			<div style="float:right">
-				<button onclick="" class="btn btn-sm btn-primary" style="width:50px; height:30px; font-size:15px">승인</button>
-				<button onclick="" class="btn btn-sm btn-warning" style="width:50px; height:30px; font-size:15px">반려</button>
-			</div>
-
-	        <br>
 	        <table class="table table-hover" style="text-align:center">
 	            <thead>
-	                <tr>            
-						<th><input type="checkbox" style="width:10px"></th>                
-	                    <th>작성일</th>
-	                    <th>사원번호</th>
+	                <tr>     
+	                	<th>문서번호</th>                       
+	                    <th>조정일</th>
+	                    <th>부서명</th>
 	                    <th>사원명</th>
-						<th>제목</th>
-						<th>진행상황</th>
+	                    <th>제목</th>
+	                    <th>진행상황</th>
+	                    <th><th>
 	                </tr>
 	            </thead>
 	            <tbody>
-	                <tr>
-	                    <td><input type="checkbox" style="width:10px"></td>
-	                    <td>2022-09-01</td>
-	                    <td>1</td>
-						<td>박명수</td>
-						<td>출퇴근 시간 변경</td>
-						<td>조정중</td>
-	                </tr>   
-					<tr>
-	                    <td><input type="checkbox" style="width:10px"></td>
-	                    <td>2022-09-01</td>
-	                    <td>1</td>
-						<td>박명수</td>
-						<td>출퇴근 시간 변경</td>
-						<td>조정중</td>
-	                </tr>  
-					<tr>
-	                    <td><input type="checkbox" style="width:10px"></td>
-	                    <td>2022-09-01</td>
-	                    <td>1</td>
-						<td>박명수</td>
-						<td>출퇴근 시간 변경</td>
-						<td>조정중</td>
-	                </tr>  
-					<tr>
-	                    <td><input type="checkbox" style="width:10px"></td>
-	                    <td>2022-09-01</td>
-	                    <td>1</td>
-						<td>박명수</td>
-						<td>출퇴근 시간 변경</td>
-						<td>조정중</td>
-	                </tr>  
-					<tr>
-	                    <td><input type="checkbox" style="width:10px"></td>
-	                    <td>2022-09-01</td>
-	                    <td>1</td>
-						<td>박명수</td>
-						<td>출퇴근 시간 변경</td>
-						<td>조정중</td>
-	                </tr>  
-					<tr>
-	                    <td><input type="checkbox" style="width:10px"></td>
-	                    <td>2022-09-01</td>
-	                    <td>1</td>
-						<td>박명수</td>
-						<td>출퇴근 시간 변경</td>
-						<td>조정중</td>
-	                </tr>  
+	               <c:choose>
+                		<c:when test="${empty list}">
+                			<tr>
+                				<td colspan="7">조회된 출퇴근시간 조정내역 없습니다.</td>
+                			</tr>
+                		</c:when>
+                		<c:otherwise>
+							<c:forEach var="a" items="${list}">
+								<tr>
+			                        <td class="no">${a.a}</td>
+			                        <td>${a.b}</td>
+			                        <td>${a.c}</td>
+			                        <td class="name">${a.d}</td>
+			                        <td>${a.e}</td>
+			                        <td>${a.f}</td>
+			                        <td>
+			                        	<c:if test="${ a.f == '조정중' }">
+			                        	<button class="btn btn-sm btn-primary" id="button1">승인</button> / 
+	                    				<button class="btn btn-sm btn-warning" id="button2">반려</button>
+			                      		 </c:if>
+			                        </td>        
+			                    </tr>
+							</c:forEach>
+                		</c:otherwise>                    
+                    </c:choose>     
+
+	            </tbody>
+	        
 	
+	        </table>
+	        
+	        <br><br><br>
+	        
+	    <h4>근무시간변경</h4>
+		<br>
+	         <table class="table table-hover" style="text-align:center">
+	             <thead>
+	                <tr>     
+	                	<th>문서번호</th>                       
+	                    <th>조정일</th>
+	                    <th>부서명</th>
+	                    <th>사원명</th>
+	                    <th>제목</th>
+	                    <th>진행상황</th>
+	                    <th><th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                 
+	                <c:choose>
+                		<c:when test="${empty list2}">
+                			<tr>
+                				<td colspan="7">조회된 근무시간조정내역 없습니다.</td>
+                			</tr>
+                		</c:when>
+                		<c:otherwise>
+							<c:forEach var="a" items="${list2}">
+								<tr>
+			                        <td class="no1">${a.a}</td>
+			                        <td>${a.b}</td>
+			                        <td>${a.c}</td>
+			                        <td>${a.d}</td>
+			                        <td>${a.e}</td>
+			                        <td>${a.f}</td>
+			                        <td>
+			                        	<c:if test="${ a.f == '조정중' }">
+			                        	<button class="btn btn-sm btn-primary" id="button3">승인</button> / 
+	                    				<button class="btn btn-sm btn-warning" id="button4">반려</button>
+			                       		 </c:if>
+			                        </td>        
+			                    </tr>
+							</c:forEach>
+                		</c:otherwise>                    
+                    </c:choose>     
+
 	            </tbody>
 	        
 	
 	        </table>
 	
 	    </div>
-	
-	
-	
-	    <!-- 페이징 -->
-	    <div class="ntPasing">
-	        <nav aria-label="Page navigation example" class="pasingCenter">
-	            <ul class="pagination">
-	              <li class="page-item">
-	                <a class="page-link" href="#" aria-label="Previous">
-	                  <span aria-hidden="true">&laquo;</span>
-	                </a>
-	              </li>
-	              <li class="page-item"><a class="page-link" href="#">1</a></li>
-	              <li class="page-item"><a class="page-link" href="#">2</a></li>
-	              <li class="page-item"><a class="page-link" href="#">3</a></li>
-	              <li class="page-item">
-	                <a class="page-link" href="#" aria-label="Next">
-	                  <span aria-hidden="true">&raquo;</span>
-	                </a>
-	              </li>
-	            </ul>
-	          </nav>     
-	    </div>
+
 	
 	
 	</div>
 	
 	<br><br><br><br><br><br><br><br><br>
+	
+	<script>
+	
+		$(function(){
+			
+			$("#button1").on('click', function(){
+				
+				var a = $(this).parent().siblings(".no").text();
+				var b = $(this).parent().siblings(".name").text();
+				
+				$.ajax({	
+	    			url:"agreeModify.att",
+	    			data:{"aatNo":a, "empName":b},
+	    			success:function(){
+	    				
+	    				console.log("근태수정신청 ajax 통신 성공");
+	    				
+	    			},
+	    			error:function(){
+	    				console.log("근태수정신청 ajax 통신 실패");
+	    			}
+				
+	    		
+			})
+			
+			})
+		})
+	</script>
 	
 	
 </body>
