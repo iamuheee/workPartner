@@ -531,7 +531,7 @@
 		SELECT MEM_NO
 			 , MEM_NAME
 			 , MEM_ROLE
-			 , NVL(EMP_PHONE, '등록된 번호 없음'
+			 , NVL(EMP_PHONE, '등록된 번호 없음')
 			 , EMP_EMAIL
 			 , DEP_NAME
 			 , POS_NAME
