@@ -735,12 +735,13 @@ public class AttController {
 		
 		
 		
-		// 출퇴근변경 수정승인
-		@RequestMapping(value = "agreeModify.att", produces = "application/json; charset=utf-8")
-		public String agreeModify(String aatNo, String empName) {
-			
-			//int result = aService.agreeModify(aatNo, empName);
-			
-			return "redirect:adminAttAdjust.att";
-		}
+//		// 출퇴근변경 수정승인
+//		@RequestMapping(value = "agreeModify.att", produces = "application/json; charset=utf-8")
+//		public String agreeModify(String aatNo, String empName) {
+//			
+//			//int result = aService.agreeModify(aatNo, empName);
+//			// 
+//			
+//			return "redirect:adminAttAdjust.att";
+//		}
 }

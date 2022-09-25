@@ -132,7 +132,7 @@ public interface AttService {
 	// 전사원 근태조정내역
 	ArrayList<Vacation> adminAttAdjust();
 	ArrayList<Vacation> adminAttAdjust2();
-	int agreeModify(String aatNo, String empName);
+//	int agreeModify(String aatNo, String empName);
 	
 
 	
