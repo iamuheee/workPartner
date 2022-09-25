@@ -248,9 +248,9 @@ public class SignDao {
 		for(Sign s : signList) {
 			HashMap<Object, Object> map = new HashMap();
 			map.put("s", s);
-			map.put("no", d.getDpNo());
+			map.put("d", d);
 			System.out.println(s);
-			System.out.println(d.getDpNo());
+			System.out.println(d);
 			System.out.println(map);
 			result += sqlSession.insert("signMapper.updateSign", map);
 		}

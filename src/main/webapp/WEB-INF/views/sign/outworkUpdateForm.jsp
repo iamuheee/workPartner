@@ -211,10 +211,10 @@ margin-left: 10px;
 				<tr>
 					<td class="tableTitle" width="100">신청자</td>
 					<td width="280" align="right"><input type="text" id="writeEmp"
-						name="otCall" value="${ o.otCall }" readonly></td>
+						name="otCall" value="${ o.otCall }" readonly><input type="hidden" name="empNo" value="${ t.empNo }"></td>
 					<td class="tableTitle" width="100">담당자</td>
 					<td width="280" align="right" style="border-right: 0;"><input
-						type="text" name="otSupervisor" value="${ o.otSupervisor }" ></td>
+						type="text" name="otSupervisor" value="${ o.otSupervisor }" ><input type="hidden" name="dpNo" value="${o.dpNo }"></td>
 				</tr>
 				<tr>
 					<td class="tableTitle">외근목적</td>

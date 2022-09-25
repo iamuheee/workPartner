@@ -261,10 +261,14 @@
 	<form action="" method="post" name="insertForm" id="insertForm" enctype="multipart/form-data"> 
 	<input type="hidden" name="dpFinal" value="${ t.dpFinal }">
 	<input type="hidden" name="dpCategory" value="${ t.dpCategory }">
-		
 	<section class="mainTitle">
 		<c:choose>
 			<c:when test="${ t.dpFinal == '임시저장'}">
+				<a class="insertBtn" id="insertForm" onclick="insertCheck()">다시 기안하기</a>
+				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
+				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
+			</c:when>
+			<c:when test="${ t.dpFinal == '대기'}">
 				<a class="insertBtn" id="insertForm" onclick="insertCheck()">다시 기안하기</a>
 				<a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
 				<a class="insertBtn" id="btn-modal" onclick="openAddressWindow()">결재선 추가</a>
@@ -318,6 +322,9 @@
 	         				
 	         		</c:when>
 	         		<c:when test="${ t.dpFinal == '반려됨'}">
+	         				
+	         		</c:when>
+	         		<c:when test="${ t.dpFinal == '대기'}">
 	         				
 	         		</c:when>
 	         		<c:otherwise>

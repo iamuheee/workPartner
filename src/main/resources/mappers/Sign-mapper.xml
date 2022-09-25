@@ -985,7 +985,20 @@
 		     ) 
 		 values
 		 (
-			#{ no }
+			<choose>
+				  <when test="d.dpCategory.equals('연차')">
+				  	10||seq_vac.currval
+				  </when>
+			  	  <when test="d.dpCategory.equals('외근')">
+				  	20||seq_otw.currval
+				  </when>
+				  <when test="d.dpCategory.equals('퇴직원')">
+				  	30||seq_res.currval
+				  </when>
+			  	  <otherwise>
+				  	40||seq_coop.currval
+				  </otherwise>
+			  </choose>
 		  , #{ s.signEmpNo }
 		  , #{ s.siSeq }
 		  , #{ s.siAsign }

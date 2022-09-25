@@ -685,25 +685,22 @@ public class SignController {
 				if(updateVa > 0) {
 					int result3 = sService.updateSign(signList,d);
 				}
-				System.out.println(1);
 			}else if(ct.equals("외근")) {
 				int updateOw = sService.updateOw(o);
 				if(updateOw > 0) {
 					int result3 = sService.updateSign(signList,d);
+					System.out.println(result3);
 				}
-				System.out.println(2);
 			}else if(ct.equals("퇴직원")) {
 				int updateRe = sService.updateRe(r);
 				if(updateRe > 0) {
 					int result3 = sService.updateSign(signList,d);
-				}
-				System.out.println(3);
+				}	
 			}else {
 				int updateCo = sService.updateCo(c);
 				if(updateCo > 0) {
 					int result3 = sService.updateSign(signList,d);
 				}
-				System.out.println(4);
 			}
 			
 		}
