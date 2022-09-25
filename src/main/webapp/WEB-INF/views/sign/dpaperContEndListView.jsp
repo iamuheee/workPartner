@@ -48,6 +48,10 @@ table {
 			text-decoration-line: none;
 			color: #212529;
 		}
+.endDpTitle{
+			text-decoration-line: none;
+			color: #212529;
+		}
 /* .mainOuter{
 	margin-top:0 !important;
 } */
@@ -222,10 +226,10 @@ table {
 				                        <td>${ e.dpCategory }</td>
 				                        <c:choose>
 					                        <c:when test="${empty e.dpTitle }">
-					                        	<td><a href="" class="dpTitle">제목없음</a></td>
+					                        	<td><a href="" class="endDpTitle">제목없음</a></td>
 					                        </c:when>
 					                        <c:otherwise>
-					                        	<td><a href="" class="dpTitle">${ e.dpTitle }</a></td>
+					                        	<td><a href="" class="endDpTitle">${ e.dpTitle }</a></td>
 					                        </c:otherwise>
 				                        </c:choose>
 				                        <td>${ e.dpCreate }</td>
@@ -275,10 +279,20 @@ table {
 			</div>
 		</c:otherwise>
 	</c:choose>
-	<script>   
+	 <script>   
 		$(document).ready(function(){
 			$(".dpTitle").click(function(){
-              			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(0).text() + "&ct=" + $(this).parents().parents().children().eq(1).text(), "btn", "width=815, height=800");
+              			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(0).text() + "&ct=" + $(this).parents().parents().children().eq(1).text() + "&st=be", "btn", "width=815, height=800");
+              			console.log($(this).parent().siblings(".a").val("input[type=hidden]"));
+	            	vacation.moveTo(560,120);
+	            	vacation.focus();
+			})
+		})
+    </script> 
+    <script>   
+		$(document).ready(function(){
+			$(".endDpTitle").click(function(){
+              			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(0).text() + "&ct=" + $(this).parents().parents().children().eq(1).text() + "&st=af", "btn", "width=815, height=800");
               			console.log($(this).parent().siblings(".a").val("input[type=hidden]"));
 	            	vacation.moveTo(560,120);
 	            	vacation.focus();

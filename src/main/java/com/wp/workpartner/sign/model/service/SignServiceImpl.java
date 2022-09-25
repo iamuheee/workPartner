@@ -155,65 +155,31 @@ public class SignServiceImpl implements SignService {
 
 
 
+//  기안서 수정하기 순서대로 // 공통 - 연차 - 외근 - 퇴직원 - 업무협조
 	@Override
-	public int updateCooperation(Dtpaper d, Cooperation c) {
-		return 0;
+	public int updateDt(Dtpaper d) {
+		return sDao.updateDt(sqlSession, d);
+	}
+	@Override
+	public int updateVa(Vacation v) {
+		return sDao.updateVa(sqlSession, v);
 	}
 
 	@Override
-	public int updateVacation(Dtpaper d, Vacation v) {
-		return 0;
+	public int updateOw(Otwork o) {
+		return sDao.updateOw(sqlSession, o);
 	}
 
 	@Override
-	public int updateOtwork(Dtpaper d, Otwork o) {
-		return 0;
+	public int updateRe(ReSign r) {
+		return sDao.updateRe(sqlSession, r);
 	}
 
 	@Override
-	public int updateReSignEmp(Dtpaper d, ReSign r) {
-		return 0;
+	public int updateCo(Cooperation c) {
+		return sDao.updateCo(sqlSession, c);
 	}
-
-	@Override
-	public int deleteCooperation(int dpNo) {
-		return 0;
-	}
-
-	@Override
-	public int deleteVacation(int dpNo) {
-		return 0;
-	}
-
-	@Override
-	public int deleteOtwork(int dpNo) {
-		return 0;
-	}
-
-	@Override
-	public int deleteReSignEmp(int dpNo) {
-		return 0;
-	}
-
-	@Override
-	public SelectCooperation selectSignCooperation(int dpNo) {
-		return null;
-	}
-
-	@Override
-	public SelectReSign selectSignResign(int dpNo) {
-		return null;
-	}
-
-	@Override
-	public SelectVacation selectSignVacation(int dpNo) {
-		return null;
-	}
-
-	@Override
-	public SelectOtwork selectSignOtwork(int dpNo) {
-		return null;
-	}
+	
 //	기안서 상세보기 결재선
 	@Override
 	public ArrayList<Sign> selectSignList(int no) {
@@ -244,6 +210,20 @@ public class SignServiceImpl implements SignService {
 	public int updateDisagreeDtpaper(Sign s) {
 		return sDao.updateDisagreeDtpaper(sqlSession, s);
 	}
+	
+	@Override
+	public int deleteDt(int dpNo) {
+		return 0;
+	}
+	@Override
+	public int deleteSign(Dtpaper d) {
+		return sDao.deleteSign(sqlSession, d);
+	}
+	@Override
+	public int updateSign(ArrayList<Sign> signList, Dtpaper d) {
+		return sDao.updateSign(sqlSession, signList, d);
+	}
+	
 	
 	
 

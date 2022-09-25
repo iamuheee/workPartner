@@ -27,11 +27,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Employee selectExemail(Employee e) {
-		return null;
-	}
-
-	@Override
 	public int insertEmployee(Employee e) {
 		return eDao.insertEmployee(sqlSession, e);
 	}
@@ -104,6 +99,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public int updateMyInfo(Employee e) {
 		return eDao.updateMyInfo(sqlSession, e);
+	}
+
+	@Override
+	public Employee findId(String empName, String empNo) {
+		return eDao.findId(sqlSession, empName, empNo);
 	}
 	
 	

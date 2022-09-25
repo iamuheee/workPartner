@@ -44,7 +44,7 @@
         }
 
         .dtpaperName {
-            line-height: 10px;
+			line-height: 10px;
         }
 
         table {
@@ -136,35 +136,78 @@
 </head>
 <!-- onload="window.resizeTo(620,800)" -->
 <body style="width: 800px; font-family: 'Noto Sans KR', sans-serif;">
-
-<form action="" method="post" name="updateForm" id="updateForm" 
-		enctype="multipart/form-data"> 
-		
-	<section class="mainTitle">
-			<a class="insertBtn" onclick="updateCheck();">기안서 재작성</a>
-            <a class="insertBtn" onclick="deleteCheck()">삭제하기</a>
-            <c:forEach var="s" items="${ selectSignList }">
-           		<c:set var="i" value="${ i + 1 }"/>
-				<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
-				<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
-			    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
-           	</c:forEach>
-		<hr>
-	</section>
+<c:if test="${ not empty alertSignMsg }">
+		<script>
+			alert("${alertSignMsg}");
+		</script>
+		<c:remove var="alertSignMsg" scope="session" />
+	</c:if>
+	<script>
+	
+	
+	</script>
+<form action="" method="post" name="updateForm" id="updateForm" enctype="multipart/form-data"> 
+	<c:choose>
+		<c:when test="${ flag == 'be' }">
+			<section class="mainTitle">
+					<a id="updateBtn" class="insertBtn" onclick="updateCheck();">기안서 재작성</a>
+		            <a id="deleteBtn" class="insertBtn" onclick="deleteCheck()">삭제하기</a>
+		            <input type="hidden" name="dpFinal" value="${ t.dpFinal }">
+		            <c:forEach var="s" items="${ selectSignList }">
+		           		<c:set var="i" value="${ i + 1 }"/>
+						<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
+						<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
+					    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
+		           	</c:forEach>
+				<hr>
+			</section>
+		</c:when>
+		<c:when test="${ flag == 're' }">
+			<section class="mainTitle">
+					<span style="font-size: 18px; margin-left:10px; color:red; border-right: 0.5px solid #878787; padding-right:15px;">반려됨</span>
+					<a class="insertBtn" onclick="updateCheck();" >기안서 재작성</a>
+		            <a class="insertBtn" onclick="deleteCheck()" >삭제하기</a>
+		            <input type="hidden" name="dpFinal" value="${ t.dpFinal }">
+		            <c:forEach var="s" items="${ selectSignList }">
+		           		<c:set var="i" value="${ i + 1 }"/>
+						<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
+						<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
+					    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
+		           	</c:forEach>
+				<hr>
+			</section>
+		</c:when>
+		<c:otherwise>
+			<section class="mainTitle">
+					<span style="font-size: 18px; margin-left:10px; color:green; border-right: 0.5px solid #878787; padding-right:15px;">결재완료</span>
+					<a class="insertBtn" onclick="updateCheck();" >기안서 재작성</a>
+					<a class="insertBtn" onclick="deleteCheck()" >삭제하기</a>
+					<input type="hidden" name="dpFinal" value="${ t.dpFinal }">
+					<c:forEach var="s" items="${ selectSignList }">
+		           		<c:set var="i" value="${ i + 1 }"/>
+						<input type="hidden" id="dpNo" name="signList[${ i - 1 }].dpNo" value="${ t.dpNo }">
+						<input type="hidden" name="signList[${ i - 1  }].siSeq" value="${ i }"><input type="hidden" name="signList[${ i - 1 }].siAsign" value="${ fn:length(selectSignList) }">
+					    <input type="hidden" id="signEmpNo" name="signList[${ i - 1 }].signEmpNo" value="${ selectSignList[i - 1].signEmpNo }" >
+		           	</c:forEach>
+				<hr>
+			</section>
+		</c:otherwise>
+	</c:choose>
+	
     <script>
 		function deleteCheck() {
 			if (confirm("정말 삭제하시겠습니까?") == true) { //확인
 				
-				if('${paperName}' == '연차'){
-					document.updateForm.action = "deleteVa.si";
-				}else if('${paperName}' == '외근'){
-					document.updateForm.action = "deleteOw.si";
-				}else if('${paperName}' == '업무협조'){
-					document.updateForm.action = "deleteCo.si";
+				if('${t.dpCategory}' == '연차'){
+					document.location.href = "deleteVa.si?no=" + ${t.dpNo} + "&ct=연차"
+				}else if('${t.dpCategory}' == '외근'){
+					document.location.href = "deleteOt.si?no=" + ${t.dpNo} + "&ct=외근"
+				}else if('${t.dpCategory}' == '업무협조'){
+					document.location.href = "deleteCo.si?no=" + ${t.dpNo} + "&ct=업무협조"
 				}else {
-					document.updateForm.action = "deleteRe.si";
-				}
-				document.updateForm.submit();
+					document.location.href = "deleteRe.si?no=" + ${t.dpNo} + "&ct=퇴직원"
+				} 
+				document.getElementById("#updateBtn").submit;
 			} else { //취소
 				return false;
 			}
@@ -174,17 +217,15 @@
 		function updateCheck() {
 			if (confirm("수정하시겠습니까?") == true) { //확인
 				
-				if('${paperName}' == '연차'){
-					document.updateForm.action = "updateVa.si";
-				}else if('${paperName}' == '외근'){
-					document.updateForm.action = "updateOw.si";
-				}else if('${paperName}' == '업무협조'){
-					document.updateForm.action = "updateCo.si";
+				if('${t.dpCategory}' == '연차'){
+					document.location.href = "updateForm.si?no=" + ${t.dpNo} + "&ct=연차"
+				}else if('${t.dpCategory}' == '외근'){
+					document.location.href = "updateForm.si?no=" + ${t.dpNo} + "&ct=외근";
+				}else if('${t.dpCategory}' == '업무협조'){
+					document.location.href = "updateForm.si?no=" + ${t.dpNo} + "&ct=업무협조";
 				}else {
-					document.updateForm.action = "updateRe.si";
+					document.location.href = "updateForm.si?no=" + ${t.dpNo} + "&ct=퇴직원";
 				}
-				document.updateForm.submit();
-
 			} else { //취소
 				return false;
 			}
@@ -192,10 +233,10 @@
 	</script>
     <section>
         <div>
-        	<h3 class="dtpaperName">
+        	<h2 class="dtpaperName">
 				<span>${ t.dpCategory }</span> 신청서 - <span
 					style="font-weight: lighter;">${ t.empName }(${ t.signEmpDept})</span>
-			</h3>
+			</h2>
             <hr>
         </div>
     </section>

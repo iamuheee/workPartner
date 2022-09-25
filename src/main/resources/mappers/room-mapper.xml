@@ -256,7 +256,7 @@
 		  from tb_book
 		 where rm_no = #{rmNo}
 		   and bk_status='N'
-		   and to_date(bk_meetdate) between trunc(sysdate) - 30 and trunc(sysdate)
+		   and to_date(bk_meetdate) >= to_date(add_months(sysdate, -1))
     </select>
     
     <!-- 회의실 총 이용 건수 조회 -->
@@ -265,7 +265,7 @@
    	    select count(*)
 		  from tb_book
 		 where bk_status='N'
-		   and to_date(bk_meetdate) between trunc(sysdate) - 30 and trunc(sysdate)
+		   and to_date(bk_meetdate) >= to_date(add_months(sysdate, -1))
     </select>
     
     <!-- 회의실 상태 변경 -->

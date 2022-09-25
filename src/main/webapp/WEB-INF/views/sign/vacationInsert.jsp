@@ -13,133 +13,134 @@
 	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-<style>
-.insertBtn {
-	font-size: 18px;
-	color: black;
-	font-weight: bold;
-	margin-left: 10px;
-	border-right: 0.5px solid rgba(143, 143, 143, 0.547);
-	padding-right: 15px;
-}
+  <style>
+        .insertBtn {
+            font-size: 18px;
+            color: black;
+            font-weight: bold;
+            margin-left: 10px;
+            border-right: 0.5px solid rgba(143, 143, 143, 0.547);
+            padding-right: 15px;
+        }
 
-.insertBtn:hover {
-	color: gray;
-	cursor: pointer;
-}
+        .insertBtn:hover {
+            color: gray;
+            cursor: pointer;
+        }
 
-.mainTitle {
-	width: 100%;
-	margin-top: 10px;
-}
+        .mainTitle {
+            width: 100%;
+            margin-top: 10px;
+        }
 
-hr {
-	opacity: 0.4;
-	width: 100%;
-}
+        hr {
+            opacity: 0.4;
+            width: 100%;
+        }
 
-h3 {
-	margin: 0;
-	margin-bottom: 10px;
-	margin-left: 10px;
-}
+        h3 {
+            margin: 0;
+            margin-bottom: 10px;
+            margin-left: 10px;
+        }
 
-.dtpaperName {
-	margin-left: 10px;
-	line-height: 10px;
-}
+        .dtpaperName {
+            margin-left: 10px;
+            line-height: 10px;
+        }
 
-table {
-	font-size: 16px;
-	border-spacing: 0px;
-	border: 0.5px solid rgba(143, 143, 143, 0.547);
-}
+        table {
+            font-size: 16px;
+            border-spacing: 0px;
+            border: 0.5px solid rgba(143, 143, 143, 0.547);
+        }
 
-tr {
-	height: 30px;
-}
+        tr {
+            height: 30px;
+        }
 
-a {
-	color: blue
-}
+        a {
+            color: blue
+        }
 
-th {
-	font-weight: 400;
-}
+        th {
+            font-weight: 400;
+        }
 
-th, td {
-	border-right: 0.5px solid rgba(143, 143, 143, 0.547);
-}
+        th,
+        td {
+            border-right: 0.5px solid rgba(143, 143, 143, 0.547);
+        }
 
-.signSelect tr {
-	text-align: center;
-	width: 100%;
-}
+        .signSelect tr {
+            text-align: center;
+            width: 100%;
+        }
 
-.signSelect th {
-	background-color: #f1f1f1;
-	width: 101px;
-}
+        .signSelect th {
+            background-color: #f1f1f1;
+            width: 101px;
 
-.signSelect td {
-	width: 150px;
-	border: 0;
-}
+        }
 
-#layoutSidenav_content {
-	font-family: 'Noto Sans KR', sans-serif;
-}
+        .signSelect td {
+            width: 150px;
+            border: 0;
 
-.publicPaper th {
-	background-color: #f1f1f1;
-	width: 100px;
-}
+        }
 
-.publicPaper td {
-	width: 664px;
-	border: 0;
-}
 
-.titleSection th, td {
-	border-bottom: 0.5px solid rgba(143, 143, 143, 0.547);
-}
+        .publicPaper th {
+            background-color: #f1f1f1;
+            width: 100px;
+        }
 
-.plusVa {
-	margin-left: 10px;
-	font-size: 16px;
-	height: 30px;
-	border: none;
-	box-shadow: 0px 0px 4px #878787;
-}
+        .publicPaper td {
+            width: 664px;
+            border: 0;
+        }
 
-.plusVa:hover {
-	cursor: pointer;
-	background-color: #8787874d;
-}
+        .titleSection th,
+        td {
+            border-bottom: 0.5px solid rgba(143, 143, 143, 0.547);
+        }
 
-.selectVa {
-	margin: 10px;
-	font-size: 16px;
-}
+        .plusVa {
+            margin-left: 10px;
+            font-size: 16px;
+            height: 30px;
+            border: none;
+            box-shadow: 0px 0px 4px #878787;
+        }
 
-.selectVa>span {
-	margin-right: 10px;
-}
+        .plusVa:hover {
+            cursor: pointer;
+            background-color: #8787874d;
+        }
 
-input, select, textarea {
-	border: 0.5px solid rgba(143, 143, 143, 0.547)
-}
-input[type=time]{
-	width:115px;
-}
-</style>
+        .selectVa {
+            margin: 10px;
+            font-size: 16px;
+        }
+
+
+        .selectVa>span {
+            margin-right: 10px;
+        }
+
+        input,
+        select,
+        textarea {
+            border: 0.5px solid rgba(143, 143, 143, 0.547)
+        }
+    </style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 	$(document).ready(function() {
 
 		$("#selectVacation").change(function() {
-
+			
 			if ($("#selectVacation").val() == "연차") {
 				$("#halfVa").attr("hidden", true);
 				$("#halfVa").hide();
@@ -150,10 +151,14 @@ input[type=time]{
 				$("#startTime").attr("disabled", true);
 				$("#endTime").attr("disabled", true);
 				$("#currentDate2").attr("readonly", false);
-				
-				
+				$("#currentDate2").val($("#currentDate").val());
+				console.log($("#currentDate2").val());
 				$("#currentDate2").attr("value", null);
 			} else {
+				$("#currentDate2").val($("#currentDate").val());
+				$("#currentDate").change(function(){
+					$("#currentDate2").val($(this).val());
+				});
 				$("#halfVa").attr("hidden", false);
 				$("#halfVa").show();
 				$("#startTime").attr("hidden", false);
@@ -163,8 +168,6 @@ input[type=time]{
 				$("#startTime").attr("disabled", false);
 				$("#endTime").attr("disabled", false);
 				$("#currentDate2").attr("readonly", true);
-				
-				$("#currentDate2").attr("value", $(this).parents().parents().siblings(".start").children().eq(1).val())
 				$("#halfVa").change(function() {
 					if ($("#halfVa").val() == "오후") {
 						$("input[id=startTime]").attr("value","13:00");
@@ -175,7 +178,6 @@ input[type=time]{
 					}
 				});
 			}
-
 		});
 	});
 </script>
@@ -185,8 +187,8 @@ input[type=time]{
 	
 	 <br>
     <section>
-        <div style="margin:auto; margin-top: 10px; width: 800px;" >
-            <table style="margin-left:30px; border:0; border-spacing: 10px;" align="center">
+        <div style="margin:auto; margin-top: 10px; width: 768.5px; border:0.5px solid #878787;" >
+            <table style="margin-left:10px; border:0; border-spacing: 10px;" align="center">
                 <tr align="left">
                     <th width="70" style="border:0">
                         근태명
@@ -237,8 +239,31 @@ input[type=time]{
         
     </section>
     <script>
+		
+		$("#halfVa").change(function() {
+			if ($("#halfVa").val() == "오전") {
+				$("input[id=startTime]").attr("value","09:00");
+				$("input[id=endTime]").attr("value","13:00");
+			} else {
+				$("input[id=startTime]").attr("value","13:00");
+				$("input[id=endTime]").attr("value","18:00");
+			}
+		});
+
         document.getElementById('currentDate').value = new Date().toISOString().substring(0, 10);
-        document.getElementById('currentDate2').value = new Date().toISOString().substring(0, 10);;
+        document.getElementById('currentDate2').value = new Date().toISOString().substring(0, 10);
+
+        var now_utc = Date.now() 
+		var timeOff = new Date().getTimezoneOffset()*60000;
+		var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+		document.getElementById("currentDate").setAttribute("min", today);
+		document.getElementById("currentDate2").setAttribute("min", today);
+		
+		document.getElementById('currentDate').onblur = function(){
+		    var val = this.value;
+		    document.getElementById("currentDate2").setAttribute("min", val);
+		}
+    </script>
     </script>
 	</section>
 	</form>

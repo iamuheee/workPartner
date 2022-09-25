@@ -156,7 +156,7 @@
 		                              +		'</div>'
 		                              +		'<hr style="border:0.1px solid white;">'
 		                              +		'<div class="card-body">'
-		                              +			'<h2 class="title">' + dlist[i].title + '</h3>'
+		                              +			'<h2 style="font-weight:bolder">' + dlist[i].title + '</h3>'
 		                              +			'<div class="content"><p style="white-space:pre-line">' + dlist[i].content +'</p></div>';
 							if( dlist[i].file != null){
 		                         html +=		' <div class="content-file" align="center">'

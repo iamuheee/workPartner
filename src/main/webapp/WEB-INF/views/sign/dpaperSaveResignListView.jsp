@@ -52,6 +52,10 @@
 			text-decoration-line: none;
 			color: #212529;
 		}
+		.reSignDpTitle{
+			text-decoration-line: none;
+			color: #212529;
+		}
     </style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
@@ -112,7 +116,7 @@
 									<c:choose>
 				                		<c:when test="${empty saveList }">
 				                			<tr>
-				                				<td colspan="6" align="center">현재 게시글이 없습니다.</td>
+				                				<td colspan="7" align="center">현재 게시글이 없습니다.</td>
 				                			</tr>
 				                		</c:when>
 				                		<c:otherwise>
@@ -233,15 +237,16 @@
                                         <th width="5%"><input type="checkbox" style="scale: 1.3;"></th>
                                         <th class="endNum" width="10%">문서번호</th>
                                         <th class="endNum" width="10%">서식</th>
-                                        <th width="15%">첨부파일</th>
+                                        <th width="10%">첨부파일</th>
                                         <th class="endTitle" width="30%">제목</th>
-                                        <th class="endCreate" width="15%">기안일</th>
-                                        <th width="15%">재작성</th>
+                                        <th class="endCreate" width="10%">기안일</th>
+                                        <th class="endCreate" width="15%">반려결정자</th>
+                                        <th width="10%">재작성</th>
                                     </tr>
 										<c:choose>
 				                		<c:when test="${empty reSignList }">
 				                			<tr>
-				                				<td colspan="6" align="center">현재 게시글이 없습니다.</td>
+				                				<td colspan="8" align="center">현재 게시글이 없습니다.</td>
 				                			</tr>
 				                		</c:when>
 				                		<c:otherwise>
@@ -259,13 +264,14 @@
 							                        </td>
 							                        <c:choose>
 								                        <c:when test="${empty r.dpTitle }">
-								                        	<td><a href="" id="detailBtn" class="dpTitle">제목없음</a></td>
+								                        	<td><a href="" id="detailBtn" class="reSignDpTitle">제목없음</a></td>
 								                        </c:when>
 								                        <c:otherwise>
-								                        	<td><a href="" id="detailBtn" class="dpTitle">${ r.dpTitle }</a></td>
+								                        	<td><a href="" id="detailBtn" class="reSignDpTitle">${ r.dpTitle }</a></td>
 								                        </c:otherwise>
 							                        </c:choose>
 							                        <td>${ r.dpCreate }</td>
+							                        <td>${ r.signEmpName }(${r.signEmpDept })</td>
                                        				<td><a href="" class="dpTitle">작성하기</a></td>
 							                    </tr>
 						                    </c:forEach>
@@ -308,7 +314,17 @@
 		            <script>   
 						$(document).ready(function(){
 							$(".dpTitle").click(function(){
-		                			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(1).text() + "&ct=" + $(this).parents().parents().children().eq(2).text(), "btn", "width=815, height=800");
+		                			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(1).text() + "&ct=" + $(this).parents().parents().children().eq(2).text() + "&st=be", "btn", "width=815, height=800");
+		                			console.log($(this).parent().siblings(".a").val("input[type=hidden]"));
+					            	vacation.moveTo(560,120);
+					            	vacation.focus();
+							})
+						})
+				    </script> 
+				    <script>   
+						$(document).ready(function(){
+							$(".reSignDpTitle").click(function(){
+		                			vacation = window.open("detailMy.si?no=" + $(this).parents().parents().children().eq(1).text() + "&ct=" + $(this).parents().parents().children().eq(2).text() + "&st=re", "btn", "width=815, height=800");
 		                			console.log($(this).parent().siblings(".a").val("input[type=hidden]"));
 					            	vacation.moveTo(560,120);
 					            	vacation.focus();

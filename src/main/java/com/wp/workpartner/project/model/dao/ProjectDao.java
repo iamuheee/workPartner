@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
+import com.wp.workpartner.project.model.vo.Calendar;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectDuty;
@@ -75,10 +76,6 @@ public class ProjectDao {
 	
 	public int insertMember(SqlSessionTemplate sqlSession, ProjectMember m) {
 		return sqlSession.insert("projectMapper.insertMember", m);
-	}
-	
-	public ArrayList<ProjectBoard> selectProjectBoardList(SqlSessionTemplate sqlSession, Project p){
-		return (ArrayList)sqlSession.selectList("projectMapper.selectProjectBoardList", p);
 	}
 	
 	public int insertBoard(SqlSessionTemplate sqlSession, ProjectBoard pb) {
@@ -164,6 +161,9 @@ public class ProjectDao {
 	public int deleteWaitingMember(SqlSessionTemplate sqlSession, ProjectMember m) {
 		return sqlSession.delete("projectMapper.deleteWaitingMember", m);
 	}
+	public ArrayList<ProjectBoard> selectMeetingList(SqlSessionTemplate sqlSession, Project p){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectMeetingList", p);
+	}
 	
 	public ProjectMeeting selectMeeting(SqlSessionTemplate sqlSession, ProjectBoard pb) {
 		return sqlSession.selectOne("projectMapper.selectMeeting", pb);
@@ -191,6 +191,14 @@ public class ProjectDao {
 	
 	public int updateAttendance(SqlSessionTemplate sqlSession, ProjectMeetingMember m) {
 		return sqlSession.update("projectMapper.updateAttendance", m);
+	}
+	
+	public ArrayList<Calendar> selectCalendarDutyList(SqlSessionTemplate sqlSession, Project p){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectCalendarDutyList", p);
+	}
+	
+	public ArrayList<Calendar> selectCalendarMeetingList(SqlSessionTemplate sqlSession, String projNo){
+		return (ArrayList)sqlSession.selectList("projectMapper.selectCalendarMeetingList", projNo);
 	}
 	
 	

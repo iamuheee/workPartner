@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -158,7 +159,7 @@ public class RoomController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="select.ro", produces="application/json; charset=UTF-8")
-	public String ajaxSelectRoom(String rmNo) {
+	public String ajaxSelectRoom(@RequestParam(defaultValue="1") String rmNo) {
 //		System.out.println("rmNo : " + rmNo);	// 넘어온 rmNo 값 조회
 		
 		ArrayList<Room> r = rService.selectRoom(rmNo);

@@ -165,13 +165,10 @@ span {
 
 .otworkPaper input[type=datetime-local] {
 	text-align: center;
-	width: 40%;
+	width: 35%;
 	vertical-align: middle;
 }
 
-#startTime {
-	width: 28%;
-}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -241,8 +238,15 @@ span {
 				<tr>
 					<td class="tableTitle">교통수단</td>
 					<td align="left">
-						<select name="otTrain" style="margin-left: 10px" disabled>
-							<option value="${ o.otTrans }">${ o.otTrans }</option>
+					<script>
+						$(document).ready(function(){
+							$(".trans").val("${o.otTrans}").prop("selected", true)
+						})
+					</script>
+						<select class="trans" name="otTrans" style="margin-left: 10px" disabled>
+							<option value="대중교통">대중교통</option>
+							<option value="자차">자차</option>
+							<option value="도보">도보</option>
 						</select>
 					</td>
 					<td class="tableTitle">위치</td>

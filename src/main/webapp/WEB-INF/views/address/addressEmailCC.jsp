@@ -30,8 +30,8 @@
      display: grid;
      grid-gap: 15px;
      height: 90vh;
-     grid-template-columns: 0.4fr  1.5fr 25px  0.5fr;
-     grid-template-rows: 60px 0.8fr  0.8fr 35px 20px;
+     grid-template-columns:  0.5fr  1.5fr 25px  0.5fr;
+     grid-template-rows: 50px 0.8fr  0.7fr 20px 50px;
      grid-template-areas: 'header2 header2  header2 header2'
                           ' adEmMenu1   adEmMain1  adEmSubmit  adEmMain2'   
                           ' adEmMenu2   adEmMain1  adEmSubmit  adEmMain2'  

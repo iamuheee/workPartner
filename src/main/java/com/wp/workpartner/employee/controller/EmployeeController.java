@@ -78,7 +78,7 @@ public class EmployeeController {
 			mv.addObject("revCount", revEmailCount).addObject("notReadCount", revNotReadEmailCount).setViewName("common/mainPage");
 						
 			
-		}else {	// 로그인 성공
+		}else {	// 로그인 실패
 			mv.addObject("errorMsg", "로그인 실패");
 			mv.setViewName("common/error");
 		}
@@ -95,7 +95,7 @@ public class EmployeeController {
 	@RequestMapping("logout.em")
 	public String logoutEmployee(HttpSession session) {
 		session.invalidate();	// 세션 만료
-		return "employee/loginForm";
+		return "main";
 	}
 	
 	@RequestMapping("main")
@@ -405,13 +405,17 @@ public class EmployeeController {
 		Employee loginUser = (Employee)session.getAttribute("loginUser");
 		// 현재 loginUser에 담긴 값을 Employee 타입 객체에 담음
 		
-		System.out.println("e : " + e);
-		System.out.println("loginUser : " + loginUser);
+//		System.out.println("e : " + e);
+//		System.out.println("loginUser : " + loginUser);
 		
 		//현재 비밀번호가 로그인한 회원의 비밀번호와 일치할 경우에만 비밀번호 변경 서비스 호출
 		if(bcryptPasswordEncoder.matches(e.getEmpPwd(), loginUser.getEmpPwd())) {
 			// 비밀번호 암호화 처리
 			String encPwd = bcryptPasswordEncoder.encode(updatePwd);
+			
+			System.out.println(e.getEmpPwd());
+			System.out.println(loginUser.getEmpPwd());
+			
 			
 			// 비밀번호 변경 서비스 실행
 			int result = eService.updatePwd(e.getEmpId(), encPwd);
@@ -434,6 +438,13 @@ public class EmployeeController {
 		return "redirect:mypage.em";
 	}
 	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 21.
+	 * @method	: 마이페이지 개인정보 변경 요청 처리 
+	 * @param	: e
+	 * @return	: String
+	 */
 	@RequestMapping("updateMy.em")
 	public String updateMyInfo(Employee e, HttpSession session) {
 		System.out.println(e);
@@ -450,4 +461,73 @@ public class EmployeeController {
 		
 		return "redirect:mypage.em";
 	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 25.
+	 * @method	: 아이디 찾기 요청 처리 
+	 * @param	: empNo, empName
+	 * @return	: Employee e
+	 */
+	@ResponseBody
+	@RequestMapping(value="findId.em", produces="application/json; charset=UTF-8")
+	public String ajaxFindId(String empName, String empNo) {
+//		System.out.println(empName);
+//		System.out.println(empNo);
+		
+		Employee e = eService.findId(empName, empNo);
+		
+		return new Gson().toJson(e);
+	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 25.
+	 * @method	: 비밀번호 재설정용 사용자 정보 조회 요청 처리 
+	 * @param	: Employee e(empName, empId, empExEmail)
+	 * @return	: String
+	 */
+	@ResponseBody
+	@RequestMapping(value="checkEmp.em", produces="application/json; charset=UTF-8")
+	public String ajaxCheckEmployee(Employee e) {
+//		System.out.println(e.getEmpId());
+//		System.out.println(e.getEmpNo());
+//		System.out.println(e.getEmpExEmail());
+		
+		Employee result = eService.checkEmployee(e);
+		
+		return new Gson().toJson(result);
+		
+	}
+	
+// 	기존 암호를 비교할 수 없어서 실패
+//	
+//	@ResponseBody
+//	@RequestMapping(value="changePwd.em", produces="application/json; charset=UTF-8")
+//	public String ajaxChangePwd(Employee e, String updatePwd) {
+//		
+//		// 기존의 비밀번호를 먼저 조회해 와야 함
+//		Employee result = eService.selectPwd(e);
+//		
+//		// 사용자가 입력한 값 대신 조회해온 값으로 비밀번호 일치 여부를 조회
+//		String pwd1 = result.getEmpPwd();
+//		String pwd2 = result.getEmpPwd();
+//		System.out.println(pwd1);
+//		System.out.println(pwd2);
+//		
+//		
+//		int r = 0;
+//		
+//		if(bcryptPasswordEncoder.matches(pwd1, pwd2)) {
+//			
+//			String encPwd = bcryptPasswordEncoder.encode(updatePwd);
+//			System.out.println(encPwd);
+//			
+//			String empId = e.getEmpId();
+//			r = eService.changePwd(empId, encPwd);
+//		}
+//		System.out.println(r);
+//
+//		return (r > 0 ) ? "success" : "fail";
+//	}
 }

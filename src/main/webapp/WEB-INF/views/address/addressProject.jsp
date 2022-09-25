@@ -51,7 +51,7 @@ font-family: 'Noto Sans KR', sans-serif;
 </style>
 <script>
 	function send() { 
-		$("#memNo").val( $("#memNo").val().substr(0, $("#memName").val().length - 1 ) )
+		$("#memNo").val( $("#memNo").val().substr(0, $("#memNo").val().length - 1 ) )
 		$("#memName").val( $("#memName").val().substr(0, $("#memName").val().length - 1) )
 		
 		if( confirm( $("#memName").val() + "님을 프로젝트에 초대하는 것이 맞나요?") ){

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.wp.workpartner.common.model.vo.Comment;
 import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.employee.model.vo.Employee;
+import com.wp.workpartner.project.model.vo.Calendar;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectMeeting;
@@ -40,8 +41,6 @@ public interface ProjectService {
 	int deleteMember(ProjectMember m);
 	
 	int insertMember(ProjectMember m);
-	
-	ArrayList<ProjectBoard> selectProjectBoardList(Project p);
 	
 	int insertDuty(ProjectBoard pb);
 	
@@ -84,5 +83,9 @@ public interface ProjectService {
 	int validateParticipant(ProjectMeetingMember m);
 	
 	int updateAttendance(ProjectMeetingMember m);
+	
+	ArrayList<Calendar> selectCalendarDutyList(Project p);
+	
+	ArrayList<Calendar> selectCalendarMeetingList(String projNo);
 	
 }

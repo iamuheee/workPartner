@@ -168,7 +168,7 @@ public class BookController {
 	/**
 	 * @author	: Taeeun Park
 	 * @date	: 2022. 9. 22.
-	 * @method	: (ajax) 풀캘린더 스케쥴에 띄울 회의실 목록 및 회의실별 예약 목록 조회 요청 처리
+	 * @method	: (ajax) 풀캘린더 스케쥴러에 띄울 회의실 목록 및 회의실별 예약 목록 조회 요청 처리
 	 * @return	: room, book
 	 */
 	@ResponseBody
@@ -297,6 +297,26 @@ public class BookController {
 		
 		return new Gson().toJson(result);
 	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 25.
+	 * @method	: 회의실별 예약 현황 조회 요청 처리
+	 * @param	: rmNo, bkDate
+	 * @return	: list
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectTime.bk", produces="application/json; charset=UTF-8")
+	public String ajaxSelectTime(String rmNo, String bkDate) {
+//		System.out.println("rmNo : "+ rmNo);
+//		System.out.println("bkDate : "+ bkDate);
+		
+		ArrayList<Book> list = bService.selectTime(rmNo, bkDate); 
+		
+		return new Gson().toJson(list);
+		
+	}
+	
 	
 	
 }

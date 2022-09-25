@@ -97,4 +97,12 @@ public class EmployeeDao {
 	public int updateMyInfo(SqlSessionTemplate sqlSession, Employee e) {
 		return sqlSession.update("employeeMapper.updateMyInfo", e);
 	}
+	
+	public Employee findId(SqlSessionTemplate sqlSession, String empName, String empNo) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("empName", empName);
+		map.put("empNo", empNo);
+		return sqlSession.selectOne("employeeMapper.findId", map);
+		
+	}
 }

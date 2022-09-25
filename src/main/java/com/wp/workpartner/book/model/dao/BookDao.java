@@ -146,4 +146,16 @@ public class BookDao {
 		
 		return (ArrayList)sqlSession.selectList("bookMapper.selectByRoomAndDateList", map, rowBounds);
 	}
+	
+	public ArrayList selectTime(SqlSessionTemplate sqlSession, String rmNo, String bkDate) {
+		System.out.println(rmNo);
+		System.out.println(bkDate);
+		
+		HashMap<String, String> map = new HashMap<>();
+		
+		map.put("rmNo", rmNo);
+		map.put("bkDate", bkDate);
+		
+		return (ArrayList)sqlSession.selectList("bookMapper.selectTime", map);
+	}
 }

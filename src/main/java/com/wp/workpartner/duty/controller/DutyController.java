@@ -1,6 +1,8 @@
 package com.wp.workpartner.duty.controller;
 
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import com.wp.workpartner.duty.model.service.DutyServiceImpl;
 import com.wp.workpartner.duty.model.vo.Duty;
 import com.wp.workpartner.duty.model.vo.DutyCharge;
 import com.wp.workpartner.employee.model.vo.Employee;
+import com.wp.workpartner.project.model.vo.Calendar;
 
 @Controller
 public class DutyController {
@@ -196,5 +199,40 @@ public class DutyController {
 			return "common/error";
 		}
 	}
-
+	
+	@RequestMapping("cal.du")
+	public ModelAndView selectCalendar(ModelAndView mv, HttpSession session) {
+		Employee e = new Employee();
+		e.setEmpNo( ((Employee)session.getAttribute("loginUser")).getEmpNo() );
+		e.setEmpName( "준비" ); // 진짜 EmpName이 아니고 String이 필요해서 가라로 쓰는거임
+		ArrayList<Duty> rlist = dService.selectCalendarList(e);
+		e.setEmpName( "진행" ); // 진짜 EmpName이 아니고 String이 필요해서 가라로 쓰는거임
+		ArrayList<Duty> clist = dService.selectCalendarList(e);
+		e.setEmpName( "지연" ); // 진짜 EmpName이 아니고 String이 필요해서 가라로 쓰는거임
+		ArrayList<Duty> dlist = dService.selectCalendarList(e);
+		e.setEmpName( "완료" ); // 진짜 EmpName이 아니고 String이 필요해서 가라로 쓰는거임
+		ArrayList<Duty> flist = dService.selectCalendarList(e);
+		
+		ArrayList<Calendar> calist = dService.selectCalList(e);
+		
+		mv.addObject("rlist", rlist)
+		  .addObject("clist", clist)
+		  .addObject("dlist", dlist)
+		  .addObject("flist", flist)
+		  .addObject("calist", calist)
+		  .setViewName("duty/dutyCalendarView");
+		
+		return mv;
+	}
+	
+	@RequestMapping("sche.du")
+	public String insertSchedule(Calendar c, HttpSession session) {
+		if( dService.insertCalendar(c) > 0) {
+			session.setAttribute("alertMsg", "성공적으로 새 일정을 등록했습니다.");
+		}else {
+			session.setAttribute("alertMsg", "새 일정 등록에 실패했습니다.");
+		}
+		return "redirect:cal.du";
+	}
+	
 }

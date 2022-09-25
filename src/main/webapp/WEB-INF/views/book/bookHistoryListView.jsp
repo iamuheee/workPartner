@@ -110,6 +110,42 @@
     	display:flex;
     	align-items: center;
     }
+    
+    
+    .fc-datagrid-cell{
+    	width:200px !important;
+    }
+    
+    .fc-timeline-slot-cushion {	/* 헤더 시간 수정 */
+    	color:#000
+    }
+    
+    .fc-timeline-slot-cushion:hover {
+		text-decoration: none;
+		color:#000;
+    }
+    
+    .fc-datagrid-cell-frame{
+    	width:200px;
+    }
+    
+    .fc-datagrid-cell-frame fc-datagrid-cell-frame-liquid{
+    	width:200px;
+    }
+    
+    #pagingArea{
+    	
+    	display:flex;
+    	justify-content:center;
+    }
+    
+    #pagingArea * {
+    	border:none;
+    	color:#000;
+    	font-size:18px;
+   	}
+    
+    
 </style>
 <body>
 	
@@ -149,7 +185,7 @@
 						        	기간별 조회 :
 							        <input type="date" id="startDate" name="startDate" onchange="searchBookList()">&nbsp;~&nbsp; 
 							        <input type="date" id="endDate" name="endDate" onchange="searchBookList()">
-							        <button type="button" class="btn btn-sm btn-primary" onclick="selectAllBookList()"><i class="fa-solid fa-arrows-rotate"></i></button>
+							        <button type="button" class="btn btn-sm btn-primary" onclick="refreshList()"><i class="fa-solid fa-arrows-rotate"></i></button>
 						        </div>
 						    </div>
 						    <!-- =========================================================== -->
@@ -157,13 +193,13 @@
 						        <table id="historyTable" class="table table-hover display">
 						            <thead>
 						                <tr>
-						                    <th scope="col">No.</th>
-						                    <th scope="col">회의실</th>
-						                    <th scope="col">회의명</th>
-						                    <th scope="col">예약자</th>
-						                    <th scope="col">인원</th>
-						                    <th scope="col">예약일정</th>
-						                    <th scope="col">예약상태</th>
+						                    <th width="5%" scope="col">No.</th>
+						                    <th width="15%" scope="col">회의실</th>
+						                    <th width="30%" scope="col">회의명</th>
+						                    <th width="15%" scope="col">예약자</th>
+						                    <th width="5%" scope="col">인원</th>
+						                    <th width="20%"scope="col">예약일정</th>
+						                    <th width="10%" scope="col">예약상태</th>
 						                </tr>
 						            </thead>
 						            <tbody id="historyList">
@@ -181,12 +217,7 @@
 							 <!-- =========================================================== -->
 						                    
 		                    
-		                    
-		                <!-- Modal footer -->
-		                <div class="modal-footer">
-		                    <button type="submit" class="btn btn-primary" id="insertBk" style="margin-right:5px;">예약</button>
-		                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal();">취소</button>
-		                </div>
+		             
 		        </div>
 		    </div>
 		</div>
@@ -206,6 +237,13 @@
         	$("#inputDate").find("#endDate").val("");
 			$('#selectBookDetail').modal('hide');
 		}
+        
+        function refreshList(){
+        	selectAllBookList();
+        	$("#inputDate").find("#startDate").val("");
+        	$("#inputDate").find("#endDate").val("");
+        }
+        
         
         $(function(){
         	selectRoomList();	// modal select opiton에 넣을 회의실 목록 조회
@@ -298,9 +336,10 @@
 					    var calendar = new FullCalendar.Calendar(calendarEl, {
 					      locale: 'kr',	// 언어 설정
 					      
-					      height:'900px',	// 캘린더 높이 설정
+					      height:'80%',	// 캘린더 높이 설정
 					      expandRows:true,
-					      initialView: 'resourceTimeline',	// 화면 포맷 설정
+					      initialView: 'resourceTimelineDay',	// 화면 포맷 설정
+					      aspectRatio: 1.5,
 					      schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',	// trial 사용 위한 라이센스 키
 					      titleFormat: { 	// 제목 포맷 설정
 					    	    month: 'long',
@@ -310,9 +349,9 @@
 					    	  },
 					   	  datesAboveResources: true,
 					   	    headerToolbar: {	// 헤더 표시 툴바
-					   	      left: 'today prev,next',
-					   	      center: 'title',
-					   	      right: 'resourceTimelineDay,resourceTimelineWeek myCustomButton'
+					   	      left: 'myCustomButton',
+					   	      right: 'prev,next',
+					   	      center: 'title'
 					   	    },
 					   	  customButtons: {	// 헤더 툴바에 커스텀한 버튼 추가
 					   		  myCustomButton: {
@@ -336,7 +375,13 @@
 					   	  selectable: true,	// 캘린더의 시간을 드래그해서 선택할 수 있게 함
 					   	  nowIndicator: true,	// 현재 시간 표시
 					      events: dataBook,	// db에서 조회한 예약들을 캘린더 위에 뿌림
-					      resources: dataRoom	// db에서 조회한 회의실 이름을 컬럼명으로 뿌림 
+					      resources: dataRoom,	// db에서 조회한 회의실 이름을 컬럼명으로 뿌림
+					      resourceAreaColumns: [
+					    	  {
+					    		  headerContent: '회의실'		// resource 컬럼명 
+					    	  }
+					      ],
+					      resourceAreaWidth: "15%"	// th width
 					    });
 					    
 					    calendar.render();
@@ -350,6 +395,10 @@
 		  	}
 		  })
 
+		  /* 풀캘린더 스케쥴러 css */
+		  $(function(){
+			  $(".fc-datagrid-cell-main").html("회의실명");
+		  })
 		 
 		 /* 회의실 전체 예약 목록 조회용 ajax */
 		  function selectAllBookList(cpage){
@@ -402,7 +451,8 @@
 					
 					$("#historyList").html(value);
 					$("#pagingArea").html(pgValue);
-							
+					
+				
 				
 				  },
 				  error:function(){

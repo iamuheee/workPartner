@@ -19,12 +19,12 @@ import com.wp.workpartner.common.model.vo.File;
 import com.wp.workpartner.common.template.FileUpload;
 import com.wp.workpartner.employee.model.vo.Employee;
 import com.wp.workpartner.project.model.service.ProjectServiceImpl;
+import com.wp.workpartner.project.model.vo.Calendar;
 import com.wp.workpartner.project.model.vo.Project;
 import com.wp.workpartner.project.model.vo.ProjectBoard;
 import com.wp.workpartner.project.model.vo.ProjectDuty;
 import com.wp.workpartner.project.model.vo.ProjectMeeting;
 import com.wp.workpartner.project.model.vo.ProjectMeetingMember;
-import com.wp.workpartner.project.model.vo.ProjectMeeting;
 import com.wp.workpartner.project.model.vo.ProjectMember;
 
 @Controller
@@ -40,8 +40,6 @@ public class ProjectController {
 		
 		Employee loginUser = (Employee)session.getAttribute("loginUser");
 		mv.addObject("plist", pService.selectProjectList(loginUser.getEmpNo()));
-		System.out.println("ilist : " + pService.selectMyInvation(loginUser.getEmpNo()));
-		mv.addObject("ilist", pService.selectMyInvation(loginUser.getEmpNo()));
 		mv.setViewName("project/projectMain");
 		return mv;
 	}
@@ -60,23 +58,18 @@ public class ProjectController {
 		}else {
 			session.setAttribute("alertMsg", "프로젝트 등록에 실패했습니다.");
 		}
-		return "project/projectMain";
+		return "redirect:list.pr";
 	}
 	
 	
 	@RequestMapping("list.pr")
 	public ModelAndView selectProjectList(ModelAndView mv, HttpSession session) {
 		String empNo = ((Employee)session.getAttribute("loginUser")).getEmpNo();
-		ArrayList<Project> plist = pService.selectProjectList(empNo);
-		ArrayList<Project> dplist = pService.selectDoneProjectList(empNo);
 		
-		mv.addObject("dplist", dplist).setViewName("project/projectListView");
-		if(dplist != null) {
-			mv.addObject("plist", plist).setViewName("project/projectListView");
-		}else {
-			session.setAttribute("alertMsg", "참여중인 프로젝트가 아직 없습니다.");
-			mv.setViewName("project/projectMain");
-		}
+		mv.addObject("dplist", pService.selectDoneProjectList(empNo))
+		  .addObject("plist", pService.selectProjectList(empNo))
+		  .addObject("ilist", pService.selectMyInvation(empNo) )
+		  .setViewName("project/projectListView");
 		return mv;
 	}
 	
@@ -84,11 +77,25 @@ public class ProjectController {
 	@RequestMapping("proom.pr")
 	public ModelAndView selectProject(ModelAndView mv, String projNo) {
 		Project p = pService.selectProject(projNo);
-		if(p != null) {
-			p.setBlist( pService.selectProjectBoardList(p) );
-			// 이제 Project p 안에는 ArrayList<ProjectMember>, ArrayList<ProjectBoard>가 담겨있음
-			// ProjectBoard 안에는 게시글 종류에 따라 ProjectDuty, ProjectMeeting이 담겨있음
-			mv.addObject("p", p).setViewName("project/projectDetailMain");
+		p.setProgress("준비");
+		ArrayList<Calendar> rlist = pService.selectCalendarDutyList(p);
+		p.setProgress("진행");
+		ArrayList<Calendar> clist = pService.selectCalendarDutyList(p);
+		p.setProgress("지연");
+		ArrayList<Calendar> dlist = pService.selectCalendarDutyList(p);
+		
+		ArrayList<Calendar> mtlist = pService.selectCalendarMeetingList(p.getProjNo());
+		
+		System.out.println(rlist);
+		System.out.println(clist);
+		
+		if(p.getProjTitle() != null) {
+			mv.addObject("p", p)
+			  .addObject("rlist", rlist)
+			  .addObject("clist", clist)
+			  .addObject("dlist", dlist)
+			  .addObject("mtlist", mtlist)
+			  .setViewName("project/projectDetailMain");
 		}else {
 			mv.addObject("errorMsg", "현재 해당 업무 페이지에 접근할 수 없습니다.")
 			  .setViewName("common/errorPage");
@@ -429,6 +436,7 @@ public class ProjectController {
 			return "회의 참석 여부 반영에 실패했습니다.";
 		}
 	}
+	
 	
 	
 }

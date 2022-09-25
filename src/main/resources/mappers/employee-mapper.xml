@@ -346,5 +346,20 @@
 		     , emp_modifydate = current_date
 		 where emp_id = #{ empId }
 	</update>
+	
+	
+	<!-- 아이디 찾기 -->
+	<select id="findId" resultMap="employeeResult">
+		select
+		       emp_id
+		     , emp_no
+		     , emp_name
+		  from tb_employee
+		 where emp_name = #{empName}
+		   and emp_no = #{empNo}
+		   and emp_status = 'Y'
+		   and emp_acc_status = 'Y'
+	</select>
+	
 
 </mapper>

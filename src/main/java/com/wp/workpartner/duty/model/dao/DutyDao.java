@@ -11,6 +11,7 @@ import com.wp.workpartner.common.model.vo.PageInfo;
 import com.wp.workpartner.duty.model.vo.Duty;
 import com.wp.workpartner.duty.model.vo.DutyCharge;
 import com.wp.workpartner.employee.model.vo.Employee;
+import com.wp.workpartner.project.model.vo.Calendar;
 
 @Repository
 public class DutyDao {
@@ -165,6 +166,18 @@ public class DutyDao {
 	
 	public int deleteDuty(SqlSessionTemplate sqlSession, String dutyNo) {
 		return sqlSession.update("dutyMapper.deleteDuty", dutyNo);
+	}
+	
+	public ArrayList<Duty> selectCalendarList(SqlSessionTemplate sqlSession, Employee e){
+		return (ArrayList)sqlSession.selectList("dutyMapper.selectCalendarList", e);
+	}
+	
+	public ArrayList<Calendar> selectCalList(SqlSessionTemplate sqlSession, Employee e){
+		return (ArrayList)sqlSession.selectList("dutyMapper.selectCalList", e);
+	}
+	
+	public int insertCalendar(SqlSessionTemplate sqlSession, Calendar c) {
+		return sqlSession.insert("dutyMapper.insertCalendar", c);
 	}
 	
 }

@@ -95,10 +95,6 @@
                                             <input class="form-control" id="inputPassword" type="password" placeholder="Password" name="empPwd" required />
                                             <label for="inputPassword">Password</label>
                                         </div>
-                                        <div class="form-check mb-3">
-                                            <input class="form-check-input" id="inputRememberLogin" type="checkbox" value="" />
-                                            <label class="form-check-label" for="inputRememberLogin">로그인 상태 유지</label>
-                                        </div>
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                         	<button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
                                         </div>

@@ -12,10 +12,8 @@ public interface EmployeeService {
 	// 로그인 서비스 (select)
 	Employee loginEmployee(Employee e);
 	
-	// 아이디 찾기 / 비밀번호 찾기
-	// 이름, 사번, 외부이메일 일치하는 사원 정보 넘겨서 이메일로 발송
-	// ==> 이메일 조회 (select)
-	Employee selectExemail(Employee e);
+	// 아이디 찾기 서비스 (select)
+	Employee findId(String empName, String empNo);
 	
 	// 구성원 등록 서비스 (insert)
 	int insertEmployee(Employee e);

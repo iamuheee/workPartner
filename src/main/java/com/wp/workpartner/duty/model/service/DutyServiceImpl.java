@@ -12,6 +12,7 @@ import com.wp.workpartner.duty.model.dao.DutyDao;
 import com.wp.workpartner.duty.model.vo.Duty;
 import com.wp.workpartner.duty.model.vo.DutyCharge;
 import com.wp.workpartner.employee.model.vo.Employee;
+import com.wp.workpartner.project.model.vo.Calendar;
 
 @Service
 public class DutyServiceImpl implements DutyService {
@@ -181,5 +182,26 @@ public class DutyServiceImpl implements DutyService {
 	}
 
 
+	@Override
+	public ArrayList<Duty> selectCalendarList(Employee e) {
+		return dDao.selectCalendarList(sqlSession, e);
+	}
+
+
+	@Override
+	public ArrayList<Calendar> selectCalList(Employee e) {
+		return dDao.selectCalList(sqlSession, e);
+	}
+
+
+	@Override
+	public int insertCalendar(Calendar c) {
+		return dDao.insertCalendar(sqlSession, c);
+	}
+
+	
+	
+	
+	
 
 }

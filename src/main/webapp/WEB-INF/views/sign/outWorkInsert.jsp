@@ -161,26 +161,15 @@ input, select, textarea {
 
 .otworkPaper input[type=datetime-local] {
 	text-align: center;
-	width: 40%;
-	vertical-align: middle;
-}
-
-#startTime {
 	width: 28%;
+	vertical-align: middle;
+	
+}
+#startDate{
+margin-left: 10px;
 }
 </style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap"
-	rel="stylesheet">
-<link rel="stylesheet"
-	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-<link rel="stylesheet"
-	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-<script src="https://uicdn.toast.com/tui-tree/latest/tui-tree.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- <script>
@@ -239,8 +228,8 @@ input, select, textarea {
 				<tr>
 					<td class="tableTitle">시간</td>
 					<td colspan="3" align="left" style="border-right: 0;">
-					<input type="datetime-local" id="startTime" style="margin-left: 10px" name="otStartdate"> ~ 
-					<input type="datetime-local" id="endTime" name="otEnddate">
+					<input type="datetime-local" id="startDate" name="otStartdate" onchange="setMinValue()">
+					<input type="datetime-local" id="endDate" name="otEnddate" onchange="setMinValue()">
 					</td>
 
 				</tr>
@@ -251,7 +240,41 @@ input, select, textarea {
 				</tr>
 			</table>
 		</div>
-		
+<!-- 		<script>
+ 		 	document.getElementById('startTime').value= new Date().toISOString().slice(0, -1);
+ 		 	document.getElementById('endTime').value= new Date().toISOString().slice(0, -1);
+		</script> -->
+	    <script>
+		    let dateElement = document.getElementById('startDate');
+	        let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -8);
+	        dateElement.value = date;
+	        dateElement.setAttribute("min", date);
+	        
+	        
+	        let dateElement1 = document.getElementById('endDate');
+	        let date1 = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -8);
+	        dateElement1.value = date1;
+	        dateElement1.setAttribute("min", date);
+			
+	        function setMinValue() {
+	            if(dateElement.value < date) {
+	                alert('현재 시간보다 이전의 날짜는 설정할 수 없습니다.');
+	                dateElement.value = date;
+	            }
+	            if(dateElement1.value < date1) {
+	                alert('현재 시간보다 이전의 날짜는 설정할 수 없습니다.');
+	                dateElement.value = date1;
+	            }
+	        }
+	        
+	        document.getElementById('startDate').onblur = function(){
+			    var val = this.value;
+			    document.getElementById("endDate").setAttribute("min", val);
+			}
+	        
+	    	</script>
+	    	
+	    	
 	</section>
 	</form>
 </body>

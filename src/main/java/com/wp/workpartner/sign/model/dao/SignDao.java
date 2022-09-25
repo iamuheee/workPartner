@@ -218,4 +218,41 @@ public class SignDao {
 	public int updateDisagreeDtpaper(SqlSessionTemplate sqlSession,Sign s) {
 		return sqlSession.update("signMapper.updateDisagreeDtpaper", s);
 	}
+//	기안서 수정하기 공통 테이블
+	public int updateDt(SqlSessionTemplate sqlSession, Dtpaper d) {
+		return sqlSession.update("signMapper.updateDt", d);
+	}
+//	기안서 수정하기 순서대로 연차 - 외근 - 퇴직원 - 업무협조
+
+	public int updateVa(SqlSessionTemplate sqlSession, Vacation v) {
+		return sqlSession.update("signMapper.updateVa", v);
+	}
+	public int updateOw(SqlSessionTemplate sqlSession, Otwork o) {
+		return sqlSession.update("signMapper.updateOw", o);
+	}
+	public int updateRe(SqlSessionTemplate sqlSession, ReSign r) {
+		return sqlSession.update("signMapper.updateRe", r);
+	}
+	public int updateCo(SqlSessionTemplate sqlSession, Cooperation c) {
+		return sqlSession.update("signMapper.updateCo", c);
+	}
+//	기안서 삭제
+	public int deleteSign(SqlSessionTemplate sqlSession, Dtpaper d) {
+		return sqlSession.delete("signMapper.deleteSign", d);
+	}
+	
+//  반려됨 결재선 다시 인서트
+	public int updateSign(SqlSessionTemplate sqlSession, ArrayList<Sign> signList, Dtpaper d) {
+		int result = 0;
+		for(Sign s : signList) {
+			HashMap<Object, Object> map = new HashMap();
+			map.put("s", s);
+			map.put("no", d.getDpNo());
+			System.out.println(s);
+			System.out.println(d.getDpNo());
+			System.out.println(map);
+			result += sqlSession.insert("signMapper.updateSign", map);
+		}
+		return result;
+	}
 }

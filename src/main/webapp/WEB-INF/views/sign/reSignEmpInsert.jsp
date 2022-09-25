@@ -213,6 +213,11 @@
 
     <script>
         document.getElementById('resRedate').value = new Date().toISOString().substring(0, 10);
+        var now_utc = Date.now() 
+		var timeOff = new Date().getTimezoneOffset()*60000;
+		var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+		document.getElementById("resRedate").setAttribute("min", today);
+		
     </script>
 	</form>
 	
