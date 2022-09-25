@@ -78,7 +78,7 @@ public class EmployeeController {
 			mv.addObject("revCount", revEmailCount).addObject("notReadCount", revNotReadEmailCount).setViewName("common/mainPage");
 						
 			
-		}else {	// 로그인 성공
+		}else {	// 로그인 실패
 			mv.addObject("errorMsg", "로그인 실패");
 			mv.setViewName("common/error");
 		}
@@ -434,6 +434,13 @@ public class EmployeeController {
 		return "redirect:mypage.em";
 	}
 	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 21.
+	 * @method	: 마이페이지 개인정보 변경 요청 처리 
+	 * @param	: e
+	 * @return	: String
+	 */
 	@RequestMapping("updateMy.em")
 	public String updateMyInfo(Employee e, HttpSession session) {
 		System.out.println(e);
@@ -449,5 +456,23 @@ public class EmployeeController {
 		}
 		
 		return "redirect:mypage.em";
+	}
+	
+	/**
+	 * @author	: Taeeun Park
+	 * @date	: 2022. 9. 25.
+	 * @method	: 아이디 찾기 요청 처리 
+	 * @param	: empNo, empName
+	 * @return	: Employee e
+	 */
+	@ResponseBody
+	@RequestMapping(value="findId.em", produces="application/json; charset=UTF-8")
+	public String ajaxFindId(String empName, String empNo) {
+//		System.out.println(empName);
+//		System.out.println(empNo);
+		
+		Employee e = eService.findId(empName, empNo);
+		
+		return new Gson().toJson(e);
 	}
 }
