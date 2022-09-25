@@ -79,6 +79,7 @@ public class SignController {
 			int result2 = sService.insertVacation(v);
 				if(result2 > 0) {
 					int result3 = sService.insertVaSign(signList);
+					System.out.println(result3);
 					if(result3 > 0) {
 						session.setAttribute("alertSignMsg", "결재신청되었습니다.");
 					}

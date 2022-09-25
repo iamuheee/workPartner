@@ -979,7 +979,7 @@
 		     , signemp_no
 		     , si_seq
 		     , si_asign
-	         <if test="siSeq == 1">
+	         <if test="s.siSeq == 1">
 			 , si_status
 			 </if>
 		     ) 
@@ -1002,7 +1002,7 @@
 		  , #{ s.signEmpNo }
 		  , #{ s.siSeq }
 		  , #{ s.siAsign }
-		   <if test="siSeq == 1">
+		   <if test="s.siSeq == 1">
 		  , 'C'
 		  </if>
 		 )
