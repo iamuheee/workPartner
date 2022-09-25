@@ -70,6 +70,7 @@ font-family: 'Noto Sans KR', sans-serif;
         }else{
            alert("업무 담당자는 3명이 최대 인원입니다.");
            $("#myform tr").remove();
+           window.close();
         }
     }
     
