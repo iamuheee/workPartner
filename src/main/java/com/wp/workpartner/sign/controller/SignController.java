@@ -606,18 +606,18 @@ public class SignController {
 		System.out.println(ct);
 		System.out.println(reupfile);
 		
-//		if(!reupfile.getOriginalFilename().equals("")) {
-//			
-//			// 기존에 첨부파일이 있을 경우
-//			if(d.getDpOrigin() != null) {
-//				new File(session.getServletContext().getRealPath(d.getDpChange())).delete();
-//			}
-//			// 새로 넘어온 첨부파일 서버 업로드 시키기
-//			String saveFilePath = FileUpload.saveFile(reupfile, session, "resources/uploadFiles/");
-//			
-//			d.setDpOrigin(reupfile.getOriginalFilename());
-//			d.setDpChange(saveFilePath);
-//		}
+		if(!reupfile.getOriginalFilename().equals("")) {
+			
+			// 기존에 첨부파일이 있을 경우
+			if(d.getDpOrigin() != null) {
+				new File(session.getServletContext().getRealPath(d.getDpChange())).delete();
+			}
+			// 새로 넘어온 첨부파일 서버 업로드 시키기
+			String saveFilePath = FileUpload.saveFile(reupfile, session, "resources/uploadFiles/");
+			
+			d.setDpOrigin(reupfile.getOriginalFilename());
+			d.setDpChange(saveFilePath);
+		}
 		int dtpaper = sService.updateDt(d);
 		System.out.println(dtpaper);
 		if(dtpaper > 0) {
