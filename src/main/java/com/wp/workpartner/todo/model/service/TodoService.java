@@ -24,5 +24,8 @@ public interface TodoService {
 	
 	// TO DO 카테고리 삭제
 	int deleteCate(String categoryNo);
+	
+	ArrayList<Todo> ajaxLatestTodo(String empNo);
+	
 
 }

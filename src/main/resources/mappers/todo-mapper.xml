@@ -86,4 +86,10 @@
 		 WHERE CATEGORY_NO = #{categoryNo}
 	</delete>
 	
+	<select id="ajaxLatestTodo" resultMap="todoResult">
+		SELECT TODO_CONTENT
+		  FROM TB_TODO
+		 WHERE EMP_NO = #{empNo}
+	</select>
+	
 </mapper>

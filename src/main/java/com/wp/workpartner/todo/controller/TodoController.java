@@ -102,6 +102,13 @@ public class TodoController {
 			return "실패했습니다.";
 		}
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="ltlist.to", produces="application/json; charset=utf-8")
+	public String ajaxLatestTodo(Todo t) {
+		ArrayList<Todo> tlist = tService.ajaxLatestTodo(t.getEmpNo());
+			return new Gson().toJson(tlist);
+	}
 
 
 	

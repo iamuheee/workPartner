@@ -7,6 +7,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+<!-- Full Calendar -->
+<link href='${pageContext.request.contextPath}/resources/css/fullcalendar-scheduler/main.css' rel='stylesheet' />
+<script src='${pageContext.request.contextPath}/resources/js/fullcalendar-scheduler/main.js'></script>
+
 <style>
 #main-outer {
 	width: 100%;
@@ -175,6 +180,8 @@
 	cursor:pointer;
 }
 
+.fc-view *{color:black;font-size:12px}
+.fc-daygrid-day-frame{height:30px;}
 
 </style>
 </head>
@@ -459,18 +466,18 @@
 							<table id="taskList" class="table table-sm">
 								<thead>
 									<tr align="center">
-										<th scope="col" style="color: #1A7742">할 일</th>
-										<th scope="col" style="color: #0b60e0">진행중</th>
+										<th scope="col" style="color: #1A7742">준비</th>
+										<th scope="col" style="color: #0b60e0">진행</th>
 										<th scope="col">완료</th>
 										<th scope="col" style="color: #e74a3b">지연</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr align="center">
-										<td>1</td>
+										<td>6</td>
 										<td>2</td>
 										<td>5</td>
-										<td>84</td>
+										<td>3</td>
 									</tr>
 								</tbody>
 							</table>
@@ -487,7 +494,7 @@
 									<span class="material-symbols-outlined">checklist</span>
 									<span class="header-title">To do List</span>
 								</div>
-								<a href="" class="read-more">더보기 +</a>
+								<a href="list.to" class="read-more">더보기 +</a>
 							</div>
 						</div>
 						<!-- 각 영역 테이블 자리 -->
@@ -495,33 +502,40 @@
 							<table id="todoList" class="table table-sm">
 								<thead>
 									<tr align="center">
-										<th scope="col">To do 리스트 자리</th>
+										<th scope="col">가장 최근에 올라온 To do List</th>
 									</tr>
 								</thead>
-								<tbody>
-									<tr>
-										<td>원하는만큼 채워주세요</td>
-									</tr>
-									<tr>
-										<td>원하는만큼 채워주세요</td>
-									</tr>
-									<tr>
-										<td>원하는만큼 채워주세요</td>
-									</tr>
-									<tr>
-										<td>원하는만큼 채워주세요</td>
-									</tr>
-									<tr>
-										<td>원하는만큼 채워주세요</td>
-									</tr>
-									<tr>
-										<td>원하는만큼 채워주세요</td>
-									</tr>
+								<tbody id="todo-area">
 								</tbody>
 							</table>
 						</div>
 					</div>
 					<!-- To do list 박스 끝 -->
+					<%-- To do list 불러오는 AJAX 시작 --%>
+					<script>
+						$.ajax({
+							url:"ltlist.to",
+							data:{
+								empNo:${loginUser.empNo}
+							},
+							success:function(tlist){
+								console.log(tlist)
+								// String 배열로 받아오기
+								let html = "";
+								for(let i=0; i<tlist.length; i++){
+									html += '<tr>'
+										  +		'<td style="padding-left:20px; font-size:12px; padding-right:20px;">' + tlist[i].todoContent + '</td>'
+										  + '</tr>';
+									$("#todo-area").html(html);
+								}
+							},
+							error:function(){
+								console.log("실패!!")
+							}
+						})
+					</script>
+					<%-- To do list 불러오는 AJAX 끝 --%>
+					
 
 					<!-- 캘린더 박스 -->
 					<div class="card mb-4">
@@ -536,9 +550,49 @@
 							</div>
 						</div>
 						<!-- 각 영역 테이블 자리 -->
-						<div class="card-body">캘린더를 넣고 싶다 넣을 수 있겠지 넣어야 한다</div>
+						<div id="calendar" style="padding:5px;"></div>
 					</div>
 					<!-- 캘린더 박스 끝 -->
+					<script>
+					$(function(){
+						// -------------------- 캘린더 렌더링 --------------------
+						var calendarEl = document.getElementById('calendar');
+						var calendar = new FullCalendar.Calendar(calendarEl, {
+							locale: 'kr',	// 언어 설정
+					     
+							height:'200px',	// 캘린더 높이 설정
+							expandRows:true,
+							initialView: 'dayGridMonth',	// 화면 포맷 설정
+							schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',	// trial 사용 위한 라이센스 키
+					
+							views: {
+							   resourceTimeGridFourDay: {
+							     type: 'resourceTimeGrid',
+							     duration: { week: 1 },
+								}
+							},
+					     	 headerToolbar: {
+					          left: 'none',
+					          center: 'none',
+					          right: 'none'
+					        },
+							weekends: false,	// 주말은 보이지 않게 함
+							slotMinTime: "09:00:00",	// 캘린더 시작 시간
+							slotMaxTime: "18:00:00",	// 캘린더 종료 시간
+							allDaySlot: false,
+							selectable: false,	// 캘린더의 시간을 드래그해서 선택할 수 있게 함
+							nowIndicator: false,	// 현재 시간 표시
+						});
+						calendar.render();
+						calendar.updateSize();
+						// -------------------- 캘린더 렌더링 끝 --------------------
+						$(".fc-scroller").css("overflow", "hidden");
+						$(".fc-toolbar").css("display", "none");
+						$(".fc-toolbar-ltr").css("display", "none");
+					})
+					</script>
+					
+					
 				</div>
 				<!-- 오른쪽 영역 끝 -->
 

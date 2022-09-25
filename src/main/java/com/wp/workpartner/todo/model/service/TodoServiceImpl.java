@@ -64,5 +64,17 @@ public class TodoServiceImpl implements TodoService {
 			return tDao.deleteTodos(sqlSession, categoryNo) * tDao.deleteCate(sqlSession, categoryNo);
 		}
 	}
+
+	@Override
+	public ArrayList<Todo> ajaxLatestTodo(String empNo) {
+		ArrayList<Todo> list = tDao.ajaxLatestTodo(sqlSession, empNo);
+		System.out.println(list);
+		return list;
+	}
+	
+	
+	
+	
+	
 	
 }

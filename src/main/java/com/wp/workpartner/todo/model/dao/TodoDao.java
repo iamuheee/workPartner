@@ -2,6 +2,7 @@ package com.wp.workpartner.todo.model.dao;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -42,5 +43,11 @@ public class TodoDao {
 	public int deleteTodos(SqlSessionTemplate sqlSession, String categoryNo) {
 		return sqlSession.delete("todoMapper.deleteTodos", categoryNo);
 	}
+	
+	public ArrayList<Todo> ajaxLatestTodo(SqlSessionTemplate sqlSession, String empNo) {
+		return (ArrayList)sqlSession.selectList("todoMapper.ajaxLatestTodo", empNo, new RowBounds(0, 5));
+	}
+	
+	
 	
 }
