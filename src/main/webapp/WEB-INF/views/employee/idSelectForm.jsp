@@ -100,7 +100,7 @@
 	                                </div>
 	                                <hr style="margin-top:20px;">
 	                                <div class="d-flex align-items-center justify-content-center mt-4 mb-0" id="findIdPwd">
-	                                    <a class="medium" href="loginForm.em"><i class="fas fa-caret-left"></i>&nbsp;이전으로</a>
+	                                    <a class="medium" href="javascript:window.history.back();"><i class="fas fa-caret-left"></i>&nbsp;이전으로</a>
 	                                </div>
                                 </div>
                             </div>

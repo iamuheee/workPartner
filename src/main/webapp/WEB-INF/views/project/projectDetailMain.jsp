@@ -257,7 +257,6 @@
 							title:"${mt.title}",
 							start:"${mt.start}",
 							end:"${mt.end}",
-							content:"${mt.content}",
 							color:"skyblue"
 						},
 					</c:forEach>

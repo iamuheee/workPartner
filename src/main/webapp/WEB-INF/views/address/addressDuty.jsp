@@ -51,6 +51,12 @@ font-family: 'Noto Sans KR', sans-serif;
 </style>
 <script>
     function send() { 
+       	$("input[name=empICNo]").val( $("input[name=empICNo]").val().substr(0, $("input[name=empICNo]").val().length - 1) );
+		$("input[name=empICName]").val( $("input[name=empICName]").val().substr(0, $("input[name=empICName]").val().length - 1) );
+
+		console.log( $("input[name=empICNo]").val() );
+		console.log( $("input[name=empICName]").val() );
+		
         var data = $("#empIC");
         window.opener.sendMeData(data);
         window.close();
@@ -59,10 +65,12 @@ font-family: 'Noto Sans KR', sans-serif;
 	// 3명까지만 넘어 갈 수 있도록
     function countInCharge(){
         if($("#myform tr").length <= 3){
+			
             send();
         }else{
            alert("업무 담당자는 3명이 최대 인원입니다.");
            $("#myform tr").remove();
+           window.close();
         }
     }
     
@@ -173,6 +181,10 @@ font-family: 'Noto Sans KR', sans-serif;
 					let value = "";					
 					var arr = new Array();		
 					
+					let empICNo = "";
+					let empICName = "";
+					let empIChtml = "";
+					
 					// 체크된 항목 반복문 돌리고 
 					$("input[name='chk']:checked").each(function(){			
 						
@@ -185,10 +197,6 @@ font-family: 'Noto Sans KR', sans-serif;
 						arr.push(obj);
 						
 					});
-					
-					let empICNo = "";
-					let empICName = "";
-					let empIChtml = "";
 					for(let i=0; i<arr.length; i++){
 						 value  += '<tr>'     
 			                     +    '<td width="60px" class="empICNo"> ' + arr[i].empNo + ' </td>'
@@ -207,12 +215,9 @@ font-family: 'Noto Sans KR', sans-serif;
 	                    		   + '</li>'
 					}
 					
-					empICNo = empICNo.substr(0, empICNo.length - 1);
-					empICName = empICName.substr(0, empICName.length - 1);
-					
-					$("input[name=empICNo]").val(empICNo);
-					$("input[name=empICName]").val(empICName);
-					$("#empICList").html(empIChtml);
+					$("input[name=empICNo]").val( $("input[name=empICNo]").val() + empICNo);
+					$("input[name=empICName]").val( $("input[name=empICName]").val() + empICName);
+					$("#empICList").html( $("#empICList").html() +  empIChtml);
 					$("#adminEmpList").append(value);
 					$("input[name='chk']").prop("checked", false); 
 				}

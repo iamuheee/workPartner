@@ -207,6 +207,7 @@
 										   		 +		'<td width="72%;" style="padding:20px; white-space:pre-line; overflow:ellipsis;">' + dclist[i].comContent + '</td>'
 										   		 +		'<td width="10%;" style="color:gray;">' + dclist[i].comCreateDate + '</td>'
 										   		 +		'<td style="display:none" class="comNo">' + dclist[i].comNo + '</td>'
+										   		 +		'<td style="display:none" class="empNo">' + dclist[i].empNo + '</td>'
 										   		 +		'<td><a width="5%" class="deleteComment">삭제</a></td>'
 										   		 + '</tr>'
 										parent.html(comment);
@@ -247,22 +248,25 @@
 				
 				// 삭제 버튼을 누르면 해당 게시글이 삭제되도록하는 ajax
 				$(document).on("click", ".delete-board", function(){
-					console.log(  );
-				    $.ajax({
-				        url:"deleted.pr",
-				        data:{
-				        	projNo:$("input[name=projNo]").val(),
-				            pboardNo:$(this).parent().parent().parent().parent().siblings("input[name=pboardNo]").val()
-				        },
-				        success:function(alertMsg){
-				            alert(alertMsg);
-				            loadDutyList();
-				            loadCommentList();
-				        },
-				        error:function(){
-				            console.log("ajax 통신 실패 : 업무 게시글 삭제")
-				        }
-				    }) 
+					if( $(this).parent().parent().parent().parent().siblings(".pboardWriter").val() == ${loginUser.empNo} ){
+					    $.ajax({
+					        url:"deleted.pr",
+					        data:{
+					        	projNo:$("input[name=projNo]").val(),
+					            pboardNo:$(this).parent().parent().parent().parent().siblings("input[name=pboardNo]").val()
+					        },
+					        success:function(alertMsg){
+					            alert(alertMsg);
+					            loadDutyList();
+					            loadCommentList();
+					        },
+					        error:function(){
+					            console.log("ajax 통신 실패 : 업무 게시글 삭제")
+					        }
+					    }) 
+					}else{
+						alert("다른 사원의 게시글은 삭제할 수 없습니다.");
+					}
 				})
 				
 			    // 댓글 작성하고 댓글 리스트 새로 불러오는 ajax
@@ -293,17 +297,20 @@
 				
 			    // 댓글 삭제하고 다시 불러오는 ajax
 			    $(document).on("click", ".deleteComment", function(){
-			    	console.log(  );
-			    	$.ajax({
-			    		url:"deletec.pr",
-			    		data:{
-			    			comNo:$(this).parent().siblings(".comNo").text()
-			    		},
-			    		success:function(result){
-			    			loadCommentList();
-			    			alert(result);
-			    		}
-			    	})
+			    	if( $(this).parent().siblings(".empNo").text() == ${loginUser.empNo} ){
+				    	$.ajax({
+				    		url:"deletec.pr",
+				    		data:{
+				    			comNo:$(this).parent().siblings(".comNo").text()
+				    		},
+				    		success:function(result){
+				    			loadCommentList();
+				    			alert(result);
+				    		}
+				    	})
+			    	}else{
+						alert("다른 사원의 댓글은 삭제할 수 없습니다.")
+					}
 			    })
 				    
 				    
