@@ -964,7 +964,7 @@
 		                                     CONNECT BY LEVEL <![CDATA[<=]]>  TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
 		                              ) A
 		                    ) B
-		                    WHERE B.D NOT IN ('1')
+		                    WHERE B.D NOT IN ('7')
 		                    AND B.DT NOT IN 
 		                  
 		                    ( 
@@ -1062,7 +1062,7 @@
 	                                     CONNECT BY LEVEL <![CDATA[<=]]>  TO_DATE(END_DT, 'YYYYMMDD') - TO_DATE(ST_DT, 'YYYYMMDD') + 1
 	                              ) A
 	                    ) B
-	                    WHERE B.D NOT IN ('1')
+	                    WHERE B.D NOT IN ('7')
 	                    AND B.DT NOT IN 
 	                  
 	                    ( 
@@ -1364,8 +1364,120 @@
 			    emp_holtake = '0',
 			    emp_holuse = '0'
 			WHERE
-			    emp_no =#{empNo}
+			    emp_no = #{empNo}
 		
 	</update>
 	
+	
+	<select id="changeAttendanceTime" resultMap="vacationResult">
+	
+		select ATT_CMT as a, ATT_QT as b
+		from tb_attendance
+		where emp_no = #{empNo}
+		and ATT_DATE = to_char(to_date(#{time}, 'YYYY-MM-DD'), 'yyyymmdd')
+		
+	</select>
+	
+	
+	<insert id="changeAttendanceTime2">
+
+        
+		INSERT INTO tb_adjust_attendance (
+		    aat_no,
+		    emp_no,
+		    aat_fcmt,
+		    aat_fqt,
+		    aat_ajfcmt,
+		    aat_ajfqt,
+		    aat_date,
+		    aat_writeday,
+		    aat_title,
+		    aat_reason,
+		    aat_status,
+		    aat_time
+		) VALUES (
+		    SEQ_AATNO.nextval,
+		    #{empNo},
+		    #{text2},
+		    #{text3},
+		    #{text4},
+		    #{text5},
+		    to_char(to_date(#{text1}, 'YYYY-MM-DD'), 'yyyymmdd'),
+		    to_char(current_date, 'yyyymmdd'),
+		    '출퇴근 시간 변경',
+		    #{text6},
+		    '1',
+		    '조정중'
+		)
+	</insert>
+	
+	
+	<insert id="changeAttendanceTime3">
+
+        
+		INSERT INTO tb_adjust_attendance (
+		    aat_no,
+		    emp_no,
+		    aat_fcmt,
+		    aat_fqt,
+		    aat_ajfcmt,
+		    aat_ajfqt,
+		    aat_date,
+		    aat_writeday,
+		    aat_title,
+		    aat_reason,
+		    aat_status,
+		    aat_time
+		) VALUES (
+		    SEQ_AATNO.nextval,
+		    #{empNo},
+		    '0900',
+		    '1800',
+		    #{text44},
+		    #{text55},
+		    to_char(to_date(#{text11}, 'YYYY-MM-DD'), 'yyyymmdd'),
+		    to_char(current_date, 'yyyymmdd'),
+		    '근무시간 변경',
+		    #{text66},
+		    '2',
+		    '조정중'
+		)
+		
+	</insert>
+	
+	<select id="adminAttAdjust" resultMap="vacationResult">
+	
+		select
+		    aat_no a,
+		    aat_date b,
+		    dep_name c,
+		    emp_name d,
+		    case when aat_status = '1' then '출퇴근 시간 변경'
+		         else '근무시간 변경' end e,
+		    aat_time f
+		from  tb_adjust_attendance 
+		join tb_employee using(emp_no)
+		join tb_department using(dep_cd)
+		where aat_status = '1'
+		order by b desc
+		
+	</select>
+	
+	<select id="adminAttAdjust2" resultMap="vacationResult">
+	
+		select
+		    aat_no a,
+		    aat_date b,
+		    dep_name c,
+		    emp_name d,
+		    case when aat_status = '1' then '출퇴근 시간 변경'
+		         else '근무시간 변경' end e,
+		    aat_time f
+		from  tb_adjust_attendance 
+		join tb_employee using(emp_no)
+		join tb_department using(dep_cd)
+		where aat_status = '2'
+		order by b desc
+		
+	</select>
 </mapper>

@@ -36,9 +36,7 @@
 		
 		<div style="width:80%"><hr></div>
 		
-		<br>
-		
-		<form action="">
+		<!-- <form action="">
 	        <span class="span1">기간조회&nbsp&nbsp&nbsp</span>
 	        <input type="date" name="date1">
 	        &nbsp~&nbsp	
@@ -52,93 +50,81 @@
 	
 	        &nbsp&nbsp
 	        <button type="submit" class="btn btn-sm btn-secondary btnSize" style="height:30px; width:60px; font-size:17px; line-height:10px ">조 회</button>
-	    </form>
-	    
+	    </form> -->
 	    <br><br>
+	   <h4>출퇴근시간변경</h4>
+	    <br>
 	    <!-- 테이블 -->
 	    <div class="ntMain" style="width:80%">
-	        <span class="span1">조회결과 <span style="font-size:x-large; font-weight: 400;">27</span><span style="font-weight:600; font-size: medium;">건</span></span>
-	
-	        <br><br>
 	        <table class="table table-hover" style="text-align:center">
 	            <thead>
-	                <tr>                            
-	                    <th>작성일</th>
+	                <tr>     
+	                	<th>문서번호</th>                       
+	                    <th>조정일</th>
 	                    <th>제목</th>
 	                    <th>진행상황</th>
+	                    <th><th>
 	                </tr>
 	            </thead>
 	            <tbody>
 	                <tr>
+	                	<td>101</td>
 	                    <td>2022-07-31</td>
 	                    <td>출퇴근 시간 변경</td>
 	                    <td>조정중</td>
+	                    <td>
+	                    	<button class="btn btn-sm btn-warning" >취소</button>
+	                    <td>
 	                </tr>
-	                <tr>
-	                    <td>2022-07-31</td>
-	                    <td>출퇴근 시간 변경</td>
-	                    <td>조정중</td>
-	                </tr>
-	                <tr>
-	                    <td>2022-07-31</td>
-	                    <td>출퇴근 시간 변경</td>
-	                    <td>조정중</td>
-	                </tr>
-	                <tr>
-	                    <td>2022-07-31</td>
-	                    <td>출퇴근 시간 변경</td>
-	                    <td>조정중</td>
-	                </tr>
-	                <tr>
-	                    <td>2022-07-31</td>
-	                    <td>출퇴근 시간 변경</td>
-	                    <td>조정중</td>
-	                </tr>
-	                <tr>
-	                    <td>2022-07-31</td>
-	                    <td>출퇴근 시간 변경</td>
-	                    <td>조정중</td>
-	                </tr>
-	                <tr>
-	                    <td>2022-07-31</td>
-	                    <td>출퇴근 시간 변경</td>
-	                    <td>조정중</td>
-	                </tr>                 
+
+	            </tbody>
+	        
 	
+	        </table>
+	        
+	        <br><br><br>
+	        
+	    <h4>근무시간변경</h4>
+		<br>
+	         <table class="table table-hover" style="text-align:center">
+	             <thead>
+	                <tr>     
+	                	<th>문서번호</th>                       
+	                    <th>조정일</th>
+	                    <th>제목</th>
+	                    <th>진행상황</th>
+	                    <th><th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <tr>
+	                	<td>101</td>
+	                    <td>2022-07-31</td>
+	                    <td>근무시간 변경</td>
+	                    <td>조정중</td>
+	                    <td>
+	                    	<button class="btn btn-sm btn-warning" >취소</button>
+	                    <td>
+	                </tr>
+
 	            </tbody>
 	        
 	
 	        </table>
 	
 	    </div>
-	
-	
-	
-	    <!-- 페이징 -->
-	    <div class="ntPasing">
-	        <nav aria-label="Page navigation example" class="pasingCenter">
-	            <ul class="pagination">
-	              <li class="page-item">
-	                <a class="page-link" href="#" aria-label="Previous">
-	                  <span aria-hidden="true">&laquo;</span>
-	                </a>
-	              </li>
-	              <li class="page-item"><a class="page-link" href="#">1</a></li>
-	              <li class="page-item"><a class="page-link" href="#">2</a></li>
-	              <li class="page-item"><a class="page-link" href="#">3</a></li>
-	              <li class="page-item">
-	                <a class="page-link" href="#" aria-label="Next">
-	                  <span aria-hidden="true">&raquo;</span>
-	                </a>
-	              </li>
-	            </ul>
-	          </nav>     
-	    </div>
+
 	
 	
 	</div>
 	
-	<br><br><br><br><br><br><br><br><br>
+	
+	
+	
+	
+	</div>
+	
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	
 	
 </body>

@@ -58,15 +58,12 @@
 			</div>
 			
 			<hr>
-			<div style="float:right">
-				<button>연장근무신청</button>
-			</div>
 			
 			<br><br>	
 			
 			<div style="clear:both"></div>
 			
-		 	<div id='calendar' class="div1">
+		 	<div id='calendar' class="div1 ">
 		 		
 			</div>
 	          
@@ -174,10 +171,216 @@
 				        	  start:'21000902'
 				          }
 			    ]
+			    ,  dateClick: function(info) {
+			        
+			    	let clickDate = new Date(info.dateStr);
+			    	clickDate.setHours(clickDate.getHours() + 9)
+			    	let currentDate = new Date()
+			    	
+			    	if(clickDate <= currentDate){
+			    		a(info.dateStr);
+			    	}else{
+			    		b(info.dateStr);
+			    	}
+			    	
+			      }
 			  });
 			  calendar.render();
 			});
+		
+		// 출퇴근시간변경
+		function a(time){
+			
+			
+			$("#zzz").click()
+			
+			$.ajax({
+    			url: "changeAttendanceTime.att",
+    			data: {
+    					time:time,
+    					empNo:${ loginUser.empNo }
+    			      },
+    				   
+    			success:function(list){
+    				
+    				let a = list[0].a;
+    				let b = list[0].b;
+    				
+    				$("#text1").val(time);
+    				$("#text2").val(a);
+    				$("#text3").val(b);
+    				
+    			},error:function(){
+    				console.log("댓글리스트 조회용 ajax통신 실패");
+    			}
+			})
+		
+		}
+		
+		
+		function b(time){
+			
+			$("#zzz1").click()
+			$("#text11").val(time);
+			
+		}
 	
 	</script>
+	
+	<button id="zzz" data-target="#departmentUpdate" data-toggle="modal" style="display:none"></button>
+	<button id="zzz1" data-target="#departmentUpdate1" data-toggle="modal" style="display:none"></button>
+	
+	
+	   <!-- ====================================================  Modal ================================================================ -->
+
+        <!-- 근무수정 및 삭제 -->
+        <div class="modal fade" id="departmentUpdate" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">출퇴근 시간 변경</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">                          
+                         <form action="changeAttendanceTime2.att" method="get"> 
+                         <input type="hidden" name="empNo" value="${loginUser.empNo }">                                             
+                            <div align="center">
+                                <table>
+                                	<tr>                                    
+                                        <th>수정할 날짜</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text1" name="text1" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>    
+                                	<tr>                                    
+                                        <th>출근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text2" name="text2" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>                                                             
+                                    <tr>                                    
+                                        <th>퇴근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text3" name="text3" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>  
+                                    <tr><td colspan="2">--------------------------------------------------------------------------</td></tr>
+                                    <tr>                                    
+                                        <th>수정할 출근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text4" name="text4" style="text-align:center" >                                    
+                                        </td>                                                                            
+                                    </tr>                                                             
+                                    <tr>                                    
+                                        <th>수정할 퇴근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text5" name="text5" style="text-align:center" >                                    
+                                        </td>                                                                             
+                                    </tr>                             
+                                    <tr>
+                                    	<th>사 유</th>
+                                    	<td>
+                                    		<textarea id="text6" name="text6"  rows="5" cols="25" wrap="hard"></textarea>
+                                    	</td>
+                                    </tr>
+                                   
+                                     
+                                </table>
+                            </div>
+                            <br>
+                            <div align="center">
+                                <button type="submit" class="btn btn-sm btn-warning" id="dUpdatebutton">수정</button>
+                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
+                            </div>
+                            
+                            <br>
+                            
+                       </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        
+         <!-- ====================================================  Modal ================================================================ -->
+
+        <!-- 근무시간 변경 -->
+        <div class="modal fade" id="departmentUpdate1" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">근무시간 변경</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">                          
+                         <form action="changeAttendanceTime3.att" method="get"> 
+                         <input type="hidden" name="empNo" value="${loginUser.empNo }">                                             
+                            <div align="center">
+                                <table>
+                                	<tr>                                    
+                                        <th>수정할 날짜</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text11" name="text11" style="text-align:center" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>    
+                                	<tr>                                    
+                                        <th>지정 출근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text22" name="text22" style="text-align:center" value="0900" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>                                                             
+                                    <tr>                                    
+                                        <th>지정 퇴근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text33" name="text33" style="text-align:center" value="1800" readonly>                                    
+                                        </td>                                                                             
+                                    </tr>  
+                                    <tr><td colspan="2">--------------------------------------------------------------------------</td></tr>
+                                    <tr>                                    
+                                        <th>수정할 출근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text44" name="text44" style="text-align:center" >                                    
+                                        </td>                                                                            
+                                    </tr>                                                             
+                                    <tr>                                    
+                                        <th>수정할 퇴근시간</th>                                                                      
+                                        <td>
+                                           	<input type="text" id="text55" name="text55" style="text-align:center" >                                    
+                                        </td>                                                                             
+                                    </tr>                             
+                                    <tr>
+                                    	<th>사 유</th>
+                                    	<td>
+                                    		<textarea id="text66" name="text66"  rows="5" cols="25" wrap="hard"></textarea>
+                                    	</td>
+                                    </tr>
+                                   
+                                     
+                                </table>
+                            </div>
+                            <br>
+                            <div align="center">
+                                <button type="submit" class="btn btn-sm btn-warning" id="dUpdatebutton">수정</button>
+                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
+                            </div>
+                            
+                            <br>
+                            
+                       </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+        
 </body>
 </html>

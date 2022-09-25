@@ -258,6 +258,33 @@ public class AttServiceImpl implements AttService{
 	public int resetVacation(String empNo) {
 		return aDao.resetVacation(empNo, sqlSession);
 	}
+	@Override
+	public ArrayList<Vacation> changeAttendanceTime(String empNo, String time) {
+		return aDao.changeAttendanceTime(empNo, time, sqlSession);
+	}
+
+	@Override
+	public int changeAttendanceTime2(String empNo, String text1, String text2, String text3, String text4,
+			String text5, String text6) {
+		return aDao.changeAttendanceTime2(empNo, text1, text2, text3, text4, text5, text6, sqlSession);
+	}
+	@Override
+	public int changeAttendanceTime3(String empNo, String text11, String text44, String text55, String text66) {
+		return aDao.changeAttendanceTime3(empNo, text11, text44, text55, text66, sqlSession);
+	}
+	@Override
+	public ArrayList<Vacation> adminAttAdjust() {
+		return aDao.adminAttAdjust(sqlSession);
+	}
+	
+	@Override
+	public ArrayList<Vacation> adminAttAdjust2() {
+		return aDao.adminAttAdjust2(sqlSession);
+	}
+	@Override
+	public int agreeModify(String aatNo, String empName) {
+		return aDao.agreeModify(aatNo, empName, sqlSession);
+	}
 
 
 }

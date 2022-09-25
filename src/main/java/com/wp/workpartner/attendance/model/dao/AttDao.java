@@ -333,5 +333,50 @@ public class AttDao {
 		return sqlSession.update("attendanceMapper.resetVacation", empNo);
 	}
 
+	public ArrayList<Vacation> changeAttendanceTime(String empNo, String time, SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("time", time);
+		map.put("empNo", empNo);
+		
+		return (ArrayList)sqlSession.selectList("attendanceMapper.changeAttendanceTime", map);
+	}
+
+	public int changeAttendanceTime2(String empNo, String text1, String text2, String text3, String text4, String text5,
+			String text6, SqlSessionTemplate sqlSession) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("empNo", empNo);
+		map.put("text1", text1);
+		map.put("text2", text2);
+		map.put("text3", text3);
+		map.put("text4", text4);
+		map.put("text5", text5);
+		map.put("text6", text6);
+		
+		return sqlSession.insert("attendanceMapper.changeAttendanceTime2", map);
+	}
+
+	public int changeAttendanceTime3(String empNo, String text11, String text44, String text55, String text66,
+			SqlSessionTemplate sqlSession) {
+
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("empNo", empNo);
+		map.put("text11", text11);
+		map.put("text44", text44);
+		map.put("text55", text55);
+		map.put("text66", text66);
+		
+		return sqlSession.insert("attendanceMapper.changeAttendanceTime3", map);
+	}
+
+	public ArrayList<Vacation> adminAttAdjust(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.adminAttAdjust");
+	}
+	
+	public ArrayList<Vacation> adminAttAdjust2(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("attendanceMapper.adminAttAdjust2");
+	}
+
 
 }
