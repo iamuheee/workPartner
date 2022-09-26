@@ -199,7 +199,11 @@
 					}  --%>
 	<script>
 		function insertCheck() {
+			let count = $("#signList tr").length;
+	        
+	        if(count > 0){
 			if (confirm("다시 기안하시겠습니까?") == true) { //확인
+				
 				 if('${ t.dpFinal }' == "반려됨" || '${ t.dpFinal }' == "임시저장"){
 					if('${ t.dpCategory }'  == '연차'){
 						document.insertForm.action = "updateRsi.si?dpNo=" + ${t.dpNo} + "&ct=연차";
@@ -225,7 +229,11 @@
 			} else { //취소
 				return false;
 			}
-		}
+	        }else{
+	     	    alert("결재선을 설정해주세요.");
+	            return false;
+	        }
+	}
 	</script>
 	<script>
 		function deleteCheck() {
