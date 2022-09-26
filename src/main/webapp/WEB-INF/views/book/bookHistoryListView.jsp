@@ -240,6 +240,7 @@
         
         function refreshList(){
         	selectAllBookList();
+        	$("#selectRmName").find("#rmName").val("none");
         	$("#inputDate").find("#startDate").val("");
         	$("#inputDate").find("#endDate").val("");
         }
