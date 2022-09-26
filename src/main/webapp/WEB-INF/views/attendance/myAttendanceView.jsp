@@ -53,9 +53,11 @@
 					<th>연장 근무 시간</th>
 				</tr>
 				<tr>
-					<td class="alignCenter">${list2[0].weekWorkHours}시간</td>
-					<td class="alignCenter">${list2[0].x}시간</td>
 					<td class="alignCenter">0시간</td>
+					<td class="alignCenter">52시간</td>
+					<td class="alignCenter">0시간</td>
+					<%-- ${list2[0].weekWorkHours} --%>
+					<%-- ${list2[0].x} --%>
 					<!-- ${ list2[0].weekPlusWorkHours } -->
 				</tr>
 			</table>
